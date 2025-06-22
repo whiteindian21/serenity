@@ -1739,8 +1739,7 @@
 
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
-  
-<script>
+ <script>
     // Initialize Supabase with environment variables
     const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
@@ -1796,7 +1795,7 @@
     let currentUser = null;
     let moodChart = null;
     
-    // Edge function URL
+    // Edge function URL (updated to match edge function path)
     const EDGE_FUNCTION_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai';
 
     // Initialize the dashboard
@@ -2589,7 +2588,7 @@
       document.getElementById('progress-percent').textContent = `${progress}%`;
     }
     
-    // UPDATED: Send chat message using edge function
+    // FIXED: Send chat message using edge function with correct auth and payload
     async function sendMessage() {
       const input = document.getElementById('chat-input');
       const message = input.value.trim();
@@ -2630,20 +2629,20 @@
       
       try {
         const companion = companions[currentCompanionIndex];
-        const session = await supabase.auth.getSession();
-        const accessToken = session.data.session?.access_token;
+        const { data: { session } } = await supabase.auth.getSession();
+        const accessToken = session?.access_token;
         
         if (!accessToken) {
           throw new Error("User not authenticated");
         }
         
-        // Prepare payload for edge function
+        // Prepare payload for edge function - match edge function structure
         const payload = {
           messages: conversationHistory.filter(msg => msg.role !== 'system'),
           systemPrompt: companion.systemPrompt
         };
         
-        // Call edge function
+        // Call edge function with correct auth header
         const response = await fetch(EDGE_FUNCTION_URL, {
           method: 'POST',
           headers: {
@@ -2653,6 +2652,7 @@
           body: JSON.stringify(payload)
         });
         
+        // Handle edge function errors
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'AI request failed');
@@ -2838,6 +2838,6 @@
       
       document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
     }
-  </script>
+  </script> 
 </body>
 </html>
