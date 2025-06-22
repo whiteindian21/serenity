@@ -1795,7 +1795,7 @@
     let currentUser = null;
     let moodChart = null;
     
-    // Edge function URL
+    // Edge function URL (updated to match edge function path)
     const EDGE_FUNCTION_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai';
 
     // Initialize the dashboard
@@ -1847,7 +1847,7 @@
       return false;
     }
     
-    // Load user progress
+    // Load user progress (FIXED)
     async function loadProgress() {
       if (!currentUser) return;
       
@@ -1855,23 +1855,24 @@
         const { data, error } = await supabase
           .from('user_progress')
           .select('progress')
-          .eq('user_id', currentUser.id)
-          .single();
+          .eq('user_id', currentUser.id);
         
         if (error) throw error;
         
-        if (data) {
-          progress = data.progress || 0;
+        if (data && data.length > 0) {
+          progress = data[0].progress || 0;
         } else {
           // Initialize progress for new users
           progress = 0;
-          await supabase
+          const { error: insertError } = await supabase
             .from('user_progress')
             .insert([{ user_id: currentUser.id, progress: 0 }]);
+            
+          if (insertError) throw insertError;
         }
       } catch (error) {
         console.error('Error loading progress:', error.message);
-        showToast("Failed to load progress", "error");
+        showToast("Failed to load progress: " + error.message, "error");
       }
     }
     
@@ -2588,7 +2589,7 @@
       document.getElementById('progress-percent').textContent = `${progress}%`;
     }
     
-    // Fixed: Handle CORS properly in fetch request
+    // FIXED: Send chat message using edge function with correct auth and payload
     async function sendMessage() {
       const input = document.getElementById('chat-input');
       const message = input.value.trim();
@@ -2636,21 +2637,20 @@
           throw new Error("User not authenticated");
         }
         
-        // Prepare payload for edge function
+        // Prepare payload for edge function - match edge function structure
         const payload = {
           messages: conversationHistory.filter(msg => msg.role !== 'system'),
           systemPrompt: companion.systemPrompt
         };
         
-        // Call edge function with correct CORS handling
+        // Call edge function with correct auth header
         const response = await fetch(EDGE_FUNCTION_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
           },
-          body: JSON.stringify(payload),
-          credentials: 'omit' // Important for CORS
+          body: JSON.stringify(payload)
         });
         
         // Handle edge function errors
