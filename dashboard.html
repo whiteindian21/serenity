@@ -1,0 +1,2822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healing Journey | Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #6C5CE7;
+      --primary-light: #A29BFE;
+      --primary-dark: #5649C0;
+      --secondary: #00CEC9;
+      --accent: #FF7675;
+      --accent-light: #FFA8A7;
+      --dark: #2D3436;
+      --light: #F5F6FA;
+      --light-2: #EDF0F5;
+      --gray: #636E72;
+      --gray-light: #DFE6E9;
+      --success: #00B894;
+      --warning: #FDCB6E;
+      --error: #D63031;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+      --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --shadow-dark: 0 8px 25px rgba(0, 0, 0, 0.15);
+      --spacing-unit: 0.5rem;
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+      --max-width: 600px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 0.5rem;
+      padding-bottom: calc(0.5rem + var(--safe-area-inset-bottom));
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      background: radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(0, 206, 201, 0.08) 0%, transparent 50%);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--dark);
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 0.5rem;
+      position: relative;
+    }
+
+    /* Login Prompt */
+    .login-prompt {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      text-align: center;
+      max-width: 500px;
+      margin: 2rem auto;
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .login-prompt h2 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .login-prompt p {
+      margin-bottom: 1.5rem;
+      color: var(--gray);
+    }
+    
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    /* Header */
+    .dashboard-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: var(--transition);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .dashboard-header:hover {
+      box-shadow: var(--shadow-medium);
+    }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      width: 100%;
+    }
+
+    .dashboard-header h2 {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    #greeting {
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 8px rgba(108, 92, 231, 0.2);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .user-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+    }
+
+    .btn-signout {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: 50%;
+    }
+
+    .btn-signout:hover {
+      color: var(--primary);
+      background: rgba(108, 92, 231, 0.1);
+    }
+
+    /* Sections */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-light);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .section:hover {
+      box-shadow: var(--shadow-medium);
+      transform: translateY(-3px);
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title i {
+      font-size: 1.1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 2px 8px rgba(108, 92, 231, 0.2);
+      transition: var(--transition);
+    }
+
+    .section-title h3 {
+      font-size: 1.2rem;
+      position: relative;
+      padding-bottom: 0.3rem;
+    }
+
+    .section-title h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* Loss Type Selector */
+    .loss-type-selector {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.6rem;
+      margin: 1.2rem 0;
+      padding-bottom: 0.6rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    
+    .loss-type-selector::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .loss-type {
+      background: rgba(108, 92, 231, 0.08);
+      color: var(--primary);
+      padding: 0.6rem 1rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(108, 92, 231, 0.15);
+      font-weight: 500;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    
+    .loss-type:hover {
+      background: rgba(108, 92, 231, 0.15);
+    }
+    
+    .loss-type.selected {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: 1px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      margin: 1.2rem 0;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: var(--shadow-light);
+      animation: fadeIn 0.7s ease-out;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-medium);
+      transform: translateY(-2px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card h3 i {
+      font-size: 0.9rem;
+      color: var(--primary);
+    }
+
+    .affirmation-card {
+      background: linear-gradient(135deg, rgba(108, 92, 231, 0.08), rgba(0, 206, 201, 0.08));
+      border: 1px solid rgba(108, 92, 231, 0.15);
+    }
+
+    #affirmation {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--dark);
+      position: relative;
+      z-index: 1;
+      line-height: 1.6;
+      font-style: italic;
+      padding: 0 0.5rem;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .btn {
+      padding: 0.8rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      border: none;
+      width: 100%;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(108, 92, 231, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(108, 92, 231, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-accent {
+      background: rgba(255, 118, 117, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(255, 118, 117, 0.2);
+    }
+
+    .btn-accent:hover {
+      background: rgba(255, 118, 117, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    /* Action Cards */
+    .action-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+
+    @media (min-width: 480px) {
+      .action-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .action-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .action-card:hover {
+      box-shadow: var(--shadow-medium);
+      transform: translateY(-3px);
+    }
+
+    .action-card i {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      background: rgba(108, 92, 231, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .action-card:hover i {
+      transform: scale(1.1);
+      background: rgba(108, 92, 231, 0.2);
+    }
+
+    .action-card h3 {
+      margin-bottom: 0.6rem;
+      color: var(--dark);
+      font-size: 1.15rem;
+    }
+
+    .action-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Breathing Exercise */
+    .breath-container {
+      position: relative;
+      margin: 1.5rem auto;
+      width: 140px;
+      height: 140px;
+    }
+    
+    .breath-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
+      transition: all 1.5s ease-in-out;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+    }
+    
+    .breath-circle.pulse {
+      animation: pulse 4s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(108, 92, 231, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(108, 92, 231, 0);
+      }
+    }
+    
+    .breath-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 1.5rem 0;
+    }
+    
+    .breath-stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+    }
+    
+    .breath-instruction {
+      font-size: 1rem;
+      margin: 1.2rem 0;
+      color: var(--dark);
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .breath-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    /* Memory Section */
+    .memory-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+    
+    .memory-item {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(0, 206, 201, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .memory-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-light);
+    }
+    
+    .memory-item.add-memory {
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px dashed rgba(108, 92, 231, 0.3);
+      color: var(--gray);
+    }
+    
+    .memory-item.add-memory:hover {
+      background: rgba(108, 92, 231, 0.1);
+      color: var(--primary);
+    }
+    
+    .memory-label {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      font-size: 0.7rem;
+      text-align: center;
+      color: var(--dark);
+      padding: 0 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 3px;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    }
+    
+    .memory-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* Mood Tracker */
+    .mood-options {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin: 1.2rem 0;
+    }
+
+    .mood-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.8rem 0.3rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(108, 92, 231, 0.1);
+    }
+
+    .mood-option:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-light);
+    }
+
+    .mood-emoji {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+      transition: var(--transition);
+    }
+
+    .mood-label {
+      font-size: 0.7rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .mood-option.selected {
+      background: rgba(108, 92, 231, 0.1);
+      border: 1px solid rgba(108, 92, 231, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(108, 92, 231, 0.1);
+    }
+
+    .mood-option.selected .mood-emoji {
+      transform: scale(1.2);
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    /* Activity Section */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.8rem;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s ease;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(108, 92, 231, 0.1);
+    }
+
+    .activity-item:hover {
+      background: rgba(108, 92, 231, 0.05);
+      transform: translateX(3px);
+    }
+
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(108, 92, 231, 0.2);
+    }
+
+    .activity-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+      color: var(--dark);
+    }
+
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    /* Progress Section */
+    .progress-bar {
+      height: 10px;
+      background: var(--gray-light);
+      border-radius: 5px;
+      margin: 1.2rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 65%;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    /* Companion Section */
+    .companion-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .companion-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .companion-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .companion-name {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .companion-role {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+    }
+
+    .companion-specialties {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .specialty-tag {
+      background: rgba(108, 92, 231, 0.1);
+      color: var(--primary);
+      padding: 0.3rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      transition: var(--transition);
+    }
+    
+    .specialty-tag:hover {
+      background: rgba(108, 92, 231, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* Chat Interface */
+    .chat-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 65vh;
+      max-height: 100%;
+      background: white;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      box-shadow: var(--shadow-dark);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      overflow: hidden;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      border: 1px solid rgba(108, 92, 231, 0.1);
+      touch-action: none;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    
+    .chat-container.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      position: relative;
+    }
+    
+    .chat-header .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-header h3 {
+      flex: 1;
+      font-size: 1.1rem;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+    
+    .close-chat:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      -webkit-overflow-scrolling: touch;
+      background: var(--light-2);
+    }
+    
+    .message {
+      max-width: 85%;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      position: relative;
+      word-break: break-word;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message.user {
+      background: white;
+      align-self: flex-end;
+      border-top-right-radius: 0;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(108, 92, 231, 0.1);
+    }
+    
+    .message.companion {
+      background: white;
+      align-self: flex-start;
+      border-top-left-radius: 0;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(0, 206, 201, 0.1);
+    }
+    
+    .message-time {
+      font-size: 0.7rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+      text-align: right;
+    }
+    
+    .chat-input {
+      display: flex;
+      padding: 0.8rem;
+      border-top: 1px solid rgba(108, 92, 231, 0.1);
+      background: white;
+    }
+    
+    .chat-input input {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: var(--transition);
+    }
+    
+    .chat-input input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+      outline: none;
+    }
+    
+    .send-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .send-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    /* Memory Modal */
+    .memory-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1rem;
+    }
+    
+    .memory-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: var(--radius-md);
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      box-shadow: var(--shadow-dark);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .memory-modal.active .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .modal-header h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    
+    .memory-form {
+      padding: 1.2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--dark);
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-sm);
+      font-family: 'Poppins', sans-serif;
+      transition: var(--transition);
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+      outline: none;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .image-preview {
+      width: 100%;
+      height: 150px;
+      background-color: var(--light);
+      border-radius: var(--radius-sm);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px dashed var(--gray-light);
+    }
+    
+    .image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .submit-memory {
+      width: 100%;
+      padding: 0.8rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 0.5rem;
+    }
+    
+    .submit-memory:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-dark);
+      z-index: 3000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      max-width: 90%;
+      text-align: center;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: var(--success);
+    }
+    
+    .toast.error {
+      background: var(--error);
+    }
+    
+    .toast.info {
+      background: var(--primary);
+    }
+
+    /* Mood Insights Modal */
+    .insights-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1rem;
+    }
+    
+    .insights-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .insights-content {
+      background: white;
+      border-radius: var(--radius-md);
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      box-shadow: var(--shadow-dark);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .insights-modal.active .insights-content {
+      transform: translateY(0);
+    }
+    
+    .insights-header {
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .insights-header h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .close-insights {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    
+    .insights-body {
+      padding: 1.5rem;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .chart-container {
+      height: 300px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Swipe Indicator */
+    .swipe-indicator {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 2px;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    /* iOS specific fixes */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        overscroll-behavior-y: none;
+      }
+      
+      .chat-messages {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 480px) {
+      .section-title h3 {
+        font-size: 1.1rem;
+      }
+      
+      .card h3 {
+        font-size: 1rem;
+      }
+      
+      #affirmation {
+        font-size: 1rem;
+      }
+      
+      .breath-container {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .section {
+        padding: 1.2rem;
+      }
+      
+      .action-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Spinner for loading states */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(108, 92, 231, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .spinner-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    
+    /* Accessibility enhancements */
+    a, button, input, select, textarea {
+      font-size: 1rem;
+    }
+    
+    button, .btn {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    input, textarea {
+      font-size: 16px;
+    }
+    
+    /* Contrast improvements */
+    .section-title h3, .card h3 {
+      color: var(--dark);
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Prompt (Shown when not logged in) -->
+  <div class="container login-prompt" id="login-prompt">
+    <h2>Please Sign In</h2>
+    <p>You need to be logged in to access your healing journey dashboard.</p>
+    <button class="btn-login" id="go-to-login">
+      <i class="fas fa-sign-in-alt"></i> Go to Login Page
+    </button>
+  </div>
+  
+  <!-- Dashboard Container (Hidden initially) -->
+  <div class="container dashboard-container" id="dashboard-container" style="display: none;">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <h2>Healing Journey</h2>
+        <p id="greeting">Good morning, welcome to your healing space</p>
+      </div>
+      <div class="user-controls">
+        <div class="user-avatar" id="userInitial" title="User Profile">
+          <span id="userInitialText">U</span>
+        </div>
+        <button class="btn-signout" id="signout-btn" aria-label="Sign out">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="dashboard-grid">
+      <main>
+        <section class="section">
+          <div class="section-title">
+            <i class="fas fa-heart"></i>
+            <h3>Healing Tools</h3>
+          </div>
+          
+          <!-- Loss Type Selection -->
+          <div class="loss-type-selector">
+            <div class="loss-type selected">Relationship</div>
+            <div class="loss-type">Loved One</div>
+            <div class="loss-type">Pet</div>
+            <div class="loss-type">Job</div>
+            <div class="loss-type">Health</div>
+            <div class="loss-type">Other</div>
+          </div>
+          
+          <div class="card affirmation-card" id="affirmationCard">
+            <p id="affirmation">"Healing isn't about forgetting, it's about learning to carry your loss with grace."</p>
+            <div class="card-actions">
+              <button class="btn btn-secondary" id="refreshAffirmation">
+                <i class="fas fa-sync-alt"></i> New
+              </button>
+              <button class="btn btn-accent" id="saveAffirmation">
+                <i class="far fa-heart"></i> Save
+              </button>
+            </div>
+          </div>
+
+          <div class="card fade-in">
+            <h3><i class="fas fa-lightbulb"></i> Today's Reflection</h3>
+            <p id="prompt">What's one positive memory you can focus on today? How does remembering this make you feel?</p>
+            <div class="card-actions">
+              <button class="btn btn-secondary" id="refreshPrompt">
+                <i class="fas fa-sync-alt"></i> New
+              </button>
+              <button class="btn btn-accent" id="savePrompt">
+                <i class="far fa-heart"></i> Save
+              </button>
+            </div>
+          </div>
+
+          <div class="action-cards">
+            <div class="action-card" id="journal-btn">
+              <i class="fas fa-book-open"></i>
+              <h3>Healing Journal</h3>
+              <p>Express your thoughts in a safe space with guided prompts</p>
+              <button class="btn btn-primary">
+                Begin <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+
+            <div class="action-card" id="compassion-btn">
+              <i class="fas fa-hand-holding-heart"></i>
+              <h3>Self-Compassion</h3>
+              <p>Exercises to cultivate kindness toward yourself</p>
+              <button class="btn btn-primary">
+                Explore <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Enhanced Breathing Exercise -->
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-wind"></i>
+              <h3>Calming Breath</h3>
+            </div>
+            <div class="breath-container">
+              <div class="breath-circle pulse">
+                <span id="breath-text">Breathe In</span>
+              </div>
+            </div>
+            
+            <div class="breath-stats">
+              <div class="breath-stat">
+                <div class="stat-value" id="cycle-count">0</div>
+                <div class="stat-label">Cycles</div>
+              </div>
+              <div class="breath-stat">
+                <div class="stat-value" id="timer">0:00</div>
+                <div class="stat-label">Time</div>
+              </div>
+            </div>
+            
+            <div class="breath-instruction" id="instruction">
+              Breathe in slowly through your nose...
+            </div>
+            
+            <div class="breath-controls">
+              <button class="btn btn-primary" id="start-breath">
+                <i class="fas fa-play"></i> Start
+              </button>
+              <button class="btn btn-secondary" id="reset-breath">
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+          </div>
+          
+          <!-- Memorial Space -->
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-memory"></i>
+              <h3>Memory Sanctuary</h3>
+            </div>
+            <p>Preserve meaningful memories</p>
+            <div class="memory-container" id="memories-container">
+              <!-- Memories will be loaded here -->
+              <div class="memory-item add-memory" id="add-memory-btn">
+                <i class="fas fa-plus"></i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Healing Progress -->
+          <div class="section">
+            <div class="section-title">
+              <i class="fas fa-chart-line"></i>
+              <h3>Your Progress</h3>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-info">
+              <span>Start</span>
+              <span id="progress-percent">0%</span>
+              <span>Healed</span>
+            </div>
+          </div>
+        </section>
+      </main>
+      
+      <aside class="sidebar">
+        <!-- Companion Section -->
+        <section class="section">
+          <div class="section-title">
+            <i class="fas fa-comments"></i>
+            <h3>Your Companion</h3>
+          </div>
+          
+          <div class="companion-container">
+            <div class="companion-avatar" id="companion-avatar">
+              <i class="fas fa-smile"></i>
+            </div>
+            <div class="companion-name" id="companion-name">Elena</div>
+            <div class="companion-role" id="companion-role">Healing Guide</div>
+            
+            <div class="companion-specialties" id="companion-specialties">
+              <div class="specialty-tag">Grief</div>
+              <div class="specialty-tag">Compassion</div>
+              <div class="specialty-tag">Support</div>
+            </div>
+            
+            <button class="btn btn-primary" id="start-chat-btn">
+              <i class="fas fa-comment"></i> Start Chat
+            </button>
+            
+            <button class="btn btn-secondary" id="change-companion-btn">
+              <i class="fas fa-sync-alt"></i> Change
+            </button>
+          </div>
+        </section>
+
+        <!-- Mood Tracker -->
+        <section class="section">
+          <div class="section-title">
+            <i class="fas fa-smile"></i>
+            <h3>How You Feel</h3>
+          </div>
+          
+          <div class="mood-options">
+            <div class="mood-option" data-mood="awful">
+              <div class="mood-emoji">😢</div>
+              <div class="mood-label">Awful</div>
+            </div>
+            <div class="mood-option" data-mood="sad">
+              <div class="mood-emoji">😞</div>
+              <div class="mood-label">Sad</div>
+            </div>
+            <div class="mood-option" data-mood="neutral">
+              <div class="mood-emoji">😐</div>
+              <div class="mood-label">Neutral</div>
+            </div>
+            <div class="mood-option" data-mood="good">
+              <div class="mood-emoji">🙂</div>
+              <div class="mood-label">Good</div>
+            </div>
+            <div class="mood-option selected" data-mood="great">
+              <div class="mood-emoji">😊</div>
+              <div class="mood-label">Great</div>
+            </div>
+          </div>
+          
+          <div class="quick-actions">
+            <button class="btn btn-secondary btn-sm" id="mood-history">
+              <i class="fas fa-history"></i> History
+            </button>
+            <button class="btn btn-secondary btn-sm" id="mood-insights">
+              <i class="fas fa-chart-pie"></i> Insights
+            </button>
+          </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="section">
+          <div class="section-title">
+            <i class="fas fa-clock"></i>
+            <h3>Recent Activity</h3>
+          </div>
+          
+          <div class="activity-list" id="activity-list">
+            <!-- Activities will be loaded here -->
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Signed in</div>
+                <div class="activity-time">Just now</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Chat Interface -->
+  <div class="chat-container" id="chat-container">
+    <div class="swipe-indicator"></div>
+    <div class="chat-header">
+      <div class="avatar">
+        <i class="fas fa-smile"></i>
+      </div>
+      <h3 id="chat-title">Chat with Elena</h3>
+      <button class="close-chat" id="close-chat" aria-label="Close chat">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <!-- Messages will appear here -->
+      <div class="message companion">
+        Hi there! I'm Elena, your healing companion. How are you feeling today?
+        <div class="message-time">10:30 AM</div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chat-input" placeholder="Type your message...">
+      <button class="send-btn" id="send-btn" aria-label="Send message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Memory Modal -->
+  <div class="memory-modal" id="memory-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add a Memory</h3>
+        <button class="close-modal" id="close-modal" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="memory-form">
+        <div class="form-group">
+          <label for="memory-title">Memory Title</label>
+          <input type="text" id="memory-title" placeholder="Enter a title">
+        </div>
+        <div class="form-group">
+          <label for="memory-description">Description</label>
+          <textarea id="memory-description" placeholder="Describe your memory"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="memory-icon">Select Icon</label>
+          <select id="memory-icon">
+            <option value="fa-heart">Heart</option>
+            <option value="fa-star">Star</option>
+            <option value="fa-tree">Tree</option>
+            <option value="fa-book">Book</option>
+            <option value="fa-music">Music</option>
+            <option value="fa-mountain">Mountain</option>
+            <option value="fa-coffee">Coffee</option>
+            <option value="fa-camera">Camera</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="memory-image">Upload Image (Optional)</label>
+          <input type="file" id="memory-image" accept="image/*">
+          <div class="image-preview" id="image-preview">
+            <p>No image selected</p>
+          </div>
+        </div>
+        <button class="submit-memory" id="submit-memory">Save Memory</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mood Insights Modal -->
+  <div class="insights-modal" id="insights-modal">
+    <div class="insights-content">
+      <div class="insights-header">
+        <h3>Mood Insights</h3>
+        <button class="close-insights" id="close-insights" aria-label="Close insights">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="insights-body">
+        <div class="chart-container">
+          <canvas id="mood-chart"></canvas>
+        </div>
+        <div id="mood-stats">
+          <!-- Mood stats will be displayed here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+  
+  <script>
+    // Initialize Supabase
+    const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // Define companions
+    const companions = [
+      {
+        id: 1,
+        name: "Elena",
+        role: "Healing Guide",
+        specialties: ["Grief", "Compassion", "Support"],
+        avatar: "fas fa-smile",
+        personality: "compassionate",
+        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
+        systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
+      },
+      {
+        id: 2,
+        name: "Marcus",
+        role: "Mindfulness Coach",
+        specialties: ["Mindfulness", "Resilience", "Meditation"],
+        avatar: "fas fa-leaf",
+        personality: "calm",
+        intro: "Hello, I'm Marcus. I'm here to help you find peace and mindfulness on your healing journey.",
+        systemPrompt: "You are Marcus, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
+      },
+      {
+        id: 3,
+        name: "Sophia",
+        role: "Therapeutic Guide",
+        specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
+        avatar: "fas fa-lightbulb",
+        personality: "insightful",
+        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+        systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
+      }
+    ];
+    
+    // State variables
+    let currentCompanionIndex = 0;
+    let currentMood = "great";
+    let breathInterval;
+    let isBreathingActive = false;
+    let cycleCount = 0;
+    let secondsElapsed = 0;
+    let currentPhase = 0;
+    let memories = [];
+    let activities = [];
+    let progress = 0;
+    let conversationHistory = [];
+    let currentUser = null;
+    let moodChart = null;
+    
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Check if user is logged in
+      const isAuthenticated = await checkSession();
+      
+      if (isAuthenticated) {
+        // Show dashboard for logged-in users
+        document.getElementById('login-prompt').style.display = 'none';
+        document.getElementById('dashboard-container').style.display = 'block';
+        
+        setGreeting();
+        initBreathingExercise();
+        updateCompanion();
+        setupEventListeners();
+        await loadMemories();
+        await loadMoodHistory();
+        await loadActivities();
+        await loadProgress();
+        updateProgressBar();
+        showToast(`Welcome back, ${currentUser.email}`, "success");
+      } else {
+        // Show login prompt for unauthenticated users
+        document.getElementById('login-prompt').style.display = 'block';
+        document.getElementById('dashboard-container').style.display = 'none';
+      }
+      
+      // Setup login redirection button
+      document.getElementById('go-to-login').addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    });
+    
+    // Check user session
+    async function checkSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+        return false;
+      }
+      
+      if (data.session) {
+        currentUser = data.session.user;
+        document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Load user progress
+    async function loadProgress() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('user_progress')
+          .select('progress')
+          .eq('user_id', currentUser.id)
+          .single();
+        
+        if (error) throw error;
+        
+        if (data) {
+          progress = data.progress || 0;
+        } else {
+          // Initialize progress for new users
+          progress = 0;
+          await supabase
+            .from('user_progress')
+            .insert([{ user_id: currentUser.id, progress: 0 }]);
+        }
+      } catch (error) {
+        console.error('Error loading progress:', error.message);
+        showToast("Failed to load progress", "error");
+      }
+    }
+    
+    // Save user progress
+    async function saveProgress() {
+      if (!currentUser) return;
+      
+      try {
+        await supabase
+          .from('user_progress')
+          .upsert({ user_id: currentUser.id, progress });
+      } catch (error) {
+        console.error('Error saving progress:', error.message);
+      }
+    }
+    
+    // Load memories from database
+    async function loadMemories() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        memories = data || [];
+        renderMemories();
+      } catch (error) {
+        console.error('Error loading memories:', error.message);
+        showToast("Failed to load memories", "error");
+      }
+    }
+    
+    // Render memories in the UI
+    function renderMemories() {
+      const container = document.getElementById('memories-container');
+      container.innerHTML = '';
+      
+      memories.forEach(memory => {
+        const memoryItem = document.createElement('div');
+        memoryItem.className = 'memory-item';
+        memoryItem.innerHTML = `
+          ${memory.image_url 
+            ? `<img src="${memory.image_url}" class="memory-image" alt="${memory.title}">` 
+            : `<i class="fas ${memory.icon}"></i>`}
+          <div class="memory-label">${memory.title}</div>
+        `;
+        container.appendChild(memoryItem);
+      });
+      
+      // Add the "add memory" button at the end
+      const addButton = document.createElement('div');
+      addButton.className = 'memory-item add-memory';
+      addButton.id = 'add-memory-btn';
+      addButton.innerHTML = '<i class="fas fa-plus"></i>';
+      addButton.addEventListener('click', () => {
+        document.getElementById('memory-modal').classList.add('active');
+      });
+      container.appendChild(addButton);
+    }
+    
+    // Save memory to database
+    async function saveMemory(memoryData) {
+      if (!currentUser) return;
+      
+      try {
+        memoryData.user_id = currentUser.id;
+        
+        const { data, error } = await supabase
+          .from('memories')
+          .insert([memoryData]);
+        
+        if (error) throw error;
+        
+        showToast("Memory saved successfully", "success");
+        await loadMemories();
+        return data;
+      } catch (error) {
+        console.error('Error saving memory:', error.message);
+        showToast("Failed to save memory", "error");
+        throw error;
+      }
+    }
+    
+    // Load mood history
+    async function loadMoodHistory() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('mood_history')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(5);
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          currentMood = data[0].mood;
+          document.querySelectorAll('.mood-option').forEach(option => {
+            option.classList.remove('selected');
+          });
+          document.querySelector(`.mood-option[data-mood="${currentMood}"]`).classList.add('selected');
+        }
+      } catch (error) {
+        console.error('Error loading mood history:', error.message);
+      }
+    }
+    
+    // Save mood to database
+    async function saveMood(mood) {
+      if (!currentUser) return false;
+      
+      try {
+        const { error } = await supabase
+          .from('mood_history')
+          .insert([{ 
+            mood: mood,
+            user_id: currentUser.id
+          }]);
+        
+        if (error) throw error;
+        
+        return true;
+      } catch (error) {
+        console.error('Error saving mood:', error.message);
+        return false;
+      }
+    }
+    
+    // Load mood data for insights
+    async function loadMoodDataForInsights() {
+      if (!currentUser) return [];
+      
+      try {
+        const { data, error } = await supabase
+          .from('mood_history')
+          .select('mood, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: true })
+          .limit(30);
+        
+        if (error) throw error;
+        
+        return data || [];
+      } catch (error) {
+        console.error('Error loading mood data:', error.message);
+        return [];
+      }
+    }
+    
+    // Render mood insights chart
+    async function renderMoodInsights() {
+      const moodData = await loadMoodDataForInsights();
+      
+      if (moodData.length === 0) {
+        document.getElementById('mood-stats').innerHTML = '<p>No mood data available yet</p>';
+        return;
+      }
+      
+      // Mood mapping to numerical values
+      const moodValues = {
+        'awful': 0,
+        'sad': 1,
+        'neutral': 2,
+        'good': 3,
+        'great': 4
+      };
+      
+      // Prepare data for chart
+      const dates = moodData.map(entry => {
+        const date = new Date(entry.created_at);
+        return date.toLocaleDateString();
+      });
+      
+      const moods = moodData.map(entry => moodValues[entry.mood]);
+      
+      // Get mood stats
+      const moodCounts = moodData.reduce((acc, entry) => {
+        acc[entry.mood] = (acc[entry.mood] || 0) + 1;
+        return acc;
+      }, {});
+      
+      const totalEntries = moodData.length;
+      const moodStatsHTML = `
+        <h4>Mood Distribution</h4>
+        <ul>
+          <li>Awful: ${moodCounts.awful || 0} (${Math.round(((moodCounts.awful || 0) / totalEntries) * 100)}%)</li>
+          <li>Sad: ${moodCounts.sad || 0} (${Math.round(((moodCounts.sad || 0) / totalEntries) * 100)}%)</li>
+          <li>Neutral: ${moodCounts.neutral || 0} (${Math.round(((moodCounts.neutral || 0) / totalEntries) * 100)}%)</li>
+          <li>Good: ${moodCounts.good || 0} (${Math.round(((moodCounts.good || 0) / totalEntries) * 100)}%)</li>
+          <li>Great: ${moodCounts.great || 0} (${Math.round(((moodCounts.great || 0) / totalEntries) * 100)}%)</li>
+        </ul>
+      `;
+      
+      document.getElementById('mood-stats').innerHTML = moodStatsHTML;
+      
+      // Destroy existing chart if it exists
+      if (moodChart) {
+        moodChart.destroy();
+      }
+      
+      // Create new chart
+      const ctx = document.getElementById('mood-chart').getContext('2d');
+      moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Mood Level',
+            data: moods,
+            borderColor: '#6C5CE7',
+            backgroundColor: 'rgba(108, 92, 231, 0.1)',
+            borderWidth: 2,
+            pointBackgroundColor: '#6C5CE7',
+            pointRadius: 4,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 4,
+              ticks: {
+                callback: function(value) {
+                  const moodLabels = ['Awful', 'Sad', 'Neutral', 'Good', 'Great'];
+                  return moodLabels[value];
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Load activities from database
+    async function loadActivities() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('activities')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(5);
+        
+        if (error) throw error;
+        
+        activities = data || [];
+        renderActivities();
+      } catch (error) {
+        console.error('Error loading activities:', error.message);
+      }
+    }
+    
+    // Save activity to database
+    async function saveActivity(activity) {
+      if (!currentUser) return false;
+      
+      try {
+        activity.user_id = currentUser.id;
+        
+        const { error } = await supabase
+          .from('activities')
+          .insert([activity]);
+        
+        if (error) throw error;
+        
+        return true;
+      } catch (error) {
+        console.error('Error saving activity:', error.message);
+        return false;
+      }
+    }
+    
+    // Save chat message to database
+    async function saveChatMessage(message) {
+      if (!currentUser) return false;
+      
+      try {
+        const { error } = await supabase
+          .from('chat_history')
+          .insert([{
+            user_id: currentUser.id,
+            companion_id: companions[currentCompanionIndex].id,
+            role: message.role,
+            content: message.content
+          }]);
+        
+        if (error) throw error;
+        
+        return true;
+      } catch (error) {
+        console.error('Error saving chat message:', error.message);
+        return false;
+      }
+    }
+    
+    // Handle memory form submission
+    async function handleMemorySubmit(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('memory-title').value.trim();
+      const description = document.getElementById('memory-description').value.trim();
+      const icon = document.getElementById('memory-icon').value;
+      const imageFile = document.getElementById('memory-image').files[0];
+      
+      if (!title) {
+        showToast("Please enter a title for your memory", "error");
+        return;
+      }
+      
+      try {
+        let memoryData = {
+          title,
+          description,
+          icon,
+        };
+        
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `${Math.random()}.${fileExt}`;
+          const filePath = `${fileName}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase
+            .storage
+            .from('memory-images')
+            .upload(filePath, imageFile);
+            
+          if (uploadError) throw uploadError;
+          
+          const { data: { publicUrl } } = await supabase
+            .storage
+            .from('memory-images')
+            .getPublicUrl(filePath);
+            
+          memoryData.image_url = publicUrl;
+        }
+        
+        await saveMemory(memoryData);
+        
+        document.getElementById('memory-modal').classList.remove('active');
+        document.getElementById('memory-title').value = '';
+        document.getElementById('memory-description').value = '';
+        document.getElementById('memory-icon').value = 'fa-heart';
+        document.getElementById('memory-image').value = '';
+        document.getElementById('image-preview').innerHTML = '<p>No image selected</p>';
+        
+        // Update progress
+        progress = Math.min(100, progress + 2);
+        await saveProgress();
+        updateProgressBar();
+      } catch (error) {
+        console.error('Error handling memory submission:', error);
+        showToast("Failed to save memory: " + error.message, "error");
+      }
+    }
+    
+    // Initialize breathing exercise
+    function initBreathingExercise() {
+      document.getElementById('cycle-count').textContent = cycleCount;
+      document.getElementById('timer').textContent = '0:00';
+    }
+    
+    // Start/stop breathing exercise
+    function toggleBreathing() {
+      if (!isBreathingActive) {
+        startBreathing();
+        document.getElementById('start-breath').innerHTML = '<i class="fas fa-pause"></i> Pause';
+      } else {
+        pauseBreathing();
+        document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Resume';
+      }
+      isBreathingActive = !isBreathingActive;
+    }
+    
+    // Start breathing exercise
+    function startBreathing() {
+      const breathCircle = document.querySelector('.breath-circle');
+      breathCircle.classList.add('pulse');
+      
+      breathInterval = setInterval(() => {
+        secondsElapsed++;
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed % 60;
+        document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        const phaseTime = secondsElapsed % 16;
+        
+        if (phaseTime < 4) {
+          if (currentPhase !== 0) {
+            currentPhase = 0;
+            document.getElementById('breath-text').textContent = 'Breathe In';
+            document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
+          }
+        } else if (phaseTime < 8) {
+          if (currentPhase !== 1) {
+            currentPhase = 1;
+            document.getElementById('breath-text').textContent = 'Hold';
+            document.getElementById('instruction').textContent = 'Hold your breath...';
+          }
+        } else if (phaseTime < 12) {
+          if (currentPhase !== 2) {
+            currentPhase = 2;
+            document.getElementById('breath-text').textContent = 'Breathe Out';
+            document.getElementById('instruction').textContent = 'Exhale slowly through your mouth...';
+            cycleCount++;
+            document.getElementById('cycle-count').textContent = cycleCount;
+          }
+        } else {
+          if (currentPhase !== 3) {
+            currentPhase = 3;
+            document.getElementById('breath-text').textContent = 'Hold';
+            document.getElementById('instruction').textContent = 'Hold your breath...';
+          }
+        }
+      }, 1000);
+    }
+    
+    // Pause breathing exercise
+    function pauseBreathing() {
+      clearInterval(breathInterval);
+      document.querySelector('.breath-circle').classList.remove('pulse');
+    }
+    
+    // Reset breathing exercise
+    function resetBreathing() {
+      pauseBreathing();
+      isBreathingActive = false;
+      cycleCount = 0;
+      secondsElapsed = 0;
+      currentPhase = 0;
+      document.getElementById('cycle-count').textContent = cycleCount;
+      document.getElementById('timer').textContent = '0:00';
+      document.getElementById('breath-text').textContent = 'Breathe In';
+      document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
+      document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Start';
+    }
+    
+    // Close chat function
+    function closeChat() {
+      document.getElementById('chat-container').classList.remove('active');
+    }
+    
+    // Update companion display
+    function updateCompanion() {
+      const companion = companions[currentCompanionIndex];
+      document.getElementById('companion-name').textContent = companion.name;
+      document.getElementById('companion-role').textContent = companion.role;
+      document.getElementById('companion-avatar').innerHTML = `<i class="${companion.avatar}"></i>`;
+      
+      const specialtiesContainer = document.getElementById('companion-specialties');
+      specialtiesContainer.innerHTML = '';
+      companion.specialties.forEach(specialty => {
+        const tag = document.createElement('div');
+        tag.className = 'specialty-tag';
+        tag.textContent = specialty;
+        specialtiesContainer.appendChild(tag);
+      });
+      
+      document.getElementById('chat-title').textContent = `Chat with ${companion.name}`;
+      
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.innerHTML = '';
+      
+      const introMessage = document.createElement('div');
+      introMessage.className = 'message companion';
+      introMessage.innerHTML = `
+        ${companion.intro}
+        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatMessages.appendChild(introMessage);
+      
+      conversationHistory = [
+        {
+          role: "system",
+          content: companion.systemPrompt
+        },
+        {
+          role: "assistant",
+          content: companion.intro
+        }
+      ];
+    }
+    
+    // Set up all event listeners
+    function setupEventListeners() {
+      // Affirmation refresh
+      document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
+      
+      // Prompt refresh
+      document.getElementById('refreshPrompt').addEventListener('click', refreshPrompt);
+      
+      // Mood tracking
+      document.querySelectorAll('.mood-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          currentMood = this.dataset.mood;
+          trackMood(currentMood);
+        });
+      });
+      
+      // Save buttons
+      document.getElementById('saveAffirmation').addEventListener('click', function() {
+        this.classList.toggle('active');
+        this.innerHTML = this.classList.contains('active') 
+          ? '<i class="fas fa-heart"></i> Saved' 
+          : '<i class="far fa-heart"></i> Save';
+        
+        showToast(
+          this.classList.contains('active') 
+            ? "Affirmation saved" 
+            : "Affirmation removed", 
+          "success"
+        );
+      });
+      
+      document.getElementById('savePrompt').addEventListener('click', function() {
+        this.classList.toggle('active');
+        this.innerHTML = this.classList.contains('active') 
+          ? '<i class="fas fa-heart"></i> Saved' 
+          : '<i class="far fa-heart"></i> Save';
+        
+        showToast(
+          this.classList.contains('active') 
+            ? "Prompt saved" 
+            : "Prompt removed", 
+          "success"
+        );
+      });
+      
+      // Sign out button
+      document.getElementById('signout-btn').addEventListener('click', async function() {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          showToast("Sign out failed: " + error.message, "error");
+        } else {
+          showToast("Signed out successfully", "success");
+          currentUser = null;
+          // Redirect to index.html
+          window.location.href = 'index.html';
+        }
+      });
+      
+      // Change companion button
+      document.getElementById('change-companion-btn').addEventListener('click', function() {
+        currentCompanionIndex = (currentCompanionIndex + 1) % companions.length;
+        updateCompanion();
+        showToast(`Companion changed to ${companions[currentCompanionIndex].name}`, "info");
+      });
+      
+      // Loss type selection
+      document.querySelectorAll('.loss-type').forEach(type => {
+        type.addEventListener('click', function() {
+          document.querySelectorAll('.loss-type').forEach(t => t.classList.remove('selected'));
+          this.classList.add('selected');
+          refreshAffirmation();
+          refreshPrompt();
+          showToast(`Tools for ${this.textContent}`, "info");
+        });
+      });
+      
+      // Breathing exercise controls
+      document.getElementById('start-breath').addEventListener('click', toggleBreathing);
+      document.getElementById('reset-breath').addEventListener('click', resetBreathing);
+      
+      // Chat interface
+      document.getElementById('start-chat-btn').addEventListener('click', function() {
+        document.getElementById('chat-container').classList.add('active');
+      });
+      
+      document.getElementById('close-chat').addEventListener('click', closeChat);
+      
+      document.getElementById('send-btn').addEventListener('click', sendMessage);
+      
+      document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+      
+      // Memory modal
+      document.getElementById('add-memory-btn').addEventListener('click', function() {
+        document.getElementById('memory-modal').classList.add('active');
+      });
+      
+      document.getElementById('close-modal').addEventListener('click', function() {
+        document.getElementById('memory-modal').classList.remove('active');
+      });
+      
+      document.getElementById('submit-memory').addEventListener('click', handleMemorySubmit);
+      
+      // Image preview for memory upload
+      document.getElementById('memory-image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('image-preview');
+        
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.innerHTML = '<p>No image selected</p>';
+        }
+      });
+      
+      // Mood history
+      document.getElementById('mood-history').addEventListener('click', function() {
+        showToast("Mood history would open here", "info");
+      });
+      
+      // Mood insights
+      document.getElementById('mood-insights').addEventListener('click', async function() {
+        document.getElementById('insights-modal').classList.add('active');
+        await renderMoodInsights();
+      });
+      
+      document.getElementById('close-insights').addEventListener('click', function() {
+        document.getElementById('insights-modal').classList.remove('active');
+      });
+      
+      // Journal button
+      document.getElementById('journal-btn').addEventListener('click', function() {
+        window.location.href = 'journal.html';
+      });
+      
+      // Compassion button
+      document.getElementById('compassion-btn').addEventListener('click', function() {
+        window.location.href = 'self-care.html';
+      });
+    }
+    
+    // Track mood
+    async function trackMood(mood) {
+      try {
+        await saveMood(mood);
+        
+        if (mood === "great" || mood === "good") {
+          progress = Math.min(100, progress + 3);
+        } else if (mood === "awful" || mood === "sad") {
+          progress = Math.max(0, progress - 1);
+        }
+        
+        await saveProgress();
+        updateProgressBar();
+        
+        const moodLabels = {
+          "awful": "Awful",
+          "sad": "Sad",
+          "neutral": "Neutral",
+          "good": "Good",
+          "great": "Great"
+        };
+        
+        const activity = { 
+          title: `Recorded mood: ${moodLabels[mood]}`, 
+          icon: 'fas fa-smile',
+        };
+        
+        await saveActivity(activity);
+        
+        activities.unshift(activity);
+        renderActivities();
+        
+        showToast("Mood recorded", "success");
+      } catch (error) {
+        console.error('Error tracking mood:', error);
+        showToast("Failed to record mood", "error");
+      }
+    }
+    
+    // Render activities
+    function renderActivities() {
+      const container = document.getElementById('activity-list');
+      container.innerHTML = '';
+      
+      if (activities.length === 0) {
+        container.innerHTML = '<p>No recent activities</p>';
+        return;
+      }
+      
+      activities.forEach(activity => {
+        const activityItem = document.createElement('div');
+        activityItem.className = 'activity-item';
+        activityItem.innerHTML = `
+          <div class="activity-icon">
+            <i class="${activity.icon}"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-title">${activity.title}</div>
+            <div class="activity-time">Just now</div>
+          </div>
+        `;
+        container.appendChild(activityItem);
+      });
+    }
+    
+    // Update progress bar
+    function updateProgressBar() {
+      document.getElementById('progressFill').style.width = `${progress}%`;
+      document.getElementById('progress-percent').textContent = `${progress}%`;
+    }
+    
+    // Send chat message
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      const chatMessages = document.getElementById('chat-messages');
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Add user message to UI
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
+      chatMessages.appendChild(userMessage);
+      
+      // Add to conversation history
+      const userMessageObj = {
+        role: "user",
+        content: message
+      };
+      
+      conversationHistory.push(userMessageObj);
+      
+      // Save to database
+      await saveChatMessage(userMessageObj);
+      
+      // Clear input
+      input.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Show thinking indicator
+      const thinkingMessage = document.createElement('div');
+      thinkingMessage.className = 'message companion';
+      thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
+      chatMessages.appendChild(thinkingMessage);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      try {
+        const companion = companions[currentCompanionIndex];
+        
+        // Simulate AI response for demo
+        const aiResponses = [
+          "I understand how you're feeling. It's completely normal to have these emotions during healing.",
+          "Thank you for sharing that with me. How does that make you feel when you think about it?",
+          "That sounds challenging. Remember to be gentle with yourself during this process.",
+          "I appreciate you opening up about this. Would you like to explore this feeling more deeply?",
+          "Your feelings are valid. What would help you feel more supported right now?"
+        ];
+        
+        const aiResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+        
+        // Remove thinking indicator
+        setTimeout(() => {
+          chatMessages.removeChild(thinkingMessage);
+          
+          // Add AI response to UI
+          const responseTime = new Date();
+          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          const companionMessage = document.createElement('div');
+          companionMessage.className = 'message companion';
+          companionMessage.innerHTML = `${aiResponse}<div class="message-time">${responseTimeString}</div>`;
+          chatMessages.appendChild(companionMessage);
+          
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Add to conversation history
+          const companionMessageObj = {
+            role: "assistant",
+            content: aiResponse
+          };
+          
+          conversationHistory.push(companionMessageObj);
+          
+          // Save to database
+          saveChatMessage(companionMessageObj);
+          
+          // Add activity
+          const activity = { 
+            title: `Chatted with ${companion.name}`, 
+            icon: 'fas fa-comment',
+          };
+          
+          saveActivity(activity);
+          activities.unshift(activity);
+          renderActivities();
+          
+          // Update progress
+          progress = Math.min(100, progress + 2);
+          saveProgress();
+          updateProgressBar();
+        }, 1500);
+        
+      } catch (error) {
+        console.error('Error sending message:', error.message);
+        chatMessages.removeChild(thinkingMessage);
+        
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'message companion';
+        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again?`;
+        chatMessages.appendChild(errorMessage);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        showToast("Connection issue, please try again", "error");
+      }
+    }
+    
+    // Generate new affirmation
+    function refreshAffirmation() {
+      const card = document.getElementById('affirmationCard');
+      const affirmationElement = document.getElementById('affirmation');
+      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
+      
+      card.style.opacity = '0.7';
+      affirmationElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating...</span>';
+      
+      setTimeout(() => {
+        const affirmations = {
+          "Relationship": [
+            "I am whole and complete just as I am.",
+            "Every ending creates space for new beginnings.",
+            "I release what no longer serves me and welcome new possibilities."
+          ],
+          "Loved One": [
+            "Their love remains with me always.",
+            "I carry their memory in my heart with gratitude.",
+            "Grief is the price of love, and I am grateful for the love we shared."
+          ],
+          "Pet": [
+            "The love we shared remains forever in my heart.",
+            "I am grateful for every moment we had together.",
+            "Their paw prints are forever on my soul."
+          ],
+          "Job": [
+            "My worth is not defined by my job title.",
+            "Endings create space for new opportunities.",
+            "I trust that the right path will reveal itself in time."
+          ],
+          "Health": [
+            "My body is doing its best to heal.",
+            "I show myself compassion during this challenging time.",
+            "Healing is a journey, and I am moving forward."
+          ],
+          "Other": [
+            "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
+            "Healing isn't linear, and that's okay.",
+            "I give myself permission to feel whatever I'm feeling."
+          ]
+        };
+        
+        const categoryAffirmations = affirmations[selectedLoss] || affirmations["Other"];
+        const affirmation = categoryAffirmations[Math.floor(Math.random() * categoryAffirmations.length)];
+        affirmationElement.textContent = `"${affirmation}"`;
+        card.style.opacity = '1';
+        showToast("New affirmation generated", "success");
+      }, 800);
+    }
+    
+    // Generate new reflection prompt
+    function refreshPrompt() {
+      const card = document.querySelector('.card');
+      const promptElement = document.getElementById('prompt');
+      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
+      
+      card.style.opacity = '0.7';
+      promptElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating...</span>';
+      
+      setTimeout(() => {
+        const prompts = {
+          "Relationship": [
+            "What have you learned about yourself through this experience?",
+            "How might you show yourself kindness today?",
+            "What boundaries have you set that make you feel empowered?"
+          ],
+          "Loved One": [
+            "What's your favorite memory of them? Why does it stand out?",
+            "How have they influenced who you are today?",
+            "What lessons did they teach you that you still carry?"
+          ],
+          "Pet": [
+            "What was their most endearing habit or quirk?",
+            "What lessons about unconditional love did they teach you?",
+            "How did they show their affection for you?"
+          ],
+          "Job": [
+            "What skills or strengths did you gain from this experience?",
+            "What did you learn about what you truly value in work?",
+            "What possibilities excite you as you look forward?"
+          ],
+          "Health": [
+            "What small victory can you celebrate today?",
+            "How have you shown resilience in facing this challenge?",
+            "What support systems have been most helpful to you?"
+          ],
+          "Other": [
+            "What's one thing you're grateful for today?",
+            "How have you grown through this experience?",
+            "What small step toward healing can you take today?"
+          ]
+        };
+        
+        const categoryPrompts = prompts[selectedLoss] || prompts["Other"];
+        const prompt = categoryPrompts[Math.floor(Math.random() * categoryPrompts.length)];
+        promptElement.textContent = prompt;
+        card.style.opacity = '1';
+        showToast("New reflection prompt generated", "success");
+      }, 800);
+    }
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+    
+    // Set greeting based on time of day
+    function setGreeting() {
+      const hour = new Date().getHours();
+      let greeting = 'Hello';
+      if (hour < 12) greeting = 'Good morning';
+      else if (hour < 18) greeting = 'Good afternoon';
+      else greeting = 'Good evening';
+      
+      document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
+    }
+  </script>
+</body>
+</html>

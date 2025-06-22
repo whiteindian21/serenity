@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serenity | AI-Powered Emotional Support</title>
+  <meta name="description" content="Serenity provides compassionate AI-powered support for emotional healing with science-backed techniques and 24/7 availability.">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #A8DADC;
+      --primary-light: #E1F0F0;
+      --primary-dark: #8AC0C2;
+      --secondary: #457B9D;
+      --accent: #E63946;
+      --dark: #1D3557;
+      --light: #F1FAEE;
+      --gray: #8A9BA8;
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(241, 250, 238, 0.95);
+      padding: 1.5rem 0;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      transition: var(--transition);
+    }
+
+    nav.scrolled {
+      padding: 1rem 0;
+      background: rgba(241, 250, 238, 0.95);
+      backdrop-filter: blur(5px);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+
+    /* Buttons */
+    .cta-button {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.2);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      background: #3a6b8a;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(69, 123, 157, 0.3);
+    }
+
+    .cta-button.primary {
+      background: var(--primary);
+      color: var(--dark);
+      box-shadow: 0 4px 15px rgba(168, 218, 220, 0.3);
+    }
+
+    .cta-button.primary:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 6px 20px rgba(168, 218, 220, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 10rem 0 6rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, var(--light) 0%, rgba(241, 250, 238, 0.7) 100%);
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 2.5rem;
+      max-width: 90%;
+      opacity: 0.9;
+    }
+
+    .hero-image-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(29, 53, 87, 0.1);
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: var(--transition);
+    }
+
+    .hero-image-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 60px -12px rgba(29, 53, 87, 0.15);
+    }
+
+    .companion-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      z-index: 3;
+      width: 180px;
+      transform: rotate(-5deg);
+      border: 2px solid var(--primary);
+    }
+
+    .companion-badge h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--secondary);
+    }
+
+    .companion-badge p {
+      font-size: 0.9rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    /* Features Grid */
+    .features {
+      background: linear-gradient(to bottom, var(--light) 50%, #ffffff 100%);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      color: var(--dark);
+    }
+
+    .section-header h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .section-header p {
+      max-width: 700px;
+      margin: 1rem auto 0;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+      transition: var(--transition);
+      text-align: center;
+      border: 1px solid var(--primary-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .feature-card:hover:before {
+      transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(168, 218, 220, 0.15);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--primary-light);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: var(--secondary);
+      font-size: 1.8rem;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover .feature-icon {
+      background: var(--primary);
+      color: var(--dark);
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    .feature-card h3 {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .feature-card p {
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    /* Companions Section */
+    .companions {
+      background: linear-gradient(to bottom, white 0%, var(--primary-light) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .companion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .companion-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      position: relative;
+      border: 1px solid var(--primary-light);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .companion-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(168, 218, 220, 0.2);
+    }
+
+    .companion-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .companion-info {
+      padding: 2rem;
+      text-align: center;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .companion-info h3 {
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .companion-role {
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .companion-bio {
+      color: var(--dark);
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      flex-grow: 1;
+    }
+
+    .specialty-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .specialty-tag {
+      background: var(--primary-light);
+      color: var(--secondary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* How It Works */
+    .steps {
+      background: var(--light);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .step-card {
+      padding: 2rem;
+      position: relative;
+      text-align: center;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+      transition: var(--transition);
+      border: 1px solid var(--primary-light);
+    }
+
+    .step-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(168, 218, 220, 0.15);
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-weight: 600;
+      font-size: 1.3rem;
+      transition: var(--transition);
+    }
+
+    .step-card:hover .step-number {
+      transform: scale(1.1);
+      background: var(--secondary);
+      color: white;
+    }
+
+    .step-card h3 {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .step-card p {
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background: var(--primary-light);
+    }
+
+    .testimonial-cards {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      max-width: 380px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      position: relative;
+      border: 1px solid var(--primary-light);
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(168, 218, 220, 0.2);
+    }
+
+    .testimonial-card:before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      position: absolute;
+      top: -10px;
+      left: 15px;
+      color: rgba(168, 218, 220, 0.2);
+      line-height: 1;
+      z-index: 0;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 2rem;
+      color: var(--dark);
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+    }
+
+    .author-info h4 {
+      margin-bottom: 0.3rem;
+      color: var(--secondary);
+    }
+
+    .author-info p {
+      color: var(--dark);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      text-align: center;
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-section p {
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-button.white {
+      background: white;
+      color: var(--secondary);
+    }
+
+    .cta-button.white:hover {
+      background: rgba(255,255,255,0.95);
+      color: var(--secondary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 5rem 0 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-section h4 {
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-links a {
+      color: white;
+      background: rgba(255,255,255,0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--primary);
+      color: var(--dark);
+      transform: translateY(-3px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--dark);
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* Animation Enhancements */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate {
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-1 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.6s;
+    }
+
+    /* Floating Elements */
+    .floating {
+      position: absolute;
+      z-index: 1;
+      opacity: 0.15;
+    }
+
+    .floating-1 {
+      top: 20%;
+      left: 5%;
+      width: 120px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .floating-2 {
+      bottom: 15%;
+      right: 8%;
+      width: 100px;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    .floating-3 {
+      top: 40%;
+      right: 10%;
+      width: 80px;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Chat Bubbles */
+    .chat-bubble {
+      position: absolute;
+      background: white;
+      border-radius: 20px;
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 200px;
+      z-index: 2;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: scale(0);
+      animation: popIn 0.5s forwards;
+      display: none;
+    }
+
+    .chat-bubble:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0); }
+      80% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .bubble-1 {
+      top: 15%;
+      right: 25%;
+      animation-delay: 0.8s;
+    }
+
+    .bubble-1:after {
+      bottom: -20px;
+      left: 20px;
+      border-top-color: white;
+      border-bottom: 0;
+    }
+
+    .bubble-2 {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 1.2s;
+    }
+
+    .bubble-2:after {
+      top: -20px;
+      right: 20px;
+      border-bottom-color: white;
+      border-top: 0;
+    }
+
+    /* Responsive Design */
+    @media (min-width: 1025px) {
+      .chat-bubble {
+        display: block;
+      }
+      
+      .bubble-1 {
+        top: 15%;
+        right: 25%;
+      }
+      
+      .bubble-2 {
+        bottom: 20%;
+        left: 20%;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-text h1 {
+        font-size: 3rem;
+      }
+      
+      .chat-bubble {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--light);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 1000;
+      }
+      
+      .nav-links.active {
+        display: flex;
+      }
+
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .hero-text p {
+        max-width: 100%;
+        margin: 0 auto 2rem;
+      }
+
+      .hero-image-container {
+        margin: 0 auto;
+        order: -1;
+        max-width: 400px;
+      }
+
+      .companion-badge {
+        position: relative;
+        width: 100%;
+        max-width: 250px;
+        margin: -20px auto 0;
+        transform: rotate(0);
+        right: auto;
+        bottom: auto;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+      }
+
+      .cta-section h2 {
+        font-size: 2rem;
+      }
+      
+      .companion-grid {
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 1.5rem;
+      }
+
+      .hero-text h1 {
+        font-size: 2.3rem;
+      }
+
+      .hero {
+        padding: 8rem 0 4rem;
+      }
+
+      .feature-card {
+        padding: 2rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .cta-button {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .companion-card {
+        max-width: 350px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <div class="container nav-content">
+      <a href="#" class="logo">Serenity</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#companions">Companions</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="createaccount.html" class="cta-button">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="animate">Your Healing Journey<br>Starts Here</h1>
+            <p class="animate delay-1">Serenity is your compassionate AI companion, offering gentle guidance through emotional challenges with science-backed techniques and always-available support.</p>
+            <div class="animate delay-2">
+              <a href="login.html" class="cta-button"> Begin Healing Today
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="hero-image-container animate delay-1">
+            <img src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Compassionate support illustration" class="hero-image">
+            <div class="companion-badge animate delay-2">
+              <h4>Meet Your AI Companions</h4>
+              <p>Always available to listen and support you</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <svg class="floating floating-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="var(--primary)" d="M45.5,-59.3C58.9,-48.8,69.6,-34.7,73.1,-18.9C76.6,-3.1,72.9,14.4,63.5,29.3C54.1,44.2,39,56.5,21.8,65.8C4.6,75.1,-14.7,81.4,-30.2,75.3C-45.7,69.2,-57.5,50.7,-64.9,31.5C-72.2,12.3,-75.1,-7.6,-68.5,-23.9C-61.9,-40.2,-45.9,-52.9,-29.6,-62.5C-13.3,-72.1,3.3,-78.6,19.8,-74.7C36.3,-70.8,52.6,-56.5,45.5,-59.3Z" transform="translate(100 100)" />
+      </svg>
+      <svg class="floating floating-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="var(--secondary)" d="M42.7,-58.8C55.1,-50.3,64.8,-38.2,69.3,-23.9C73.8,-9.6,73.1,6.9,66.7,21.1C60.3,35.3,48.2,47.2,33.7,56.3C19.2,65.4,2.3,71.7,-13.6,67.9C-29.5,64.1,-44.4,50.2,-54.7,33.6C-65,17,-70.6,-2.3,-66.8,-19.3C-63,-36.3,-49.7,-51,-34.4,-59.8C-19.1,-68.6,-1.8,-71.5,14.1,-67.1C30,-62.7,44.9,-51.1,42.7,-58.8Z" transform="translate(100 100)" />
+      </svg>
+      <svg class="floating floating-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="var(--primary)" d="M38.7,-59.1C49.5,-49.2,57.1,-36.5,62.6,-22.8C68.1,-9.1,71.5,5.6,67.8,18.1C64.1,30.7,53.3,41.1,40.9,49.7C28.4,58.3,14.2,65.1,-0.8,66.2C-15.8,67.3,-31.6,62.7,-45.3,54.8C-59.1,46.8,-70.9,35.5,-75.2,21.5C-79.5,7.5,-76.4,-9.2,-69.2,-23.5C-62,-37.8,-50.8,-49.7,-37.9,-58.9C-25,-68.1,-10.4,-74.5,3.4,-79.4C17.1,-84.3,34.3,-87.6,38.7,-59.1Z" transform="translate(100 100)" />
+      </svg>
+      <div class="chat-bubble bubble-1">"I'm here whenever you need to talk"</div>
+     
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header animate">
+          <h2>Your Healing Toolkit</h2>
+          <p>Comprehensive features designed to support your emotional recovery journey</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card animate delay-1">
+            <div class="feature-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3>24/7 Emotional Support</h3>
+            <p>Always-available compassionate listening and guidance whenever you need it most</p>
+          </div>
+          <div class="feature-card animate delay-2">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Cognitive Exercises</h3>
+            <p>Science-backed CBT techniques to reframe negative thoughts and build resilience</p>
+          </div>
+          <div class="feature-card animate delay-3">
+            <div class="feature-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3>Guided Journaling</h3>
+            <p>Structured prompts to process emotions and track your healing progress</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="companions" class="companions">
+      <div class="container">
+        <div class="section-header animate">
+          <h2>Meet Your Compassionate Companions</h2>
+          <p>Our AI companions are designed to provide personalized support whenever you need it</p>
+        </div>
+        <div class="companion-grid">
+          <div class="companion-card animate delay-1">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Elena" class="companion-image">
+            <div class="companion-info">
+              <h3>Elena</h3>
+              <span class="companion-role">Empathy Specialist</span>
+              <p class="companion-bio">Elena specializes in active listening and providing emotional validation during difficult moments. She creates a safe space for you to express your feelings without judgment.</p>
+              <div class="specialty-tags">
+                <span class="specialty-tag">Active Listening</span>
+                <span class="specialty-tag">Validation</span>
+                <span class="specialty-tag">Comfort</span>
+              </div>
+            </div>
+          </div>
+          <div class="companion-card animate delay-2">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="David" class="companion-image">
+            <div class="companion-info">
+              <h3>David</h3>
+              <span class="companion-role">Resilience Coach</span>
+              <p class="companion-bio">David helps you build emotional resilience through cognitive exercises and positive reframing. He provides practical tools to overcome negative thought patterns.</p>
+              <div class="specialty-tags">
+                <span class="specialty-tag">CBT Techniques</span>
+                <span class="specialty-tag">Growth Mindset</span>
+                <span class="specialty-tag">Goal Setting</span>
+              </div>
+            </div>
+          </div>
+          <div class="companion-card animate delay-3">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Sophia" class="companion-image">
+            <div class="companion-info">
+              <h3>Sophia</h3>
+              <span class="companion-role">Mindfulness Guide</span>
+              <p class="companion-bio">Sophia leads guided meditations and mindfulness practices to help you find peace in the present moment. Her techniques reduce anxiety and promote emotional balance.</p>
+              <div class="specialty-tags">
+                <span class="specialty-tag">Meditation</span>
+                <span class="specialty-tag">Mindfulness</span>
+                <span class="specialty-tag">Grounding</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="steps">
+      <div class="container">
+        <div class="section-header animate">
+          <h2>Simple Path to Healing</h2>
+          <p>Serenity guides you through each step of the recovery process</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card animate delay-1">
+            <div class="step-number">1</div>
+            <h3>Share Your Story</h3>
+            <p>Begin with a confidential conversation about your experience and needs</p>
+          </div>
+          <div class="step-card animate delay-2">
+            <div class="step-number">2</div>
+            <h3>Meet Your Companion</h3>
+            <p>Connect with an AI companion that matches your emotional needs</p>
+          </div>
+          <div class="step-card animate delay-3">
+            <div class="step-number">3</div>
+            <h3>Daily Support</h3>
+            <p>Engage with guided exercises, check-ins, and progress tracking</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+      <div class="container">
+        <div class="section-header animate">
+          <h2>Stories of Renewed Hope</h2>
+          <p>Real people who found healing with Serenity</p>
+        </div>
+        <div class="testimonial-cards">
+          <div class="testimonial-card animate delay-1">
+            <p class="testimonial-text">"Serenity was there for me at 3 AM when the loneliness felt unbearable. Talking to Elena helped me process emotions I couldn't share with anyone else."</p>
+            <div class="testimonial-author">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="author-avatar">
+              <div class="author-info">
+                <h4>Sarah, 28</h4>
+                <p>New York</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card animate delay-2">
+            <p class="testimonial-text">"David became my daily resilience coach. His cognitive exercises helped me break negative thought patterns I'd been stuck in for months."</p>
+            <div class="testimonial-author">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael" class="author-avatar">
+              <div class="author-info">
+                <h4>Michael, 32</h4>
+                <p>Chicago</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card animate delay-3">
+            <p class="testimonial-text">"Sophia's mindfulness sessions gave me tools to manage anxiety. Having a compassionate companion available 24/7 made all the difference."</p>
+            <div class="testimonial-author">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jessica" class="author-avatar">
+              <div class="author-info">
+                <h4>Jessica, 35</h4>
+                <p>Los Angeles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="animate">Ready to Begin Your Healing Journey?</h2>
+        <p class="animate delay-1">Take the first step towards emotional recovery today with our supportive AI companions</p>
+        <div class="cta-buttons animate delay-2">
+          <a href="createaccount.html" class="cta-button white">
+            Start Free Trial
+            <i class="fas fa-heart"></i>
+          </a>
+          <a href="#companions" class="cta-button primary">
+            Meet Companions
+            <i class="fas fa-comment"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Serenity</h4>
+          <p>Compassionate AI-powered support for emotional recovery and personal growth.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#companions">Companions</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Newsletter</h4>
+          <p>Subscribe for tips and updates on emotional wellness</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your email" required>
+            <button type="submit" class="cta-button primary" style="margin-top: 1rem;">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Serenity. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary);"></i> for healing hearts</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileMenuBtn.textContent = '☰';
+      });
+    });
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Animation on scroll
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.animate');
+      elements.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          el.style.animationPlayState = 'running';
+        }
+      });
+    };
+
+    // Initial check and then on scroll
+    animateOnScroll();
+    window.addEventListener('scroll', animateOnScroll);
+
+    // Chat bubble animation
+    setTimeout(() => {
+      document.querySelectorAll('.chat-bubble').forEach(bubble => {
+        bubble.style.opacity = '1';
+        bubble.style.transform = 'scale(1)';
+      });
+    }, 500);
+  </script>
+</body>
+</html>

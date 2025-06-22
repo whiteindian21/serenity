@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serenity Journal | Healing Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+  <style>
+    :root {
+      --primary: #7C4DFF;
+      --primary-light: #EDE7F6;
+      --primary-dark: #651FFF;
+      --secondary: #FF7E8F;
+      --secondary-light: #FFE5E9;
+      --tertiary: #4DB6AC;
+      --tertiary-light: #E0F2F1;
+      --dark: #2E3A4D;
+      --light: #F9FAFB;
+      --gray: #94A3B8;
+      --gray-light: #E2E8F0;
+      --success: #4CAF50;
+      --warning: #FFC107;
+      --error: #F44336;
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+      --shadow-light: 0 6px 30px rgba(0, 0, 0, 0.04);
+      --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.08);
+      --shadow-dark: 0 12px 50px rgba(0, 0, 0, 0.12);
+      --spacing-unit: 0.5rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(124, 77, 255, 0.03) 0%, transparent 70%),
+        radial-gradient(circle at 90% 80%, rgba(77, 182, 172, 0.03) 0%, transparent 70%),
+        linear-gradient(to bottom right, #f9fafb, #eef2f6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-medium);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-out;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--dark);
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .journal-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+      padding: 2.5rem 1rem 1rem;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--tertiary-light) 100%);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      overflow: hidden;
+    }
+
+    .journal-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .journal-header h2 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: textGlow 3s infinite alternate;
+      position: relative;
+      z-index: 2;
+    }
+
+    .journal-header p {
+      color: var(--dark);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-decor {
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(45deg, rgba(124, 77, 255, 0.1), rgba(255, 126, 143, 0.1));
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .header-decor:nth-child(2) {
+      top: 30px;
+      left: -80px;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(45deg, rgba(77, 182, 172, 0.1), rgba(124, 77, 255, 0.1));
+    }
+
+    .mood-selector {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      padding: 0 1rem;
+    }
+
+    .mood-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: var(--transition);
+      padding: 1.2rem;
+      border-radius: var(--radius-md);
+      background: white;
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--gray-light);
+      min-width: 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mood-option:hover {
+      opacity: 0.8;
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .mood-option.selected {
+      opacity: 1;
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(124, 77, 255, 0.2);
+    }
+
+    .mood-option.selected:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .mood-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .mood-option.selected .mood-icon {
+      transform: scale(1.2);
+    }
+
+    .formatting-toolbar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      background: var(--light);
+      padding: 0.8rem;
+      border-radius: var(--radius-md);
+      margin: 0 1rem;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(124, 77, 255, 0.1);
+    }
+
+    .format-btn {
+      padding: 0.7rem 1rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-light);
+    }
+
+    .format-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .journal-input {
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    #userInput {
+      width: 100%;
+      min-height: 250px;
+      padding: 1.8rem 2rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      resize: vertical;
+      transition: var(--transition);
+      background-color: white;
+      box-shadow: var(--shadow-light);
+      font-family: 'Poppins', sans-serif;
+      background-image: linear-gradient(white, white);
+      background-attachment: local;
+    }
+
+    #userInput.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+    }
+
+    #userInput:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light), var(--shadow-medium);
+    }
+
+    #userInput::placeholder {
+      color: var(--gray);
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    .journal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      padding: 0 1rem;
+    }
+
+    .btn {
+      padding: 1.1rem 2rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      border: none;
+      box-shadow: var(--shadow-light);
+      flex: 1;
+      min-width: 200px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-light);
+      transform: translateY(-3px);
+    }
+
+    .btn-tertiary {
+      background: linear-gradient(135deg, var(--tertiary), #3CA89F);
+      color: white;
+      box-shadow: 0 4px 15px rgba(77, 182, 172, 0.3);
+    }
+
+    .btn-tertiary:hover {
+      background: linear-gradient(135deg, #3CA89F, var(--tertiary));
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(77, 182, 172, 0.4);
+    }
+
+    .ai-response {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin: 2rem 1rem 0;
+      position: relative;
+      min-height: auto;
+      transition: opacity 0.3s ease;
+      box-shadow: var(--shadow-light);
+      animation: fadeIn 0.8s ease-out;
+      border: 1px solid rgba(124, 77, 255, 0.1);
+    }
+
+    .ai-response:before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      position: absolute;
+      top: -1rem;
+      left: 1rem;
+      color: rgba(124, 77, 255, 0.1);
+      line-height: 1;
+    }
+
+    .ai-response h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ai-response h3 i {
+      font-size: 1.2rem;
+    }
+
+    #response {
+      position: relative;
+      z-index: 1;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .prompt-suggestions {
+      margin: 3rem 1rem 0;
+      padding: 1.5rem;
+      background: var(--tertiary-light);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(77, 182, 172, 0.1);
+    }
+
+    .prompt-suggestions h3 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .prompt-suggestions h3 i {
+      color: var(--primary);
+    }
+
+    .prompt-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .prompt-btn {
+      padding: 0.8rem 1.5rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+    }
+
+    .prompt-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .journal-entry-history {
+      margin: 3rem 1rem 1rem;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(124, 77, 255, 0.1);
+    }
+
+    .entry-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .entry-item {
+      padding: 1.2rem;
+      background: white;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .entry-item:hover {
+      transform: translateX(5px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .entry-date {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .entry-tag {
+      background: rgba(124, 77, 255, 0.1);
+      color: var(--primary);
+      padding: 0.3rem 0.7rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+      display: inline-block;
+    }
+
+    .entry-mood {
+      display: inline-block;
+      font-size: 1.4rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .entry-content-preview {
+      margin-top: 0.5rem;
+      color: var(--dark);
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gray);
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: var(--radius-md);
+      width: fit-content;
+      margin: 1rem auto;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingAnimation {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-medium);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+
+    .toast.error {
+      background: var(--error);
+    }
+
+    .toast.info {
+      background: var(--primary);
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.8rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.6rem 1.2rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .filter-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      width: 90%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: var(--shadow-dark);
+      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+      transition: var(--transition);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-modal:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .user-info {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: white;
+      padding: 0.7rem 1.2rem;
+      border-radius: 50px;
+      box-shadow: var(--shadow-light);
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .user-name {
+      font-weight: 500;
+    }
+
+    .login-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .login-form {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+    }
+
+    .login-form h2 {
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.9rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .login-btn {
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+    }
+
+    .signup-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 1rem;
+      display: inline-block;
+    }
+
+    .tag-suggestions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+      padding: 0 1rem;
+    }
+
+    .tag-btn {
+      padding: 0.5rem 1rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(124, 77, 255, 0.3);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tag-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 5px rgba(124, 77, 255, 0.3); }
+      100% { text-shadow: 0 0 15px rgba(124, 77, 255, 0.5); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        padding: 0;
+      }
+
+      .journal-header {
+        padding: 1.5rem 1rem 1rem;
+      }
+
+      .journal-header h2 {
+        font-size: 1.8rem;
+      }
+
+      .journal-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        min-width: auto;
+      }
+      
+      .user-info {
+        position: static;
+        margin: 1rem auto;
+        width: fit-content;
+        justify-content: center;
+      }
+      
+      .mood-selector {
+        gap: 0.8rem;
+      }
+      
+      .mood-option {
+        padding: 0.8rem;
+        min-width: 80px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .journal-header h2 {
+        font-size: 1.6rem;
+      }
+      
+      .journal-header p {
+        font-size: 1rem;
+      }
+      
+      .mood-icon {
+        font-size: 2rem;
+      }
+      
+      .mood-option {
+        padding: 0.5rem;
+        min-width: 70px;
+        font-size: 0.8rem;
+      }
+      
+      .btn {
+        padding: 0.9rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="user-info" id="userInfo">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <span class="user-name" id="userName">User</span>
+    </div>
+    
+    <div id="journalContent">
+      <header class="journal-header">
+        <div class="header-decor"></div>
+        <div class="header-decor"></div>
+        <h2>Serenity Journal</h2>
+        <p>How are you feeling today? This is your safe space to write freely, without judgment 🌿</p>
+      </header>
+
+      <div class="mood-selector">
+        <div class="mood-option" data-mood="very-sad" onclick="selectMood(this)">
+          <i class="mood-icon fas fa-sad-tear"></i>
+          <span>Very Sad</span>
+        </div>
+        <div class="mood-option" data-mood="sad" onclick="selectMood(this)">
+          <i class="mood-icon fas fa-frown"></i>
+          <span>Sad</span>
+        </div>
+        <div class="mood-option" data-mood="neutral" onclick="selectMood(this)">
+          <i class="mood-icon fas fa-meh"></i>
+          <span>Neutral</span>
+        </div>
+        <div class="mood-option" data-mood="happy" onclick="selectMood(this)">
+          <i class="mood-icon fas fa-smile"></i>
+          <span>Happy</span>
+        </div>
+        <div class="mood-option" data-mood="very-happy" onclick="selectMood(this)">
+          <i class="mood-icon fas fa-laugh"></i>
+          <span>Very Happy</span>
+        </div>
+      </div>
+      
+      <div class="tag-suggestions">
+        <div class="tag-btn" onclick="insertTag('grateful')">#grateful</div>
+        <div class="tag-btn" onclick="insertTag('anxious')">#anxious</div>
+        <div class="tag-btn" onclick="insertTag('reflective')">#reflective</div>
+        <div class="tag-btn" onclick="insertTag('stress')">#stress</div>
+        <div class="tag-btn" onclick="insertTag('family')">#family</div>
+        <div class="tag-btn" onclick="insertTag('work')">#work</div>
+      </div>
+
+      <div class="formatting-toolbar">
+        <button class="format-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i> Bold</button>
+        <button class="format-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i> Italic</button>
+        <button class="format-btn" onclick="formatText('bullet')"><i class="fas fa-list-ul"></i> List</button>
+        <button class="format-btn" onclick="formatText('header')"><i class="fas fa-heading"></i> Heading</button>
+        <button class="format-btn" onclick="formatText('quote')"><i class="fas fa-quote-right"></i> Quote</button>
+      </div>
+
+      <div class="journal-input">
+        <textarea id="userInput" rows="6" placeholder="Let it all out... your thoughts and feelings are welcome here. This space is just for you."></textarea>
+      </div>
+
+      <div class="journal-actions">
+        <button class="btn btn-primary" onclick="talkToCoach()">
+          <i class="fas fa-paper-plane"></i> Get Compassionate Response
+        </button>
+        <button class="btn btn-tertiary" onclick="saveJournal()">
+          <i class="fas fa-save"></i> Save Entry
+        </button>
+        <button class="btn btn-secondary" onclick="clearForm()">
+          <i class="fas fa-eraser"></i> Clear
+        </button>
+      </div>
+
+      <div class="typing-indicator" id="typingIndicator">
+        <span>Serenity is thinking</span>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+
+      <div class="ai-response">
+        <h3><i class="fas fa-heart"></i> Serenity's Response</h3>
+        <p id="response">I'm here to listen with compassion and without judgment. Whenever you're ready to share, I'll offer thoughtful reflections to support your healing journey.</p>
+      </div>
+
+      <div class="prompt-suggestions">
+        <h3><i class="fas fa-lightbulb"></i> Need inspiration? Try these prompts:</h3>
+        <div class="prompt-buttons">
+          <button class="prompt-btn" onclick="insertPrompt('What emotions am I holding onto that no longer serve me?')">Letting go</button>
+          <button class="prompt-btn" onclick="insertPrompt('What have I learned about my needs in relationships?')">Relationships</button>
+          <button class="prompt-btn" onclick="insertPrompt('What does my ideal future look like?')">Future vision</button>
+          <button class="prompt-btn" onclick="insertPrompt('What am I grateful for today?')">Gratitude</button>
+          <button class="prompt-btn" onclick="insertPrompt('What self-care activities nourish me most?')">Self-care</button>
+        </div>
+      </div>
+
+      <div class="journal-entry-history">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+          <h3><i class="fas fa-archive"></i> Journal Archive</h3>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="happy">Happy</button>
+            <button class="filter-btn" data-filter="sad">Sad</button>
+            <button class="filter-btn" data-filter="reflective">Reflective</button>
+            <button class="filter-btn" data-filter="grateful">Grateful</button>
+          </div>
+        </div>
+        <ul class="entry-list" id="entryList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="login-modal" id="loginModal">
+    <div class="login-form">
+      <h2>Welcome to Serenity Journal</h2>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••">
+      </div>
+      <div class="form-actions">
+        <button class="login-btn" onclick="login()">Sign In</button>
+        <a href="#" class="signup-link" onclick="signUp()">Create an account</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry Modal -->
+  <div class="modal" id="entryModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <h2 id="modalTitle">Journal Entry</h2>
+      <p id="modalDate" class="entry-date"></p>
+      <div id="modalContent" style="margin-top: 1rem; line-height: 1.8;"></div>
+      <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <button class="btn btn-primary" onclick="editEntry()"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-secondary" onclick="deleteEntry()"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+  // Supabase Configuration
+  const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+  
+  // Declare supabase client at the top level
+  let supabaseClient = null;
+
+  // User and journal state
+  let currentUser = null;
+  let entries = [];
+  let currentEntryId = null;
+  let selectedMood = null;
+
+  // Mood mapping to emojis
+  const moodEmojis = {
+    'very-sad': '😭',
+    'sad': '😔',
+    'neutral': '😐',
+    'happy': '🙂',
+    'very-happy': '😄'
+  };
+
+  // Initialize the app when DOM is loaded
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize Supabase client
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Check for existing session
+    const { data, error } = await supabaseClient.auth.getSession();
+    
+    if (data.session) {
+      currentUser = data.session.user;
+      updateUserUI();
+      loadEntries();
+    } else {
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+    
+    // Set up filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderEntryList();
+      });
+    });
+  });
+
+  // Update user UI elements
+  function updateUserUI() {
+    if (currentUser) {
+      const avatar = document.getElementById('userAvatar');
+      const name = document.getElementById('userName');
+      
+      avatar.textContent = currentUser.email.charAt(0).toUpperCase();
+      name.textContent = currentUser.email.split('@')[0];
+      
+      // Show journal content
+      document.getElementById('journalContent').style.display = 'block';
+      document.getElementById('loginModal').style.display = 'none';
+    } else {
+      document.getElementById('journalContent').style.display = 'none';
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+  }
+
+  // Login function
+  async function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!email || !password) {
+      showToast('Please enter both email and password', 'error');
+      return;
+    }
+    
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) {
+      showToast(error.message, 'error');
+      return;
+    }
+    
+    currentUser = data.user;
+    updateUserUI();
+    showToast('Welcome back!', 'success');
+    loadEntries();
+  }
+
+  // Sign up function
+  async function signUp() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!email || !password) {
+      showToast('Please enter both email and password', 'error');
+      return;
+    }
+    
+    if (password.length < 6) {
+      showToast('Password must be at least 6 characters', 'error');
+      return;
+    }
+    
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+    
+    if (error) {
+      showToast(error.message, 'error');
+      return;
+    }
+    
+    showToast('Account created! Please check your email to verify your account', 'success');
+  }
+
+  // Logout function
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    currentUser = null;
+    entries = [];
+    updateUserUI();
+    showToast('You have been logged out', 'info');
+  }
+
+  // Journal Entry Functions
+  async function saveJournal() {
+    if (!currentUser) {
+      showToast('Please sign in to save your journal', 'error');
+      return;
+    }
+    
+    const entryContent = document.getElementById('userInput').value.trim();
+    if (!entryContent) {
+      document.getElementById('userInput').classList.add('error');
+      showToast('Please write something before saving', 'error');
+      return;
+    }
+
+    try {
+      // Create new entry
+      const entryData = {
+        user_id: currentUser.id,
+        content: entryContent,
+        mood: selectedMood,
+        tags: analyzeContent(entryContent),
+      };
+
+      if (currentEntryId) {
+        // Update existing entry
+        const { error } = await supabaseClient
+          .from('journal_entries')
+          .update({ ...entryData, updated_at: new Date().toISOString() })
+          .eq('id', currentEntryId)
+          .eq('user_id', currentUser.id);
+        
+        if (error) throw error;
+        showToast('Journal entry updated successfully', 'success');
+      } else {
+        // Create new entry
+        const { error } = await supabaseClient
+          .from('journal_entries')
+          .insert([{ ...entryData, created_at: new Date().toISOString() }]);
+        
+        if (error) throw error;
+        showToast('Journal entry saved successfully', 'success');
+      }
+
+      // Reset UI
+      document.getElementById('userInput').classList.remove('error');
+      document.getElementById('userInput').value = '';
+      selectedMood = null;
+      currentEntryId = null;
+      document.querySelectorAll('.mood-option.selected').forEach(el => {
+        el.classList.remove('selected');
+      });
+      
+      // Reload entries
+      loadEntries();
+      
+    } catch (error) {
+      console.error('Error saving entry:', error);
+      showToast('Error saving entry: ' + error.message, 'error');
+    }
+  }
+
+  // Clear form function
+  function clearForm() {
+    document.getElementById('userInput').value = '';
+    selectedMood = null;
+    currentEntryId = null;
+    document.querySelectorAll('.mood-option.selected').forEach(el => {
+      el.classList.remove('selected');
+    });
+    showToast('Form cleared', 'info');
+  }
+
+  async function deleteEntry() {
+    if (!currentUser || !currentEntryId) return;
+    
+    if (confirm('Are you sure you want to delete this entry?')) {
+      try {
+        const { error } = await supabaseClient
+          .from('journal_entries')
+          .delete()
+          .eq('id', currentEntryId)
+          .eq('user_id', currentUser.id);
+        
+        if (error) throw error;
+        
+        showToast('Entry deleted', 'success');
+        loadEntries();
+        closeModal();
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+        showToast('Error deleting entry: ' + error.message, 'error');
+      }
+    }
+  }
+
+  // UI Functions
+  function formatText(type) {
+    const textarea = document.getElementById('userInput');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    let newText = '';
+    let cursorOffset = 0;
+
+    switch(type) {
+      case 'bold':
+        newText = `**${selectedText}**`;
+        cursorOffset = 2;
+        break;
+      case 'italic':
+        newText = `_${selectedText}_`;
+        cursorOffset = 1;
+        break;
+      case 'header':
+        newText = `## ${selectedText}`;
+        cursorOffset = 3;
+        break;
+      case 'quote':
+        newText = `> ${selectedText}`;
+        cursorOffset = 2;
+        break;
+      case 'bullet':
+        if (selectedText) {
+          newText = `• ${selectedText.replace(/\n/g, '\n• ')}`;
+          cursorOffset = 2;
+        } else {
+          newText = '• ';
+          cursorOffset = 2;
+        }
+        break;
+    }
+
+    textarea.value = textarea.value.substring(0, start) + 
+                   newText + 
+                   textarea.value.substring(end);
+    textarea.focus();
+    
+    // Restore cursor position with offset
+    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset + (selectedText ? selectedText.length : 0));
+  }
+
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  function selectMood(element) {
+    document.querySelectorAll('.mood-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    
+    element.classList.add('selected');
+    selectedMood = element.getAttribute('data-mood');
+    element.classList.add('pulse');
+    setTimeout(() => element.classList.remove('pulse'), 500);
+  }
+  
+  function insertTag(tag) {
+    const textarea = document.getElementById('userInput');
+    const currentText = textarea.value;
+    textarea.value = currentText + (currentText.endsWith(' ') ? '' : ' ') + `#${tag} `;
+    textarea.focus();
+    
+    // Visual feedback
+    const tagBtn = Array.from(document.querySelectorAll('.tag-btn')).find(
+      btn => btn.textContent.includes(tag)
+    );
+    if (tagBtn) {
+      tagBtn.classList.add('pulse');
+      setTimeout(() => tagBtn.classList.remove('pulse'), 500);
+    }
+  }
+
+  // Sanitize markdown output
+  function safeMarkdown(text) {
+    return DOMPurify.sanitize(marked.parse(text));
+  }
+
+  async function loadEntries() {
+    if (!currentUser) {
+      showToast('Please sign in to view your journal history', 'error');
+      return;
+    }
+    
+    try {
+      const { data, error } = await supabaseClient
+        .from('journal_entries')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      entries = data || [];
+      renderEntryList();
+    } catch (error) {
+      console.error('Error loading entries:', error);
+      showToast('Error loading entries: ' + error.message, 'error');
+    }
+  }
+
+  function renderEntryList() {
+    const entryList = document.getElementById('entryList');
+    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    
+    // Filter entries
+    let filteredEntries = entries;
+    if (filter !== 'all') {
+      filteredEntries = entries.filter(entry => 
+        entry.tags?.includes(filter) || 
+        (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
+        (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
+      );
+    }
+    
+    entryList.innerHTML = filteredEntries
+      .slice(0, 5) // Only show last 5 entries by default
+      .map(entry => {
+        // Format date for display
+        const date = new Date(entry.created_at);
+        const formattedDate = date.toLocaleDateString('en-US', {
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        return `
+        <li class="entry-item" onclick="openEntryModal('${entry.id}')">
+          <div>
+            <span class="entry-date">${formattedDate}</span>
+            ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
+            ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
+            <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </li>
+      `})
+      .join('');
+
+    // Show more button if there are more entries
+    if (filteredEntries.length > 5) {
+      entryList.innerHTML += `
+        <li class="entry-item" onclick="showAllEntries()">
+          <div>Show all ${filteredEntries.length} entries</div>
+          <i class="fas fa-chevron-down"></i>
+        </li>
+      `;
+    }
+  }
+
+  function openEntryModal(id) {
+    const entry = entries.find(e => e.id == id);
+    if (entry) {
+      // Format date for display
+      const date = new Date(entry.created_at);
+      const formattedDate = date.toLocaleDateString('en-US', {
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      document.getElementById('modalTitle').textContent = "Journal Entry";
+      document.getElementById('modalDate').textContent = formattedDate;
+      document.getElementById('modalContent').innerHTML = safeMarkdown(entry.content);
+      
+      if (entry.mood) {
+        document.getElementById('modalTitle').innerHTML += ` <span style="font-size: 1.5rem;">${moodEmojis[entry.mood]}</span>`;
+      }
+      
+      document.getElementById('entryModal').style.display = 'flex';
+      currentEntryId = entry.id;
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('entryModal').style.display = 'none';
+    currentEntryId = null;
+  }
+
+  function editEntry() {
+    const entry = entries.find(e => e.id == currentEntryId);
+    if (entry) {
+      document.getElementById('userInput').value = entry.content;
+      if (entry.mood) {
+        document.querySelector(`.mood-option[data-mood="${entry.mood}"]`).classList.add('selected');
+        selectedMood = entry.mood;
+      }
+      document.getElementById('userInput').focus();
+      closeModal();
+    }
+  }
+
+  function insertPrompt(prompt) {
+    const textarea = document.getElementById('userInput');
+    textarea.value = prompt;
+    textarea.focus();
+    showToast('Prompt inserted');
+  }
+
+  function showTypingIndicator() {
+    document.getElementById('typingIndicator').style.display = 'flex';
+    document.getElementById('response').innerHTML = '';
+  }
+
+  function hideTypingIndicator() {
+    document.getElementById('typingIndicator').style.display = 'none';
+  }
+
+  function analyzeContent(text) {
+    const tags = [];
+    const words = text.toLowerCase().split(/\s+/);
+    
+    // Emotion detection
+    const emotions = ['happy', 'sad', 'angry', 'confused', 'hopeful', 'anxious'];
+    emotions.forEach(emotion => {
+      if (text.toLowerCase().includes(emotion)) tags.push(emotion);
+    });
+    
+    // Content themes
+    const themes = {
+      'grateful': ['thank', 'grateful', 'appreciate', 'blessed'],
+      'reflective': ['learn', 'realize', 'understand', 'reflect'],
+      'relationship': ['friend', 'partner', 'family', 'relationship', 'love'],
+      'work': ['work', 'job', 'career', 'project', 'colleague'],
+      'health': ['health', 'body', 'exercise', 'sleep', 'diet', 'pain']
+    };
+    
+    for (const [theme, keywords] of Object.entries(themes)) {
+      if (keywords.some(keyword => text.toLowerCase().includes(keyword))) {
+        tags.push(theme);
+      }
+    }
+    
+    return [...new Set(tags)]; // Remove duplicates
+  }
+
+  async function talkToCoach() {
+    const userInput = document.getElementById('userInput').value.trim();
+    if (!userInput) {
+      document.getElementById('userInput').classList.add('error');
+      showToast('Please share your thoughts first', 'error');
+      return;
+    }
+
+    showTypingIndicator();
+    
+    try {
+      // Call Supabase Edge Function for AI response
+      const { data, error } = await supabaseClient.functions.invoke('journal-coach', {
+        body: JSON.stringify({ entry: userInput }), // Stringify the body
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (error) throw error;
+
+      // Display AI response
+      document.getElementById('response').innerHTML = safeMarkdown(data.response);
+      document.getElementById('response').classList.add('fade-in');
+      hideTypingIndicator();
+      
+      // Auto-save if not already saved
+      if (!currentEntryId) {
+        saveJournal();
+      }
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      showToast('Error connecting to AI companion: ' + error.message, 'error');
+      document.getElementById('response').innerHTML = "I'm having trouble connecting right now. Would you like to try again?";
+      hideTypingIndicator();
+    }
+  }
+
+  // Logout when clicking user info
+  document.getElementById('userInfo').addEventListener('click', function() {
+    if (currentUser) {
+      logout();
+    } else {
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+  });
+</script>
+</body>
+</html>

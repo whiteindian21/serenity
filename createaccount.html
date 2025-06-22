@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Serenity Healing Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    :root {
+      --primary: #A8DADC;
+      --primary-light: #E1F0F0;
+      --primary-dark: #8AC0C2;
+      --secondary: #457B9D;
+      --accent: #E63946;
+      --dark: #1D3557;
+      --light: #F1FAEE;
+      --gray: #8A9BA8;
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+      background-image: url('https://images.unsplash.com/photo-1516589091380-5d6019716b86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      background-color: rgba(241, 250, 238, 0.92);
+      padding: 2rem;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(29, 53, 87, 0.15);
+      width: 100%;
+      max-width: 500px;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--primary-light);
+    }
+
+    .container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h2 {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .header h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .header p {
+      color: var(--dark);
+      opacity: 0.8;
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.9rem;
+    }
+
+    .input-container {
+      position: relative;
+    }
+
+    .input-container i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .left-icon {
+      left: 1rem;
+    }
+
+    .right-icon {
+      right: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .right-icon:hover {
+      color: var(--secondary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1rem 3rem;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background-color: var(--light);
+    }
+
+    .has-left-icon {
+      padding-left: 3rem;
+    }
+
+    .has-right-icon {
+      padding-right: 3rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin: 2rem 0;
+    }
+
+    .terms input {
+      margin-top: 0.3rem;
+      accent-color: var(--secondary);
+    }
+
+    .terms label {
+      font-size: 0.85rem;
+      color: var(--dark);
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .terms a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .terms a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .btn {
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      border: none;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #3a6b8a;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(69, 123, 157, 0.3);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .login-link a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .login-link a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .floating-heart {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      background: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.8rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .error-message {
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    
+    .success-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .success-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    
+    .success-overlay.active .success-box {
+      transform: translateY(0);
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .success-icon i {
+      font-size: 2.5rem;
+      color: var(--secondary);
+    }
+    
+    .success-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      margin-top: 1rem;
+    }
+    
+    .success-btn:hover {
+      background: #3a6b8a;
+    }
+
+    /* Password strength meter */
+    .password-strength {
+      height: 5px;
+      border-radius: 3px;
+      margin-top: 5px;
+      background: #e0e0e0;
+      overflow: hidden;
+    }
+    
+    .strength-meter {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    
+    .strength-0 { background: #e53935; width: 25%; }
+    .strength-1 { background: #ef6c00; width: 50%; }
+    .strength-2 { background: #ffb300; width: 75%; }
+    .strength-3 { background: #7cb342; width: 100%; }
+    .strength-4 { background: #388e3c; width: 100%; }
+    
+    .strength-text {
+      font-size: 0.8rem;
+      margin-top: 3px;
+      text-align: right;
+    }
+    
+    .resend-link {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .resend-link a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .resend-link a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .toast.show {
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: var(--secondary);
+    }
+    
+    .toast.error {
+      background: var(--accent);
+    }
+    
+    /* Recaptcha container */
+    .recaptcha-container {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    /* Form validation feedback */
+    .form-group.error input {
+      border-color: var(--accent);
+    }
+    
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 2.5rem 1.8rem;
+      }
+      
+      .header h2 {
+        font-size: 1.8rem;
+      }
+      
+      .success-box {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .floating-heart {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .form-group input {
+        padding: 0.8rem 2.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="floating-heart">
+      <i class="fas fa-heart"></i>
+    </div>
+    
+    <div class="header">
+      <h2>Begin Your Healing Journey</h2>
+      <p>Create your account to access personalized support</p>
+    </div>
+    
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <div class="input-container">
+          <i class="fas fa-user left-icon"></i>
+          <input type="text" id="name" placeholder="Your name" required class="has-left-icon">
+        </div>
+        <div class="error-message" id="nameError"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-container">
+          <i class="fas fa-envelope left-icon"></i>
+          <input type="email" id="email" placeholder="you@example.com" required class="has-left-icon">
+        </div>
+        <div class="error-message" id="emailError"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-container">
+          <i class="fas fa-lock left-icon"></i>
+          <input type="password" id="password" placeholder="••••••••" required minlength="8" class="has-left-icon has-right-icon">
+          <i class="fas fa-eye right-icon" id="togglePassword"></i>
+        </div>
+        <div class="password-strength">
+          <div class="strength-meter" id="strengthMeter"></div>
+        </div>
+        <div class="strength-text" id="strengthText"></div>
+        <div class="error-message" id="passwordError"></div>
+      </div>
+      
+      <div class="recaptcha-container">
+        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+      </div>
+      
+      <div class="terms">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>, and I'm at least 18 years old</label>
+      </div>
+      <div class="error-message" id="termsError"></div>
+      
+      <button type="submit" class="btn btn-primary" id="submitBtn">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+      
+      <div class="login-link">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Success message overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+      <div class="success-icon">
+        <i class="fas fa-envelope"></i>
+      </div>
+      <h3 id="successTitle">Verify Your Email</h3>
+      <p id="successMessage"></p>
+      <div class="resend-link" id="resendContainer" style="display: none;">
+        Didn't receive the email? <a href="#" id="resendLink">Resend verification</a>
+      </div>
+      <button class="success-btn" id="continueBtn">Continue to Login</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Include Supabase JS library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Include zxcvbn for password strength -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+  
+  <script>
+    // Initialize Supabase client
+    const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // DOM Elements
+    const signupForm = document.getElementById('signupForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const submitBtn = document.getElementById('submitBtn');
+    const successOverlay = document.getElementById('successOverlay');
+    const successTitle = document.getElementById('successTitle');
+    const successMessage = document.getElementById('successMessage');
+    const continueBtn = document.getElementById('continueBtn');
+    const resendContainer = document.getElementById('resendContainer');
+    const resendLink = document.getElementById('resendLink');
+    const toast = document.getElementById('toast');
+    const strengthMeter = document.getElementById('strengthMeter');
+    const strengthText = document.getElementById('strengthText');
+    
+    // Password toggle visibility
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+    
+    // Password strength indicator
+    passwordInput.addEventListener('input', function() {
+      if (this.value.length === 0) {
+        strengthMeter.className = 'strength-meter';
+        strengthText.textContent = '';
+        return;
+      }
+      
+      const result = zxcvbn(this.value);
+      strengthMeter.className = `strength-meter strength-${result.score}`;
+      
+      const strengthLabels = [
+        'Very weak',
+        'Weak',
+        'Fair',
+        'Strong',
+        'Very strong'
+      ];
+      
+      strengthText.textContent = `${strengthLabels[result.score]} • ${result.feedback.suggestions[0] || 'Good password'}`;
+      strengthText.style.color = [
+        '#e53935', // red
+        '#ef6c00', // orange
+        '#ffb300', // yellow
+        '#7cb342', // light green
+        '#388e3c'  // dark green
+      ][result.score];
+    });
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Add error state to form group
+    function setErrorState(element, message) {
+      const formGroup = element.closest('.form-group');
+      formGroup.classList.add('error');
+      const errorElement = formGroup.querySelector('.error-message');
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+      }
+    }
+    
+    // Clear error state
+    function clearErrorState(element) {
+      const formGroup = element.closest('.form-group');
+      if (formGroup) {
+        formGroup.classList.remove('error');
+        const errorElement = formGroup.querySelector('.error-message');
+        if (errorElement) errorElement.style.display = 'none';
+      }
+    }
+    
+    // Clear error messages on input
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', () => {
+        clearErrorState(input);
+      });
+    });
+    
+    // Form submission
+    signupForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const termsChecked = document.getElementById('terms').checked;
+      
+      // Reset errors
+      document.querySelectorAll('.form-group').forEach(el => {
+        el.classList.remove('error');
+      });
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      // Validate inputs
+      let isValid = true;
+      
+      if (!name) {
+        setErrorState(nameInput, 'Please enter your name');
+        isValid = false;
+      }
+      
+      if (!email) {
+        setErrorState(emailInput, 'Please enter your email');
+        isValid = false;
+      } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+        setErrorState(emailInput, 'Please enter a valid email');
+        isValid = false;
+      }
+      
+      if (!password) {
+        setErrorState(passwordInput, 'Please enter a password');
+        isValid = false;
+      } else if (password.length < 8) {
+        setErrorState(passwordInput, 'Password must be at least 8 characters');
+        isValid = false;
+      } else {
+        // Check password strength
+        const result = zxcvbn(password);
+        if (result.score < 2) {
+          setErrorState(passwordInput, 
+            'Password is too weak. ' + (result.feedback.suggestions[0] || 'Please choose a stronger password'));
+          isValid = false;
+        }
+      }
+      
+      if (!termsChecked) {
+        setErrorState(document.getElementById('terms'), 'You must agree to the terms and conditions');
+        isValid = false;
+      }
+      
+      // Validate reCAPTCHA
+      let recaptchaResponse = '';
+      try {
+        recaptchaResponse = grecaptcha.getResponse();
+      } catch (e) {
+        console.log('reCAPTCHA not loaded');
+      }
+      
+      if (!recaptchaResponse) {
+        showToast('Please complete the reCAPTCHA verification', 'error');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+      
+      try {
+        // Sign up with email/password
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name
+            },
+            emailRedirectTo: window.location.origin + '/dashboard.html'
+          }
+        });
+        
+        if (error) throw error;
+        
+        // Store user in local storage
+        localStorage.setItem('tempUser', JSON.stringify({
+          email,
+          name,
+          signupTime: new Date().toISOString()
+        }));
+        
+        // Show success message
+        successTitle.textContent = 'Verify Your Email';
+        successMessage.innerHTML = `
+          <p>Welcome to Serenity, <strong>${name}</strong>!</p>
+          <p>We've sent a verification link to:</p>
+          <p><strong>${email}</strong></p>
+          <p>Please check your inbox and click the link to activate your account.</p>
+        `;
+        resendContainer.style.display = 'block';
+        successOverlay.classList.add('active');
+        
+      } catch (error) {
+        console.error('Signup error:', error);
+        
+        // Show appropriate error message
+        if (error.message.includes('User already registered')) {
+          setErrorState(emailInput, 'This email is already registered. Try logging in.');
+        } else if (error.message.includes('password')) {
+          setErrorState(passwordInput, 'Invalid password format. ' + error.message);
+        } else if (error.message.includes('42501')) {
+          showToast('Database configuration issue. Please contact support.', 'error');
+        } else {
+          showToast('Signup failed: ' + error.message, 'error');
+        }
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+      }
+    });
+    
+    // Continue button in success overlay
+    continueBtn.addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+    
+    // Resend verification email
+    resendLink.addEventListener('click', async function(e) {
+      e.preventDefault();
+      
+      const tempUser = JSON.parse(localStorage.getItem('tempUser'));
+      if (!tempUser) return;
+      
+      try {
+        const { error } = await supabaseClient.auth.resend({
+          type: 'signup',
+          email: tempUser.email
+        });
+        
+        if (error) throw error;
+        
+        showToast('Verification email resent!', 'success');
+      } catch (error) {
+        console.error('Resend error:', error);
+        showToast('Failed to resend email: ' + error.message, 'error');
+      }
+    });
+    
+    // Auto-hide password after 5 seconds
+    passwordInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        passwordInput.type = 'password';
+        togglePassword.classList.remove('fa-eye-slash');
+        togglePassword.classList.add('fa-eye');
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

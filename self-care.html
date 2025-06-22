@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Calming Self-Compassion Exercises | Healing Journey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Modern Healing Color Scheme */
+    :root {
+      --primary: #A8DADC;
+      --primary-light: #E1F0F0;
+      --primary-dark: #8AC0C2;
+      --secondary: #457B9D;
+      --accent: #E63946;
+      --dark: #1D3557;
+      --light: #F1FAEE;
+      --gray: #8A9BA8;
+      --gray-light: #E2E8F0;
+      --success: #4CAF50;
+      --warning: #FFC107;
+      --error: #F44336;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+      --shadow-light: 0 6px 30px rgba(0, 0, 0, 0.04);
+      --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.08);
+      --shadow-dark: 0 12px 50px rgba(0, 0, 0, 0.12);
+      --spacing-unit: 0.5rem;
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      color: var(--dark);
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating elements */
+    .floating-element {
+      position: absolute;
+      z-index: -1;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .cloud {
+      background: white;
+      border-radius: 50%;
+      animation: float 25s infinite linear;
+    }
+
+    .leaf {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23A8DADC" d="M50,10 C70,20 85,40 90,70 C85,90 65,95 50,90 C35,95 15,90 10,70 C15,40 30,20 50,10 Z"/></svg>');
+      background-size: contain;
+      animation: float 30s infinite ease-in-out;
+    }
+
+    .bubble {
+      background: rgba(168, 218, 220, 0.2);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(30px, -40px) rotate(5deg); }
+      50% { transform: translate(-25px, 30px) rotate(-5deg); }
+      75% { transform: translate(35px, 25px) rotate(8deg); }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-medium);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--dark);
+    }
+
+    /* Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .page-header p {
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    .page-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* User Profile */
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      animation: slideIn 0.8s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .user-avatar:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .user-info h3 {
+      margin-bottom: 0.2rem;
+      font-size: 1.4rem;
+    }
+
+    .user-info p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .streak-counter {
+      margin-left: auto;
+      background: var(--primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .streak-counter i {
+      color: var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Exercises Grid */
+    .exercises-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .exercise-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--gray-light);
+      animation: fadeIn 0.6s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .exercise-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .exercise-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .exercise-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(168, 218, 220, 0.3);
+    }
+
+    .exercise-card:hover .exercise-icon {
+      transform: rotate(15deg) scale(1.1);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+
+    .exercise-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .exercise-card p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .exercise-btn {
+      padding: 0.8rem 1.5rem;
+      background: var(--secondary);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(69, 123, 157, 0.3);
+    }
+
+    .exercise-btn:hover {
+      background: #3a6b8a;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 15px rgba(69, 123, 157, 0.4);
+    }
+
+    .exercise-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .exercise-btn:hover i {
+      transform: scale(1.2);
+    }
+
+    .exercise-btn.secondary {
+      background: white;
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+    }
+
+    .exercise-btn.secondary:hover {
+      background: var(--primary-light);
+    }
+
+    /* Exercise Modal */
+    .exercise-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .exercise-modal-content {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      position: relative;
+      box-shadow: var(--shadow-dark);
+      animation: modalAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalAppear {
+      from { opacity: 0; transform: scale(0.9) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--gray);
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .close-modal:hover {
+      color: var(--secondary);
+      background: var(--primary-light);
+      transform: rotate(90deg);
+    }
+
+    .modal-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modal-header p {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .modal-body {
+      margin-bottom: 2rem;
+    }
+
+    /* Breathing Exercise */
+    .breathing-exercise {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .breathing-circle {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 10px 30px rgba(69, 123, 157, 0.3);
+      transition: all 1.5s ease-in-out;
+    }
+
+    .breathing-instructions {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    /* Affirmation Cards */
+    .affirmation-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .affirmation-card {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      perspective: 1000px;
+    }
+
+    .affirmation-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .affirmation-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-front {
+      background: var(--primary-light);
+      color: var(--dark);
+    }
+
+    .card-back {
+      background: var(--secondary);
+      color: white;
+      transform: rotateY(180deg);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+    }
+
+    .affirmation-card:before {
+      content: '?';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-family: 'Playfair Display', serif;
+      color: rgba(69, 123, 157, 0.2);
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .affirmation-card.flipped:before {
+      opacity: 0;
+    }
+
+    .affirmation-text {
+      font-size: 1.2rem;
+      padding: 0 1rem;
+      color: var(--dark);
+      font-style: italic;
+      text-align: center;
+      transform: rotateY(180deg);
+    }
+
+    /* Gratitude Journal */
+    .gratitude-form {
+      margin: 2rem 0;
+      position: relative;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-light);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      resize: vertical;
+      background: #f9f9f9;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(168, 218, 220, 0.3);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-medium);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+    
+    .toast.info {
+      background: var(--secondary);
+    }
+
+    .toast.error {
+      background: var(--error);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--gray-light);
+      margin-top: 2rem;
+    }
+
+    /* Nature elements */
+    .nature-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    /* Exercise-specific styles */
+    .coloring-area {
+      background: white;
+      border-radius: var(--radius-md);
+      height: 350px;
+      margin: 1rem 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .coloring-canvas {
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+    
+    .color-picker {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .color-option.active {
+      border-color: var(--dark);
+      transform: scale(1.2);
+    }
+    
+    .soundscape-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .sound-card {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sound-card:hover {
+      transform: translateY(-5px);
+      background: var(--primary);
+    }
+    
+    .sound-card.active {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .sound-card i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .sensory-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    
+    .sensory-item {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-light);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sensory-item:hover {
+      transform: scale(1.1);
+      background: var(--primary);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+      }
+      
+      .exercises-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .user-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .streak-counter {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+      
+      .breathing-circle {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .soundscape-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nature-container" id="natureContainer"></div>
+  
+  <div class="container">
+    <header class="page-header">
+      <h1><i class="fas fa-heart"></i> Enhanced Calming Exercises</h1>
+      <p>Experience deep relaxation with these nature-inspired self-compassion practices</p>
+    </header>
+
+    <!-- User Profile Section -->
+    <div class="user-profile">
+      <div class="user-avatar">☺</div>
+      <div class="user-info">
+        <h3>Welcome, Friend!</h3>
+        <p>Take a deep breath and be gentle with yourself today</p>
+      </div>
+      <div class="streak-counter">
+        <i class="fas fa-fire"></i>
+        <span id="streakCount">Daily Practice</span>
+      </div>
+    </div>
+
+    <div class="exercises-grid">
+      <!-- Nature Soundscape -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-mountain"></i>
+        </div>
+        <h3>Nature Soundscape</h3>
+        <p>Create your perfect calming environment with natural sounds.</p>
+        <button class="exercise-btn" onclick="openExercise('soundscape')">
+          <i class="fas fa-play"></i> Start
+        </button>
+      </div>
+
+      <!-- Mindful Coloring -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3>Mindful Coloring</h3>
+        <p>Focus your mind and relax through creative expression.</p>
+        <button class="exercise-btn" onclick="openExercise('coloring')">
+          <i class="fas fa-paint-brush"></i> Begin
+        </button>
+      </div>
+
+      <!-- Sensory Grounding -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-hands"></i>
+        </div>
+        <h3>Sensory Grounding</h3>
+        <p>Reconnect with the present moment using your senses.</p>
+        <button class="exercise-btn" onclick="openExercise('sensory')">
+          <i class="fas fa-leaf"></i> Start
+        </button>
+      </div>
+
+      <!-- Breathing Exercise -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-wind"></i>
+        </div>
+        <h3>Calming Breath</h3>
+        <p>A guided breathing exercise to center yourself.</p>
+        <button class="exercise-btn" onclick="openExercise('breathing')">
+          <i class="fas fa-play"></i> Start
+        </button>
+      </div>
+      
+      <!-- Gratitude Garden -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-seedling"></i>
+        </div>
+        <h3>Gratitude Garden</h3>
+        <p>Cultivate appreciation by planting virtual flowers.</p>
+        <button class="exercise-btn" onclick="openExercise('gratitude')">
+          <i class="fas fa-pen"></i> Begin
+        </button>
+      </div>
+
+      <!-- Positive Affirmations -->
+      <div class="exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-comment-dots"></i>
+        </div>
+        <h3>Affirmation Cards</h3>
+        <p>Discover uplifting messages to reinforce self-compassion.</p>
+        <button class="exercise-btn" onclick="openExercise('affirmations')">
+          <i class="fas fa-list"></i> View
+        </button>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Made with <i class="fas fa-heart" style="color: var(--accent);"></i> for your wellbeing | Take a deep breath, you're doing great!</p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+  
+  <!-- Exercise Modals -->
+  <div class="exercise-modal" id="breathingModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('breathingModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-wind"></i> Calming Breath Exercise</h2>
+        <p>Follow the breathing circle to center yourself and find calm</p>
+      </div>
+      <div class="modal-body">
+        <div class="breathing-exercise">
+          <div class="breathing-circle" id="breathingCircle">
+            Breathe In
+          </div>
+          <div class="breathing-instructions" id="breathInstructions">
+            Inhale slowly for 4 seconds...
+          </div>
+          <button class="exercise-btn" onclick="startBreathing()" id="breathButton">
+            <i class="fas fa-play"></i> Start Breathing
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="exercise-modal" id="affirmationsModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('affirmationsModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-comment-dots"></i> Affirmation Cards</h2>
+        <p>Tap each card to reveal a self-compassion affirmation</p>
+      </div>
+      <div class="modal-body">
+        <div class="affirmation-cards">
+          <div class="affirmation-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+              <div class="card-front"></div>
+              <div class="card-back">
+                <div class="affirmation-text">I am worthy of love and respect exactly as I am.</div>
+              </div>
+            </div>
+          </div>
+          <div class="affirmation-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+              <div class="card-front"></div>
+              <div class="card-back">
+                <div class="affirmation-text">My feelings are valid and important.</div>
+              </div>
+            </div>
+          </div>
+          <div class="affirmation-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+              <div class="card-front"></div>
+              <div class="card-back">
+                <div class="affirmation-text">I give myself permission to rest and recharge.</div>
+              </div>
+            </div>
+          </div>
+          <div class="affirmation-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+              <div class="card-front"></div>
+              <div class="card-back">
+                <div class="affirmation-text">I am doing the best I can with what I have.</div>
+              </div>
+            </div>
+          </div>
+          <div class="affirmation-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+              <div class="card-front"></div>
+              <div class="card-back">
+                <div class="affirmation-text">I release self-judgment and embrace self-compassion.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="exercise-modal" id="gratitudeModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('gratitudeModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-seedling"></i> Gratitude Garden</h2>
+        <p>Plant flowers for each thing you're grateful for</p>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center;">
+          <div style="background: #e8f5e9; border-radius: var(--radius-md); padding: 1.5rem; min-height: 250px; position: relative; overflow: hidden;" id="gardenArea">
+            <div id="gardenFlowers" style="position: relative; height: 200px;"></div>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: #8bc34a;"></div>
+          </div>
+          
+          <div style="margin: 1.5rem 0;">
+            <input type="text" id="gratitudeInput" placeholder="Something I'm grateful for..." style="padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--gray-light); width: 100%; max-width: 400px; font-family: 'Poppins', sans-serif;">
+            <button class="exercise-btn" onclick="plantFlower()" style="margin-top: 1rem;">
+              <i class="fas fa-plus"></i> Plant Flower
+            </button>
+          </div>
+          
+          <p style="margin-top: 1rem; color: var(--gray); font-size: 0.9rem;">
+            <i class="fas fa-lightbulb"></i> Tip: Focus on small things that brought you joy today.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="exercise-modal" id="soundscapeModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('soundscapeModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-mountain"></i> Nature Soundscape</h2>
+        <p>Create your perfect calming environment</p>
+      </div>
+      <div class="modal-body">
+        <div class="soundscape-container">
+          <div class="sound-card" onclick="toggleSound('rain')" id="rainSound">
+            <i class="fas fa-cloud-rain"></i>
+            <div>Rain</div>
+          </div>
+          <div class="sound-card" onclick="toggleSound('waves')" id="wavesSound">
+            <i class="fas fa-water"></i>
+            <div>Ocean Waves</div>
+          </div>
+          <div class="sound-card" onclick="toggleSound('forest')" id="forestSound">
+            <i class="fas fa-tree"></i>
+            <div>Forest</div>
+          </div>
+          <div class="sound-card" onclick="toggleSound('birds')" id="birdsSound">
+            <i class="fas fa-dove"></i>
+            <div>Birds</div>
+          </div>
+          <div class="sound-card" onclick="toggleSound('wind')" id="windSound">
+            <i class="fas fa-wind"></i>
+            <div>Wind</div>
+          </div>
+          <div class="sound-card" onclick="toggleSound('fire')" id="fireSound">
+            <i class="fas fa-fire"></i>
+            <div>Fireplace</div>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <div id="volumeControl" style="max-width: 300px; margin: 0 auto;">
+            <label for="volumeSlider" style="display: block; margin-bottom: 0.5rem;">Volume Control</label>
+            <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width: 100%;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="exercise-modal" id="coloringModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('coloringModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-palette"></i> Mindful Coloring</h2>
+        <p>Focus your mind through creative expression</p>
+      </div>
+      <div class="modal-body">
+        <div class="coloring-area">
+          <canvas id="coloringCanvas" class="coloring-canvas"></canvas>
+        </div>
+        
+        <div class="color-picker">
+          <div class="color-option active" style="background: #FF6B6B;" data-color="#FF6B6B"></div>
+          <div class="color-option" style="background: #4ECDC4;" data-color="#4ECDC4"></div>
+          <div class="color-option" style="background: #FFD166;" data-color="#FFD166"></div>
+          <div class="color-option" style="background: #06D6A0;" data-color="#06D6A0"></div>
+          <div class="color-option" style="background: #118AB2;" data-color="#118AB2"></div>
+          <div class="color-option" style="background: #073B4C;" data-color="#073B4C"></div>
+          <div class="color-option" style="background: #FFAFCC;" data-color="#FFAFCC"></div>
+          <div class="color-option" style="background: #CDB4DB;" data-color="#CDB4DB"></div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 1rem;">
+          <button class="exercise-btn secondary" onclick="clearCanvas()">
+            <i class="fas fa-eraser"></i> Clear Canvas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="exercise-modal" id="sensoryModal">
+    <div class="exercise-modal-content">
+      <button class="close-modal" onclick="closeModal('sensoryModal')">&times;</button>
+      <div class="modal-header">
+        <h2><i class="fas fa-hands"></i> Sensory Grounding</h2>
+        <p>Reconnect with the present moment using your senses</p>
+      </div>
+      <div class="modal-body">
+        <div class="sensory-container">
+          <div class="sensory-item" onclick="sensoryPrompt('see')">
+            👁️
+          </div>
+          <div class="sensory-item" onclick="sensoryPrompt('hear')">
+            👂
+          </div>
+          <div class="sensory-item" onclick="sensoryPrompt('touch')">
+            ✋
+          </div>
+          <div class="sensory-item" onclick="sensoryPrompt('smell')">
+            👃
+          </div>
+          <div class="sensory-item" onclick="sensoryPrompt('taste')">
+            👅
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin: 2rem 0; min-height: 100px;">
+          <div id="sensoryPrompt" style="font-size: 1.2rem; padding: 1.5rem; background: var(--primary-light); border-radius: var(--radius-md);">
+            Click on a sense to begin the grounding exercise
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Create floating elements
+    function createFloatingElements() {
+      const container = document.getElementById('natureContainer');
+      const types = ['cloud', 'leaf', 'bubble'];
+      const colors = ['#A8DADC', '#457B9D', '#E63946', '#1D3557', '#F1FAEE'];
+      
+      for (let i = 0; i < 25; i++) {
+        const element = document.createElement('div');
+        const type = types[Math.floor(Math.random() * types.length)];
+        element.classList.add('floating-element', type);
+        
+        // Random size
+        const size = Math.floor(Math.random() * 120) + 40;
+        
+        if (type === 'cloud') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size/2}px`;
+          element.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        } else if (type === 'leaf') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size}px`;
+        } else if (type === 'bubble') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size}px`;
+          element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          element.style.opacity = Math.random() * 0.3 + 0.1;
+        }
+        
+        // Random position
+        element.style.top = `${Math.random() * 100}%`;
+        element.style.left = `${Math.random() * 100}%`;
+        
+        // Random animation delay and duration
+        element.style.animationDelay = `${Math.random() * 20}s`;
+        element.style.animationDuration = `${15 + Math.random() * 30}s`;
+        
+        container.appendChild(element);
+      }
+    }
+    
+    // Open exercise modal
+    function openExercise(exercise) {
+      const modal = document.getElementById(`${exercise}Modal`);
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Initialize coloring canvas if needed
+        if (exercise === 'coloring') {
+          initColoring();
+        }
+      }
+    }
+    
+    // Close modal
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Reset exercises if needed
+        if (modalId === 'breathingModal') {
+          resetBreathing();
+        } else if (modalId === 'soundscapeModal') {
+          stopAllSounds();
+        }
+      }
+    }
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Breathing exercise
+    let breathingInterval;
+    let breathPhase = 0; // 0 = inhale, 1 = hold, 2 = exhale, 3 = hold
+    
+    function startBreathing() {
+      const button = document.getElementById('breathButton');
+      const circle = document.getElementById('breathingCircle');
+      const instructions = document.getElementById('breathInstructions');
+      
+      button.innerHTML = '<i class="fas fa-pause"></i> Pause';
+      button.onclick = pauseBreathing;
+      
+      let count = 4;
+      circle.textContent = 'Breathe In';
+      circle.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+      circle.style.transform = 'scale(1)';
+      instructions.textContent = 'Inhale slowly for 4 seconds...';
+      
+      breathingInterval = setInterval(() => {
+        count--;
+        
+        if (count <= 0) {
+          breathPhase = (breathPhase + 1) % 4;
+          
+          switch(breathPhase) {
+            case 0: // Inhale
+              count = 4;
+              circle.textContent = 'Breathe In';
+              circle.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+              circle.style.transform = 'scale(1)';
+              instructions.textContent = 'Inhale slowly for 4 seconds...';
+              break;
+            case 1: // Hold after inhale
+              count = 2;
+              circle.textContent = 'Hold';
+              instructions.textContent = 'Hold your breath for 2 seconds...';
+              break;
+            case 2: // Exhale
+              count = 6;
+              circle.textContent = 'Breathe Out';
+              circle.style.background = 'linear-gradient(135deg, var(--secondary), var(--dark))';
+              circle.style.transform = 'scale(0.7)';
+              instructions.textContent = 'Exhale slowly for 6 seconds...';
+              break;
+            case 3: // Hold after exhale
+              count = 2;
+              circle.textContent = 'Hold';
+              instructions.textContent = 'Hold for 2 seconds...';
+              break;
+          }
+        } else {
+          circle.textContent = breathPhase === 0 ? 'Breathe In' : 
+                             breathPhase === 1 ? 'Hold' : 
+                             breathPhase === 2 ? 'Breathe Out' : 'Hold';
+        }
+      }, 1000);
+    }
+    
+    function pauseBreathing() {
+      clearInterval(breathingInterval);
+      const button = document.getElementById('breathButton');
+      button.innerHTML = '<i class="fas fa-play"></i> Resume';
+      button.onclick = startBreathing;
+    }
+    
+    function resetBreathing() {
+      pauseBreathing();
+      breathPhase = 0;
+      const circle = document.getElementById('breathingCircle');
+      const instructions = document.getElementById('breathInstructions');
+      const button = document.getElementById('breathButton');
+      
+      circle.textContent = 'Breathe In';
+      circle.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-dark))';
+      circle.style.transform = 'scale(1)';
+      instructions.textContent = 'Inhale slowly for 4 seconds...';
+      button.innerHTML = '<i class="fas fa-play"></i> Start Breathing';
+      button.onclick = startBreathing;
+    }
+    
+    // Gratitude Garden
+    function plantFlower() {
+      const input = document.getElementById('gratitudeInput');
+      const garden = document.getElementById('gardenFlowers');
+      
+      if (input.value.trim() === '') {
+        showToast('Please enter something you\'re grateful for', 'error');
+        return;
+      }
+      
+      const flower = document.createElement('div');
+      flower.innerHTML = '🌸';
+      flower.style.position = 'absolute';
+      flower.style.fontSize = '2rem';
+      flower.style.left = `${10 + Math.random() * 80}%`;
+      flower.style.bottom = '40px';
+      flower.style.transform = `scale(${0.5 + Math.random()}) rotate(${Math.random() * 360}deg)`;
+      flower.style.transition = 'all 1s ease';
+      
+      garden.appendChild(flower);
+      
+      setTimeout(() => {
+        flower.style.bottom = `${30 + Math.random() * 120}px`;
+      }, 10);
+      
+      showToast(`Planted a flower for: "${input.value}"`, 'success');
+      input.value = '';
+    }
+    
+    // Soundscape
+    const sounds = {};
+    
+    function toggleSound(soundId) {
+      const soundCard = document.getElementById(`${soundId}Sound`);
+      
+      if (!sounds[soundId]) {
+        // Create audio element
+        sounds[soundId] = new Audio();
+        sounds[soundId].loop = true;
+        
+        // Simulated sound (in a real app, you'd link to actual sound files)
+        sounds[soundId].volume = document.getElementById('volumeSlider').value / 100;
+        sounds[soundId].play();
+        
+        soundCard.classList.add('active');
+      } else {
+        sounds[soundId].pause();
+        sounds[soundId] = null;
+        soundCard.classList.remove('active');
+      }
+    }
+    
+    function stopAllSounds() {
+      for (const soundId in sounds) {
+        if (sounds[soundId]) {
+          sounds[soundId].pause();
+          sounds[soundId] = null;
+          document.getElementById(`${soundId}Sound`).classList.remove('active');
+        }
+      }
+    }
+    
+    // Coloring
+    let canvas, ctx;
+    let isDrawing = false;
+    let currentColor = '#FF6B6B';
+    let lastX = 0;
+    let lastY = 0;
+    
+    function initColoring() {
+      canvas = document.getElementById('coloringCanvas');
+      ctx = canvas.getContext('2d');
+      
+      // Set canvas size
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      // Set initial styles
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = currentColor;
+      
+      // Add event listeners
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+      
+      // Add touch events for mobile
+      canvas.addEventListener('touchstart', handleTouchStart);
+      canvas.addEventListener('touchmove', handleTouchMove);
+      canvas.addEventListener('touchend', stopDrawing);
+      
+      // Add color picker listeners
+      document.querySelectorAll('.color-option').forEach(option => {
+        option.addEventListener('click', function() {
+          currentColor = this.dataset.color;
+          ctx.strokeStyle = currentColor;
+          document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    }
+    
+    function startDrawing(e) {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+    
+    function draw(e) {
+      if (!isDrawing) return;
+      
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+    
+    function stopDrawing() {
+      isDrawing = false;
+    }
+    
+    function handleTouchStart(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousedown', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }
+    
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }
+    
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      showToast('Canvas cleared', 'info');
+    }
+    
+    // Sensory Grounding
+    const sensoryPrompts = {
+      see: [
+        "Notice 5 things you can see around you",
+        "Find 4 different colors in your environment",
+        "Observe 3 objects with interesting textures",
+        "Notice 2 things you hadn't seen before",
+        "Find 1 beautiful thing in your surroundings"
+      ],
+      hear: [
+        "Identify 5 different sounds around you",
+        "Listen for 4 distinct pitches or tones",
+        "Notice 3 sounds that are constant",
+        "Identify 2 sounds that are intermittent",
+        "Focus on 1 sound that brings you comfort"
+      ],
+      touch: [
+        "Notice 5 things you can feel on your skin",
+        "Find 4 different textures around you",
+        "Pay attention to 3 points of contact with surfaces",
+        "Notice 2 temperature differences in your environment",
+        "Focus on 1 comforting sensation in your body"
+      ],
+      smell: [
+        "Notice 5 distinct smells around you",
+        "Identify 4 different scent categories (sweet, earthy, etc.)",
+        "Find 3 pleasant aromas in your environment",
+        "Notice 2 subtle scents you hadn't detected before",
+        "Focus on 1 comforting smell that grounds you"
+      ],
+      taste: [
+        "Notice 5 distinct tastes in your mouth",
+        "Identify 4 flavors from your last meal or drink",
+        "Pay attention to 3 temperature sensations in your mouth",
+        "Notice 2 textures you can recall from recent food",
+        "Focus on 1 pleasant taste memory that brings comfort"
+      ]
+    };
+    
+    function sensoryPrompt(sense) {
+      const promptElement = document.getElementById('sensoryPrompt');
+      const prompts = sensoryPrompts[sense];
+      let step = 0;
+      
+      promptElement.innerHTML = `<div style="font-size: 1.5rem; margin-bottom: 0.5rem;">${sense.toUpperCase()}</div>${prompts[step]}`;
+      
+      const interval = setInterval(() => {
+        step++;
+        if (step >= prompts.length) {
+          clearInterval(interval);
+          promptElement.innerHTML = `
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">Well done!</div>
+            You've completed the sensory grounding exercise for ${sense}.
+            <div style="margin-top: 1rem; font-size: 3rem;">🌿</div>
+          `;
+          return;
+        }
+        promptElement.innerHTML = `<div style="font-size: 1.5rem; margin-bottom: 0.5rem;">${sense.toUpperCase()}</div>${prompts[step]}`;
+      }, 10000);
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      createFloatingElements();
+      
+      // Add animation delays to exercise cards
+      const cards = document.querySelectorAll('.exercise-card');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+      });
+      
+      // Add heartbeat animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes heartbeat {
+          0% { transform: scale(1); }
+          25% { transform: scale(1.1); }
+          50% { transform: scale(1); }
+          75% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Volume control
+      const volumeSlider = document.getElementById('volumeSlider');
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', function() {
+          const volume = this.value / 100;
+          for (const soundId in sounds) {
+            if (sounds[soundId]) {
+              sounds[soundId].volume = volume;
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
