@@ -356,49 +356,6 @@
       box-shadow: 0 6px 20px rgba(77, 182, 172, 0.4);
     }
 
-    .ai-response {
-      background: var(--primary-light);
-      border-radius: var(--radius-md);
-      padding: 2rem;
-      margin: 2rem 1rem 0;
-      position: relative;
-      min-height: auto;
-      transition: opacity 0.3s ease;
-      box-shadow: var(--shadow-light);
-      animation: fadeIn 0.8s ease-out;
-      border: 1px solid rgba(124, 77, 255, 0.1);
-    }
-
-    .ai-response:before {
-      content: '\201C';
-      font-family: 'Playfair Display', serif;
-      font-size: 5rem;
-      position: absolute;
-      top: -1rem;
-      left: 1rem;
-      color: rgba(124, 77, 255, 0.1);
-      line-height: 1;
-    }
-
-    .ai-response h3 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .ai-response h3 i {
-      font-size: 1.2rem;
-    }
-
-    #response {
-      position: relative;
-      z-index: 1;
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-
     .prompt-suggestions {
       margin: 3rem 1rem 0;
       padding: 1.5rem;
@@ -806,6 +763,176 @@
       transform: translateY(-2px);
     }
 
+    /* Floating Chat Assistant */
+    .floating-chat-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.4);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .floating-chat-btn:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 8px 25px rgba(124, 77, 255, 0.6);
+    }
+
+    .chat-icon {
+      font-size: 2rem;
+    }
+
+    .chat-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Chat Modal */
+    .chat-modal {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 90%;
+      max-width: 400px;
+      height: 70vh;
+      max-height: 600px;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-dark);
+      z-index: 2000;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .chat-header h3 {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: white;
+    }
+
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-chat:hover {
+      transform: rotate(90deg);
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      background: var(--light);
+    }
+
+    .chat-message {
+      max-width: 80%;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: var(--primary-light);
+      border-bottom-right-radius: 0;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background: white;
+      box-shadow: var(--shadow-light);
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input-container {
+      padding: 1rem;
+      background: white;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-md);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      resize: none;
+      max-height: 100px;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .send-chat-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-md);
+      background: var(--primary);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .send-chat-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -821,20 +948,22 @@
       100% { text-shadow: 0 0 15px rgba(124, 77, 255, 0.5); }
     }
 
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
-    }
-
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
 
-    .pulse {
-      animation: pulse 0.5s ease;
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Responsive improvements */
     @media (max-width: 768px) {
       .container {
         margin: 0;
@@ -873,6 +1002,16 @@
         padding: 0.8rem;
         min-width: 80px;
       }
+      
+      .chat-modal {
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 85vh;
+        max-height: 85vh;
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+      }
     }
     
     @media (max-width: 480px) {
@@ -898,10 +1037,42 @@
         padding: 0.9rem 1rem;
         font-size: 0.9rem;
       }
+      
+      .floating-chat-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Floating Chat Assistant Button -->
+  <div class="floating-chat-btn" id="floatingChatBtn">
+    <i class="chat-icon fas fa-comment"></i>
+    <div class="chat-badge" id="chatBadge">1</div>
+  </div>
+
+  <!-- Chat Modal -->
+  <div class="chat-modal" id="chatModal">
+    <div class="chat-header">
+      <h3><i class="fas fa-heart"></i> Serenity Assistant</h3>
+      <button class="close-chat" onclick="closeChat()">&times;</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-message bot-message">
+        Hi there! I'm Serenity, your healing companion. How can I support you today? You can share your thoughts, ask for guidance, or just talk about your day.
+      </div>
+    </div>
+    <div class="chat-input-container">
+      <textarea class="chat-input" id="chatInput" placeholder="Type your message here..." rows="1"></textarea>
+      <button class="send-chat-btn" onclick="sendChatMessage()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="user-info" id="userInfo">
       <div class="user-avatar" id="userAvatar">U</div>
@@ -970,18 +1141,6 @@
         <button class="btn btn-secondary" onclick="clearForm()">
           <i class="fas fa-eraser"></i> Clear
         </button>
-      </div>
-
-      <div class="typing-indicator" id="typingIndicator">
-        <span>Serenity is thinking</span>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-
-      <div class="ai-response">
-        <h3><i class="fas fa-heart"></i> Serenity's Response</h3>
-        <p id="response">I'm here to listen with compassion and without judgment. Whenever you're ready to share, I'll offer thoughtful reflections to support your healing journey.</p>
       </div>
 
       <div class="prompt-suggestions">
@@ -1093,7 +1252,89 @@
         renderEntryList();
       });
     });
+    
+    // Set up chat functionality
+    setupChat();
   });
+
+  // Chat functionality
+  function setupChat() {
+    // Floating chat button event
+    document.getElementById('floatingChatBtn').addEventListener('click', openChat);
+    
+    // Chat input auto-resize
+    const chatInput = document.getElementById('chatInput');
+    chatInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+    
+    // Send message on Enter (without Shift)
+    chatInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
+      }
+    });
+  }
+  
+  function openChat() {
+    document.getElementById('chatModal').style.display = 'flex';
+    document.getElementById('chatBadge').style.display = 'none';
+    // Scroll to bottom
+    const chatBody = document.getElementById('chatBody');
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  
+  function closeChat() {
+    document.getElementById('chatModal').style.display = 'none';
+  }
+  
+  function sendChatMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage(message, 'user');
+    
+    // Clear input
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    
+    // Simulate AI response
+    setTimeout(() => {
+      simulateAIChatResponse(message);
+    }, 1000);
+  }
+  
+  function addChatMessage(text, sender) {
+    const chatBody = document.getElementById('chatBody');
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('chat-message');
+    messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    messageDiv.innerHTML = DOMPurify.sanitize(marked.parse(text));
+    chatBody.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  
+  function simulateAIChatResponse(userMessage) {
+    // In a real app, this would call an AI API
+    const responses = [
+      "I appreciate you sharing that with me. How does that make you feel?",
+      "Thank you for opening up. What do you think is the underlying cause of these feelings?",
+      "I hear you. What would be most helpful for you right now?",
+      "That sounds challenging. What steps could you take to care for yourself in this situation?",
+      "I'm here to support you. What would you like to explore further about this?"
+    ];
+    
+    // Select a random response for simulation
+    const response = responses[Math.floor(Math.random() * responses.length)];
+    addChatMessage(response, 'bot');
+  }
 
   // Update user UI elements
   function updateUserUI() {
@@ -1486,15 +1727,6 @@
     showToast('Prompt inserted');
   }
 
-  function showTypingIndicator() {
-    document.getElementById('typingIndicator').style.display = 'flex';
-    document.getElementById('response').innerHTML = '';
-  }
-
-  function hideTypingIndicator() {
-    document.getElementById('typingIndicator').style.display = 'none';
-  }
-
   function analyzeContent(text) {
     const tags = [];
     const words = text.toLowerCase().split(/\s+/);
@@ -1531,7 +1763,9 @@
       return;
     }
 
-    showTypingIndicator();
+    // Open chat and send the journal entry as first message
+    openChat();
+    addChatMessage(userInput, 'user');
     
     try {
       // Call Supabase Edge Function
@@ -1541,10 +1775,8 @@
 
       if (error) throw error;
 
-      // Display AI response
-      document.getElementById('response').innerHTML = safeMarkdown(data.response);
-      document.getElementById('response').classList.add('fade-in');
-      hideTypingIndicator();
+      // Display AI response in chat
+      addChatMessage(data.response, 'bot');
       
       // Auto-save if not already saved
       if (!currentEntryId) {
@@ -1552,9 +1784,7 @@
       }
     } catch (error) {
       console.error('Error getting AI response:', error);
-      showToast('Error connecting to AI companion: ' + error.message, 'error');
-      document.getElementById('response').innerHTML = "I'm having trouble connecting right now. Would you like to try again?";
-      hideTypingIndicator();
+      addChatMessage("I'm having trouble connecting right now. Would you like to try again?", 'bot');
     }
   }
 
