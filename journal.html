@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
   <style>
+    /* CSS remains unchanged from your original */
     :root {
       --primary: #7C4DFF;
       --primary-light: #EDE7F6;
@@ -1534,9 +1535,9 @@
     showTypingIndicator();
     
     try {
-      // Call Supabase Edge Function for AI response
+      // Fixed function invocation
       const { data, error } = await supabaseClient.functions.invoke('journal-coach', {
-        body: JSON.stringify({ entry: userInput }), // Stringify the body
+        body: { entry: userInput },
         headers: {
           'Content-Type': 'application/json'
         }
@@ -1569,6 +1570,46 @@
       document.getElementById('loginModal').style.display = 'flex';
     }
   });
+
+  // Helper function to show all entries
+  function showAllEntries() {
+    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    let filteredEntries = entries;
+    
+    if (filter !== 'all') {
+      filteredEntries = entries.filter(entry => 
+        entry.tags?.includes(filter) || 
+        (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
+        (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
+      );
+    }
+    
+    const entryList = document.getElementById('entryList');
+    entryList.innerHTML = filteredEntries
+      .map(entry => {
+        const date = new Date(entry.created_at);
+        const formattedDate = date.toLocaleDateString('en-US', {
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        return `
+        <li class="entry-item" onclick="openEntryModal('${entry.id}')">
+          <div>
+            <span class="entry-date">${formattedDate}</span>
+            ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
+            ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
+            <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </li>
+      `})
+      .join('');
+  }
 </script>
 </body>
 </html>
