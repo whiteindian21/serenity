@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Healing Journey | Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -32,7 +33,7 @@
       --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
       --spacing-unit: 0.5rem;
       --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-      --max-width: 1200px;
+      --max-width: 100%;
     }
 
     * {
@@ -48,13 +49,13 @@
     }
 
     body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--light);
       color: var(--dark);
       line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: calc(70px + var(--safe-area-inset-bottom));
+      padding-bottom: calc(60px + var(--safe-area-inset-bottom));
       position: relative;
       overflow-x: hidden;
       background: radial-gradient(circle at 20% 30%, rgba(93, 139, 244, 0.05) 0%, transparent 50%),
@@ -62,15 +63,15 @@
     }
 
     h1, h2, h3, h4 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
       line-height: 1.3;
       color: var(--dark);
     }
 
     p {
       color: var(--gray);
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .container {
@@ -81,11 +82,80 @@
       position: relative;
     }
 
+    /* Mobile Navigation */
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .menu-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+    
+    /* Sidebar for mobile */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 280px;
+      height: 100%;
+      background: white;
+      z-index: 200;
+      transition: var(--transition);
+      overflow-y: auto;
+      box-shadow: var(--shadow-medium);
+      padding: 1.5rem;
+    }
+    
+    .sidebar.open {
+      left: 0;
+    }
+    
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+    
+    .sidebar-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .close-sidebar {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+    
     /* Login Prompt */
     .login-prompt {
       background: white;
       border-radius: var(--radius-md);
-      padding: 2.5rem;
+      padding: 2.5rem 1.5rem;
       text-align: center;
       max-width: 500px;
       margin: 2rem auto;
@@ -121,7 +191,11 @@
       align-items: center;
       gap: 0.8rem;
       box-shadow: var(--shadow-medium);
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      justify-content: center;
     }
     
     .btn-login:hover {
@@ -168,10 +242,9 @@
     }
 
     #greeting {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--gray);
       font-weight: 500;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -229,7 +302,7 @@
       margin-bottom: 1.5rem;
     }
 
-    @media (min-width: 992px) {
+    @media (min-width: 768px) {
       .dashboard-grid {
         grid-template-columns: 2fr 1fr;
       }
@@ -323,7 +396,7 @@
       color: var(--primary);
       padding: 0.8rem 1.2rem;
       border-radius: 30px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       border: 1px solid rgba(93, 139, 244, 0.2);
@@ -375,7 +448,7 @@
     }
 
     .card h3 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -383,7 +456,7 @@
     }
 
     .card h3 i {
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: var(--primary);
     }
 
@@ -393,7 +466,7 @@
     }
 
     #affirmation {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 500;
       color: var(--dark);
       position: relative;
@@ -416,7 +489,7 @@
     .btn {
       padding: 1rem;
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
@@ -427,7 +500,7 @@
       border: none;
       width: 100%;
       outline: none;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Nunito', sans-serif;
     }
 
     .btn-primary {
@@ -467,8 +540,8 @@
     }
 
     .btn-sm {
-      padding: 0.6rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.8rem;
+      font-size: 0.9rem;
     }
 
     /* Action Cards */
@@ -507,12 +580,12 @@
     }
 
     .action-card i {
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: var(--primary);
       margin-bottom: 1.2rem;
       background: rgba(93, 139, 244, 0.12);
-      width: 54px;
-      height: 54px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -528,12 +601,12 @@
     .action-card h3 {
       margin-bottom: 0.8rem;
       color: var(--dark);
-      font-size: 1.25rem;
+      font-size: 1.3rem;
     }
 
     .action-card p {
       color: var(--gray);
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 1.8rem;
       line-height: 1.6;
     }
@@ -542,8 +615,8 @@
     .breath-container {
       position: relative;
       margin: 2rem auto;
-      width: 160px;
-      height: 160px;
+      width: 200px;
+      height: 200px;
     }
     
     .breath-circle {
@@ -555,7 +628,7 @@
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 700;
       transition: all 1.5s ease-in-out;
       position: absolute;
@@ -594,20 +667,20 @@
     }
     
     .stat-value {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--primary);
     }
     
     .stat-label {
-      font-size: 0.85rem;
+      font-size: 1rem;
       color: var(--gray);
       margin-top: 0.4rem;
       font-weight: 600;
     }
     
     .breath-instruction {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       margin: 1.5rem 0;
       color: var(--dark);
       font-weight: 600;
@@ -627,7 +700,7 @@
     /* Memory Section */
     .memory-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       gap: 1rem;
       margin-top: 1.5rem;
     }
@@ -670,7 +743,7 @@
       bottom: 8px;
       left: 0;
       right: 0;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-align: center;
       color: var(--dark);
       padding: 0 5px;
@@ -720,13 +793,13 @@
     }
 
     .mood-emoji {
-      font-size: 1.8rem;
+      font-size: 2rem;
       margin-bottom: 0.5rem;
       transition: var(--transition);
     }
 
     .mood-label {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--gray);
       font-weight: 600;
     }
@@ -773,28 +846,28 @@
     }
 
     .activity-icon {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1rem;
+      font-size: 1.1rem;
       flex-shrink: 0;
       box-shadow: 0 4px 10px rgba(93, 139, 244, 0.25);
     }
 
     .activity-title {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 0.3rem;
       color: var(--dark);
     }
 
     .activity-time {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--gray);
       font-weight: 500;
     }
@@ -821,7 +894,7 @@
     .progress-info {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--gray);
       font-weight: 600;
     }
@@ -837,15 +910,15 @@
     }
 
     .companion-avatar {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       box-shadow: 0 6px 18px rgba(93, 139, 244, 0.35);
       transition: transform 0.3s ease;
     }
@@ -856,12 +929,12 @@
 
     .companion-name {
       font-weight: 800;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: var(--dark);
     }
 
     .companion-role {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--gray);
       margin-bottom: 0.6rem;
       font-weight: 600;
@@ -878,9 +951,9 @@
     .specialty-tag {
       background: rgba(93, 139, 244, 0.12);
       color: var(--primary);
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 1rem;
       border-radius: 30px;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border: 1px solid rgba(93, 139, 244, 0.25);
       transition: var(--transition);
@@ -917,7 +990,7 @@
       align-items: center;
       justify-content: center;
       color: var(--gray);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-decoration: none;
       transition: var(--transition);
       flex: 1;
@@ -925,7 +998,7 @@
     }
     
     .nav-item i {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       margin-bottom: 0.3rem;
     }
     
@@ -942,6 +1015,21 @@
       font-weight: 600;
     }
 
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
     /* Toast Notification */
     .toast {
       position: fixed;
@@ -952,7 +1040,7 @@
       color: white;
       padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       box-shadow: var(--shadow-dark);
       z-index: 3000;
@@ -983,21 +1071,6 @@
       background: rgba(93, 139, 244, 0.95);
     }
 
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-      animation: fadeIn 0.6s ease forwards;
-    }
-    
     /* Responsive Adjustments */
     @media (max-width: 480px) {
       .section {
@@ -1005,24 +1078,24 @@
       }
       
       .section-title h3 {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
       }
       
       .card {
-        padding: 1.2rem;
+        padding: 1.5rem;
       }
       
       .card h3 {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
       
       #affirmation {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
       }
       
       .breath-container {
-        width: 140px;
-        height: 140px;
+        width: 180px;
+        height: 180px;
       }
       
       .action-cards {
@@ -1030,15 +1103,32 @@
       }
       
       .dashboard-header {
-        padding: 1.2rem;
+        padding: 1.5rem;
       }
       
       .login-prompt {
-        padding: 1.8rem;
+        padding: 1.5rem;
+      }
+      
+      .memory-item {
+        min-width: 90px;
+        min-height: 90px;
+      }
+      
+      .mood-emoji {
+        font-size: 1.8rem;
+      }
+      
+      .mood-label {
+        font-size: 0.8rem;
       }
     }
     
     @media (min-width: 768px) {
+      .container {
+        padding: 0 2rem;
+      }
+      
       body {
         padding-bottom: 0;
       }
@@ -1046,22 +1136,146 @@
       .bottom-nav {
         display: none;
       }
-    }
-    
-    @media (min-width: 992px) {
-      .container {
-        padding: 0 2rem;
+      
+      .mobile-header {
+        display: none;
       }
       
-      .dashboard-header h2 {
-        font-size: 2rem;
+      .sidebar-overlay {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .sidebar {
+        display: block;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar-content {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Login Prompt (Shown when not logged in) -->
-  <div class="container login-prompt" id="login-prompt" style="display: none;">
+  <!-- Mobile Header -->
+  <div class="mobile-header">
+    <button class="menu-toggle" id="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <h2>Healing Journey</h2>
+    <div class="user-avatar" id="userInitialMobile">
+      <span id="userInitialTextMobile">U</span>
+    </div>
+  </div>
+  
+  <!-- Sidebar for mobile -->
+  <div class="sidebar" id="sidebar">
+    <button class="close-sidebar" id="close-sidebar">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="sidebar-content">
+      <!-- Companion Section -->
+      <section class="section">
+        <div class="section-title">
+          <i class="fas fa-comments"></i>
+          <h3>Your Companion</h3>
+        </div>
+        
+        <div class="companion-container">
+          <div class="companion-avatar" id="companion-avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <div class="companion-name" id="companion-name">Elena</div>
+          <div class="companion-role" id="companion-role">Healing Guide</div>
+          
+          <div class="companion-specialties" id="companion-specialties">
+            <div class="specialty-tag">Grief</div>
+            <div class="specialty-tag">Compassion</div>
+            <div class="specialty-tag">Support</div>
+          </div>
+          
+          <button class="btn btn-primary" id="start-chat-btn">
+            <i class="fas fa-comment"></i> Start Chat
+          </button>
+          
+          <button class="btn btn-secondary" id="change-companion-btn">
+            <i class="fas fa-sync-alt"></i> Change
+          </button>
+        </div>
+      </section>
+
+      <!-- Mood Tracker -->
+      <section class="section">
+        <div class="section-title">
+          <i class="fas fa-smile"></i>
+          <h3>How You Feel</h3>
+        </div>
+        
+        <div class="mood-options">
+          <div class="mood-option" data-mood="awful">
+            <div class="mood-emoji">😢</div>
+            <div class="mood-label">Awful</div>
+          </div>
+          <div class="mood-option" data-mood="sad">
+            <div class="mood-emoji">😞</div>
+            <div class="mood-label">Sad</div>
+          </div>
+          <div class="mood-option" data-mood="neutral">
+            <div class="mood-emoji">😐</div>
+            <div class="mood-label">Neutral</div>
+          </div>
+          <div class="mood-option" data-mood="good">
+            <div class="mood-emoji">🙂</div>
+            <div class="mood-label">Good</div>
+          </div>
+          <div class="mood-option selected" data-mood="great">
+            <div class="mood-emoji">😊</div>
+            <div class="mood-label">Great</div>
+          </div>
+        </div>
+        
+        <div class="quick-actions">
+          <button class="btn btn-secondary btn-sm" id="mood-history">
+            <i class="fas fa-history"></i> History
+          </button>
+          <button class="btn btn-secondary btn-sm" id="mood-insights">
+            <i class="fas fa-chart-pie"></i> Insights
+          </button>
+        </div>
+      </section>
+
+      <!-- Recent Activity -->
+      <section class="section">
+        <div class="section-title">
+          <i class="fas fa-clock"></i>
+          <h3>Recent Activity</h3>
+        </div>
+        
+        <div class="activity-list" id="activity-list">
+          <!-- Activities will be loaded here -->
+          <div class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title">Signed in</div>
+              <div class="activity-time">Just now</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Login Prompt -->
+  <div class="container login-prompt" id="login-prompt">
     <h2>Welcome to Healing Journey</h2>
     <p>Please sign in to access your personalized healing tools, resources, and progress tracking.</p>
     <button class="btn-login" id="go-to-login">
@@ -1069,8 +1283,8 @@
     </button>
   </div>
   
-  <!-- Dashboard Container (Hidden initially) -->
-  <div class="container dashboard-container" id="dashboard-container">
+  <!-- Dashboard Container -->
+  <div class="container dashboard-container" id="dashboard-container" style="display: none;">
     <header class="dashboard-header">
       <div class="header-content">
         <h2>Healing Journey</h2>
@@ -1194,22 +1408,7 @@
             </div>
             <p>Preserve meaningful memories</p>
             <div class="memory-container" id="memories-container">
-              <div class="memory-item">
-                <i class="fas fa-heart"></i>
-                <div class="memory-label">Special Day</div>
-              </div>
-              <div class="memory-item">
-                <i class="fas fa-mountain"></i>
-                <div class="memory-label">Trip</div>
-              </div>
-              <div class="memory-item">
-                <i class="fas fa-music"></i>
-                <div class="memory-label">Concert</div>
-              </div>
-              <div class="memory-item">
-                <i class="fas fa-paw"></i>
-                <div class="memory-label">Pet</div>
-              </div>
+              <!-- Memories will be loaded here -->
               <div class="memory-item add-memory" id="add-memory-btn">
                 <i class="fas fa-plus"></i>
               </div>
@@ -1227,14 +1426,14 @@
             </div>
             <div class="progress-info">
               <span>Start</span>
-              <span id="progress-percent">65%</span>
+              <span id="progress-percent">0%</span>
               <span>Healed</span>
             </div>
           </div>
         </section>
       </main>
       
-      <aside class="sidebar">
+      <aside class="sidebar-content">
         <!-- Companion Section -->
         <section class="section">
           <div class="section-title">
@@ -1313,6 +1512,7 @@
           </div>
           
           <div class="activity-list" id="activity-list">
+            <!-- Activities will be loaded here -->
             <div class="activity-item">
               <div class="activity-icon">
                 <i class="fas fa-user"></i>
@@ -1320,33 +1520,6 @@
               <div class="activity-content">
                 <div class="activity-title">Signed in</div>
                 <div class="activity-time">Just now</div>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-icon">
-                <i class="fas fa-heart"></i>
-              </div>
-              <div class="activity-content">
-                <div class="activity-title">Recorded mood: Great</div>
-                <div class="activity-time">Today, 8:30 AM</div>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-icon">
-                <i class="fas fa-book"></i>
-              </div>
-              <div class="activity-content">
-                <div class="activity-title">Journal entry created</div>
-                <div class="activity-time">Yesterday</div>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-icon">
-                <i class="fas fa-comment"></i>
-              </div>
-              <div class="activity-content">
-                <div class="activity-title">Chatted with Elena</div>
-                <div class="activity-time">2 days ago</div>
               </div>
             </div>
           </div>
@@ -1383,30 +1556,85 @@
   <div class="toast" id="toast"></div>
   
   <script>
-    // Initialize state variables
+    // Initialize Supabase with environment variables
+    const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+    
+    // State variables
     let currentMood = "great";
     let breathInterval;
     let isBreathingActive = false;
     let cycleCount = 0;
     let secondsElapsed = 0;
     let currentPhase = 0;
-    let progress = 65;
-
+    let progress = 0;
+    let currentUser = null;
+    
     // Initialize the dashboard
-    document.addEventListener('DOMContentLoaded', function() {
-      setGreeting();
-      initBreathingExercise();
-      setupEventListeners();
-      updateProgressBar();
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Check if user is logged in
+      const isAuthenticated = await checkSession();
+      
+      if (isAuthenticated) {
+        // Show dashboard for logged-in users
+        document.getElementById('login-prompt').style.display = 'none';
+        document.getElementById('dashboard-container').style.display = 'block';
+        
+        setGreeting();
+        initBreathingExercise();
+        setupEventListeners();
+        updateProgressBar();
+        showToast(`Welcome back!`, "success");
+      } else {
+        // Show login prompt for unauthenticated users
+        document.getElementById('login-prompt').style.display = 'block';
+        document.getElementById('dashboard-container').style.display = 'none';
+      }
       
       // Setup login redirection button
       document.getElementById('go-to-login').addEventListener('click', function() {
-        showToast("Redirecting to login page", "info");
-        setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 1500);
+        window.location.href = 'login.html';
+      });
+      
+      // Mobile sidebar toggle
+      document.getElementById('menu-toggle').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebar-overlay').classList.add('open');
+      });
+      
+      document.getElementById('close-sidebar').addEventListener('click', function() {
+        closeSidebar();
+      });
+      
+      document.getElementById('sidebar-overlay').addEventListener('click', function() {
+        closeSidebar();
       });
     });
+    
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('open');
+    }
+    
+    // Check user session
+    async function checkSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+        return false;
+      }
+      
+      if (data.session) {
+        currentUser = data.session.user;
+        document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
+        document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
+        return true;
+      }
+      
+      return false;
+    }
     
     // Initialize breathing exercise
     function initBreathingExercise() {
@@ -1538,24 +1766,15 @@
       
       // Sign out button
       document.getElementById('signout-btn').addEventListener('click', async function() {
-        showToast("Signed out successfully", "success");
-        setTimeout(() => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          showToast("Sign out failed: " + error.message, "error");
+        } else {
+          showToast("Signed out successfully", "success");
+          currentUser = null;
+          // Redirect to login.html
           window.location.href = 'login.html';
-        }, 1500);
-      });
-      
-      // Change companion
-      document.getElementById('change-companion-btn').addEventListener('click', function() {
-        const names = ["Elena", "Marcus", "Sophia"];
-        const randomName = names[Math.floor(Math.random() * names.length)];
-        document.getElementById('companion-name').textContent = randomName;
-        document.getElementById('companion-avatar').innerHTML = `<i class="fas fa-${randomName === 'Marcus' ? 'leaf' : randomName === 'Sophia' ? 'lightbulb' : 'smile'}"></i>`;
-        showToast(`Companion changed to ${randomName}`, "info");
-      });
-      
-      // Start chat
-      document.getElementById('start-chat-btn').addEventListener('click', function() {
-        showToast("Chat session started", "info");
+        }
       });
       
       // Loss type selection
@@ -1575,32 +1794,27 @@
       
       // Journal button
       document.getElementById('journal-btn').addEventListener('click', function() {
-        showToast("Opening journal", "info");
+        window.location.href = 'journal.html';
       });
       
       // Compassion button
       document.getElementById('compassion-btn').addEventListener('click', function() {
-        showToast("Opening self-compassion exercises", "info");
+        window.location.href = 'self-care.html';
       });
       
       // Mood history
       document.getElementById('mood-history').addEventListener('click', function() {
-        showToast("Opening mood history", "info");
+        showToast("Mood history would open here", "info");
       });
       
       // Mood insights
-      document.getElementById('mood-insights').addEventListener('click', function() {
-        showToast("Showing mood insights", "info");
-      });
-      
-      // Add memory
-      document.getElementById('add-memory-btn').addEventListener('click', function() {
-        showToast("Add memory screen opened", "info");
+      document.getElementById('mood-insights').addEventListener('click', async function() {
+        showToast("Mood insights would open here", "info");
       });
     }
     
     // Track mood
-    function trackMood(mood) {
+    async function trackMood(mood) {
       const moodLabels = {
         "awful": "Awful",
         "sad": "Sad",
@@ -1610,21 +1824,6 @@
       };
       
       showToast(`Mood recorded: ${moodLabels[mood]}`, "success");
-      
-      // Update activity list
-      const activityList = document.getElementById('activity-list');
-      const activityItem = document.createElement('div');
-      activityItem.className = 'activity-item';
-      activityItem.innerHTML = `
-        <div class="activity-icon">
-          <i class="fas fa-heart"></i>
-        </div>
-        <div class="activity-content">
-          <div class="activity-title">Recorded mood: ${moodLabels[mood]}</div>
-          <div class="activity-time">Just now</div>
-        </div>
-      `;
-      activityList.prepend(activityItem);
     }
     
     // Update progress bar
