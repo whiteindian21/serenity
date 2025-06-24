@@ -1812,7 +1812,7 @@
       <button class="btn-save" id="save-companion">Select Companion</button>
     </div>
   </div>
-  <script>
+<script>
   // Initialize Supabase with environment variables
   const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
@@ -2564,7 +2564,7 @@
     document.getElementById('chat-container').classList.remove('active');
   }
   
-  // Send message to companion - UPDATED TO USE CORRECT API ENDPOINT
+  // Send message to companion - FIXED AUTHENTICATION ISSUE
   async function sendMessage() {
     const input = document.getElementById('chat-input');
     const message = input.value.trim();
@@ -2599,13 +2599,21 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
     try {
+      // Get current session for access token
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session) {
+        throw new Error("Not authenticated. Please sign in again.");
+      }
+      const accessToken = sessionData.session.access_token;
+      
       // Use the correct Supabase Function URL
       const OPENAI_ENDPOINT = `https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai`;
       
       const response = await fetch(OPENAI_ENDPOINT, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           messages: conversationHistory.filter(msg => msg.role !== 'system'),
@@ -2614,7 +2622,8 @@
       });
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`API error: ${errorData.error || response.status}`);
       }
       
       const data = await response.json();
