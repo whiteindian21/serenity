@@ -1095,13 +1095,7 @@
     });
     
     // Setup global event listeners
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    document.getElementById('saveBtn').addEventListener('click', saveJournal);
-    document.getElementById('clearBtn').addEventListener('click', clearForm);
-    document.getElementById('talkBtn').addEventListener('click', talkToCoach);
-    document.getElementById('closeModal').addEventListener('click', closeModal);
-    document.getElementById('editBtn').addEventListener('click', editEntry);
-    document.getElementById('deleteBtn').addEventListener('click', deleteEntry);
+    document.getElementById('userInfo').addEventListener('click', logout);
   });
 
   // Update user UI elements
@@ -1548,7 +1542,7 @@
     return [...new Set(tags)]; // Remove duplicates
   }
 
-  // UPDATED FUNCTION FOR OPENAI INTEGRATION
+  // FIXED FUNCTION: Using fetch with proper headers to resolve CORS issue
   async function talkToCoach() {
     const userInput = document.getElementById('userInput').value.trim();
     if (!userInput) {
@@ -1560,29 +1554,33 @@
     showTypingIndicator();
     
     try {
-      // Call Supabase Edge Function with timeout
+      // Create a controller for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
       
-      const { data, error } = await supabaseClient.functions.invoke(
-        'journal-coach', 
-        { 
-          body: { entry: userInput },
+      // Use direct fetch with proper headers to avoid CORS issues
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/journal-coach`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'apikey': SUPABASE_KEY
+          },
+          body: JSON.stringify({ entry: userInput }),
           signal: controller.signal
         }
       );
 
       clearTimeout(timeoutId);
 
-      if (error) {
-        // Handle Supabase client errors
-        throw new Error(`Supabase error: ${error.message}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Service error: ${errorData.error || response.statusText}`);
       }
 
-      // Handle edge function application errors
-      if (data && data.error) {
-        throw new Error(`Service error: ${data.error}`);
-      }
+      const data = await response.json();
 
       // Display AI response
       document.getElementById('response').innerHTML = safeMarkdown(data?.response || "I'm here to listen. Would you like to share more?");
