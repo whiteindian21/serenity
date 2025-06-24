@@ -1523,6 +1523,7 @@
     return [...new Set(tags)]; // Remove duplicates
   }
 
+  // UPDATED FUNCTION FOR OPENAI INTEGRATION
   async function talkToCoach() {
     const userInput = document.getElementById('userInput').value.trim();
     if (!userInput) {
@@ -1535,11 +1536,19 @@
     
     try {
       // Call Supabase Edge Function
-      const { data, error } = await supabaseClient.functions.invoke('journal-coach', {
-        body: { entry: userInput }
-      });
+      const { data, error } = await supabaseClient.functions.invoke(
+        'journal-coach', 
+        { body: { entry: userInput } }
+      );
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(`Edge function error: ${error.message}`);
+      }
+
+      // Handle edge function application errors
+      if (data && data.error) {
+        throw new Error(`AI service error: ${data.error}`);
+      }
 
       // Display AI response
       document.getElementById('response').innerHTML = safeMarkdown(data.response);
@@ -1548,12 +1557,17 @@
       
       // Auto-save if not already saved
       if (!currentEntryId) {
-        saveJournal();
+        await saveJournal();
       }
     } catch (error) {
       console.error('Error getting AI response:', error);
-      showToast('Error connecting to AI companion: ' + error.message, 'error');
-      document.getElementById('response').innerHTML = "I'm having trouble connecting right now. Would you like to try again?";
+      showToast('Error connecting to AI companion', 'error');
+      document.getElementById('response').innerHTML = `
+        <p>I'm having trouble connecting right now. Would you like to try again?</p>
+        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
+          Retry
+        </button>
+      `;
       hideTypingIndicator();
     }
   }
@@ -1609,5 +1623,3 @@
 </script>
 </body>
 </html>
-
-
