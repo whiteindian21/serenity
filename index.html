@@ -82,6 +82,13 @@
       color: var(--secondary);
       text-decoration: none;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      color: var(--accent);
     }
 
     .nav-links {
@@ -801,6 +808,70 @@
       border-top: 0;
     }
 
+    /* New AI-themed elements */
+    .ai-gradient {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(168, 218, 220, 0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, rgba(69, 123, 157, 0.1) 0%, transparent 40%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    .ai-grid-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-image: 
+        linear-gradient(rgba(29, 53, 87, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 53, 87, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .ai-particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0.5;
+      z-index: 1;
+    }
+    
+    /* Login status indicator */
+    .login-status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      font-size: 0.85rem;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .login-status .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4CAF50;
+    }
+    
+    .login-status.logged-out .status-indicator {
+      background: #f44336;
+    }
+
     /* Responsive Design */
     @media (min-width: 1025px) {
       .chat-bubble {
@@ -894,6 +965,11 @@
       .companion-grid {
         gap: 2rem;
       }
+      
+      .login-status {
+        top: 80px;
+        right: 10px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -931,9 +1007,17 @@
   </style>
 </head>
 <body>
+  <div class="login-status" id="loginStatus">
+    <span class="status-indicator"></span>
+    <span id="statusText">Logged In</span>
+  </div>
+  
   <nav id="mainNav">
     <div class="container nav-content">
-      <a href="#" class="logo">Serenity</a>
+      <a href="#" class="logo">
+        <i class="fas fa-brain logo-icon"></i>
+        Serenity
+      </a>
       <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
       <div class="nav-links" id="navLinks">
         <a href="#features">Features</a>
@@ -946,6 +1030,9 @@
   </nav>
 
   <main>
+    <div class="ai-gradient"></div>
+    <div class="ai-grid-pattern"></div>
+    
     <section class="hero">
       <div class="container">
         <div class="hero-content">
@@ -953,13 +1040,13 @@
             <h1 class="animate">Your Healing Journey<br>Starts Here</h1>
             <p class="animate delay-1">Serenity is your compassionate AI companion, offering gentle guidance through emotional challenges with science-backed techniques and always-available support.</p>
             <div class="animate delay-2">
-              <a href="login.html" class="cta-button"> Begin Healing Today
+              <a href="#" id="beginHealingBtn" class="cta-button"> Begin Healing Today
                 <i class="fas fa-arrow-right"></i>
               </a>
             </div>
           </div>
           <div class="hero-image-container animate delay-1">
-            <img src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Compassionate support illustration" class="hero-image">
+            <img src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="AI emotional support" class="hero-image">
             <div class="companion-badge animate delay-2">
               <h4>Meet Your AI Companions</h4>
               <p>Always available to listen and support you</p>
@@ -977,7 +1064,12 @@
         <path fill="var(--primary)" d="M38.7,-59.1C49.5,-49.2,57.1,-36.5,62.6,-22.8C68.1,-9.1,71.5,5.6,67.8,18.1C64.1,30.7,53.3,41.1,40.9,49.7C28.4,58.3,14.2,65.1,-0.8,66.2C-15.8,67.3,-31.6,62.7,-45.3,54.8C-59.1,46.8,-70.9,35.5,-75.2,21.5C-79.5,7.5,-76.4,-9.2,-69.2,-23.5C-62,-37.8,-50.8,-49.7,-37.9,-58.9C-25,-68.1,-10.4,-74.5,3.4,-79.4C17.1,-84.3,34.3,-87.6,38.7,-59.1Z" transform="translate(100 100)" />
       </svg>
       <div class="chat-bubble bubble-1">"I'm here whenever you need to talk"</div>
-     
+      
+      <!-- AI Particles -->
+      <div class="ai-particle" style="top: 15%; left: 12%;"></div>
+      <div class="ai-particle" style="top: 25%; right: 15%;"></div>
+      <div class="ai-particle" style="bottom: 20%; left: 18%;"></div>
+      <div class="ai-particle" style="bottom: 30%; right: 22%;"></div>
     </section>
 
     <section id="features" class="features">
@@ -1020,7 +1112,7 @@
         </div>
         <div class="companion-grid">
           <div class="companion-card animate delay-1">
-            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Elena" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1677442135133-33d364e7d1d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elena AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Elena</h3>
               <span class="companion-role">Empathy Specialist</span>
@@ -1033,7 +1125,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-2">
-            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="David" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1677442135722-5f8ea49cec8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David AI companion" class="companion-image">
             <div class="companion-info">
               <h3>David</h3>
               <span class="companion-role">Resilience Coach</span>
@@ -1046,7 +1138,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-3">
-            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Sophia" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1677442135699-3d09b4e9a1e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sophia AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Sophia</h3>
               <span class="companion-role">Mindfulness Guide</span>
@@ -1134,7 +1226,7 @@
         <h2 class="animate">Ready to Begin Your Healing Journey?</h2>
         <p class="animate delay-1">Take the first step towards emotional recovery today with our supportive AI companions</p>
         <div class="cta-buttons animate delay-2">
-          <a href="createaccount.html" class="cta-button white">
+          <a href="#" id="startTrialBtn" class="cta-button white">
             Start Free Trial
             <i class="fas fa-heart"></i>
           </a>
@@ -1194,6 +1286,50 @@
   </footer>
 
   <script>
+    // Simulated login status (in a real app, this would be determined by authentication)
+    let isLoggedIn = false; // Change to true to simulate logged in state
+    
+    // Set login status indicator
+    const loginStatus = document.getElementById('loginStatus');
+    const statusText = document.getElementById('statusText');
+    
+    if (isLoggedIn) {
+      loginStatus.classList.remove('logged-out');
+      statusText.textContent = 'Logged In';
+    } else {
+      loginStatus.classList.add('logged-out');
+      statusText.textContent = 'Not Logged In';
+    }
+    
+    // Set button destinations based on login status
+    const beginHealingBtn = document.getElementById('beginHealingBtn');
+    const startTrialBtn = document.getElementById('startTrialBtn');
+    
+    if (isLoggedIn) {
+      beginHealingBtn.href = 'dashboard.html';
+      startTrialBtn.href = 'dashboard.html';
+    } else {
+      beginHealingBtn.href = 'login.html';
+      startTrialBtn.href = 'login.html';
+    }
+    
+    // Toggle login status for demo purposes
+    loginStatus.addEventListener('click', () => {
+      isLoggedIn = !isLoggedIn;
+      
+      if (isLoggedIn) {
+        loginStatus.classList.remove('logged-out');
+        statusText.textContent = 'Logged In';
+        beginHealingBtn.href = 'dashboard.html';
+        startTrialBtn.href = 'dashboard.html';
+      } else {
+        loginStatus.classList.add('logged-out');
+        statusText.textContent = 'Not Logged In';
+        beginHealingBtn.href = 'login.html';
+        startTrialBtn.href = 'login.html';
+      }
+    });
+
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const navLinks = document.getElementById('navLinks');
@@ -1245,6 +1381,24 @@
         bubble.style.transform = 'scale(1)';
       });
     }, 500);
+    
+    // Create floating particles
+    function createParticles() {
+      const heroSection = document.querySelector('.hero');
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'ai-particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.width = `${Math.random() * 8 + 2}px`;
+        particle.style.height = particle.style.width;
+        particle.style.animation = `float ${Math.random() * 10 + 5}s ease-in-out infinite`;
+        particle.style.opacity = Math.random() * 0.5 + 0.2;
+        heroSection.appendChild(particle);
+      }
+    }
+    
+    createParticles();
   </script>
 </body>
 </html>
