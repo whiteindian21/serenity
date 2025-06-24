@@ -1524,53 +1524,64 @@
   }
 
   // UPDATED FUNCTION FOR OPENAI INTEGRATION
-  async function talkToCoach() {
-    const userInput = document.getElementById('userInput').value.trim();
-    if (!userInput) {
-      document.getElementById('userInput').classList.add('error');
-      showToast('Please share your thoughts first', 'error');
-      return;
-    }
-
-    showTypingIndicator();
-    
-    try {
-      // Call Supabase Edge Function
-      const { data, error } = await supabaseClient.functions.invoke(
-        'journal-coach', 
-        { body: { entry: userInput } }
-      );
-
-      if (error) {
-        throw new Error(`Edge function error: ${error.message}`);
-      }
-
-      // Handle edge function application errors
-      if (data && data.error) {
-        throw new Error(`AI service error: ${data.error}`);
-      }
-
-      // Display AI response
-      document.getElementById('response').innerHTML = safeMarkdown(data.response);
-      document.getElementById('response').classList.add('fade-in');
-      hideTypingIndicator();
-      
-      // Auto-save if not already saved
-      if (!currentEntryId) {
-        await saveJournal();
-      }
-    } catch (error) {
-      console.error('Error getting AI response:', error);
-      showToast('Error connecting to AI companion', 'error');
-      document.getElementById('response').innerHTML = `
-        <p>I'm having trouble connecting right now. Would you like to try again?</p>
-        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
-          Retry
-        </button>
-      `;
-      hideTypingIndicator();
-    }
+ async function talkToCoach() {
+  const userInput = document.getElementById('userInput').value.trim();
+  if (!userInput) {
+    document.getElementById('userInput').classList.add('error');
+    showToast('Please share your thoughts first', 'error');
+    return;
   }
+
+  showTypingIndicator();
+  
+  try {
+    // Call Supabase Edge Function with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+    
+    const { data, error } = await supabaseClient.functions.invoke(
+      'journal-coach', 
+      { 
+        body: { entry: userInput },
+        signal: controller.signal
+      }
+    );
+
+    clearTimeout(timeoutId);
+
+    if (error) {
+      // Handle Supabase client errors
+      throw new Error(`Supabase error: ${error.message}`);
+    }
+
+    // Handle edge function application errors
+    if (data && data.error) {
+      throw new Error(`Service error: ${data.error}`);
+    }
+
+    // Display AI response
+    document.getElementById('response').innerHTML = safeMarkdown(data.response);
+    hideTypingIndicator();
+    
+    // Auto-save
+    if (!currentEntryId) {
+      await saveJournal();
+    }
+  } catch (error) {
+    console.error('AI Companion Error:', error);
+    hideTypingIndicator();
+    
+    document.getElementById('response').innerHTML = `
+      <p>I'm having trouble connecting right now.</p>
+      <p><small>${error.message.includes('timeout') ? 'Request timed out' : 'Service unavailable'}</small></p>
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
+        <i class="fas fa-redo"></i> Try Again
+      </button>
+    `;
+    
+    showToast('Connection issue. Please try again.', 'error');
+  }
+}
 
   // Logout when clicking user info
   document.getElementById('userInfo').addEventListener('click', function() {
