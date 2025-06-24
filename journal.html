@@ -1093,6 +1093,15 @@
         renderEntryList();
       });
     });
+    
+    // Setup global event listeners
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    document.getElementById('saveBtn').addEventListener('click', saveJournal);
+    document.getElementById('clearBtn').addEventListener('click', clearForm);
+    document.getElementById('talkBtn').addEventListener('click', talkToCoach);
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('editBtn').addEventListener('click', editEntry);
+    document.getElementById('deleteBtn').addEventListener('click', deleteEntry);
   });
 
   // Update user UI elements
@@ -1211,11 +1220,16 @@
         showToast('Journal entry updated successfully', 'success');
       } else {
         // Create new entry
-        const { error } = await supabaseClient
+        const { data, error } = await supabaseClient
           .from('journal_entries')
-          .insert([{ ...entryData, created_at: new Date().toISOString() }]);
+          .insert([{ ...entryData, created_at: new Date().toISOString() }])
+          .select();
         
         if (error) throw error;
+        // Add new entry to local state
+        if (data && data.length > 0) {
+          entries.unshift(data[0]);
+        }
         showToast('Journal entry saved successfully', 'success');
       }
 
@@ -1228,8 +1242,8 @@
         el.classList.remove('selected');
       });
       
-      // Reload entries
-      loadEntries();
+      // Update entry list
+      renderEntryList();
       
     } catch (error) {
       console.error('Error saving entry:', error);
@@ -1261,8 +1275,11 @@
         
         if (error) throw error;
         
+        // Remove from local entries
+        entries = entries.filter(entry => entry.id !== currentEntryId);
+        
         showToast('Entry deleted', 'success');
-        loadEntries();
+        renderEntryList();
         closeModal();
       } catch (error) {
         console.error('Error deleting entry:', error);
@@ -1411,7 +1428,7 @@
         });
         
         return `
-        <li class="entry-item" onclick="openEntryModal('${entry.id}')">
+        <li class="entry-item" data-id="${entry.id}">
           <div>
             <span class="entry-date">${formattedDate}</span>
             ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
@@ -1423,14 +1440,22 @@
       `})
       .join('');
 
+    // Add event listeners to new items
+    document.querySelectorAll('.entry-item').forEach(item => {
+      const id = item.getAttribute('data-id');
+      item.addEventListener('click', () => openEntryModal(id));
+    });
+
     // Show more button if there are more entries
     if (filteredEntries.length > 5) {
-      entryList.innerHTML += `
-        <li class="entry-item" onclick="showAllEntries()">
-          <div>Show all ${filteredEntries.length} entries</div>
-          <i class="fas fa-chevron-down"></i>
-        </li>
+      const showAllItem = document.createElement('li');
+      showAllItem.className = 'entry-item';
+      showAllItem.innerHTML = `
+        <div>Show all ${filteredEntries.length} entries</div>
+        <i class="fas fa-chevron-down"></i>
       `;
+      showAllItem.addEventListener('click', showAllEntries);
+      entryList.appendChild(showAllItem);
     }
   }
 
@@ -1524,73 +1549,64 @@
   }
 
   // UPDATED FUNCTION FOR OPENAI INTEGRATION
- async function talkToCoach() {
-  const userInput = document.getElementById('userInput').value.trim();
-  if (!userInput) {
-    document.getElementById('userInput').classList.add('error');
-    showToast('Please share your thoughts first', 'error');
-    return;
-  }
+  async function talkToCoach() {
+    const userInput = document.getElementById('userInput').value.trim();
+    if (!userInput) {
+      document.getElementById('userInput').classList.add('error');
+      showToast('Please share your thoughts first', 'error');
+      return;
+    }
 
-  showTypingIndicator();
-  
-  try {
-    // Call Supabase Edge Function with timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+    showTypingIndicator();
     
-    const { data, error } = await supabaseClient.functions.invoke(
-      'journal-coach', 
-      { 
-        body: { entry: userInput },
-        signal: controller.signal
+    try {
+      // Call Supabase Edge Function with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+      
+      const { data, error } = await supabaseClient.functions.invoke(
+        'journal-coach', 
+        { 
+          body: { entry: userInput },
+          signal: controller.signal
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (error) {
+        // Handle Supabase client errors
+        throw new Error(`Supabase error: ${error.message}`);
       }
-    );
 
-    clearTimeout(timeoutId);
+      // Handle edge function application errors
+      if (data && data.error) {
+        throw new Error(`Service error: ${data.error}`);
+      }
 
-    if (error) {
-      // Handle Supabase client errors
-      throw new Error(`Supabase error: ${error.message}`);
+      // Display AI response
+      document.getElementById('response').innerHTML = safeMarkdown(data?.response || "I'm here to listen. Would you like to share more?");
+      hideTypingIndicator();
+      
+      // Auto-save if new entry
+      if (!currentEntryId) {
+        await saveJournal();
+      }
+    } catch (error) {
+      console.error('AI Companion Error:', error);
+      hideTypingIndicator();
+      
+      document.getElementById('response').innerHTML = `
+        <p>I'm having trouble connecting right now.</p>
+        <p><small>${error.message.includes('timeout') ? 'Request timed out' : 'Service unavailable'}</small></p>
+        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
+          <i class="fas fa-redo"></i> Try Again
+        </button>
+      `;
+      
+      showToast('Connection issue. Please try again.', 'error');
     }
-
-    // Handle edge function application errors
-    if (data && data.error) {
-      throw new Error(`Service error: ${data.error}`);
-    }
-
-    // Display AI response
-    document.getElementById('response').innerHTML = safeMarkdown(data.response);
-    hideTypingIndicator();
-    
-    // Auto-save
-    if (!currentEntryId) {
-      await saveJournal();
-    }
-  } catch (error) {
-    console.error('AI Companion Error:', error);
-    hideTypingIndicator();
-    
-    document.getElementById('response').innerHTML = `
-      <p>I'm having trouble connecting right now.</p>
-      <p><small>${error.message.includes('timeout') ? 'Request timed out' : 'Service unavailable'}</small></p>
-      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
-        <i class="fas fa-redo"></i> Try Again
-      </button>
-    `;
-    
-    showToast('Connection issue. Please try again.', 'error');
   }
-}
-
-  // Logout when clicking user info
-  document.getElementById('userInfo').addEventListener('click', function() {
-    if (currentUser) {
-      logout();
-    } else {
-      document.getElementById('loginModal').style.display = 'flex';
-    }
-  });
 
   // Helper function to show all entries
   function showAllEntries() {
@@ -1619,7 +1635,7 @@
         });
         
         return `
-        <li class="entry-item" onclick="openEntryModal('${entry.id}')">
+        <li class="entry-item" data-id="${entry.id}">
           <div>
             <span class="entry-date">${formattedDate}</span>
             ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
@@ -1630,7 +1646,30 @@
         </li>
       `})
       .join('');
+    
+    // Add event listeners to new items
+    document.querySelectorAll('.entry-item').forEach(item => {
+      const id = item.getAttribute('data-id');
+      item.addEventListener('click', () => openEntryModal(id));
+    });
   }
+
+  // Make functions globally available
+  window.login = login;
+  window.signUp = signUp;
+  window.logout = logout;
+  window.saveJournal = saveJournal;
+  window.clearForm = clearForm;
+  window.talkToCoach = talkToCoach;
+  window.formatText = formatText;
+  window.selectMood = selectMood;
+  window.insertTag = insertTag;
+  window.insertPrompt = insertPrompt;
+  window.openEntryModal = openEntryModal;
+  window.closeModal = closeModal;
+  window.editEntry = editEntry;
+  window.deleteEntry = deleteEntry;
+  window.showAllEntries = showAllEntries;
 </script>
 </body>
 </html>
