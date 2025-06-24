@@ -595,6 +595,8 @@
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow-light);
+      background-size: cover;
+      background-position: center;
     }
     
     .memory-item:hover {
@@ -639,6 +641,15 @@
       top: 0;
       left: 0;
       z-index: -1;
+    }
+    
+    .memory-item.has-image i {
+      display: none;
+    }
+    
+    .memory-item.has-image .memory-label {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
     }
 
     /* Mood Tracker */
@@ -781,6 +792,45 @@
       color: var(--gray);
       font-weight: 600;
     }
+    
+    /* Progress sources indicator */
+    .progress-sources {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      gap: 0.5rem;
+    }
+    
+    .progress-source {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+    
+    .progress-source-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+    
+    .progress-source-value {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary);
+    }
+    
+    .progress-source-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+      text-align: center;
+    }
 
     /* Companion Section */
     .companion-container {
@@ -871,7 +921,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       color: var(--gray);
       font-size: 0.75rem;
       text-decoration: none;
@@ -1180,6 +1229,37 @@
       margin-top: 1rem;
     }
     
+    /* Memory preview */
+    .memory-preview {
+      width: 100%;
+      height: 200px;
+      border-radius: var(--radius-md);
+      background-color: var(--light-2);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .memory-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+    
+    .memory-preview i {
+      font-size: 3rem;
+      color: var(--gray);
+    }
+    
+    /* View memory modal */
+    .memory-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
     @keyframes scaleIn {
       from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
@@ -1455,8 +1535,8 @@
           </div>
           
           <div class="card fade-in">
-            <h3><i class="fas fa-lightbulb"></i> Today's Reflection</h3>
-            <p id="prompt">What's one positive memory you can focus on today? How does remembering this make you feel?</p>
+            <h3><i class="fas fa-lightbulb"></i> "Today's Reflection"</h3>
+            <p id="prompt">"What's one positive memory you can focus on today? How does remembering this make you feel?"</p>
             <div class="card-actions">
               <button class="btn btn-secondary" id="refreshPrompt">
                 <i class="fas fa-sync-alt"></i> New
@@ -1530,6 +1610,31 @@
             <span>Start</span>
             <span id="progress-percent">0%</span>
             <span>Healed</span>
+          </div>
+          
+          <!-- Progress Sources -->
+          <div class="progress-sources">
+            <div class="progress-source">
+              <div class="progress-source-icon">
+                <i class="fas fa-smile"></i>
+              </div>
+              <div class="progress-source-value" id="mood-source">0</div>
+              <div class="progress-source-label">Moods</div>
+            </div>
+            <div class="progress-source">
+              <div class="progress-source-icon">
+                <i class="fas fa-comments"></i>
+              </div>
+              <div class="progress-source-value" id="chat-source">0</div>
+              <div class="progress-source-label">Chats</div>
+            </div>
+            <div class="progress-source">
+              <div class="progress-source-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="progress-source-value" id="journal-source">0</div>
+              <div class="progress-source-label">Journal</div>
+            </div>
           </div>
         </section>
         
@@ -1737,6 +1842,9 @@
       
       <div class="form-group">
         <label>Add Photo</label>
+        <div class="memory-preview" id="memory-preview">
+          <i class="fas fa-image"></i>
+        </div>
         <label for="memory-photo" class="memory-label-upload">
           <i class="fas fa-cloud-upload-alt"></i> Click to upload an image
         </label>
@@ -1744,6 +1852,27 @@
       </div>
       
       <button class="btn-save" id="save-memory">Save Memory</button>
+    </div>
+  </div>
+  
+  <!-- View Memory Modal -->
+  <div class="modal" id="view-memory-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="view-memory-title"></h3>
+        <button class="close-modal" id="close-view-memory">&times;</button>
+      </div>
+      
+      <div class="memory-preview" id="view-memory-preview">
+        <i class="fas fa-image"></i>
+      </div>
+      
+      <p id="view-memory-description" style="margin: 1rem 0;"></p>
+      
+      <div class="memory-actions">
+        <button class="btn btn-secondary" id="edit-memory">Edit</button>
+        <button class="btn btn-accent" id="delete-memory">Delete</button>
+      </div>
     </div>
   </div>
   
@@ -1812,1069 +1941,1302 @@
       <button class="btn-save" id="save-companion">Select Companion</button>
     </div>
   </div>
-<script>
-  // Initialize Supabase with environment variables
-  const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
   
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  
-  // State variables
-  let currentMood = "great";
-  let breathInterval;
-  let isBreathingActive = false;
-  let cycleCount = 0;
-  let secondsElapsed = 0;
-  let currentPhase = 0;
-  let progress = 0;
-  let currentUser = null;
-  let currentSection = 0;
-  let moodChart = null;
-  let currentCompanion = "elena";
-  let conversationHistory = [];
-  
-  // Define companions
-  const companions = {
-    "elena": {
-      name: "Elena",
-      role: "Healing Guide",
-      specialties: ["Grief", "Compassion", "Support"],
-      avatar: "fas fa-smile",
-      personality: "compassionate",
-      intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
-      systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
-    },
-    "david": {
-      name: "David",
-      role: "Mindfulness Coach",
-      specialties: ["Mindfulness", "Resilience", "Meditation"],
-      avatar: "fas fa-leaf",
-      personality: "calm",
-      intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
-      systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
-    },
-    "sophia": {
-      name: "Sophia",
-      role: "Therapeutic Guide",
-      specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
-      avatar: "fas fa-lightbulb",
-      personality: "insightful",
-      intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
-      systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
-    }
-  };
-  
-  // Initialize the dashboard
-  document.addEventListener('DOMContentLoaded', async function() {
-    // Check if user is logged in
-    const isAuthenticated = await checkSession();
+  <script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
     
-    if (isAuthenticated) {
-      // Show dashboard for logged-in users
-      document.getElementById('login-prompt').style.display = 'none';
-      document.getElementById('dashboard-container').style.display = 'block';
-      
-      setGreeting();
-      initBreathingExercise();
-      setupEventListeners();
-      updateProgressBar();
-      setupSectionIndicators();
-      showToast(`Welcome back!`, "success");
-      
-      // Load user-specific data
-      loadMemories();
-      loadCompanion();
-      loadMoodHistory();
-    } else {
-      // Show login prompt for unauthenticated users
-      document.getElementById('login-prompt').style.display = 'block';
-      document.getElementById('dashboard-container').style.display = 'none';
-    }
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    // Setup login redirection button
-    document.getElementById('go-to-login').addEventListener('click', function() {
-      window.location.href = 'login.html';
+    // State variables
+    let currentMood = "great";
+    let breathInterval;
+    let isBreathingActive = false;
+    let cycleCount = 0;
+    let secondsElapsed = 0;
+    let currentPhase = 0;
+    let progress = 0;
+    let currentUser = null;
+    let currentSection = 0;
+    let moodChart = null;
+    let currentCompanion = "elena";
+    let conversationHistory = [];
+    
+    // Progress tracking
+    let progressSources = {
+      mood: 0,
+      chat: 0,
+      journal: 0
+    };
+    
+    // Define companions
+    const companions = {
+      "elena": {
+        name: "Elena",
+        role: "Healing Guide",
+        specialties: ["Grief", "Compassion", "Support"],
+        avatar: "fas fa-smile",
+        personality: "compassionate",
+        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
+        systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
+      },
+      "david": {
+        name: "David",
+        role: "Mindfulness Coach",
+        specialties: ["Mindfulness", "Resilience", "Meditation"],
+        avatar: "fas fa-leaf",
+        personality: "calm",
+        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
+        systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
+      },
+      "sophia": {
+        name: "Sophia",
+        role: "Therapeutic Guide",
+        specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
+        avatar: "fas fa-lightbulb",
+        personality: "insightful",
+        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+        systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
+      }
+    };
+    
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Check if user is logged in
+      const isAuthenticated = await checkSession();
+      
+      if (isAuthenticated) {
+        // Show dashboard for logged-in users
+        document.getElementById('login-prompt').style.display = 'none';
+        document.getElementById('dashboard-container').style.display = 'block';
+        
+        setGreeting();
+        initBreathingExercise();
+        setupEventListeners();
+        updateProgressBar();
+        setupSectionIndicators();
+        showToast(`Welcome back!`, "success");
+        
+        // Load user-specific data
+        loadMemories();
+        loadCompanion();
+        loadMoodHistory();
+        loadProgress();
+      } else {
+        // Show login prompt for unauthenticated users
+        document.getElementById('login-prompt').style.display = 'block';
+        document.getElementById('dashboard-container').style.display = 'none';
+      }
+      
+      // Setup login redirection button
+      document.getElementById('go-to-login').addEventListener('click', function() {
+        window.location.href = 'login.html';
+      });
     });
-  });
-  
-  // Check user session
-  async function checkSession() {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) {
-      console.error('Error getting session:', error.message);
+    
+    // Check user session
+    async function checkSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+        return false;
+      }
+      
+      if (data.session) {
+        currentUser = data.session.user;
+        document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
+        document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
+        return true;
+      }
+      
       return false;
     }
     
-    if (data.session) {
-      currentUser = data.session.user;
-      document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
-      document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
-      return true;
+    // Initialize breathing exercise
+    function initBreathingExercise() {
+      document.getElementById('cycle-count').textContent = cycleCount;
+      document.getElementById('timer').textContent = '0:00';
     }
     
-    return false;
-  }
-  
-  // Initialize breathing exercise
-  function initBreathingExercise() {
-    document.getElementById('cycle-count').textContent = cycleCount;
-    document.getElementById('timer').textContent = '0:00';
-  }
-  
-  // Start/stop breathing exercise
-  function toggleBreathing() {
-    if (!isBreathingActive) {
-      startBreathing();
-      document.getElementById('start-breath').innerHTML = '<i class="fas fa-pause"></i> Pause';
-    } else {
-      pauseBreathing();
-      document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Resume';
+    // Start/stop breathing exercise
+    function toggleBreathing() {
+      if (!isBreathingActive) {
+        startBreathing();
+        document.getElementById('start-breath').innerHTML = '<i class="fas fa-pause"></i> Pause';
+      } else {
+        pauseBreathing();
+        document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Resume';
+      }
+      isBreathingActive = !isBreathingActive;
     }
-    isBreathingActive = !isBreathingActive;
-  }
-  
-  // Start breathing exercise
-  function startBreathing() {
-    const breathCircle = document.querySelector('.breath-circle');
-    breathCircle.classList.add('pulse');
     
-    breathInterval = setInterval(() => {
-      secondsElapsed++;
-      const minutes = Math.floor(secondsElapsed / 60);
-      const seconds = secondsElapsed % 60;
-      document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    // Start breathing exercise
+    function startBreathing() {
+      const breathCircle = document.querySelector('.breath-circle');
+      breathCircle.classList.add('pulse');
       
-      const phaseTime = secondsElapsed % 16;
-      
-      if (phaseTime < 4) {
-        if (currentPhase !== 0) {
-          currentPhase = 0;
-          document.getElementById('breath-text').textContent = 'Breathe In';
-          document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
-        }
-      } else if (phaseTime < 8) {
-        if (currentPhase !== 1) {
-          currentPhase = 1;
-          document.getElementById('breath-text').textContent = 'Hold';
-          document.getElementById('instruction').textContent = 'Hold your breath...';
-        }
-      } else if (phaseTime < 12) {
-        if (currentPhase !== 2) {
-          currentPhase = 2;
-          document.getElementById('breath-text').textContent = 'Breathe Out';
-          document.getElementById('instruction').textContent = 'Exhale slowly through your mouth...';
-          cycleCount++;
-          document.getElementById('cycle-count').textContent = cycleCount;
-        }
-      } else {
-        if (currentPhase !== 3) {
-          currentPhase = 3;
-          document.getElementById('breath-text').textContent = 'Hold';
-          document.getElementById('instruction').textContent = 'Hold your breath...';
-        }
-      }
-    }, 1000);
-  }
-  
-  // Pause breathing exercise
-  function pauseBreathing() {
-    clearInterval(breathInterval);
-    document.querySelector('.breath-circle').classList.remove('pulse');
-  }
-  
-  // Reset breathing exercise
-  function resetBreathing() {
-    pauseBreathing();
-    isBreathingActive = false;
-    cycleCount = 0;
-    secondsElapsed = 0;
-    currentPhase = 0;
-    document.getElementById('cycle-count').textContent = cycleCount;
-    document.getElementById('timer').textContent = '0:00';
-    document.getElementById('breath-text').textContent = 'Breathe In';
-    document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
-    document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Start';
-  }
-  
-  // Set up all event listeners
-  function setupEventListeners() {
-    // Affirmation refresh
-    document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
-    
-    // Prompt refresh
-    document.getElementById('refreshPrompt').addEventListener('click', refreshPrompt);
-    
-    // Mood tracking
-    document.querySelectorAll('.mood-option').forEach(option => {
-      option.addEventListener('click', function() {
-        document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
-        this.classList.add('selected');
-        currentMood = this.dataset.mood;
-        trackMood(currentMood);
-      });
-    });
-    
-    // Save buttons
-    document.getElementById('saveAffirmation').addEventListener('click', function() {
-      this.classList.toggle('active');
-      this.innerHTML = this.classList.contains('active') 
-        ? '<i class="fas fa-heart"></i> Saved' 
-        : '<i class="far fa-heart"></i> Save';
-      
-      showToast(
-        this.classList.contains('active') 
-          ? "Affirmation saved" 
-          : "Affirmation removed", 
-        "success"
-      );
-    });
-    
-    document.getElementById('savePrompt').addEventListener('click', function() {
-      this.classList.toggle('active');
-      this.innerHTML = this.classList.contains('active') 
-        ? '<i class="fas fa-heart"></i> Saved' 
-        : '<i class="far fa-heart"></i> Save';
-      
-      showToast(
-        this.classList.contains('active') 
-          ? "Prompt saved" 
-          : "Prompt removed", 
-        "success"
-      );
-    });
-    
-    // Sign out button
-    document.getElementById('signout-btn').addEventListener('click', async function() {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        showToast("Sign out failed: " + error.message, "error");
-      } else {
-        showToast("Signed out successfully", "success");
-        currentUser = null;
-        // Redirect to login.html
-        window.location.href = 'login.html';
-      }
-    });
-    
-    // Loss type selection
-    document.querySelectorAll('.loss-type').forEach(type => {
-      type.addEventListener('click', function() {
-        document.querySelectorAll('.loss-type').forEach(t => t.classList.remove('selected'));
-        this.classList.add('selected');
-        refreshAffirmation();
-        refreshPrompt();
-        showToast(`Tools for ${this.textContent}`, "info");
-      });
-    });
-    
-    // Breathing exercise controls
-    document.getElementById('start-breath').addEventListener('click', toggleBreathing);
-    document.getElementById('reset-breath').addEventListener('click', resetBreathing);
-    
-    // Journal button
-    document.getElementById('journal-btn').addEventListener('click', function() {
-      window.location.href = 'journal.html';
-    });
-    
-    // Compassion button
-    document.getElementById('compassion-btn').addEventListener('click', function() {
-      window.location.href = 'self-care.html';
-    });
-    
-    // Mood history
-    document.getElementById('mood-history').addEventListener('click', function() {
-      document.getElementById('mood-history-modal').style.display = 'flex';
-    });
-    
-    // Mood insights
-    document.getElementById('mood-insights').addEventListener('click', async function() {
-      document.getElementById('mood-insights-modal').style.display = 'flex';
-      initMoodChart();
-    });
-    
-    // Bottom navigation
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
+      breathInterval = setInterval(() => {
+        secondsElapsed++;
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed % 60;
+        document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         
-        // Scroll to the appropriate section
-        const navIndex = Array.from(this.parentElement.children).indexOf(this);
-        scrollToSection(navIndex);
-      });
-    });
-    
-    // Section scrolling
-    const sectionsContainer = document.getElementById('sections-container');
-    sectionsContainer.addEventListener('scroll', updateSectionIndicators);
-    
-    // Settings modal
-    document.getElementById('userInitial').addEventListener('click', () => {
-      document.getElementById('settings-modal').style.display = 'flex';
-    });
-    
-    document.getElementById('userInitialMobile').addEventListener('click', () => {
-      document.getElementById('settings-modal').style.display = 'flex';
-    });
-    
-    // Close modals
-    document.getElementById('close-settings').addEventListener('click', () => {
-      document.getElementById('settings-modal').style.display = 'none';
-    });
-    
-    document.getElementById('close-mood-history').addEventListener('click', () => {
-      document.getElementById('mood-history-modal').style.display = 'none';
-    });
-    
-    document.getElementById('close-mood-insights').addEventListener('click', () => {
-      document.getElementById('mood-insights-modal').style.display = 'none';
-    });
-    
-    // Save settings
-    document.getElementById('save-settings').addEventListener('click', saveSettings);
-    
-    // Memory handling
-    document.getElementById('add-memory-btn').addEventListener('click', () => {
-      document.getElementById('add-memory-modal').style.display = 'flex';
-    });
-    
-    document.getElementById('save-memory').addEventListener('click', saveMemory);
-    
-    // Companion change
-    document.getElementById('change-companion-btn').addEventListener('click', () => {
-      document.getElementById('companion-modal').style.display = 'flex';
-    });
-    
-    document.getElementById('close-companion').addEventListener('click', () => {
-      document.getElementById('companion-modal').style.display = 'none';
-    });
-    
-    document.getElementById('companion-select').addEventListener('change', (e) => {
-      changeCompanionPreview(e.target.value);
-    });
-    
-    document.getElementById('save-companion').addEventListener('click', saveCompanion);
-    
-    // Start chat with companion
-    document.getElementById('start-chat-btn').addEventListener('click', startCompanionChat);
-    
-    // Chat interface
-    document.getElementById('close-chat').addEventListener('click', closeChat);
-    document.getElementById('send-btn').addEventListener('click', sendMessage);
-    document.getElementById('chat-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
-    });
-  }
-  
-  // Setup section indicators
-  function setupSectionIndicators() {
-    const indicators = document.querySelectorAll('.indicator');
-    indicators.forEach((indicator, index) => {
-      indicator.addEventListener('click', () => {
-        scrollToSection(index);
-      });
-    });
-  }
-  
-  // Scroll to specific section
-  function scrollToSection(index) {
-    const sectionsContainer = document.getElementById('sections-container');
-    const sectionWidth = sectionsContainer.clientWidth;
-    sectionsContainer.scrollTo({
-      left: index * sectionWidth,
-      behavior: 'smooth'
-    });
-    currentSection = index;
-    updateSectionIndicators();
-  }
-  
-  // Update section indicators based on scroll position
-  function updateSectionIndicators() {
-    const sectionsContainer = document.getElementById('sections-container');
-    const scrollPosition = sectionsContainer.scrollLeft;
-    const sectionWidth = sectionsContainer.clientWidth;
-    const currentSection = Math.round(scrollPosition / sectionWidth);
-    
-    const indicators = document.querySelectorAll('.indicator');
-    indicators.forEach((indicator, index) => {
-      if (index === currentSection) {
-        indicator.classList.add('active');
-      } else {
-        indicator.classList.remove('active');
-      }
-    });
-  }
-  
-  // Track mood
-  async function trackMood(mood) {
-    const moodLabels = {
-      "awful": "Awful",
-      "sad": "Sad",
-      "neutral": "Neutral",
-      "great": "Great"
-    };
-    
-    try {
-      const { error } = await supabase
-        .from('mood_entries')
-        .insert([
-          { 
-            user_id: currentUser.id, 
-            mood: mood,
-            created_at: new Date().toISOString()
+        const phaseTime = secondsElapsed % 16;
+        
+        if (phaseTime < 4) {
+          if (currentPhase !== 0) {
+            currentPhase = 0;
+            document.getElementById('breath-text').textContent = 'Breathe In';
+            document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
           }
-        ]);
-      
-      if (error) throw error;
-      
-      showToast(`Mood recorded: ${moodLabels[mood]}`, "success");
-      loadMoodHistory();
-    } catch (error) {
-      showToast("Error saving mood: " + error.message, "error");
+        } else if (phaseTime < 8) {
+          if (currentPhase !== 1) {
+            currentPhase = 1;
+            document.getElementById('breath-text').textContent = 'Hold';
+            document.getElementById('instruction').textContent = 'Hold your breath...';
+          }
+        } else if (phaseTime < 12) {
+          if (currentPhase !== 2) {
+            currentPhase = 2;
+            document.getElementById('breath-text').textContent = 'Breathe Out';
+            document.getElementById('instruction').textContent = 'Exhale slowly through your mouth...';
+            cycleCount++;
+            document.getElementById('cycle-count').textContent = cycleCount;
+          }
+        } else {
+          if (currentPhase !== 3) {
+            currentPhase = 3;
+            document.getElementById('breath-text').textContent = 'Hold';
+            document.getElementById('instruction').textContent = 'Hold your breath...';
+          }
+        }
+      }, 1000);
     }
-  }
-  
-  // Update progress bar
-  function updateProgressBar() {
-    // Simulate progress increasing
-    progress = Math.min(100, progress + 5);
-    document.getElementById('progressFill').style.width = `${progress}%`;
-    document.getElementById('progress-percent').textContent = `${progress}%`;
-  }
-  
-  // Generate new affirmation using OpenAI Edge Function
-  async function refreshAffirmation() {
-    const card = document.getElementById('affirmationCard');
-    const affirmationElement = document.getElementById('affirmation');
-    const selectedLoss = document.querySelector('.loss-type.selected').textContent;
     
-    card.style.opacity = '0.7';
-    affirmationElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
+    // Pause breathing exercise
+    function pauseBreathing() {
+      clearInterval(breathInterval);
+      document.querySelector('.breath-circle').classList.remove('pulse');
+    }
     
-    try {
-      // Call OpenAI Edge Function
-      const response = await fetch('/api/generate-affirmation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          lossType: selectedLoss,
-          userId: currentUser.id
-        })
+    // Reset breathing exercise
+    function resetBreathing() {
+      pauseBreathing();
+      isBreathingActive = false;
+      cycleCount = 0;
+      secondsElapsed = 0;
+      currentPhase = 0;
+      document.getElementById('cycle-count').textContent = cycleCount;
+      document.getElementById('timer').textContent = '0:00';
+      document.getElementById('breath-text').textContent = 'Breathe In';
+      document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
+      document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Start';
+    }
+    
+    // Set up all event listeners
+    function setupEventListeners() {
+      // Affirmation refresh
+      document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
+      
+      // Prompt refresh
+      document.getElementById('refreshPrompt').addEventListener('click', refreshPrompt);
+      
+      // Mood tracking
+      document.querySelectorAll('.mood-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          currentMood = this.dataset.mood;
+          trackMood(currentMood);
+        });
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to generate affirmation');
-      }
+      // Save buttons
+      document.getElementById('saveAffirmation').addEventListener('click', function() {
+        this.classList.toggle('active');
+        this.innerHTML = this.classList.contains('active') 
+          ? '<i class="fas fa-heart"></i> Saved' 
+          : '<i class="far fa-heart"></i> Save';
+        
+        showToast(
+          this.classList.contains('active') 
+            ? "Affirmation saved" 
+            : "Affirmation removed", 
+          "success"
+        );
+      });
       
-      const data = await response.json();
-      affirmationElement.textContent = `"${data.affirmation}"`;
-      showToast("AI-generated affirmation created", "success");
-    } catch (error) {
-      // Fallback to local generation
-      const affirmations = {
-        "Relationship": [
-          "I am whole and complete just as I am.",
-          "Every ending creates space for new beginnings.",
-          "I release what no longer serves me and welcome new possibilities."
-        ],
-        "Loved One": [
-          "Their love remains with me always.",
-          "I carry their memory in my heart with gratitude.",
-          "Grief is the price of love, and I am grateful for the love we shared."
-        ],
-        "Pet": [
-          "The love we shared remains forever in my heart.",
-          "I am grateful for every moment we had together.",
-          "Their paw prints are forever on my soul."
-        ],
-        "Job": [
-          "My worth is not defined by my job title.",
-          "Endings create space for new opportunities.",
-          "I trust that the right path will reveal itself in time."
-        ],
-        "Other": [
-          "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
-          "Healing isn't linear, and that's okay.",
-          "I give myself permission to feel whatever I'm feeling."
-        ]
+      document.getElementById('savePrompt').addEventListener('click', function() {
+        this.classList.toggle('active');
+        this.innerHTML = this.classList.contains('active') 
+          ? '<i class="fas fa-heart"></i> Saved' 
+          : '<i class="far fa-heart"></i> Save';
+        
+        showToast(
+          this.classList.contains('active') 
+            ? "Prompt saved" 
+            : "Prompt removed", 
+          "success"
+        );
+      });
+      
+      // Sign out button
+      document.getElementById('signout-btn').addEventListener('click', async function() {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          showToast("Sign out failed: " + error.message, "error");
+        } else {
+          showToast("Signed out successfully", "success");
+          currentUser = null;
+          // Redirect to login.html
+          window.location.href = 'login.html';
+        }
+      });
+      
+      // Loss type selection
+      document.querySelectorAll('.loss-type').forEach(type => {
+        type.addEventListener('click', function() {
+          document.querySelectorAll('.loss-type').forEach(t => t.classList.remove('selected'));
+          this.classList.add('selected');
+          refreshAffirmation();
+          refreshPrompt();
+          showToast(`Tools for ${this.textContent}`, "info");
+        });
+      });
+      
+      // Breathing exercise controls
+      document.getElementById('start-breath').addEventListener('click', toggleBreathing);
+      document.getElementById('reset-breath').addEventListener('click', resetBreathing);
+      
+      // Journal button
+      document.getElementById('journal-btn').addEventListener('click', function() {
+        // Simulate journal entry creation
+        progressSources.journal++;
+        updateProgressBar();
+        saveProgress();
+        showToast("Journal entry created", "success");
+        window.location.href = 'journal.html';
+      });
+      
+      // Compassion button
+      document.getElementById('compassion-btn').addEventListener('click', function() {
+        window.location.href = 'self-care.html';
+      });
+      
+      // Mood history
+      document.getElementById('mood-history').addEventListener('click', function() {
+        document.getElementById('mood-history-modal').style.display = 'flex';
+      });
+      
+      // Mood insights
+      document.getElementById('mood-insights').addEventListener('click', async function() {
+        document.getElementById('mood-insights-modal').style.display = 'flex';
+        initMoodChart();
+      });
+      
+      // Bottom navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Scroll to the appropriate section
+          const navIndex = Array.from(this.parentElement.children).indexOf(this);
+          scrollToSection(navIndex);
+        });
+      });
+      
+      // Section scrolling
+      const sectionsContainer = document.getElementById('sections-container');
+      sectionsContainer.addEventListener('scroll', updateSectionIndicators);
+      
+      // Settings modal
+      document.getElementById('userInitial').addEventListener('click', () => {
+        document.getElementById('settings-modal').style.display = 'flex';
+      });
+      
+      document.getElementById('userInitialMobile').addEventListener('click', () => {
+        document.getElementById('settings-modal').style.display = 'flex';
+      });
+      
+      // Close modals
+      document.getElementById('close-settings').addEventListener('click', () => {
+        document.getElementById('settings-modal').style.display = 'none';
+      });
+      
+      document.getElementById('close-mood-history').addEventListener('click', () => {
+        document.getElementById('mood-history-modal').style.display = 'none';
+      });
+      
+      document.getElementById('close-mood-insights').addEventListener('click', () => {
+        document.getElementById('mood-insights-modal').style.display = 'none';
+      });
+      
+      // Save settings
+      document.getElementById('save-settings').addEventListener('click', saveSettings);
+      
+      // Memory handling - FIXED: Use event delegation for add memory button
+      document.getElementById('memories-container').addEventListener('click', function(e) {
+        if (e.target.id === 'add-memory-btn' || e.target.closest('#add-memory-btn')) {
+          document.getElementById('add-memory-modal').style.display = 'flex';
+        }
+      });
+      
+      document.getElementById('memory-photo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const preview = document.getElementById('memory-preview');
+            preview.innerHTML = `<img src="${event.target.result}" alt="Memory preview">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      document.getElementById('save-memory').addEventListener('click', saveMemory);
+      
+      // Companion change
+      document.getElementById('change-companion-btn').addEventListener('click', () => {
+        document.getElementById('companion-modal').style.display = 'flex';
+      });
+      
+      document.getElementById('close-companion').addEventListener('click', () => {
+        document.getElementById('companion-modal').style.display = 'none';
+      });
+      
+      document.getElementById('companion-select').addEventListener('change', (e) => {
+        changeCompanionPreview(e.target.value);
+      });
+      
+      document.getElementById('save-companion').addEventListener('click', saveCompanion);
+      
+      // Start chat with companion
+      document.getElementById('start-chat-btn').addEventListener('click', startCompanionChat);
+      
+      // Chat interface
+      document.getElementById('close-chat').addEventListener('click', closeChat);
+      document.getElementById('send-btn').addEventListener('click', sendMessage);
+      document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+    }
+    
+    // Setup section indicators
+    function setupSectionIndicators() {
+      const indicators = document.querySelectorAll('.indicator');
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+          scrollToSection(index);
+        });
+      });
+    }
+    
+    // Scroll to specific section
+    function scrollToSection(index) {
+      const sectionsContainer = document.getElementById('sections-container');
+      const sectionWidth = sectionsContainer.clientWidth;
+      sectionsContainer.scrollTo({
+        left: index * sectionWidth,
+        behavior: 'smooth'
+      });
+      currentSection = index;
+      updateSectionIndicators();
+    }
+    
+    // Update section indicators based on scroll position
+    function updateSectionIndicators() {
+      const sectionsContainer = document.getElementById('sections-container');
+      const scrollPosition = sectionsContainer.scrollLeft;
+      const sectionWidth = sectionsContainer.clientWidth;
+      const currentSection = Math.round(scrollPosition / sectionWidth);
+      
+      const indicators = document.querySelectorAll('.indicator');
+      indicators.forEach((indicator, index) => {
+        if (index === currentSection) {
+          indicator.classList.add('active');
+        } else {
+          indicator.classList.remove('active');
+        }
+      });
+    }
+    
+    // Track mood
+    async function trackMood(mood) {
+      const moodLabels = {
+        "awful": "Awful",
+        "sad": "Sad",
+        "neutral": "Neutral",
+        "great": "Great"
       };
       
-      const categoryAffirmations = affirmations[selectedLoss] || affirmations["Other"];
-      const affirmation = categoryAffirmations[Math.floor(Math.random() * categoryAffirmations.length)];
-      affirmationElement.textContent = `"${affirmation}"`;
-      showToast("Local affirmation generated", "info");
-    } finally {
-      card.style.opacity = '1';
+      try {
+        const { error } = await supabase
+          .from('mood_entries')
+          .insert([
+            { 
+              user_id: currentUser.id, 
+              mood: mood,
+              created_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (error) throw error;
+        
+        // Update progress
+        progressSources.mood++;
+        updateProgressBar();
+        saveProgress();
+        
+        showToast(`Mood recorded: ${moodLabels[mood]}`, "success");
+        loadMoodHistory();
+      } catch (error) {
+        showToast("Error saving mood: " + error.message, "error");
+      }
     }
-  }
-  
-  // Generate new reflection prompt using OpenAI Edge Function
-  async function refreshPrompt() {
-    const card = document.querySelector('.card');
-    const promptElement = document.getElementById('prompt');
-    const selectedLoss = document.querySelector('.loss-type.selected').textContent;
     
-    card.style.opacity = '0.7';
-    promptElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
-    
-    try {
-      // Call OpenAI Edge Function
-      const response = await fetch('/api/generate-prompt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          lossType: selectedLoss,
-          userId: currentUser.id
-        })
-      });
+    // Update progress bar
+    function updateProgressBar() {
+      // Calculate total progress points
+      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + progressSources.journal * 3;
+      progress = Math.min(100, Math.round(totalPoints * 100 / 50)); // 50 points = 100%
       
-      if (!response.ok) {
-        throw new Error('Failed to generate prompt');
+      document.getElementById('progressFill').style.width = `${progress}%`;
+      document.getElementById('progress-percent').textContent = `${progress}%`;
+      
+      // Update progress sources
+      document.getElementById('mood-source').textContent = progressSources.mood;
+      document.getElementById('chat-source').textContent = progressSources.chat;
+      document.getElementById('journal-source').textContent = progressSources.journal;
+    }
+    
+    // Save progress to localStorage
+    function saveProgress() {
+      if (!currentUser) return;
+      localStorage.setItem(`progress_${currentUser.id}`, JSON.stringify(progressSources));
+    }
+    
+    // Load progress from localStorage
+    function loadProgress() {
+      if (!currentUser) return;
+      const savedProgress = localStorage.getItem(`progress_${currentUser.id}`);
+      if (savedProgress) {
+        progressSources = JSON.parse(savedProgress);
+        updateProgressBar();
+      }
+    }
+    
+    // Generate new affirmation using OpenAI Edge Function
+    async function refreshAffirmation() {
+      const card = document.getElementById('affirmationCard');
+      const affirmationElement = document.getElementById('affirmation');
+      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
+      
+      card.style.opacity = '0.7';
+      affirmationElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
+      
+      try {
+        // Call OpenAI Edge Function
+        const response = await fetch('/api/generate-affirmation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            lossType: selectedLoss,
+            userId: currentUser.id
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate affirmation');
+        }
+        
+        const data = await response.json();
+        affirmationElement.textContent = `"${data.affirmation}"`;
+        showToast("AI-generated affirmation created", "success");
+      } catch (error) {
+        // Fallback to local generation
+        const affirmations = {
+          "Relationship": [
+            "I am whole and complete just as I am.",
+            "Every ending creates space for new beginnings.",
+            "I release what no longer serves me and welcome new possibilities."
+          ],
+          "Loved One": [
+            "Their love remains with me always.",
+            "I carry their memory in my heart with gratitude.",
+            "Grief is the price of love, and I am grateful for the love we shared."
+          ],
+          "Pet": [
+            "The love we shared remains forever in my heart.",
+            "I am grateful for every moment we had together.",
+            "Their paw prints are forever on my soul."
+          ],
+          "Job": [
+            "My worth is not defined by my job title.",
+            "Endings create space for new opportunities.",
+            "I trust that the right path will reveal itself in time."
+          ],
+          "Other": [
+            "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
+            "Healing isn't linear, and that's okay.",
+            "I give myself permission to feel whatever I'm feeling."
+          ]
+        };
+        
+        const categoryAffirmations = affirmations[selectedLoss] || affirmations["Other"];
+        const affirmation = categoryAffirmations[Math.floor(Math.random() * categoryAffirmations.length)];
+        affirmationElement.textContent = `"${affirmation}"`;
+        showToast("Local affirmation generated", "info");
+      } finally {
+        card.style.opacity = '1';
+      }
+    }
+    
+    // Generate new reflection prompt using OpenAI Edge Function
+    async function refreshPrompt() {
+      const card = document.querySelector('.card');
+      const promptElement = document.getElementById('prompt');
+      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
+      
+      card.style.opacity = '0.7';
+      promptElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
+      
+      try {
+        // Call OpenAI Edge Function
+        const response = await fetch('/api/generate-prompt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            lossType: selectedLoss,
+            userId: currentUser.id
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate prompt');
+        }
+        
+        const data = await response.json();
+        promptElement.textContent = data.prompt;
+        showToast("AI-generated reflection prompt created", "success");
+      } catch (error) {
+        // Fallback to local generation
+        const prompts = {
+          "Relationship": [
+            "What have you learned about yourself through this experience?",
+            "How might you show yourself kindness today?",
+            "What boundaries have you set that make you feel empowered?"
+          ],
+          "Loved One": [
+            "What's your favorite memory of them? Why does it stand out?",
+            "How have they influenced who you are today?",
+            "What lessons did they teach you that you still carry?"
+          ],
+          "Pet": [
+            "What was their most endearing habit or quirk?",
+            "What lessons about unconditional love did they teach you?",
+            "How did they show their affection for you?"
+          ],
+          "Job": [
+            "What skills or strengths did you gain from this experience?",
+            "What did you learn about what you truly value in work?",
+            "What possibilities excite you as you look forward?"
+          ],
+          "Other": [
+            "What's one thing you're grateful for today?",
+            "How have you grown through this experience?",
+            "What small step toward healing can you take today?"
+          ]
+        };
+        
+        const categoryPrompts = prompts[selectedLoss] || prompts["Other"];
+        const prompt = categoryPrompts[Math.floor(Math.random() * categoryPrompts.length)];
+        promptElement.textContent = prompt;
+        showToast("Local reflection prompt generated", "info");
+      } finally {
+        card.style.opacity = '1';
+      }
+    }
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Set greeting based on time of day
+    function setGreeting() {
+      const hour = new Date().getHours();
+      let greeting = 'Hello';
+      if (hour < 12) greeting = 'Good morning';
+      else if (hour < 18) greeting = 'Good afternoon';
+      else greeting = 'Good evening';
+      
+      document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
+    }
+    
+    // Load user memories from Supabase - FIXED VERSION
+    async function loadMemories() {
+      if (!currentUser) return;
+      
+      try {
+        const { data: memories, error } = await supabase
+          .from('memories')
+          .select('id, title, description, image_url, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(5);
+        
+        if (error) throw error;
+        
+        const container = document.getElementById('memories-container');
+        // Clear existing memories except the add button
+        container.innerHTML = '<div class="memory-item add-memory" id="add-memory-btn"><i class="fas fa-plus"></i></div>';
+        
+        memories.forEach(memory => {
+          const memoryItem = document.createElement('div');
+          memoryItem.className = 'memory-item';
+          memoryItem.dataset.id = memory.id;
+          
+          // Add background image if exists
+          if (memory.image_url) {
+            memoryItem.style.backgroundImage = `url('${memory.image_url}')`;
+            memoryItem.classList.add('has-image');
+          }
+          
+          memoryItem.innerHTML = `
+            ${memory.image_url ? '' : `<i class="fas fa-image"></i>`}
+            <div class="memory-label">${memory.title}</div>
+          `;
+          container.insertBefore(memoryItem, container.firstChild);
+          
+          memoryItem.addEventListener('click', function() {
+            viewMemory(memory.id);
+          });
+        });
+      } catch (error) {
+        showToast("Error loading memories: " + error.message, "error");
+      }
+    }
+    
+    // View memory
+    async function viewMemory(id) {
+      try {
+        const { data: memory, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('id', id)
+          .single();
+        
+        if (error) throw error;
+        
+        document.getElementById('view-memory-title').textContent = memory.title;
+        document.getElementById('view-memory-description').textContent = memory.description || '(No description)';
+        
+        const preview = document.getElementById('view-memory-preview');
+        if (memory.image_url) {
+          preview.innerHTML = `<img src="${memory.image_url}" alt="${memory.title}" style="max-width: 100%; max-height: 200px; border-radius: 10px;">`;
+        } else {
+          preview.innerHTML = '<i class="fas fa-image" style="font-size: 3rem;"></i>';
+        }
+        
+        document.getElementById('view-memory-modal').style.display = 'flex';
+        
+        // Set up memory actions
+        document.getElementById('edit-memory').onclick = function() {
+          document.getElementById('view-memory-modal').style.display = 'none';
+          editMemory(memory);
+        };
+        
+        document.getElementById('delete-memory').onclick = function() {
+          deleteMemory(memory.id);
+        };
+      } catch (error) {
+        showToast("Error loading memory: " + error.message, "error");
+      }
+    }
+    
+    // Edit memory
+    function editMemory(memory) {
+      document.getElementById('memory-title').value = memory.title;
+      document.getElementById('memory-description').value = memory.description || '';
+      
+      const preview = document.getElementById('memory-preview');
+      if (memory.image_url) {
+        preview.innerHTML = `<img src="${memory.image_url}" alt="${memory.title}">`;
+      } else {
+        preview.innerHTML = '<i class="fas fa-image"></i>';
       }
       
-      const data = await response.json();
-      promptElement.textContent = data.prompt;
-      showToast("AI-generated reflection prompt created", "success");
-    } catch (error) {
-      // Fallback to local generation
-      const prompts = {
-        "Relationship": [
-          "What have you learned about yourself through this experience?",
-          "How might you show yourself kindness today?",
-          "What boundaries have you set that make you feel empowered?"
-        ],
-        "Loved One": [
-          "What's your favorite memory of them? Why does it stand out?",
-          "How have they influenced who you are today?",
-          "What lessons did they teach you that you still carry?"
-        ],
-        "Pet": [
-          "What was their most endearing habit or quirk?",
-          "What lessons about unconditional love did they teach you?",
-          "How did they show their affection for you?"
-        ],
-        "Job": [
-          "What skills or strengths did you gain from this experience?",
-          "What did you learn about what you truly value in work?",
-          "What possibilities excite you as you look forward?"
-        ],
-        "Other": [
-          "What's one thing you're grateful for today?",
-          "How have you grown through this experience?",
-          "What small step toward healing can you take today?"
-        ]
+      document.getElementById('add-memory-modal').style.display = 'flex';
+      
+      // Change save button to update
+      const saveBtn = document.getElementById('save-memory');
+      saveBtn.textContent = 'Update Memory';
+      saveBtn.onclick = function() {
+        updateMemory(memory.id);
       };
-      
-      const categoryPrompts = prompts[selectedLoss] || prompts["Other"];
-      const prompt = categoryPrompts[Math.floor(Math.random() * categoryPrompts.length)];
-      promptElement.textContent = prompt;
-      showToast("Local reflection prompt generated", "info");
-    } finally {
-      card.style.opacity = '1';
-    }
-  }
-  
-  // Show toast notification
-  function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast ${type} show`;
-    
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
-  }
-  
-  // Set greeting based on time of day
-  function setGreeting() {
-    const hour = new Date().getHours();
-    let greeting = 'Hello';
-    if (hour < 12) greeting = 'Good morning';
-    else if (hour < 18) greeting = 'Good afternoon';
-    else greeting = 'Good evening';
-    
-    document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
-  }
-  
-  // Load user memories from Supabase
-  async function loadMemories() {
-    if (!currentUser) return;
-    
-    try {
-      const { data: memories, error } = await supabase
-        .from('memories')
-        .select('id, title, description, created_at')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-      
-      if (error) throw error;
-      
-      const container = document.getElementById('memories-container');
-      // Clear existing memories except the add button
-      container.innerHTML = '<div class="memory-item add-memory" id="add-memory-btn"><i class="fas fa-plus"></i></div>';
-      
-      memories.forEach(memory => {
-        const memoryItem = document.createElement('div');
-        memoryItem.className = 'memory-item';
-        memoryItem.innerHTML = `
-          <div class="memory-label">${memory.title}</div>
-        `;
-        container.insertBefore(memoryItem, container.firstChild);
-      });
-    } catch (error) {
-      showToast("Error loading memories: " + error.message, "error");
-    }
-  }
-  
-  // Save a new memory
-  async function saveMemory() {
-    const title = document.getElementById('memory-title').value;
-    const description = document.getElementById('memory-description').value;
-    
-    if (!title) {
-      showToast("Please enter a title for your memory", "error");
-      return;
     }
     
-    try {
-      const { error } = await supabase
-        .from('memories')
-        .insert([
-          { 
+    // Save a new memory
+    async function saveMemory() {
+      const title = document.getElementById('memory-title').value;
+      const description = document.getElementById('memory-description').value;
+      
+      if (!title) {
+        showToast("Please enter a title for your memory", "error");
+        return;
+      }
+      
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('memory-photo');
+        
+        // Upload image if exists
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `${currentUser.id}/${Date.now()}-${file.name}`;
+          
+          // Upload to Supabase storage
+          const { error: uploadError } = await supabase.storage
+            .from('memories')
+            .upload(fileName, file);
+          
+          if (uploadError) throw uploadError;
+          
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('memories')
+            .getPublicUrl(fileName);
+          
+          imageUrl = urlData.publicUrl;
+        }
+        
+        // Save to database
+        const { error: dbError } = await supabase
+          .from('memories')
+          .insert([{ 
             user_id: currentUser.id, 
             title: title, 
             description: description,
+            image_url: imageUrl,
             created_at: new Date().toISOString()
-          }
-        ]);
-      
-      if (error) throw error;
-      
-      showToast("Memory saved successfully", "success");
-      document.getElementById('add-memory-modal').style.display = 'none';
-      loadMemories();
-      
-      // Reset form
-      document.getElementById('memory-title').value = '';
-      document.getElementById('memory-description').value = '';
-    } catch (error) {
-      showToast("Error saving memory: " + error.message, "error");
-    }
-  }
-  
-  // Load companion information
-  async function loadCompanion() {
-    try {
-      // Get companion index from user metadata
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error) throw error;
-      
-      currentCompanion = user.user_metadata?.companion || "elena";
-      
-      // Update UI
-      document.getElementById('companion-name').textContent = companions[currentCompanion].name;
-      document.getElementById('companion-role').textContent = companions[currentCompanion].role;
-      document.getElementById('companion-avatar').innerHTML = `<i class="${companions[currentCompanion].avatar}"></i>`;
-      
-      // Update specialties
-      const specialtiesContainer = document.getElementById('companion-specialties');
-      specialtiesContainer.innerHTML = '';
-      companions[currentCompanion].specialties.forEach(specialty => {
-        const tag = document.createElement('div');
-        tag.className = 'specialty-tag';
-        tag.textContent = specialty;
-        specialtiesContainer.appendChild(tag);
-      });
-      
-    } catch (error) {
-      showToast("Error loading companion: " + error.message, "error");
-    }
-  }
-  
-  // Change companion preview
-  function changeCompanionPreview(companionId) {
-    const companion = companions[companionId];
-    document.getElementById('companion-preview-name').textContent = companion.name;
-    document.getElementById('companion-preview-role').textContent = companion.role;
-    document.getElementById('companion-preview-avatar').innerHTML = `<i class="${companion.avatar}"></i>`;
-    document.getElementById('companion-description').innerHTML = `<p>${companion.intro}</p>`;
-  }
-  
-  // Save companion selection
-  async function saveCompanion() {
-    const companionId = document.getElementById('companion-select').value;
-    
-    try {
-      // Update user metadata
-      const { error } = await supabase.auth.updateUser({
-        data: { companion: companionId }
-      });
-      
-      if (error) throw error;
-      
-      // Update UI
-      loadCompanion();
-      showToast(`Companion changed to ${companionId === 'elena' ? 'Elena' : companionId === 'david' ? 'David' : 'Sophia'}`, "success");
-      document.getElementById('companion-modal').style.display = 'none';
-    } catch (error) {
-      showToast("Error changing companion: " + error.message, "error");
-    }
-  }
-  
-  // Start chat with companion
-  function startCompanionChat() {
-    document.getElementById('chat-container').classList.add('active');
-    document.getElementById('chat-title').textContent = `Chat with ${companions[currentCompanion].name}`;
-    
-    // Reset conversation history
-    conversationHistory = [
-      {
-        role: "system",
-        content: companions[currentCompanion].systemPrompt
-      },
-      {
-        role: "assistant",
-        content: companions[currentCompanion].intro
+          }]);
+        
+        if (dbError) throw dbError;
+        
+        showToast("Memory saved successfully", "success");
+        document.getElementById('add-memory-modal').style.display = 'none';
+        loadMemories();
+        
+        // Reset form
+        document.getElementById('memory-title').value = '';
+        document.getElementById('memory-description').value = '';
+        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+        fileInput.value = '';
+      } catch (error) {
+        showToast("Error saving memory: " + error.message, "error");
       }
-    ];
+    }
     
-    // Clear chat messages and add intro
-    const chatMessages = document.getElementById('chat-messages');
-    chatMessages.innerHTML = '';
-    
-    const introMessage = document.createElement('div');
-    introMessage.className = 'message companion';
-    introMessage.innerHTML = `
-      ${companions[currentCompanion].intro}
-      <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-    `;
-    chatMessages.appendChild(introMessage);
-  }
-  
-  // Close chat
-  function closeChat() {
-    document.getElementById('chat-container').classList.remove('active');
-  }
-  
-  // Send message to companion - FIXED AUTHENTICATION ISSUE
-  async function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const message = input.value.trim();
-    
-    if (!message) return;
-    
-    const chatMessages = document.getElementById('chat-messages');
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    // Add user message to UI
-    const userMessage = document.createElement('div');
-    userMessage.className = 'message user';
-    userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
-    chatMessages.appendChild(userMessage);
-    
-    // Add to conversation history
-    conversationHistory.push({
-      role: "user",
-      content: message
-    });
-    
-    // Clear input
-    input.value = '';
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Show thinking indicator
-    const thinkingMessage = document.createElement('div');
-    thinkingMessage.className = 'message companion';
-    thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
-    chatMessages.appendChild(thinkingMessage);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    try {
-      // Get current session for access token
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !sessionData.session) {
-        throw new Error("Not authenticated. Please sign in again.");
+    // Update memory
+    async function updateMemory(id) {
+      const title = document.getElementById('memory-title').value;
+      const description = document.getElementById('memory-description').value;
+      
+      if (!title) {
+        showToast("Please enter a title for your memory", "error");
+        return;
       }
-      const accessToken = sessionData.session.access_token;
       
-      // Use the correct Supabase Function URL
-      const OPENAI_ENDPOINT = `https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai`;
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('memory-photo');
+        
+        // Upload image if exists
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `${currentUser.id}/${Date.now()}-${file.name}`;
+          
+          // Upload to Supabase storage
+          const { error: uploadError } = await supabase.storage
+            .from('memories')
+            .upload(fileName, file);
+          
+          if (uploadError) throw uploadError;
+          
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('memories')
+            .getPublicUrl(fileName);
+          
+          imageUrl = urlData.publicUrl;
+        }
+        
+        // Update database
+        const { error: dbError } = await supabase
+          .from('memories')
+          .update({ 
+            title: title, 
+            description: description,
+            image_url: imageUrl,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', id);
+        
+        if (dbError) throw dbError;
+        
+        showToast("Memory updated successfully", "success");
+        document.getElementById('add-memory-modal').style.display = 'none';
+        loadMemories();
+        
+        // Reset form
+        document.getElementById('memory-title').value = '';
+        document.getElementById('memory-description').value = '';
+        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+        fileInput.value = '';
+      } catch (error) {
+        showToast("Error updating memory: " + error.message, "error");
+      }
+    }
+    
+    // Delete memory
+    async function deleteMemory(id) {
+      try {
+        const { error } = await supabase
+          .from('memories')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        showToast("Memory deleted successfully", "success");
+        document.getElementById('view-memory-modal').style.display = 'none';
+        loadMemories();
+      } catch (error) {
+        showToast("Error deleting memory: " + error.message, "error");
+      }
+    }
+    
+    // Load companion information
+    async function loadCompanion() {
+      try {
+        // Get companion index from user metadata
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        
+        currentCompanion = user.user_metadata?.companion || "elena";
+        
+        // Update UI
+        document.getElementById('companion-name').textContent = companions[currentCompanion].name;
+        document.getElementById('companion-role').textContent = companions[currentCompanion].role;
+        document.getElementById('companion-avatar').innerHTML = `<i class="${companions[currentCompanion].avatar}"></i>`;
+        
+        // Update specialties
+        const specialtiesContainer = document.getElementById('companion-specialties');
+        specialtiesContainer.innerHTML = '';
+        companions[currentCompanion].specialties.forEach(specialty => {
+          const tag = document.createElement('div');
+          tag.className = 'specialty-tag';
+          tag.textContent = specialty;
+          specialtiesContainer.appendChild(tag);
+        });
+        
+      } catch (error) {
+        showToast("Error loading companion: " + error.message, "error");
+      }
+    }
+    
+    // Change companion preview
+    function changeCompanionPreview(companionId) {
+      const companion = companions[companionId];
+      document.getElementById('companion-preview-name').textContent = companion.name;
+      document.getElementById('companion-preview-role').textContent = companion.role;
+      document.getElementById('companion-preview-avatar').innerHTML = `<i class="${companion.avatar}"></i>`;
+      document.getElementById('companion-description').innerHTML = `<p>${companion.intro}</p>`;
+    }
+    
+    // Save companion selection
+    async function saveCompanion() {
+      const companionId = document.getElementById('companion-select').value;
       
-      const response = await fetch(OPENAI_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+      try {
+        // Update user metadata
+        const { error } = await supabase.auth.updateUser({
+          data: { companion: companionId }
+        });
+        
+        if (error) throw error;
+        
+        // Update UI
+        loadCompanion();
+        showToast(`Companion changed to ${companionId === 'elena' ? 'Elena' : companionId === 'david' ? 'David' : 'Sophia'}`, "success");
+        document.getElementById('companion-modal').style.display = 'none';
+      } catch (error) {
+        showToast("Error changing companion: " + error.message, "error");
+      }
+    }
+    
+    // Start chat with companion
+    function startCompanionChat() {
+      document.getElementById('chat-container').classList.add('active');
+      document.getElementById('chat-title').textContent = `Chat with ${companions[currentCompanion].name}`;
+      
+      // Reset conversation history
+      conversationHistory = [
+        {
+          role: "system",
+          content: companions[currentCompanion].systemPrompt
         },
-        body: JSON.stringify({
-          messages: conversationHistory.filter(msg => msg.role !== 'system'),
-          systemPrompt: companions[currentCompanion].systemPrompt
-        })
-      });
+        {
+          role: "assistant",
+          content: companions[currentCompanion].intro
+        }
+      ];
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`API error: ${errorData.error || response.status}`);
-      }
+      // Clear chat messages and add intro
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.innerHTML = '';
       
-      const data = await response.json();
-      const aiResponse = data.response;
+      const introMessage = document.createElement('div');
+      introMessage.className = 'message companion';
+      introMessage.innerHTML = `
+        ${companions[currentCompanion].intro}
+        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatMessages.appendChild(introMessage);
+    }
+    
+    // Close chat
+    function closeChat() {
+      document.getElementById('chat-container').classList.remove('active');
+    }
+    
+    // Send message to companion
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
       
-      // Remove thinking indicator
-      chatMessages.removeChild(thinkingMessage);
+      if (!message) return;
       
-      // Add AI response to UI
-      const responseTime = new Date();
-      const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const chatMessages = document.getElementById('chat-messages');
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       
-      const companionMessage = document.createElement('div');
-      companionMessage.className = 'message companion';
-      companionMessage.innerHTML = `${aiResponse}<div class="message-time">${responseTimeString}</div>`;
-      chatMessages.appendChild(companionMessage);
-      
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      // Add user message to UI
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
+      chatMessages.appendChild(userMessage);
       
       // Add to conversation history
       conversationHistory.push({
-        role: "assistant",
-        content: aiResponse
+        role: "user",
+        content: message
       });
       
-      // Update progress
-      progress = Math.min(100, progress + 2);
-      updateProgressBar();
-      
-    } catch (error) {
-      console.error("Companion chat error:", error);
-      chatMessages.removeChild(thinkingMessage);
-      
-      const errorMessage = document.createElement('div');
-      errorMessage.className = 'message companion';
-      errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?<br><small>Error: ${error.message}</small>`;
-      chatMessages.appendChild(errorMessage);
+      // Clear input
+      input.value = '';
       chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Show thinking indicator
+      const thinkingMessage = document.createElement('div');
+      thinkingMessage.className = 'message companion';
+      thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
+      chatMessages.appendChild(thinkingMessage);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      try {
+        // Get current session for access token
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !sessionData.session) {
+          throw new Error("Not authenticated. Please sign in again.");
+        }
+        const accessToken = sessionData.session.access_token;
+        
+        // Use the correct Supabase Function URL
+        const OPENAI_ENDPOINT = `https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai`;
+        
+        const response = await fetch(OPENAI_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          body: JSON.stringify({
+            messages: conversationHistory.filter(msg => msg.role !== 'system'),
+            systemPrompt: companions[currentCompanion].systemPrompt
+          })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`API error: ${errorData.error || response.status}`);
+        }
+        
+        const data = await response.json();
+        const aiResponse = data.response;
+        
+        // Remove thinking indicator
+        chatMessages.removeChild(thinkingMessage);
+        
+        // Add AI response to UI
+        const responseTime = new Date();
+        const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        const companionMessage = document.createElement('div');
+        companionMessage.className = 'message companion';
+        companionMessage.innerHTML = `${aiResponse}<div class="message-time">${responseTimeString}</div>`;
+        chatMessages.appendChild(companionMessage);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Add to conversation history
+        conversationHistory.push({
+          role: "assistant",
+          content: aiResponse
+        });
+        
+        // Update progress
+        progressSources.chat++;
+        updateProgressBar();
+        saveProgress();
+        
+      } catch (error) {
+        console.error("Companion chat error:", error);
+        chatMessages.removeChild(thinkingMessage);
+        
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'message companion';
+        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?<br><small>Error: ${error.message}</small>`;
+        chatMessages.appendChild(errorMessage);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
     }
-  }
-  
-  // Load mood history
-  async function loadMoodHistory() {
-    if (!currentUser) return;
     
-    try {
-      const { data: moods, error } = await supabase
-        .from('mood_entries')
-        .select('mood, created_at')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false })
-        .limit(7);
+    // Load mood history
+    async function loadMoodHistory() {
+      if (!currentUser) return;
       
-      if (error) throw error;
+      try {
+        const { data: moods, error } = await supabase
+          .from('mood_entries')
+          .select('mood, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(7);
+        
+        if (error) throw error;
+        
+        const historyContainer = document.getElementById('mood-history-list');
+        historyContainer.innerHTML = '';
+        
+        moods.forEach(mood => {
+          const moodLabels = {
+            "awful": { emoji: "😢", label: "Awful" },
+            "sad": { emoji: "😞", label: "Sad" },
+            "neutral": { emoji: "😐", label: "Neutral" },
+            "great": { emoji: "😊", label: "Great" }
+          };
+          
+          const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
+          const date = new Date(mood.created_at);
+          const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+          
+          const entry = document.createElement('div');
+          entry.className = 'mood-entry';
+          entry.innerHTML = `
+            <div>
+              <span class="mood-emoji-history">${moodData.emoji}</span>
+              <span>${moodData.label}</span>
+            </div>
+            <div>${formattedDate}</div>
+          `;
+          
+          historyContainer.appendChild(entry);
+        });
+      } catch (error) {
+        showToast("Error loading mood history: " + error.message, "error");
+      }
+    }
+    
+    // Initialize mood chart
+    async function initMoodChart() {
+      if (!currentUser) return;
       
-      const historyContainer = document.getElementById('mood-history-list');
-      historyContainer.innerHTML = '';
-      
-      moods.forEach(mood => {
-        const moodLabels = {
-          "awful": { emoji: "😢", label: "Awful" },
-          "sad": { emoji: "😞", label: "Sad" },
-          "neutral": { emoji: "😐", label: "Neutral" },
-          "great": { emoji: "😊", label: "Great" }
+      try {
+        const ctx = document.getElementById('mood-chart').getContext('2d');
+        
+        // Get mood data from Supabase
+        const { data: moods, error } = await supabase
+          .from('mood_entries')
+          .select('mood, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: true })
+          .limit(30);
+        
+        if (error) throw error;
+        
+        // Prepare chart data
+        const moodValues = {
+          "awful": 1,
+          "sad": 2,
+          "neutral": 3,
+          "great": 4
         };
         
-        const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
-        const date = new Date(mood.created_at);
-        const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        const moodData = moods.map(entry => ({
+          x: new Date(entry.created_at),
+          y: moodValues[entry.mood] || 0
+        }));
         
-        const entry = document.createElement('div');
-        entry.className = 'mood-entry';
-        entry.innerHTML = `
-          <div>
-            <span class="mood-emoji-history">${moodData.emoji}</span>
-            <span>${moodData.label}</span>
-          </div>
-          <div>${formattedDate}</div>
-        `;
+        // Destroy existing chart if it exists
+        if (moodChart) {
+          moodChart.destroy();
+        }
         
-        historyContainer.appendChild(entry);
-      });
-    } catch (error) {
-      showToast("Error loading mood history: " + error.message, "error");
-    }
-  }
-  
-  // Initialize mood chart
-  async function initMoodChart() {
-    if (!currentUser) return;
-    
-    try {
-      const ctx = document.getElementById('mood-chart').getContext('2d');
-      
-      // Get mood data from Supabase
-      const { data: moods, error } = await supabase
-        .from('mood_entries')
-        .select('mood, created_at')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: true })
-        .limit(30);
-      
-      if (error) throw error;
-      
-      // Prepare chart data
-      const moodValues = {
-        "awful": 1,
-        "sad": 2,
-        "neutral": 3,
-        "great": 4
-      };
-      
-      const moodData = moods.map(entry => ({
-        x: new Date(entry.created_at),
-        y: moodValues[entry.mood] || 0
-      }));
-      
-      // Destroy existing chart if it exists
-      if (moodChart) {
-        moodChart.destroy();
-      }
-      
-      moodChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          datasets: [{
-            label: 'Mood Level',
-            data: moodData,
-            backgroundColor: 'rgba(93, 139, 244, 0.2)',
-            borderColor: 'rgba(93, 139, 244, 1)',
-            borderWidth: 2,
-            tension: 0.3,
-            pointBackgroundColor: 'rgba(93, 139, 244, 1)',
-            pointRadius: 5
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                unit: 'day'
-              }
-            },
-            y: {
-              beginAtZero: false,
-              min: 0,
-              max: 5,
-              ticks: {
-                callback: function(value) {
-                  const moodLabels = {
-                    1: 'Awful',
-                    2: 'Sad',
-                    3: 'Neutral',
-                    4: 'Great'
-                  };
-                  return moodLabels[value] || '';
+        moodChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            datasets: [{
+              label: 'Mood Level',
+              data: moodData,
+              backgroundColor: 'rgba(93, 139, 244, 0.2)',
+              borderColor: 'rgba(93, 139, 244, 1)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointBackgroundColor: 'rgba(93, 139, 244, 1)',
+              pointRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'day'
+                }
+              },
+              y: {
+                beginAtZero: false,
+                min: 0,
+                max: 5,
+                ticks: {
+                  callback: function(value) {
+                    const moodLabels = {
+                      1: 'Awful',
+                      2: 'Sad',
+                      3: 'Neutral',
+                      4: 'Great'
+                    };
+                    return moodLabels[value] || '';
+                  }
                 }
               }
-            }
-          },
-          plugins: {
-            legend: {
-              display: false
             },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  const moodLabels = {
-                    1: 'Awful',
-                    2: 'Sad',
-                    3: 'Neutral',
-                    4: 'Great'
-                  };
-                  return moodLabels[context.parsed.y] || context.parsed.y;
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const moodLabels = {
+                      1: 'Awful',
+                      2: 'Sad',
+                      3: 'Neutral',
+                      4: 'Great'
+                    };
+                    return moodLabels[context.parsed.y] || context.parsed.y;
+                  }
                 }
               }
             }
           }
-        }
-      });
-      
-      // Generate AI insights
-      generateMoodInsights(moods);
-      
-    } catch (error) {
-      showToast("Error loading mood insights: " + error.message, "error");
-    }
-  }
-  
-  // Generate AI-powered mood insights
-  async function generateMoodInsights(moods) {
-    try {
-      // Call OpenAI Edge Function for mood insights
-      const response = await fetch('/api/mood-insights', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userId: currentUser.id,
-          moodData: moods
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to generate mood insights');
+        });
+        
+        // Generate AI insights
+        generateMoodInsights(moods);
+        
+      } catch (error) {
+        showToast("Error loading mood insights: " + error.message, "error");
       }
-      
-      const data = await response.json();
-      document.getElementById('mood-insights-text').innerHTML = 
-        `<p>${data.insights}</p>`;
-    } catch (error) {
-      document.getElementById('mood-insights-text').innerHTML = 
-        `<p>Your mood has been recorded ${moods.length} times. The chart shows your mood fluctuations over time.</p>`;
     }
-  }
-  
-  // Save user settings
-  async function saveSettings() {
-    const name = document.getElementById('user-name').value;
-    const email = document.getElementById('user-email').value;
-    const lossType = document.getElementById('loss-type').value;
     
-    try {
-      const { error } = await supabase.auth.updateUser({
-        email: email,
-        data: { 
-          name: name,
-          loss_type: lossType,
-          journal_reminders: document.getElementById('journal-reminders').checked,
-          affirmation_reminders: document.getElementById('affirmation-reminders').checked
+    // Generate AI-powered mood insights
+    async function generateMoodInsights(moods) {
+      try {
+        // Call OpenAI Edge Function for mood insights
+        const response = await fetch('/api/mood-insights', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: currentUser.id,
+            moodData: moods
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate mood insights');
         }
-      });
-      
-      if (error) throw error;
-      
-      showToast("Settings saved successfully", "success");
-      document.getElementById('settings-modal').style.display = 'none';
-      
-      // Update UI with new name if available
-      if (name) {
-        document.getElementById('userInitialText').textContent = name[0].toUpperCase();
-        document.getElementById('userInitialTextMobile').textContent = name[0].toUpperCase();
+        
+        const data = await response.json();
+        document.getElementById('mood-insights-text').innerHTML = 
+          `<p>${data.insights}</p>`;
+      } catch (error) {
+        document.getElementById('mood-insights-text').innerHTML = 
+          `<p>Your mood has been recorded ${moods.length} times. The chart shows your mood fluctuations over time.</p>`;
       }
-    } catch (error) {
-      showToast("Error saving settings: " + error.message, "error");
     }
-  }
-</script>
+    
+    // Save user settings
+    async function saveSettings() {
+      const name = document.getElementById('user-name').value;
+      const email = document.getElementById('user-email').value;
+      const lossType = document.getElementById('loss-type').value;
+      
+      try {
+        const { error } = await supabase.auth.updateUser({
+          email: email,
+          data: { 
+            name: name,
+            loss_type: lossType,
+            journal_reminders: document.getElementById('journal-reminders').checked,
+            affirmation_reminders: document.getElementById('affirmation-reminders').checked
+          }
+        });
+        
+        if (error) throw error;
+        
+        showToast("Settings saved successfully", "success");
+        document.getElementById('settings-modal').style.display = 'none';
+        
+        // Update UI with new name if available
+        if (name) {
+          document.getElementById('userInitialText').textContent = name[0].toUpperCase();
+          document.getElementById('userInitialTextMobile').textContent = name[0].toUpperCase();
+        }
+      } catch (error) {
+        showToast("Error saving settings: " + error.message, "error");
+      }
+    }
+  </script>
 </body>
 </html>
