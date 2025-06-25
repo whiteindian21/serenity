@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Payment | Healing Journey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #5D8BF4;
@@ -36,7 +37,7 @@
         }
 
         body {
-            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
@@ -64,6 +65,7 @@
             color: white;
             padding: 1.5rem;
             text-align: center;
+            position: relative;
         }
 
         .payment-header h1 {
@@ -136,10 +138,12 @@
             display: flex;
             gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .method-option {
             flex: 1;
+            min-width: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -178,9 +182,82 @@
             color: white;
         }
 
+        .method-icon.card {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+        }
+
         .method-name {
             font-weight: 700;
             font-size: 0.9rem;
+        }
+
+        .card-form {
+            display: none;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            background: var(--light-2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card-form.visible {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-light);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 139, 244, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 25px;
+            background: var(--light);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            border: 1px solid var(--gray-light);
         }
 
         .payment-btn {
@@ -279,6 +356,31 @@
             font-weight: 700;
             color: var(--success);
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .card-icon-preview {
+            position: absolute;
+            right: 12px;
+            top: 40px;
+            width: 40px;
+            height: 25px;
+            background: var(--light);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            border: 1px solid var(--gray-light);
+        }
     </style>
 </head>
 <body>
@@ -286,6 +388,10 @@
         <div class="payment-header">
             <h1>Healing Journey Premium</h1>
             <p>Unlock full access to premium healing resources</p>
+            <div class="secure-badge" style="position: absolute; top: 10px; right: 20px;">
+                <i class="fas fa-lock"></i>
+                Secure Payment
+            </div>
         </div>
 
         <div class="payment-content">
@@ -293,11 +399,11 @@
                 <div class="plan-name">Premium Membership</div>
                 <div class="plan-price">$9.99<span>/month</span></div>
                 <ul class="plan-features">
-                    <li>Unlimited journal entries</li>
-                    <li>Advanced mood tracking</li>
-                    <li>Priority companion access</li>
-                    <li>Exclusive healing exercises</li>
-                    <li>Ad-free experience</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Unlimited journal entries</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Advanced mood tracking</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Priority companion access</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Exclusive healing exercises</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Ad-free experience</li>
                 </ul>
             </div>
 
@@ -306,26 +412,56 @@
                 <div class="method-options">
                     <div class="method-option" data-method="google-pay">
                         <div class="method-icon google-pay">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20Z" stroke="white" stroke-width="2"/>
-                                <path d="M15 9H17C17.5523 9 18 9.44772 18 10V14C18 14.5523 17.5523 15 17 15H15V9Z" stroke="white" stroke-width="2"/>
-                                <path d="M7 9H9V15H7V9Z" stroke="white" stroke-width="2"/>
-                                <path d="M11 9H13V15H11V9Z" stroke="white" stroke-width="2"/>
-                            </svg>
+                            <i class="fab fa-google-pay fa-2x"></i>
                         </div>
                         <div class="method-name">Google Pay</div>
                     </div>
                     <div class="method-option" data-method="paypal">
                         <div class="method-icon paypal">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.5 18L8.5 9.5H12C13.5 9.5 14.5 10.5 14.5 12C14.5 13.5 13.5 14.5 12 14.5H9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M9.5 12H14.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M17 18L18 9.5H21.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 15.5L5.5 5.5H15C16.5 5.5 17.5 6.5 17.5 8C17.5 9.5 16.5 10.5 15 10.5H11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <i class="fab fa-paypal fa-2x"></i>
                         </div>
                         <div class="method-name">PayPal</div>
                     </div>
+                    <div class="method-option" data-method="card" id="card-method">
+                        <div class="method-icon card">
+                            <i class="far fa-credit-card fa-2x"></i>
+                        </div>
+                        <div class="method-name">Credit/Debit Card</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Payment Form -->
+            <div class="card-form" id="card-form">
+                <div class="form-group input-with-icon">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                    <div class="card-icon-preview" id="card-type-preview">
+                        <i class="far fa-credit-card"></i>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="card-expiry">Expiration Date</label>
+                        <input type="text" id="card-expiry" class="form-control" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvv">CVV</label>
+                        <input type="text" id="card-cvv" class="form-control" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" class="form-control" placeholder="John Doe">
+                </div>
+
+                <div class="card-icons">
+                    <div class="card-icon"><i class="fab fa-cc-visa"></i></div>
+                    <div class="card-icon"><i class="fab fa-cc-mastercard"></i></div>
+                    <div class="card-icon"><i class="fab fa-cc-amex"></i></div>
+                    <div class="card-icon"><i class="fab fa-cc-discover"></i></div>
                 </div>
             </div>
 
@@ -339,14 +475,14 @@
         </div>
 
         <div class="success-message" id="success-section">
-            <div class="success-icon">✓</div>
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
             <h3>Payment Successful!</h3>
             <p>Thank you for your purchase. Your premium membership is now active.</p>
             <a href="#" class="back-to-app">Continue to Healing Journey</a>
         </div>
 
         <div class="error-message" id="error-section">
-            <div class="error-icon">✕</div>
+            <div class="error-icon"><i class="fas fa-exclamation-circle"></i></div>
             <h3>Payment Failed</h3>
             <p id="error-details">There was an issue processing your payment. Please try again.</p>
             <button class="payment-btn" id="retry-btn">Try Again</button>
@@ -355,12 +491,12 @@
         <div class="payment-footer">
             <p>All transactions are secure and encrypted</p>
             <div class="secure-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#48BB78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M9 12L11 14L15 10" stroke="#48BB78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Secure Payment
+                <i class="fas fa-lock"></i>
+                PCI DSS Compliant
             </div>
+            <p style="margin-top: 10px; font-size: 0.8rem;">
+                <i class="fas fa-shield-alt"></i> Your payment details are securely processed by Braintree, a PayPal service
+            </p>
         </div>
     </div>
 
@@ -373,6 +509,8 @@
             const successSection = document.getElementById('success-section');
             const errorSection = document.getElementById('error-section');
             const retryBtn = document.getElementById('retry-btn');
+            const cardForm = document.getElementById('card-form');
+            const cardMethod = document.getElementById('card-method');
             
             // Method selection
             const methodOptions = document.querySelectorAll('.method-option');
@@ -381,9 +519,79 @@
                     methodOptions.forEach(o => o.classList.remove('selected'));
                     this.classList.add('selected');
                     selectedMethod = this.dataset.method;
-                    payNowBtn.disabled = false;
+                    
+                    // Show card form if card method selected
+                    if (selectedMethod === 'card') {
+                        cardForm.classList.add('visible');
+                        // Disable pay button until form is valid
+                        payNowBtn.disabled = true;
+                    } else {
+                        cardForm.classList.remove('visible');
+                        payNowBtn.disabled = false;
+                    }
                 });
             });
+            
+            // Card number formatting
+            const cardNumberInput = document.getElementById('card-number');
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) formattedValue += ' ';
+                    formattedValue += value[i];
+                }
+                
+                e.target.value = formattedValue;
+                validateCardForm();
+            });
+            
+            // Expiry date formatting
+            const expiryInput = document.getElementById('card-expiry');
+            expiryInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length >= 3) {
+                    value = value.slice(0, 2) + '/' + value.slice(2);
+                }
+                
+                e.target.value = value;
+                validateCardForm();
+            });
+            
+            // CVV formatting
+            const cvvInput = document.getElementById('card-cvv');
+            cvvInput.addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+                validateCardForm();
+            });
+            
+            // Name validation
+            const nameInput = document.getElementById('card-name');
+            nameInput.addEventListener('input', validateCardForm);
+            
+            // Validate card form
+            function validateCardForm() {
+                if (selectedMethod !== 'card') return;
+                
+                const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+                const expiry = expiryInput.value;
+                const cvv = cvvInput.value;
+                const name = nameInput.value.trim();
+                
+                // Basic validation
+                const isValid = (
+                    cardNumber.length >= 13 && 
+                    cardNumber.length <= 19 &&
+                    /^\d{2}\/\d{2}$/.test(expiry) &&
+                    cvv.length >= 3 && 
+                    cvv.length <= 4 &&
+                    name.length > 2
+                );
+                
+                payNowBtn.disabled = !isValid;
+            }
             
             // Payment button handler
             payNowBtn.addEventListener('click', async function() {
@@ -420,7 +628,6 @@
             });
             
             // Simulated payment processing function
-            // In a real app, this would call your edge function
             async function processPayment(method) {
                 // Simulate network delay
                 await new Promise(resolve => setTimeout(resolve, 1500));
@@ -447,6 +654,35 @@
                     throw new Error(randomReason);
                 }
             }
+            
+            // Card type detection
+            cardNumberInput.addEventListener('input', function() {
+                const cardNumber = this.value.replace(/\s/g, '');
+                let cardType = 'unknown';
+                
+                if (/^4/.test(cardNumber)) {
+                    cardType = 'visa';
+                } else if (/^5[1-5]/.test(cardNumber)) {
+                    cardType = 'mastercard';
+                } else if (/^3[47]/.test(cardNumber)) {
+                    cardType = 'amex';
+                } else if (/^6(?:011|5)/.test(cardNumber)) {
+                    cardType = 'discover';
+                }
+                
+                const preview = document.getElementById('card-type-preview');
+                preview.innerHTML = '';
+                
+                if (cardType !== 'unknown') {
+                    const icon = document.createElement('i');
+                    icon.className = `fab fa-cc-${cardType}`;
+                    preview.appendChild(icon);
+                } else {
+                    const icon = document.createElement('i');
+                    icon.className = 'far fa-credit-card';
+                    preview.appendChild(icon);
+                }
+            });
         });
     </script>
 </body>
