@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Healing Journey | Upgrade to Premium</title>
+  <title>Healing Journey | Upgrade Plan</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
@@ -19,6 +19,7 @@
       --gray: #718096;
       --success: #48BB78;
       --gold: #FFD700;
+      --silver: #C0C0C0;
     }
 
     * {
@@ -38,69 +39,113 @@
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
     }
 
     .header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 2rem;
       text-align: center;
+      margin-bottom: 2rem;
     }
 
     .header h1 {
-      font-size: 2rem;
+      color: var(--primary-dark);
       margin-bottom: 0.5rem;
     }
 
-    .content {
-      padding: 2rem;
+    .plans-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .plan-card {
-      border: 1px solid var(--gray-light);
       border-radius: 12px;
       padding: 1.5rem;
-      margin-bottom: 2rem;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       position: relative;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
 
-    .premium-badge {
+    .plan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .free-plan {
+      border: 2px solid var(--gray-light);
+    }
+
+    .monthly-plan {
+      border: 2px solid var(--primary);
+    }
+
+    .yearly-plan {
+      border: 2px solid var(--gold);
+    }
+
+    .lifetime-plan {
+      border: 2px solid var(--success);
+    }
+
+    .plan-badge {
       position: absolute;
       top: 0;
       right: 0;
-      background: var(--gold);
-      color: var(--dark);
       padding: 0.5rem 1rem;
       font-weight: 700;
       border-bottom-left-radius: 12px;
     }
 
+    .free-badge {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .monthly-badge {
+      background: var(--primary);
+      color: white;
+    }
+
+    .yearly-badge {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    .lifetime-badge {
+      background: var(--success);
+      color: white;
+    }
+
     .plan-title {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       margin-bottom: 1rem;
-      color: var(--primary-dark);
+      font-weight: 700;
     }
 
     .plan-price {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      color: var(--dark);
     }
 
     .plan-price span {
       font-size: 1rem;
+      font-weight: 400;
       color: var(--gray);
+    }
+
+    .plan-credits {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
     }
 
     .plan-features {
       list-style: none;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .plan-features li {
@@ -110,11 +155,24 @@
     }
 
     .plan-features li i {
-      color: var(--success);
       margin-right: 0.5rem;
+      width: 20px;
+      text-align: center;
     }
 
-    #paypal-button-container {
+    .feature-included {
+      color: var(--success);
+    }
+
+    .feature-excluded {
+      color: var(--accent);
+    }
+
+    .feature-limited {
+      color: var(--gold);
+    }
+
+    .paypal-container {
       margin-top: 1.5rem;
     }
 
@@ -123,14 +181,20 @@
       justify-content: center;
       gap: 1rem;
       margin-top: 1rem;
+      font-size: 0.9rem;
     }
 
-    .payment-option {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--gray);
+    .current-plan {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: rgba(93, 139, 244, 0.1);
+      border-radius: 8px;
+    }
+
+    .current-plan span {
+      font-weight: 700;
+      color: var(--primary-dark);
     }
 
     .back-link {
@@ -144,98 +208,223 @@
     .back-link i {
       margin-right: 0.5rem;
     }
+
+    .recommended {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--dark);
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Upgrade to Premium</h1>
-      <p>Unlock all features and support your healing journey</p>
+      <h1>Choose Your Plan</h1>
+      <p>Upgrade to get more credits and access premium features</p>
     </div>
 
-    <div class="content">
-      <div class="plan-card">
-        <div class="premium-badge">MOST POPULAR</div>
-        <h2 class="plan-title">Premium Membership</h2>
-        <div class="plan-price">$9.99<span>/month</span></div>
+    <div class="current-plan">
+      You currently have <span>50 Free Credits</span>. Upgrade for more!
+    </div>
+
+    <div class="plans-container">
+      <!-- Free Plan -->
+      <div class="plan-card free-plan">
+        <div class="plan-badge free-badge">FREE</div>
+        <h3 class="plan-title">Basic</h3>
+        <div class="plan-credits">50 Credits</div>
+        <div class="plan-price">$0<span>/month</span></div>
         
         <ul class="plan-features">
-          <li><i class="fas fa-check"></i> Unlimited memory storage</li>
-          <li><i class="fas fa-check"></i> Advanced healing tools</li>
-          <li><i class="fas fa-check"></i> Priority companion access</li>
-          <li><i class="fas fa-check"></i> Detailed progress analytics</li>
-          <li><i class="fas fa-check"></i> Ad-free experience</li>
+          <li><i class="fas fa-check feature-limited"></i> 10 credits/week (optional)</li>
+          <li><i class="fas fa-check feature-included"></i> Basic features</li>
+          <li><i class="fas fa-times feature-excluded"></i> Limited tool access</li>
+          <li><i class="fas fa-times feature-excluded"></i> No premium features</li>
         </ul>
-
-        <div id="paypal-button-container"></div>
-        
-        <div class="payment-options">
-          <div class="payment-option">
-            <i class="fab fa-cc-visa"></i>
-            <i class="fab fa-cc-mastercard"></i>
-            <i class="fab fa-cc-amex"></i>
-          </div>
-          <div class="payment-option">
-            <i class="fab fa-cc-paypal"></i>
-          </div>
-        </div>
       </div>
 
-      <a href="index.html" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to Dashboard
-      </a>
+      <!-- Monthly Plan -->
+      <div class="plan-card monthly-plan">
+        <div class="recommended">MOST POPULAR</div>
+        <div class="plan-badge monthly-badge">MONTHLY</div>
+        <h3 class="plan-title">Premium</h3>
+        <div class="plan-credits">90 Credits</div>
+        <div class="plan-price">$8.70<span>/month</span></div>
+        
+        <ul class="plan-features">
+          <li><i class="fas fa-check feature-included"></i> Unlimited access</li>
+          <li><i class="fas fa-check feature-included"></i> Full tool access</li>
+          <li><i class="fas fa-check feature-included"></i> Priority support</li>
+          <li><i class="fas fa-check feature-included"></i> Ad-free experience</li>
+        </ul>
+
+        <div id="monthly-button" class="paypal-container"></div>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="plan-card yearly-plan">
+        <div class="plan-badge yearly-badge">YEARLY</div>
+        <h3 class="plan-title">Premium+</h3>
+        <div class="plan-credits">120 Credits</div>
+        <div class="plan-price">$87<span>/year</span></div>
+        <div style="font-size: 0.9rem; color: var(--success); margin-bottom: 1rem;">Save 17%</div>
+        
+        <ul class="plan-features">
+          <li><i class="fas fa-check feature-included"></i> All Premium features</li>
+          <li><i class="fas fa-check feature-included"></i> Additional tools</li>
+          <li><i class="fas fa-check feature-included"></i> Voice mode</li>
+          <li><i class="fas fa-check feature-included"></i> Demo Pro access</li>
+        </ul>
+
+        <div id="yearly-button" class="paypal-container"></div>
+      </div>
+
+      <!-- Lifetime Plan -->
+      <div class="plan-card lifetime-plan">
+        <div class="plan-badge lifetime-badge">LIFETIME</div>
+        <h3 class="plan-title">Ultimate</h3>
+        <div class="plan-credits">200 Credits + 7% Bonus</div>
+        <div class="plan-price">$199<span> one-time</span></div>
+        <div style="font-size: 0.9rem; color: var(--success); margin-bottom: 1rem;">Best value</div>
+        
+        <ul class="plan-features">
+          <li><i class="fas fa-check feature-included"></i> All features forever</li>
+          <li><i class="fas fa-check feature-included"></i> Highest credit bonus</li>
+          <li><i class="fas fa-check feature-included"></i> VIP support</li>
+          <li><i class="fas fa-check feature-included"></i> Early access to new tools</li>
+        </ul>
+
+        <div id="lifetime-button" class="paypal-container"></div>
+      </div>
     </div>
+
+    <div class="payment-options">
+      <div class="payment-option">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-amex"></i>
+      </div>
+      <div class="payment-option">
+        <i class="fab fa-cc-paypal"></i>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
   </div>
 
   <script>
-    // Initialize PayPal button
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'paypal'
-      },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              value: '9.99',
-              breakdown: {
-                item_total: {
-                  value: '9.99',
-                  currency_code: 'USD'
+    // Initialize PayPal buttons for each plan
+    function initPayPalButtons() {
+      // Monthly Plan
+      paypal.Buttons({
+        style: {
+          shape: 'pill',
+          color: 'blue',
+          layout: 'vertical',
+          label: 'subscribe'
+        },
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({
+            plan_id: 'YOUR_MONTHLY_PLAN_ID' // Replace with your actual plan ID
+          });
+        },
+        onApprove: function(data, actions) {
+          alert('Monthly subscription activated!');
+          // Handle subscription activation
+          window.location.href = 'payment-success.html?plan=monthly';
+        },
+        onError: function(err) {
+          console.error('PayPal error:', err);
+          alert('Payment failed. Please try again.');
+        }
+      }).render('#monthly-button');
+
+      // Yearly Plan
+      paypal.Buttons({
+        style: {
+          shape: 'pill',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'subscribe'
+        },
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({
+            plan_id: 'YOUR_YEARLY_PLAN_ID' // Replace with your actual plan ID
+          });
+        },
+        onApprove: function(data, actions) {
+          alert('Yearly subscription activated!');
+          // Handle subscription activation
+          window.location.href = 'payment-success.html?plan=yearly';
+        },
+        onError: function(err) {
+          console.error('PayPal error:', err);
+          alert('Payment failed. Please try again.');
+        }
+      }).render('#yearly-button');
+
+      // Lifetime Plan (one-time payment)
+      paypal.Buttons({
+        style: {
+          shape: 'pill',
+          color: 'silver',
+          layout: 'vertical',
+          label: 'pay'
+        },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: '199.00',
+                breakdown: {
+                  item_total: {
+                    value: '199.00',
+                    currency_code: 'USD'
+                  }
                 }
-              }
-            },
-            items: [{
-              name: "Healing Journey Premium Membership",
-              description: "Monthly subscription",
-              unit_amount: {
-                currency_code: "USD",
-                value: "9.99"
               },
-              quantity: "1",
-              category: "DIGITAL_GOODS"
+              items: [{
+                name: "Healing Journey Lifetime Membership",
+                description: "One-time payment for lifetime access",
+                unit_amount: {
+                  currency_code: "USD",
+                  value: "199.00"
+                },
+                quantity: "1",
+                category: "DIGITAL_GOODS"
+              }]
             }]
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert('Transaction completed by ' + details.payer.name.given_name);
-          // Here you would typically send the transaction details to your server
-          console.log('Transaction details:', details);
-          
-          // Redirect to success page or update user status
-          window.location.href = 'payment-success.html';
-        });
-      },
-      onError: function(err) {
-        console.error('PayPal error:', err);
-        alert('An error occurred with your payment. Please try again.');
-      }
-    }).render('#paypal-button-container');
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Lifetime purchase completed!');
+            // Handle successful payment
+            window.location.href = 'payment-success.html?plan=lifetime';
+          });
+        },
+        onError: function(err) {
+          console.error('PayPal error:', err);
+          alert('Payment failed. Please try again.');
+        }
+      }).render('#lifetime-button');
+    }
+
+    // Initialize buttons when PayPal SDK is loaded
+    if (window.paypal) {
+      initPayPalButtons();
+    } else {
+      document.addEventListener('DOMContentLoaded', initPayPalButtons);
+    }
   </script>
 </body>
 </html>
