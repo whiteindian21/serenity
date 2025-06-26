@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Payment | Healing Journey</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Unlock Premium Features | Healing Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
             --primary: #5D8BF4;
@@ -12,7 +15,6 @@
             --primary-dark: #3D56B2;
             --secondary: #FFB3C1;
             --accent: #FF6B6B;
-            --accent-light: #FFA8A7;
             --dark: #2D3748;
             --light: #F8FAFC;
             --light-2: #EDF2F7;
@@ -21,162 +23,65 @@
             --success: #48BB78;
             --warning: #F6AD55;
             --error: #E53E3E;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 10px;
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
             --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
             --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --glass-border: rgba(255, 255, 255, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f0f5ff 0%, #e6f3ff 100%);
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            padding: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
+            padding: 1.5rem;
+            background: radial-gradient(circle at 20% 30%, rgba(93, 139, 244, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 179, 193, 0.05) 0%, transparent 50%);
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(93, 139, 244, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 179, 193, 0.08) 0%, transparent 40%),
-                linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
-            z-index: -1;
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--dark);
         }
 
         .payment-container {
-            max-width: 520px;
-            width: 100%;
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.97);
             border-radius: var(--radius-lg);
-            box-shadow: 
-                0 15px 50px rgba(93, 139, 244, 0.15),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 10;
-            transform: scale(0.98);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .payment-container:hover {
-            transform: scale(1);
-            box-shadow: 0 20px 60px rgba(93, 139, 244, 0.25);
-        }
-
-        .payment-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .payment-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
-            transform: rotate(30deg);
-            pointer-events: none;
-        }
-
-        .payment-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .payment-header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-            position: relative;
-            z-index: 2;
-            max-width: 80%;
-            margin: 0 auto;
-        }
-
-        .secure-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.25);
-            padding: 0.6rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 3;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .payment-content {
             padding: 2.5rem;
-        }
-
-        .payment-plan {
-            background: linear-gradient(to bottom, white, var(--light-2));
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            max-width: 500px;
+            width: 100%;
             text-align: center;
+            box-shadow: var(--shadow-dark);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            animation: fadeIn 0.8s ease-out;
             position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(93, 139, 244, 0.15);
-            box-shadow: var(--shadow-light);
         }
 
-        .payment-plan::before {
+        .payment-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary), var(--accent-light));
+            height: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         }
 
-        .plan-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 0.8rem;
+        .payment-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
@@ -184,839 +89,184 @@
             letter-spacing: -0.5px;
         }
 
-        .plan-price {
-            font-size: 3.2rem;
-            font-weight: 900;
-            margin: 1.5rem 0;
-            color: var(--dark);
-            position: relative;
-            display: inline-block;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .plan-price::after {
-            content: 'Premium';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
+        .payment-container p {
+            color: var(--gray);
             font-size: 1rem;
-            font-weight: 800;
-            background: var(--primary);
-            color: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(93, 139, 244, 0.3);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
 
-        .plan-price span {
-            font-size: 1.2rem;
-            font-weight: 600;
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--light-2);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-display span {
+            font-size: 1.5rem;
             color: var(--gray);
         }
 
-        .plan-features {
-            list-style: none;
+        #paypal-button-container {
             margin-top: 2rem;
-            text-align: left;
         }
 
-        .plan-features li {
-            padding: 1rem 0.8rem;
-            border-bottom: 1px solid rgba(93, 139, 244, 0.1);
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .plan-features li:hover {
-            background: rgba(93, 139, 244, 0.05);
-            transform: translateX(8px);
-        }
-
-        .plan-features li:last-child {
-            border-bottom: none;
-        }
-
-        .plan-features li i {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border-radius: 50%;
+        .go-back-link {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 1rem;
-            box-shadow: 0 4px 8px rgba(93, 139, 244, 0.2);
-        }
-
-        .payment-methods {
-            margin: 2.5rem 0;
-        }
-
-        .payment-methods h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-            text-align: center;
-            position: relative;
-            padding-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .payment-methods h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            border-radius: 4px;
-        }
-
-        .method-options {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .method-option {
-            flex: 1;
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 1.2rem;
-            border: 1px solid var(--gray-light);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            background: white;
-            box-shadow: var(--shadow-light);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .method-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gray-light);
-            transition: all 0.4s ease;
-        }
-
-        .method-option.selected {
-            border-color: var(--primary-light);
-            background: rgba(93, 139, 244, 0.03);
-            box-shadow: 0 10px 25px rgba(93, 139, 244, 0.15);
-            transform: translateY(-8px);
-        }
-
-        .method-option.selected::before {
-            background: linear-gradient(to right, var(--primary), var(--accent-light));
-        }
-
-        .method-icon {
-            width: 70px;
-            height: 70px;
-            margin-bottom: 1.2rem;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            font-size: 2rem;
-            transition: all 0.4s ease;
-        }
-
-        .method-option:hover .method-icon {
-            transform: scale(1.15);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .method-icon.google-pay {
-            background: linear-gradient(to bottom, #4285F4, #34A853, #FBBC05, #EA4335);
-            color: white;
-        }
-
-        .method-icon.paypal {
-            background: #0070BA;
-            color: white;
-        }
-
-        .method-icon.card {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-        }
-
-        .method-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--dark);
-        }
-
-        .card-form {
-            display: none;
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: var(--radius-md);
-            background: white;
-            animation: fadeIn 0.6s ease;
-            border: 1px solid var(--gray-light);
-            box-shadow: var(--shadow-light);
-        }
-
-        .card-form.visible {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 1.8rem;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 1rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 1.2rem 1.5rem;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--gray-light);
-            font-family: inherit;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-            background: var(--light);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(93, 139, 244, 0.2);
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        .card-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            justify-content: center;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 35px;
-            background: var(--light);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--gray);
-            border: 1px solid var(--gray-light);
-            transition: all 0.3s ease;
-        }
-
-        .card-icon:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .payment-btn {
-            display: block;
-            width: 100%;
-            padding: 1.4rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 
-                0 8px 20px rgba(93, 139, 244, 0.35),
-                inset 0 0 0 1px rgba(255,255,255,0.2);
-            margin-top: 1.8rem;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 0.5px;
-        }
-
-        .payment-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transition: 0.6s;
-        }
-
-        .payment-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 12px 30px rgba(93, 139, 244, 0.45),
-                inset 0 0 0 1px rgba(255,255,255,0.3);
-        }
-
-        .payment-btn:hover::before {
-            left: 100%;
-        }
-
-        .payment-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: var(--shadow-light);
-        }
-
-        .payment-btn:disabled:hover::before {
-            left: -100%;
-        }
-
-        .payment-processing {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(93, 139, 244, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-            margin-bottom: 2rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .success-message, .error-message {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .success-icon, .error-icon {
-            font-size: 5rem;
-            margin-bottom: 2rem;
-            display: inline-block;
-        }
-
-        .success-icon {
-            color: var(--success);
-            animation: successScale 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes successScale {
-            0% { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .error-icon {
-            color: var(--error);
-            animation: errorShake 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes errorShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-12px); }
-            40%, 80% { transform: translateX(12px); }
-        }
-
-        .back-to-app {
-            display: inline-block;
+            gap: 0.5rem;
             margin-top: 2rem;
             color: var(--primary);
             text-decoration: none;
-            font-weight: 700;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            background: rgba(93, 139, 244, 0.12);
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 12px rgba(93, 139, 244, 0.15);
-        }
-
-        .back-to-app:hover {
-            background: rgba(93, 139, 244, 0.2);
-            text-decoration: none;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(93, 139, 244, 0.25);
-        }
-
-        .payment-footer {
-            padding: 2rem;
-            background: var(--light-2);
-            text-align: center;
+            font-weight: 600;
             font-size: 0.95rem;
-            color: var(--gray);
-            border-top: 1px solid var(--gray-light);
+            transition: var(--transition);
         }
 
-        .secure-badge-footer {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            font-weight: 700;
-            color: var(--success);
-            background: rgba(72, 187, 120, 0.12);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15);
+        .go-back-link:hover {
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Toast Notification (copied from dashboard.html) */
+        .toast {
+            position: fixed;
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dark);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-dark);
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(45, 55, 72, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: rgba(72, 187, 120, 0.95);
+        }
+
+        .toast.error {
+            background: rgba(229, 62, 62, 0.95);
+        }
+
+        .toast.info {
+            background: rgba(93, 139, 244, 0.95);
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .card-icon-preview {
-            position: absolute;
-            right: 15px;
-            top: 47px;
-            width: 50px;
-            height: 35px;
-            background: white;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: var(--gray);
-            border: 1px solid var(--gray-light);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-        }
-
-        .floating-decoration {
-            position: absolute;
-            z-index: 1;
-            opacity: 0.08;
-            animation: float 15s infinite ease-in-out;
-        }
-
-        .decoration-1 {
-            top: 10%;
-            left: 5%;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(25px);
-            animation-delay: 0s;
-        }
-
-        .decoration-2 {
-            bottom: 10%;
-            right: 5%;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--accent);
-            filter: blur(25px);
-            animation-delay: 2s;
-        }
-
-        .decoration-3 {
-            top: 40%;
-            right: 15%;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: var(--secondary);
-            filter: blur(20px);
-            animation-delay: 4s;
-        }
-
-        .decoration-4 {
-            bottom: 30%;
-            left: 10%;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            filter: blur(20px);
-            animation-delay: 1s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            25% { transform: translateY(-20px) translateX(10px); }
-            50% { transform: translateY(10px) translateX(-15px); }
-            75% { transform: translateY(-15px) translateX(-10px); }
-        }
-
-        @media (max-width: 480px) {
-            .payment-content {
-                padding: 1.8rem;
-            }
-            
-            .payment-plan {
-                padding: 1.5rem;
-            }
-            
-            .plan-price {
-                font-size: 2.8rem;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 1.2rem;
-            }
-            
-            .method-option {
-                min-width: 100%;
-            }
-            
-            .card-form {
-                padding: 1.5rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="floating-decoration decoration-1"></div>
-    <div class="floating-decoration decoration-2"></div>
-    <div class="floating-decoration decoration-3"></div>
-    <div class="floating-decoration decoration-4"></div>
-    
     <div class="payment-container">
-        <div class="payment-header">
-            <h1>Healing Journey Premium</h1>
-            <p>Unlock your full healing potential with premium features</p>
-            <div class="secure-badge">
-                <i class="fas fa-lock"></i>
-                Secure Payment
-            </div>
+        <h2>Unlock Premium Features</h2>
+        <p>Gain full access to guided meditations, advanced journaling tools, personalized companion support, and exclusive content to deepen your healing journey.</p>
+        
+        <div class="price-display">
+            $9.99 <span>/ month</span>
         </div>
 
-        <div class="payment-content">
-            <div class="payment-plan">
-                <div class="plan-name">Premium Membership</div>
-                <div class="plan-price">$9.99<span>/month</span></div>
-                <ul class="plan-features">
-                    <li><i class="fas fa-infinity"></i> Unlimited journal entries</li>
-                    <li><i class="fas fa-chart-line"></i> Advanced mood tracking</li>
-                    <li><i class="fas fa-comments"></i> Priority companion access</li>
-                    <li><i class="fas fa-heartbeat"></i> Exclusive healing exercises</li>
-                    <li><i class="fas fa-ad"></i> Ad-free experience</li>
-                    <li><i class="fas fa-cloud-download-alt"></i> Cloud backup & sync</li>
-                </ul>
-            </div>
+        <div id="paypal-button-container"></div>
 
-            <div class="payment-methods">
-                <h3>Select Payment Method</h3>
-                <div class="method-options">
-                    <div class="method-option" data-method="google-pay">
-                        <div class="method-icon google-pay">
-                            <i class="fab fa-google-pay"></i>
-                        </div>
-                        <div class="method-name">Google Pay</div>
-                    </div>
-                    <div class="method-option" data-method="paypal">
-                        <div class="method-icon paypal">
-                            <i class="fab fa-paypal"></i>
-                        </div>
-                        <div class="method-name">PayPal</div>
-                    </div>
-                    <div class="method-option" data-method="card" id="card-method">
-                        <div class="method-icon card">
-                            <i class="far fa-credit-card"></i>
-                        </div>
-                        <div class="method-name">Credit/Debit Card</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Payment Form -->
-            <div class="card-form" id="card-form">
-                <div class="form-group input-with-icon">
-                    <label for="card-number">Card Number</label>
-                    <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
-                    <div class="card-icon-preview" id="card-type-preview">
-                        <i class="far fa-credit-card"></i>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="card-expiry">Expiration Date</label>
-                        <input type="text" id="card-expiry" class="form-control" placeholder="MM/YY" maxlength="5">
-                    </div>
-                    <div class="form-group">
-                        <label for="card-cvv">CVV</label>
-                        <input type="text" id="card-cvv" class="form-control" placeholder="123" maxlength="4">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="card-name">Name on Card</label>
-                    <input type="text" id="card-name" class="form-control" placeholder="John Doe">
-                </div>
-
-                <div class="card-icons">
-                    <div class="card-icon"><i class="fab fa-cc-visa"></i></div>
-                    <div class="card-icon"><i class="fab fa-cc-mastercard"></i></div>
-                    <div class="card-icon"><i class="fab fa-cc-amex"></i></div>
-                    <div class="card-icon"><i class="fab fa-cc-discover"></i></div>
-                </div>
-            </div>
-
-            <button class="payment-btn" id="pay-now-btn" disabled>
-                <i class="fas fa-lock"></i> Complete Secure Payment
-            </button>
-        </div>
-
-        <div class="payment-processing" id="processing-section">
-            <div class="spinner"></div>
-            <h3>Processing Payment</h3>
-            <p>Please wait while we securely process your payment</p>
-        </div>
-
-        <div class="success-message" id="success-section">
-            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-            <h3>Payment Successful!</h3>
-            <p>Thank you for upgrading to Premium. Your healing journey is now enhanced.</p>
-            <a href="#" class="back-to-app">Continue to Healing Journey</a>
-        </div>
-
-        <div class="error-message" id="error-section">
-            <div class="error-icon"><i class="fas fa-exclamation-circle"></i></div>
-            <h3>Payment Failed</h3>
-            <p id="error-details">There was an issue processing your payment. Please try again.</p>
-            <button class="payment-btn" id="retry-btn">Try Again</button>
-        </div>
-
-        <div class="payment-footer">
-            <p>All transactions are secure and encrypted with 256-bit SSL encryption</p>
-            <div class="secure-badge-footer">
-                <i class="fas fa-shield-alt"></i>
-                PCI DSS Compliant
-            </div>
-            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.9;">
-                <i class="fas fa-lock"></i> Your payment details are securely processed by Braintree, a PayPal service
-            </p>
-        </div>
+        <a href="index.html" class="go-back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
 
+    <div id="toast-notification" class="toast"></div>
+
+    <!-- PayPal JavaScript SDK -->
+    <!-- Replace 'YOUR_CLIENT_ID' with your actual PayPal client ID (for sandbox or live) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // State variables
-            let selectedMethod = null;
-            const payNowBtn = document.getElementById('pay-now-btn');
-            const processingSection = document.getElementById('processing-section');
-            const successSection = document.getElementById('success-section');
-            const errorSection = document.getElementById('error-section');
-            const retryBtn = document.getElementById('retry-btn');
-            const cardForm = document.getElementById('card-form');
-            
-            // Method selection
-            const methodOptions = document.querySelectorAll('.method-option');
-            methodOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    methodOptions.forEach(o => o.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedMethod = this.dataset.method;
-                    
-                    // Show card form if card method selected
-                    if (selectedMethod === 'card') {
-                        cardForm.classList.add('visible');
-                        // Disable pay button until form is valid
-                        payNowBtn.disabled = true;
-                    } else {
-                        cardForm.classList.remove('visible');
-                        payNowBtn.disabled = false;
-                    }
+        // Function to show toast notifications
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast-notification');
+            toast.textContent = message;
+            toast.className = `toast ${type}`; // Reset classes and add new type
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        // Initialize PayPal Buttons
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                // This function sets up the details of the transaction, including the amount and currency.
+                // In a real application, you'd typically make an API call to your server here
+                // to create an order and get its ID to prevent manipulation of the amount.
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '9.99' // Set the amount here
+                        }
+                    }]
                 });
-            });
-            
-            // Card number formatting
-            const cardNumberInput = document.getElementById('card-number');
-            cardNumberInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                let formattedValue = '';
-                
-                for (let i = 0; i < value.length; i++) {
-                    if (i > 0 && i % 4 === 0) formattedValue += ' ';
-                    formattedValue += value[i];
-                }
-                
-                e.target.value = formattedValue;
-                validateCardForm();
-            });
-            
-            // Expiry date formatting
-            const expiryInput = document.getElementById('card-expiry');
-            expiryInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                if (value.length >= 3) {
-                    value = value.slice(0, 2) + '/' + value.slice(2);
-                }
-                
-                e.target.value = value;
-                validateCardForm();
-            });
-            
-            // CVV formatting
-            const cvvInput = document.getElementById('card-cvv');
-            cvvInput.addEventListener('input', function(e) {
-                e.target.value = e.target.value.replace(/\D/g, '');
-                validateCardForm();
-            });
-            
-            // Name validation
-            const nameInput = document.getElementById('card-name');
-            nameInput.addEventListener('input', validateCardForm);
-            
-            // Validate card form
-            function validateCardForm() {
-                if (selectedMethod !== 'card') return;
-                
-                const cardNumber = cardNumberInput.value.replace(/\s/g, '');
-                const expiry = expiryInput.value;
-                const cvv = cvvInput.value;
-                const name = nameInput.value.trim();
-                
-                // Basic validation
-                const isValid = (
-                    cardNumber.length >= 13 && 
-                    cardNumber.length <= 19 &&
-                    /^\d{2}\/\d{2}$/.test(expiry) &&
-                    cvv.length >= 3 && 
-                    cvv.length <= 4 &&
-                    name.length > 2
-                );
-                
-                payNowBtn.disabled = !isValid;
-            }
-            
-            // Payment button handler
-            payNowBtn.addEventListener('click', async function() {
-                // Show processing UI
-                document.querySelector('.payment-content').style.display = 'none';
-                processingSection.style.display = 'block';
-                
-                try {
-                    // Simulate API call to edge function
-                    const paymentResult = await processPayment(selectedMethod);
+            },
+            onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                // In a real application, you'd send `data.orderID` to your server
+                // to validate and capture the payment securely.
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    showToast('Payment successful! Welcome to Premium.', 'success');
                     
-                    if (paymentResult.success) {
-                        // Show success after 2 seconds
-                        setTimeout(() => {
-                            processingSection.style.display = 'none';
-                            successSection.style.display = 'block';
-                        }, 2000);
-                    } else {
-                        throw new Error(paymentResult.message || 'Payment failed');
-                    }
-                } catch (error) {
-                    // Show error message
-                    processingSection.style.display = 'none';
-                    document.getElementById('error-details').textContent = error.message;
-                    errorSection.style.display = 'block';
-                }
-            });
-            
-            // Retry button handler
-            retryBtn.addEventListener('click', function() {
-                errorSection.style.display = 'none';
-                document.querySelector('.payment-content').style.display = 'block';
-                payNowBtn.disabled = false;
-            });
-            
-            // Simulated payment processing function
-            async function processPayment(method) {
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Simulate payment success 85% of the time
-                const isSuccess = Math.random() > 0.15;
-                
-                if (isSuccess) {
-                    return {
-                        success: true,
-                        transactionId: 'TX' + Math.floor(Math.random() * 1000000),
-                        method: method
-                    };
-                } else {
-                    // Simulate various failure reasons
-                    const reasons = [
-                        'Insufficient funds',
-                        'Payment authorization failed',
-                        'Payment method not supported',
-                        'Transaction declined by issuer'
-                    ];
-                    const randomReason = reasons[Math.floor(Math.random() * reasons.length)];
-                    
-                    throw new Error(randomReason);
-                }
+                    // Simulate user registration/feature unlock
+                    // In a real app, this would be a server-side process after secure payment capture.
+                    localStorage.setItem('userRegistered', 'true');
+                    // For a real app, you would associate the payment with a specific user ID
+                    localStorage.setItem('tempUserId', details.payer.payer_id || 'guest_user_' + Date.now());
+
+                    // Redirect to the dashboard after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html'; 
+                    }, 2000); 
+                }).catch(function(error) {
+                    console.error('Payment capture error:', error);
+                    showToast('Payment failed. Please try again.', 'error');
+                });
+            },
+            onCancel: function(data) {
+                // User cancelled the payment
+                console.log('Payment cancelled:', data);
+                showToast('Payment cancelled.', 'info');
+            },
+            onError: function(err) {
+                // An error occurred during payment
+                console.error('PayPal button error:', err);
+                showToast('An error occurred during payment. Please try again later.', 'error');
             }
-            
-            // Card type detection
-            cardNumberInput.addEventListener('input', function() {
-                const cardNumber = this.value.replace(/\s/g, '');
-                let cardType = 'unknown';
-                
-                if (/^4/.test(cardNumber)) {
-                    cardType = 'visa';
-                } else if (/^5[1-5]/.test(cardNumber)) {
-                    cardType = 'mastercard';
-                } else if (/^3[47]/.test(cardNumber)) {
-                    cardType = 'amex';
-                } else if (/^6(?:011|5)/.test(cardNumber)) {
-                    cardType = 'discover';
-                }
-                
-                const preview = document.getElementById('card-type-preview');
-                preview.innerHTML = '';
-                
-                if (cardType !== 'unknown') {
-                    const icon = document.createElement('i');
-                    icon.className = `fab fa-cc-${cardType}`;
-                    preview.appendChild(icon);
-                } else {
-                    const icon = document.createElement('i');
-                    icon.className = 'far fa-credit-card';
-                    preview.appendChild(icon);
-                }
-            });
-        });
+        }).render('#paypal-button-container'); // Render the PayPal buttons into the div with id 'paypal-button-container'
     </script>
 </body>
 </html>
