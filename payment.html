@@ -1,272 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unlock Premium Features | Healing Journey</title>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --primary: #5D8BF4;
-            --primary-light: #85CDFD;
-            --primary-dark: #3D56B2;
-            --secondary: #FFB3C1;
-            --accent: #FF6B6B;
-            --dark: #2D3748;
-            --light: #F8FAFC;
-            --light-2: #EDF2F7;
-            --gray: #718096;
-            --gray-light: #E2E8F0;
-            --success: #48BB78;
-            --warning: #F6AD55;
-            --error: #E53E3E;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 10px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
-            --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healing Journey | Upgrade to Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+  <style>
+    :root {
+      --primary: #5D8BF4;
+      --primary-light: #85CDFD;
+      --primary-dark: #3D56B2;
+      --secondary: #FFB3C1;
+      --accent: #FF6B6B;
+      --dark: #2D3748;
+      --light: #F8FAFC;
+      --gray: #718096;
+      --success: #48BB78;
+      --gold: #FFD700;
+    }
 
-        body {
-            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            background: radial-gradient(circle at 20% 30%, rgba(93, 139, 244, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 179, 193, 0.05) 0%, transparent 50%);
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        h1, h2, h3, h4 {
-            font-family: 'Merriweather', serif;
-            font-weight: 700;
-            line-height: 1.3;
-            color: var(--dark);
-        }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 2rem;
+    }
 
-        .payment-container {
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: var(--radius-lg);
-            padding: 2.5rem;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            box-shadow: var(--shadow-dark);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            animation: fadeIn 0.8s ease-out;
-            position: relative;
-        }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
 
-        .payment-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
 
-        .payment-container h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
 
-        .payment-container p {
-            color: var(--gray);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
+    .content {
+      padding: 2rem;
+    }
 
-        .price-display {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: var(--light-2);
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
+    .plan-card {
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .price-display span {
-            font-size: 1.5rem;
-            color: var(--gray);
-        }
+    .premium-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      border-bottom-left-radius: 12px;
+    }
 
-        #paypal-button-container {
-            margin-top: 2rem;
-        }
+    .plan-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+    }
 
-        .go-back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
 
-        .go-back-link:hover {
-            color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
+    .plan-price span {
+      font-size: 1rem;
+      color: var(--gray);
+    }
 
-        /* Toast Notification (copied from dashboard.html) */
-        .toast {
-            position: fixed;
-            bottom: 1.2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--dark);
-            color: white;
-            padding: 0.8rem 1.2rem;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            font-weight: 600;
-            box-shadow: var(--shadow-dark);
-            z-index: 3000;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            max-width: 90%;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: rgba(45, 55, 72, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+    .plan-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
+    .plan-features li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+    }
 
-        .toast.success {
-            background: rgba(72, 187, 120, 0.95);
-        }
+    .plan-features li i {
+      color: var(--success);
+      margin-right: 0.5rem;
+    }
 
-        .toast.error {
-            background: rgba(229, 62, 62, 0.95);
-        }
+    #paypal-button-container {
+      margin-top: 1.5rem;
+    }
 
-        .toast.info {
-            background: rgba(93, 139, 244, 0.95);
-        }
+    .payment-options {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link i {
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="payment-container">
-        <h2>Unlock Premium Features</h2>
-        <p>Gain full access to guided meditations, advanced journaling tools, personalized companion support, and exclusive content to deepen your healing journey.</p>
-        
-        <div class="price-display">
-            $9.99 <span>/ month</span>
-        </div>
-
-        <div id="paypal-button-container"></div>
-
-        <a href="index.html" class="go-back-link">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+  <div class="container">
+    <div class="header">
+      <h1>Upgrade to Premium</h1>
+      <p>Unlock all features and support your healing journey</p>
     </div>
 
-    <div id="toast-notification" class="toast"></div>
+    <div class="content">
+      <div class="plan-card">
+        <div class="premium-badge">MOST POPULAR</div>
+        <h2 class="plan-title">Premium Membership</h2>
+        <div class="plan-price">$9.99<span>/month</span></div>
+        
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Unlimited memory storage</li>
+          <li><i class="fas fa-check"></i> Advanced healing tools</li>
+          <li><i class="fas fa-check"></i> Priority companion access</li>
+          <li><i class="fas fa-check"></i> Detailed progress analytics</li>
+          <li><i class="fas fa-check"></i> Ad-free experience</li>
+        </ul>
 
-    <!-- PayPal JavaScript SDK -->
-    <!-- Replace 'YOUR_CLIENT_ID' with your actual PayPal client ID (for sandbox or live) -->
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
-    <script>
-        // Function to show toast notifications
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast-notification');
-            toast.textContent = message;
-            toast.className = `toast ${type}`; // Reset classes and add new type
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5000);
-        }
+        <div id="paypal-button-container"></div>
+        
+        <div class="payment-options">
+          <div class="payment-option">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-amex"></i>
+          </div>
+          <div class="payment-option">
+            <i class="fab fa-cc-paypal"></i>
+          </div>
+        </div>
+      </div>
 
-        // Initialize PayPal Buttons
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                // This function sets up the details of the transaction, including the amount and currency.
-                // In a real application, you'd typically make an API call to your server here
-                // to create an order and get its ID to prevent manipulation of the amount.
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: '9.99' // Set the amount here
-                        }
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                // This function captures the funds from the transaction.
-                // In a real application, you'd send `data.orderID` to your server
-                // to validate and capture the payment securely.
-                return actions.order.capture().then(function(details) {
-                    // Show a success message to the buyer
-                    showToast('Payment successful! Welcome to Premium.', 'success');
-                    
-                    // Simulate user registration/feature unlock
-                    // In a real app, this would be a server-side process after secure payment capture.
-                    localStorage.setItem('userRegistered', 'true');
-                    // For a real app, you would associate the payment with a specific user ID
-                    localStorage.setItem('tempUserId', details.payer.payer_id || 'guest_user_' + Date.now());
+      <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </div>
 
-                    // Redirect to the dashboard after a short delay
-                    setTimeout(() => {
-                        window.location.href = 'index.html'; 
-                    }, 2000); 
-                }).catch(function(error) {
-                    console.error('Payment capture error:', error);
-                    showToast('Payment failed. Please try again.', 'error');
-                });
+  <script>
+    // Initialize PayPal button
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'paypal'
+      },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '9.99',
+              breakdown: {
+                item_total: {
+                  value: '9.99',
+                  currency_code: 'USD'
+                }
+              }
             },
-            onCancel: function(data) {
-                // User cancelled the payment
-                console.log('Payment cancelled:', data);
-                showToast('Payment cancelled.', 'info');
-            },
-            onError: function(err) {
-                // An error occurred during payment
-                console.error('PayPal button error:', err);
-                showToast('An error occurred during payment. Please try again later.', 'error');
-            }
-        }).render('#paypal-button-container'); // Render the PayPal buttons into the div with id 'paypal-button-container'
-    </script>
+            items: [{
+              name: "Healing Journey Premium Membership",
+              description: "Monthly subscription",
+              unit_amount: {
+                currency_code: "USD",
+                value: "9.99"
+              },
+              quantity: "1",
+              category: "DIGITAL_GOODS"
+            }]
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Transaction completed by ' + details.payer.name.given_name);
+          // Here you would typically send the transaction details to your server
+          console.log('Transaction details:', details);
+          
+          // Redirect to success page or update user status
+          window.location.href = 'payment-success.html';
+        });
+      },
+      onError: function(err) {
+        console.error('PayPal error:', err);
+        alert('An error occurred with your payment. Please try again.');
+      }
+    }).render('#paypal-button-container');
+  </script>
 </body>
 </html>
