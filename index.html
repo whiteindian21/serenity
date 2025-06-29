@@ -7,6 +7,7 @@
   <meta name="description" content="Serenity provides compassionate AI-powered support for emotional healing with science-backed techniques and 24/7 availability.">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary: #A8DADC;
@@ -844,33 +845,6 @@
       opacity: 0.5;
       z-index: 1;
     }
-    
-    /* Login status indicator */
-    .login-status {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 8px 15px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      font-size: 0.85rem;
-      z-index: 1001;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .login-status .status-indicator {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #4CAF50;
-    }
-    
-    .login-status.logged-out .status-indicator {
-      background: #f44336;
-    }
 
     /* Responsive Design */
     @media (min-width: 1025px) {
@@ -965,11 +939,6 @@
       .companion-grid {
         gap: 2rem;
       }
-      
-      .login-status {
-        top: 80px;
-        right: 10px;
-      }
     }
 
     @media (max-width: 480px) {
@@ -1007,11 +976,6 @@
   </style>
 </head>
 <body>
-  <div class="login-status" id="loginStatus">
-    <span class="status-indicator"></span>
-    <span id="statusText">Logged In</span>
-  </div>
-  
   <nav id="mainNav">
     <div class="container nav-content">
       <a href="#" class="logo">
@@ -1024,7 +988,7 @@
         <a href="#companions">Companions</a>
         <a href="#how-it-works">How It Works</a>
         <a href="#testimonials">Testimonials</a>
-        <a href="createaccount.html" class="cta-button">Get Started</a>
+        <a href="login.html" class="cta-button" id="navAuthBtn">Get Started</a>
       </div>
     </div>
   </nav>
@@ -1112,7 +1076,7 @@
         </div>
         <div class="companion-grid">
           <div class="companion-card animate delay-1">
-            <img src="https://images.unsplash.com/photo-1677442135133-33d364e7d1d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elena AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elena AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Elena</h3>
               <span class="companion-role">Empathy Specialist</span>
@@ -1125,7 +1089,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-2">
-            <img src="https://images.unsplash.com/photo-1677442135722-5f8ea49cec8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David AI companion" class="companion-image">
             <div class="companion-info">
               <h3>David</h3>
               <span class="companion-role">Resilience Coach</span>
@@ -1138,7 +1102,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-3">
-            <img src="https://images.unsplash.com/photo-1677442135699-3d09b4e9a1e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sophia AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sophia AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Sophia</h3>
               <span class="companion-role">Mindfulness Guide</span>
@@ -1286,49 +1250,43 @@
   </footer>
 
   <script>
-    // Simulated login status (in a real app, this would be determined by authentication)
-    let isLoggedIn = false; // Change to true to simulate logged in state
-    
-    // Set login status indicator
-    const loginStatus = document.getElementById('loginStatus');
-    const statusText = document.getElementById('statusText');
-    
-    if (isLoggedIn) {
-      loginStatus.classList.remove('logged-out');
-      statusText.textContent = 'Logged In';
-    } else {
-      loginStatus.classList.add('logged-out');
-      statusText.textContent = 'Not Logged In';
+    // Initialize Supabase
+    const supabaseUrl = 'YOUR_SUPABASE_URL';
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Check auth state
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      updateAuthState(!!session);
+    });
+
+    // Check initial auth state
+    async function checkAuthState() {
+      const { data: { session } } = await supabase.auth.getSession();
+      updateAuthState(!!session);
     }
-    
-    // Set button destinations based on login status
-    const beginHealingBtn = document.getElementById('beginHealingBtn');
-    const startTrialBtn = document.getElementById('startTrialBtn');
-    
-    if (isLoggedIn) {
-      beginHealingBtn.href = 'dashboard.html';
-      startTrialBtn.href = 'dashboard.html';
-    } else {
-      beginHealingBtn.href = 'login.html';
-      startTrialBtn.href = 'login.html';
-    }
-    
-    // Toggle login status for demo purposes
-    loginStatus.addEventListener('click', () => {
-      isLoggedIn = !isLoggedIn;
+
+    // Update UI based on auth state
+    function updateAuthState(loggedIn) {
+      const beginHealingBtn = document.getElementById('beginHealingBtn');
+      const startTrialBtn = document.getElementById('startTrialBtn');
+      const navAuthBtn = document.getElementById('navAuthBtn');
       
-      if (isLoggedIn) {
-        loginStatus.classList.remove('logged-out');
-        statusText.textContent = 'Logged In';
+      if (loggedIn) {
         beginHealingBtn.href = 'dashboard.html';
         startTrialBtn.href = 'dashboard.html';
+        navAuthBtn.textContent = 'Dashboard';
+        navAuthBtn.href = 'dashboard.html';
       } else {
-        loginStatus.classList.add('logged-out');
-        statusText.textContent = 'Not Logged In';
         beginHealingBtn.href = 'login.html';
         startTrialBtn.href = 'login.html';
+        navAuthBtn.textContent = 'Get Started';
+        navAuthBtn.href = 'login.html';
       }
-    });
+    }
+
+    // Initialize auth state
+    checkAuthState();
 
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
