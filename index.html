@@ -988,7 +988,7 @@
         <a href="#companions">Companions</a>
         <a href="#how-it-works">How It Works</a>
         <a href="#testimonials">Testimonials</a>
-        <a href="login.html" class="cta-button" id="navAuthBtn">Get Started</a>
+        <a href="login.html" class="cta-button" id="navAuthBtn">Get Started <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
   </nav>
@@ -1275,12 +1275,12 @@
       if (loggedIn) {
         beginHealingBtn.href = 'dashboard.html';
         startTrialBtn.href = 'dashboard.html';
-        navAuthBtn.textContent = 'Dashboard';
+        navAuthBtn.innerHTML = 'Go to Dashboard <i class="fas fa-arrow-right"></i>';
         navAuthBtn.href = 'dashboard.html';
       } else {
         beginHealingBtn.href = 'login.html';
         startTrialBtn.href = 'login.html';
-        navAuthBtn.textContent = 'Get Started';
+        navAuthBtn.innerHTML = 'Get Started <i class="fas fa-arrow-right"></i>';
         navAuthBtn.href = 'login.html';
       }
     }
