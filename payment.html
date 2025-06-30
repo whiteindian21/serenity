@@ -6,6 +6,7 @@
     <title>Upgrade to Premium</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&vault=true&intent=subscription"></script>
     <style>
         .plan-card {
             transition: all 0.3s ease;
@@ -17,6 +18,22 @@
         .recommended-badge {
             top: -12px;
             right: 20px;
+        }
+        #paypal-button-container {
+            min-width: 200px;
+            margin: 0 auto;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -95,9 +112,7 @@
                             Ad-free experience
                         </li>
                     </ul>
-                    <button id="monthly-plan" class="w-full py-2 px-4 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-md transition-colors">
-                        Choose Monthly
-                    </button>
+                    <div id="paypal-monthly-button" class="mt-4"></div>
                 </div>
             </div>
 
@@ -137,9 +152,7 @@
                             Early access to new features
                         </li>
                     </ul>
-                    <button id="yearly-plan" class="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors">
-                        Choose Yearly
-                    </button>
+                    <div id="paypal-yearly-button" class="mt-4"></div>
                 </div>
             </div>
         </div>
@@ -149,17 +162,30 @@
             <div class="space-y-4">
                 <div>
                     <h4 class="font-medium text-gray-800">Can I cancel anytime?</h4>
-                    <p class="text-gray-600 mt-1">Yes, you can cancel your subscription anytime. Your premium features will remain active until the end of your billing period.</p>
+                    <p class="text-gray-600 mt-1">Yes, you can cancel your subscription anytime through your PayPal account. Your premium features will remain active until the end of your billing period.</p>
                 </div>
                 <div>
                     <h4 class="font-medium text-gray-800">What payment methods do you accept?</h4>
-                    <p class="text-gray-600 mt-1">We accept all major credit cards (Visa, Mastercard, American Express) as well as PayPal.</p>
+                    <p class="text-gray-600 mt-1">We accept PayPal and all major credit/debit cards (Visa, Mastercard, American Express, Discover) through PayPal's secure payment system.</p>
                 </div>
                 <div>
                     <h4 class="font-medium text-gray-800">Do you offer refunds?</h4>
-                    <p class="text-gray-600 mt-1">We offer a 14-day money-back guarantee for annual plans. Monthly plans can be canceled before the next billing cycle.</p>
+                    <p class="text-gray-600 mt-1">We offer a 30-day money-back guarantee for annual plans. Monthly plans can be canceled before the next billing cycle.</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-800">How do I manage my subscription?</h4>
+                    <p class="text-gray-600 mt-1">You can manage or cancel your subscription anytime through your PayPal account under the "Automatic Payments" section.</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Payment Processing Modal -->
+    <div id="processing-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg max-w-sm w-full text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <h3 class="text-xl font-semibold mb-2">Processing Payment</h3>
+            <p class="text-gray-600">Please wait while we process your subscription...</p>
         </div>
     </div>
 
@@ -168,6 +194,12 @@
         const supabaseUrl = 'YOUR_SUPABASE_URL';
         const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // PayPal Plan IDs - Replace with your actual PayPal plan IDs
+        const PAYPAL_PLANS = {
+            monthly: 'P-XXXXXXXXXXXXXXXXXXXXXXXX', // Your monthly plan ID
+            yearly: 'P-XXXXXXXXXXXXXXXXXXXXXXXX'   // Your yearly plan ID
+        };
 
         document.addEventListener('DOMContentLoaded', async () => {
             // Check user's current plan
@@ -178,38 +210,86 @@
                 return;
             }
 
-            // Set up event listeners for plan selection
-            document.getElementById('monthly-plan').addEventListener('click', () => handlePlanSelection('monthly'));
-            document.getElementById('yearly-plan').addEventListener('click', () => handlePlanSelection('yearly'));
+            // Initialize PayPal buttons
+            paypal.Buttons({
+                style: {
+                    shape: 'pill',
+                    color: 'gold',
+                    layout: 'vertical',
+                    label: 'subscribe'
+                },
+                createSubscription: function(data, actions) {
+                    return actions.subscription.create({
+                        'plan_id': PAYPAL_PLANS.monthly,
+                        'custom_id': user.id // Pass user ID for webhook handling
+                    });
+                },
+                onApprove: function(data, actions) {
+                    showProcessingModal();
+                    // Call your backend to verify and activate the subscription
+                    return verifySubscription(data.subscriptionID, 'monthly');
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('There was an error processing your PayPal payment. Please try again.');
+                }
+            }).render('#paypal-monthly-button');
+
+            paypal.Buttons({
+                style: {
+                    shape: 'pill',
+                    color: 'blue',
+                    layout: 'vertical',
+                    label: 'subscribe'
+                },
+                createSubscription: function(data, actions) {
+                    return actions.subscription.create({
+                        'plan_id': PAYPAL_PLANS.yearly,
+                        'custom_id': user.id // Pass user ID for webhook handling
+                    });
+                },
+                onApprove: function(data, actions) {
+                    showProcessingModal();
+                    // Call your backend to verify and activate the subscription
+                    return verifySubscription(data.subscriptionID, 'yearly');
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('There was an error processing your PayPal payment. Please try again.');
+                }
+            }).render('#paypal-yearly-button');
         });
 
-        async function handlePlanSelection(planType) {
-            try {
-                // Show loading state
-                const button = document.getElementById(`${planType}-plan`);
-                const originalText = button.textContent;
-                button.textContent = 'Processing...';
-                button.disabled = true;
+        function showProcessingModal() {
+            document.getElementById('processing-modal').classList.remove('hidden');
+        }
 
-                // Call your backend to create a checkout session
-                const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-                    body: { plan_type: planType }
+        function hideProcessingModal() {
+            document.getElementById('processing-modal').classList.add('hidden');
+        }
+
+        async function verifySubscription(subscriptionId, planType) {
+            try {
+                // Call your backend to verify the subscription
+                const { data, error } = await supabase.functions.invoke('verify-paypal-subscription', {
+                    body: {
+                        subscription_id: subscriptionId,
+                        plan_type: planType
+                    }
                 });
 
                 if (error) throw error;
 
-                if (data && data.checkoutUrl) {
-                    // Redirect to Stripe checkout
-                    window.location.href = data.checkoutUrl;
+                if (data.success) {
+                    // Redirect to success page or dashboard
+                    window.location.href = '/dashboard.html?subscription=success';
                 } else {
-                    throw new Error('No checkout URL returned');
+                    throw new Error('Subscription verification failed');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('There was an error processing your request. Please try again.');
-                const button = document.getElementById(`${planType}-plan`);
-                button.textContent = originalText;
-                button.disabled = false;
+                console.error('Verification error:', error);
+                hideProcessingModal();
+                alert('There was an error verifying your subscription. Please contact support.');
             }
         }
     </script>
