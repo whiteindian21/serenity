@@ -4,16 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy | TheraTalk.ai</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4F709C;
-      --secondary: #213555;
-      --accent: #E74646;
-      --light: #F8F8F8;
-      --dark: #1A1A2E;
-      --gray: #6B7280;
-      --transition: all 0.3s ease;
+      --primary: #4361ee;
+      --primary-light: #e0e7ff;
+      --primary-dark: #3a0ca3;
+      --secondary: #7209b7;
+      --accent: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.05);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
     }
     
     * {
@@ -28,91 +37,272 @@
       color: var(--dark);
       background-color: var(--light);
       padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
     .container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 3rem 2rem;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+    
+    /* Decorative elements */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
     }
     
     header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
     }
     
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--secondary);
+      font-size: 2.75rem;
+      color: var(--primary-dark);
       margin-bottom: 1rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
     }
     
     .last-updated {
       color: var(--gray);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       margin-bottom: 2rem;
+      font-weight: 500;
     }
     
     h2 {
       font-family: 'Playfair Display', serif;
       color: var(--primary);
-      margin: 2.5rem 0 1rem;
-      font-size: 1.5rem;
+      margin: 3rem 0 1.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--primary-light);
+      border-radius: 3px;
     }
     
     h3 {
       color: var(--secondary);
-      margin: 1.8rem 0 0.8rem;
-      font-size: 1.2rem;
+      margin: 2.5rem 0 1rem;
+      font-size: 1.35rem;
+      font-weight: 600;
     }
     
-    p, ul {
-      margin-bottom: 1.2rem;
+    p, ul, ol {
+      margin-bottom: 1.5rem;
       color: var(--dark);
+      font-size: 1.05rem;
     }
     
-    ul {
-      padding-left: 1.5rem;
+    ul, ol {
+      padding-left: 2rem;
     }
     
     li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      padding-left: 0.5rem;
+    }
+    
+    ul li::before {
+      content: '•';
+      color: var(--primary);
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+    
+    ol {
+      counter-reset: item;
+    }
+    
+    ol li {
+      counter-increment: item;
+    }
+    
+    ol li::before {
+      content: counter(item) ".";
+      color: var(--primary);
+      font-weight: bold;
+      display: inline-block;
+      width: 1.5em;
+      margin-left: -1.5em;
     }
     
     .highlight-box {
-      background-color: rgba(79, 112, 156, 0.08);
+      background-color: rgba(67, 97, 238, 0.05);
       border-left: 4px solid var(--primary);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      border-radius: 0 4px 4px 0;
+      padding: 2rem;
+      margin: 3rem 0;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .highlight-box:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
     
     .contact-info {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(0,0,0,0.1);
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--light-gray);
     }
     
     a {
       color: var(--primary);
       text-decoration: none;
+      font-weight: 500;
       transition: var(--transition);
+      position: relative;
     }
     
     a:hover {
       color: var(--accent);
-      text-decoration: underline;
     }
     
+    a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    
+    a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    strong {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 100;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* Responsive Design */
     @media (max-width: 768px) {
       .container {
-        padding: 2rem 1.5rem;
+        padding: 3rem 1.5rem;
       }
       
       h1 {
+        font-size: 2.25rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+        margin: 2.5rem 0 1.25rem;
+      }
+      
+      .highlight-box {
+        padding: 1.5rem;
+      }
+      
+      .back-to-top {
+        width: 40px;
+        height: 40px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      h1 {
         font-size: 2rem;
       }
+      
+      h2 {
+        font-size: 1.35rem;
+      }
+      
+      p, ul, ol {
+        font-size: 1rem;
+      }
+    }
+    
+    /* Animation for section appearance */
+    section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
@@ -123,7 +313,7 @@
       <p class="last-updated">Effective Date: [Insert Date] | Last Updated: [Insert Date]</p>
     </header>
     
-    <section>
+    <section class="visible">
       <h2>1. Purpose</h2>
       <p>This Data Protection Policy outlines how TheraTalk.ai collects, stores, processes, and protects personal and sensitive information. We are committed to safeguarding the emotional, mental, and personal privacy of our users.</p>
     </section>
@@ -242,5 +432,51 @@
       <p>We may update this policy from time to time. Users will be notified of major changes. Continued use of the platform implies acceptance of the current policy.</p>
     </section>
   </div>
+
+  <a href="#" class="back-to-top" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </a>
+
+  <script>
+    // Back to top button functionality
+    const backToTopButton = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Animate sections as they come into view
+    const sections = document.querySelectorAll('section');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+    
+    sections.forEach(section => {
+      if (!section.classList.contains('visible')) {
+        observer.observe(section);
+      }
+    });
+  </script>
 </body>
 </html>
