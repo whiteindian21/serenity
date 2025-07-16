@@ -357,19 +357,18 @@
       width: 100%;
     }
 
-    /* Breathing Exercise */
+    /* Enhanced Breathing Exercise */
     .breath-container {
       position: relative;
       margin: 1.5rem auto;
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
     }
     
     .breath-circle {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -381,25 +380,55 @@
       top: 0;
       left: 0;
       box-shadow: 0 6px 20px rgba(94, 96, 206, 0.35);
+      z-index: 2;
     }
     
     .breath-circle.pulse {
       animation: pulse 4s infinite alternate;
     }
     
-    @keyframes pulse {
-      0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0.45);
-      }
-      70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 12px rgba(94, 96, 206, 0);
-      }
-      100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0);
-      }
+    .breath-visual {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      z-index: 1;
+      opacity: 0.3;
+      transition: all 1.5s ease-in-out;
+    }
+    
+    .breath-phase {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(94, 96, 206, 0.1);
+      z-index: 0;
+      animation: breathPhase 16s infinite linear;
+    }
+    
+    .breath-phase::before,
+    .breath-phase::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(94, 96, 206, 0.1);
+      opacity: 0;
+      animation: breathPhase 16s infinite linear;
+    }
+    
+    .breath-phase::before {
+      animation-delay: -4s;
+    }
+    
+    .breath-phase::after {
+      animation-delay: -8s;
     }
     
     .breath-stats {
@@ -434,6 +463,7 @@
       padding: 0.8rem;
       background: rgba(94, 96, 206, 0.08);
       border-radius: var(--radius-sm);
+      transition: all 0.5s ease;
     }
     
     .breath-controls {
@@ -836,6 +866,28 @@
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0.45);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 12px rgba(94, 96, 206, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0);
+      }
+    }
+    
+    @keyframes breathPhase {
+      0% { transform: scale(0.8); opacity: 0; }
+      12.5% { transform: scale(1.2); opacity: 0.8; }
+      25% { transform: scale(1.5); opacity: 0; }
+      100% { transform: scale(1.5); opacity: 0; }
     }
     
     .fade-in {
@@ -1335,6 +1387,23 @@
       font-size: 1.5rem;
     }
     
+    /* Page sections for navigation */
+    .page-section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .page-section.active {
+      display: block;
+    }
+    
+    /* Mood chart */
+    .mood-chart {
+      width: 100%;
+      height: 200px;
+      margin-top: 1rem;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .card {
@@ -1346,8 +1415,8 @@
       }
       
       .breath-container {
-        width: 140px;
-        height: 140px;
+        width: 160px;
+        height: 160px;
       }
       
       .chat-container {
@@ -1392,8 +1461,8 @@
       </div>
     </div>
 
-    <!-- Dashboard Content -->
-    <div class="dashboard-content">
+    <!-- Page Sections -->
+    <div id="home-section" class="page-section active">
       <!-- Affirmation Card -->
       <div class="card affirmation-card" id="affirmationCard">
         <h3><i class="fas fa-quote-left"></i> Daily Affirmation</h3>
@@ -1436,6 +1505,8 @@
           <h3>Calming Breath</h3>
         </div>
         <div class="breath-container">
+          <div class="breath-visual"></div>
+          <div class="breath-phase"></div>
           <div class="breath-circle pulse">
             <span id="breath-text">Breathe In</span>
           </div>
@@ -1529,6 +1600,141 @@
       </div>
     </div>
     
+    <!-- Tools Page -->
+    <div id="tools-section" class="page-section">
+      <div class="card">
+        <h3><i class="fas fa-tools"></i> Healing Tools</h3>
+        <p>Explore our collection of therapeutic tools</p>
+        
+        <div class="action-cards">
+          <div class="action-card">
+            <i class="fas fa-book"></i>
+            <h3>Guided Journaling</h3>
+            <p>Write with prompts to explore your emotions</p>
+            <button class="btn btn-primary">
+              Start <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          
+          <div class="action-card">
+            <i class="fas fa-headphones"></i>
+            <h3>Meditation Library</h3>
+            <p>Calming meditations for grief and healing</p>
+            <button class="btn btn-primary">
+              Explore <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          
+          <div class="action-card">
+            <i class="fas fa-brain"></i>
+            <h3>Cognitive Exercises</h3>
+            <p>Tools to reframe negative thoughts</p>
+            <button class="btn btn-primary">
+              Begin <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          
+          <div class="action-card">
+            <i class="fas fa-hands-helping"></i>
+            <h3>Support Groups</h3>
+            <p>Connect with others on similar journeys</p>
+            <button class="btn btn-primary">
+              Join <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Memories Page -->
+    <div id="memories-section" class="page-section">
+      <div class="card">
+        <h3><i class="fas fa-memory"></i> Cherished Memories</h3>
+        <p>Preserve and revisit special moments</p>
+        
+        <div class="memory-container">
+          <div class="memory-item has-image" style="background-image: url('https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300')">
+            <img class="memory-image" src="https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300" alt="Memory">
+            <div class="memory-label">Beach Day</div>
+          </div>
+          <div class="memory-item has-image" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300')">
+            <img class="memory-image" src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300" alt="Memory">
+            <div class="memory-label">Birthday</div>
+          </div>
+          <div class="memory-item">
+            <i class="fas fa-paw"></i>
+            <div class="memory-label">Luna</div>
+          </div>
+          <div class="memory-item">
+            <i class="fas fa-tree"></i>
+            <div class="memory-label">Park Walk</div>
+          </div>
+          <div class="memory-item add-memory">
+            <i class="fas fa-plus"></i>
+            <div class="memory-label">Add Memory</div>
+          </div>
+        </div>
+        
+        <div class="memory-actions">
+          <button class="btn btn-primary">
+            <i class="fas fa-book"></i> Memory Book
+          </button>
+          <button class="btn btn-secondary">
+            <i class="fas fa-plus"></i> Add New
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Profile Page -->
+    <div id="profile-section" class="page-section">
+      <div class="card">
+        <div class="companion-container">
+          <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2rem;">
+            <span id="profile-initial">U</span>
+          </div>
+          <div class="companion-name" id="profile-name">User Name</div>
+          <div class="companion-role">Member since <span id="join-date">Jan 2023</span></div>
+        </div>
+        
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 65%"></div>
+        </div>
+        <div class="progress-info">
+          <span>Healing Progress</span>
+          <span id="progress-percent">65%</span>
+        </div>
+        
+        <div class="progress-sources">
+          <div class="progress-source">
+            <div class="progress-source-icon">
+              <i class="fas fa-smile"></i>
+            </div>
+            <div class="progress-source-value" id="mood-source">12</div>
+            <div class="progress-source-label">Moods</div>
+          </div>
+          <div class="progress-source">
+            <div class="progress-source-icon">
+              <i class="fas fa-comment"></i>
+            </div>
+            <div class="progress-source-value" id="chat-source">8</div>
+            <div class="progress-source-label">Chats</div>
+          </div>
+          <div class="progress-source">
+            <div class="progress-source-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="progress-source-value" id="journal-source">5</div>
+            <div class="progress-source-label">Journals</div>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" style="margin-top: 1.5rem;">
+          <i class="fas fa-cog"></i> Account Settings
+        </button>
+      </div>
+    </div>
+    
     <!-- Sign Out Button -->
     <div style="text-align: center; margin: 1.5rem 0;">
       <button class="btn-signout" id="signout-btn" aria-label="Sign out">
@@ -1553,19 +1759,19 @@
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <a href="#" class="nav-item active">
+    <a href="#" class="nav-item active" data-target="home-section">
       <i class="fas fa-home"></i>
       <span class="nav-label">Home</span>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#" class="nav-item" data-target="tools-section">
       <i class="fas fa-tools"></i>
       <span class="nav-label">Tools</span>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#" class="nav-item" data-target="memories-section">
       <i class="fas fa-memory"></i>
       <span class="nav-label">Memories</span>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#" class="nav-item" data-target="profile-section">
       <i class="fas fa-user"></i>
       <span class="nav-label">Profile</span>
     </a>
@@ -1652,8 +1858,39 @@
         <button class="close-modal" id="close-mood-history">&times;</button>
       </div>
       
+      <div class="mood-chart">
+        <canvas id="moodChart"></canvas>
+      </div>
+      
       <div class="mood-history-container" id="mood-history-list">
-        <!-- Mood entries will be loaded here -->
+        <div class="mood-entry">
+          <div>
+            <span class="mood-emoji-history">😊</span>
+            <span>Great</span>
+          </div>
+          <div>Today, 9:45 AM</div>
+        </div>
+        <div class="mood-entry">
+          <div>
+            <span class="mood-emoji-history">😞</span>
+            <span>Sad</span>
+          </div>
+          <div>Yesterday, 7:30 PM</div>
+        </div>
+        <div class="mood-entry">
+          <div>
+            <span class="mood-emoji-history">😐</span>
+            <span>Neutral</span>
+          </div>
+          <div>Jan 22, 2:15 PM</div>
+        </div>
+        <div class="mood-entry">
+          <div>
+            <span class="mood-emoji-history">😊</span>
+            <span>Great</span>
+          </div>
+          <div>Jan 21, 10:30 AM</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1680,9 +1917,9 @@
     
     // Progress tracking
     let progressSources = {
-      mood: 0,
-      chat: 0,
-      journal: 0
+      mood: 12,
+      chat: 8,
+      journal: 5
     };
     
     // Define companions
@@ -1736,6 +1973,9 @@
         loadCompanion();
         loadMoodHistory();
         loadProgress();
+        
+        // Initialize mood chart
+        initMoodChart();
       } else {
         // Show login prompt for unauthenticated users
         document.getElementById('login-prompt').style.display = 'block';
@@ -1760,6 +2000,7 @@
         currentUser = data.session.user;
         document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
         document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
+        document.getElementById('profile-initial').textContent = currentUser.email[0].toUpperCase();
         return true;
       }
       
@@ -1770,6 +2011,32 @@
     function initBreathingExercise() {
       document.getElementById('cycle-count').textContent = cycleCount;
       document.getElementById('timer').textContent = '0:00';
+      
+      // Set initial color for breathing circle
+      updateBreathingCircleColor();
+    }
+    
+    // Update breathing circle color based on phase
+    function updateBreathingCircleColor() {
+      const breathCircle = document.querySelector('.breath-circle');
+      switch(currentPhase) {
+        case 0: // Inhale
+          breathCircle.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+          breathCircle.style.boxShadow = '0 6px 20px rgba(94, 96, 206, 0.35)';
+          break;
+        case 1: // Hold
+          breathCircle.style.background = 'linear-gradient(135deg, #5E60CE, #4A4DC7)';
+          breathCircle.style.boxShadow = '0 6px 20px rgba(74, 77, 199, 0.35)';
+          break;
+        case 2: // Exhale
+          breathCircle.style.background = 'linear-gradient(135deg, #64DFDF, #48BB78)';
+          breathCircle.style.boxShadow = '0 6px 20px rgba(100, 223, 223, 0.35)';
+          break;
+        case 3: // Hold
+          breathCircle.style.background = 'linear-gradient(135deg, #48BB78, #64DFDF)';
+          breathCircle.style.boxShadow = '0 6px 20px rgba(72, 187, 120, 0.35)';
+          break;
+      }
     }
     
     // Start/stop breathing exercise
@@ -1802,12 +2069,14 @@
             currentPhase = 0;
             document.getElementById('breath-text').textContent = 'Breathe In';
             document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
+            updateBreathingCircleColor();
           }
         } else if (phaseTime < 8) {
           if (currentPhase !== 1) {
             currentPhase = 1;
             document.getElementById('breath-text').textContent = 'Hold';
             document.getElementById('instruction').textContent = 'Hold your breath...';
+            updateBreathingCircleColor();
           }
         } else if (phaseTime < 12) {
           if (currentPhase !== 2) {
@@ -1816,12 +2085,14 @@
             document.getElementById('instruction').textContent = 'Exhale slowly through your mouth...';
             cycleCount++;
             document.getElementById('cycle-count').textContent = cycleCount;
+            updateBreathingCircleColor();
           }
         } else {
           if (currentPhase !== 3) {
             currentPhase = 3;
             document.getElementById('breath-text').textContent = 'Hold';
             document.getElementById('instruction').textContent = 'Hold your breath...';
+            updateBreathingCircleColor();
           }
         }
       }, 1000);
@@ -1845,10 +2116,27 @@
       document.getElementById('breath-text').textContent = 'Breathe In';
       document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
       document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Start';
+      updateBreathingCircleColor();
     }
     
     // Set up all event listeners
     function setupEventListeners() {
+      // Navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = this.dataset.target;
+          
+          // Update active nav item
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show target section
+          document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+          document.getElementById(target).classList.add('active');
+        });
+      });
+      
       // Affirmation refresh
       document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
       
@@ -1916,7 +2204,7 @@
       
       // Mood insights
       document.getElementById('mood-insights').addEventListener('click', async function() {
-        document.getElementById('mood-insights-modal').style.display = 'flex';
+        document.getElementById('mood-history-modal').style.display = 'flex';
       });
       
       // Settings modal
@@ -1949,6 +2237,42 @@
       document.getElementById('chat-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           sendMessage();
+        }
+      });
+    }
+    
+    // Initialize mood chart
+    function initMoodChart() {
+      const ctx = document.getElementById('moodChart').getContext('2d');
+      moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Mood Level',
+            data: [3, 1, 2, 3, 4, 3, 4],
+            borderColor: '#5E60CE',
+            backgroundColor: 'rgba(94, 96, 206, 0.1)',
+            borderWidth: 3,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 4,
+              ticks: {
+                callback: function(value) {
+                  const moods = ['Awful', 'Sad', 'Neutral', 'Good', 'Great'];
+                  return moods[value];
+                }
+              }
+            }
+          }
         }
       });
     }
@@ -2297,6 +2621,8 @@
         if (name) {
           document.getElementById('userInitialText').textContent = name[0].toUpperCase();
           document.getElementById('userInitialTextMobile').textContent = name[0].toUpperCase();
+          document.getElementById('profile-initial').textContent = name[0].toUpperCase();
+          document.getElementById('profile-name').textContent = name;
         }
       } catch (error) {
         showToast("Error saving settings: " + error.message, "error");
