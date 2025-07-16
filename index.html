@@ -49,7 +49,7 @@
     }
 
     section {
-      padding: 5rem 0;
+      padding: 4rem 0; /* Reduced padding */
     }
 
     /* Navigation */
@@ -163,7 +163,7 @@
 
     /* Hero Section */
     .hero {
-      padding: 10rem 0 6rem;
+      padding: 8rem 0 4rem; /* Reduced padding */
       position: relative;
       overflow: hidden;
       background: linear-gradient(to bottom, var(--light) 0%, rgba(241, 250, 238, 0.7) 100%);
@@ -172,7 +172,7 @@
     .hero-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 3rem; /* Reduced gap */
       align-items: center;
     }
 
@@ -191,7 +191,7 @@
     .hero-text p {
       font-size: 1.2rem;
       color: var(--dark);
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem; /* Reduced margin */
       max-width: 90%;
       opacity: 0.9;
     }
@@ -250,11 +250,12 @@
     /* Features Grid */
     .features {
       background: linear-gradient(to bottom, var(--light) 50%, #ffffff 100%);
+      padding-top: 2rem; /* Reduced top padding */
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem; /* Reduced margin */
     }
 
     .section-header h2 {
@@ -575,7 +576,7 @@
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
       text-align: center;
-      padding: 6rem 0;
+      padding: 5rem 0; /* Reduced padding */
       position: relative;
       overflow: hidden;
     }
@@ -612,7 +613,7 @@
     footer {
       background: var(--dark);
       color: white;
-      padding: 5rem 0 2rem;
+      padding: 4rem 0 2rem; /* Reduced padding */
     }
 
     .footer-content {
@@ -925,7 +926,7 @@
       }
 
       section {
-        padding: 4rem 0;
+        padding: 3rem 0; /* Reduced padding */
       }
 
       .section-header h2 {
@@ -951,7 +952,7 @@
       }
 
       .hero {
-        padding: 8rem 0 4rem;
+        padding: 7rem 0 3rem; /* Reduced padding */
       }
 
       .feature-card {
@@ -971,6 +972,10 @@
       .companion-card {
         max-width: 350px;
         margin: 0 auto;
+      }
+      
+      .section-header {
+        margin-bottom: 2rem; /* Reduced margin */
       }
     }
   </style>
@@ -1010,7 +1015,8 @@
             </div>
           </div>
           <div class="hero-image-container animate delay-1">
-            <img src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="AI emotional support" class="hero-image">
+            <!-- Updated hero image to warmer version -->
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Warm welcoming AI emotional support" class="hero-image">
             <div class="companion-badge animate delay-2">
               <h4>Meet Your AI Companions</h4>
               <p>Always available to listen and support you</p>
@@ -1076,7 +1082,8 @@
         </div>
         <div class="companion-grid">
           <div class="companion-card animate delay-1">
-            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elena AI companion" class="companion-image">
+            <!-- Updated to AI-generated companion images -->
+            <img src="https://images.thispersondoesnotexist.com/" alt="Elena AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Elena</h3>
               <span class="companion-role">Empathy Specialist</span>
@@ -1089,7 +1096,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-2">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David AI companion" class="companion-image">
+            <img src="https://images.thispersondoesnotexist.com/" alt="David AI companion" class="companion-image">
             <div class="companion-info">
               <h3>David</h3>
               <span class="companion-role">Resilience Coach</span>
@@ -1102,7 +1109,7 @@
             </div>
           </div>
           <div class="companion-card animate delay-3">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sophia AI companion" class="companion-image">
+            <img src="https://images.thispersondoesnotexist.com/" alt="Sophia AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Sophia</h3>
               <span class="companion-role">Mindfulness Guide</span>
@@ -1210,10 +1217,11 @@
           <h4>Serenity</h4>
           <p>Compassionate AI-powered support for emotional recovery and personal growth.</p>
           <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <!-- Updated with actual social media links -->
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
         <div class="footer-section">
@@ -1251,7 +1259,7 @@
 
   <script>
     // Initialize Supabase
-  const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
     const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
     
