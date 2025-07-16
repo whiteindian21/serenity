@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome Back | Serenity AI Healing Companion</title>
+  <title>Login | Therapathy</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     /* CSS Variables */
     :root {
-      --primary: #A8DADC;
-      --primary-light: #E1F0F0;
-      --primary-dark: #8AC0C2;
-      --secondary: #457B9D;
-      --accent: #E63946;
-      --dark: #1D3557;
-      --light: #F1FAEE;
+      --primary: #5E60CE;
+      --primary-light: #E0E1FF;
+      --primary-dark: #4A4DC7;
+      --secondary: #64DFDF;
+      --accent: #FF6B6B;
+      --dark: #25274D;
+      --light: #F8F9FF;
       --gray: #8A9BA8;
-      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --radius: 12px;
+      --transition: all 0.3s ease;
+      --radius: 16px;
     }
 
     /* Base Styles */
@@ -32,15 +32,18 @@
       font-family: 'Poppins', sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      line-height: 1.7;
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       -webkit-font-smoothing: antialiased;
-      background: linear-gradient(135deg, rgba(168, 218, 220, 0.1) 0%, rgba(241, 250, 238, 0.9) 100%), 
-                  radial-gradient(circle at 80% 20%, rgba(69, 123, 157, 0.08) 0%, transparent 50%);
-      padding: 2rem;
+      background-image: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      background-color: rgba(248, 249, 255, 0.92);
+      padding: 1rem;
     }
 
     h1, h2, h3 {
@@ -52,10 +55,10 @@
     .container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: var(--radius);
-      box-shadow: 0 25px 50px rgba(29, 53, 87, 0.15);
+      box-shadow: 0 20px 40px rgba(37, 39, 77, 0.2);
       width: 100%;
       max-width: 500px;
-      padding: 3rem;
+      padding: 2.5rem;
       position: relative;
       overflow: hidden;
       border: 1px solid var(--primary-light);
@@ -82,16 +85,16 @@
     /* Header */
     .header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .header h2 {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       color: var(--dark);
       margin-bottom: 0.5rem;
       position: relative;
       display: inline-block;
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -100,22 +103,22 @@
     .header p {
       color: var(--dark);
       opacity: 0.8;
-      margin-top: 1.5rem;
-      font-size: 1.05rem;
+      margin-top: 1rem;
+      font-size: 0.95rem;
     }
 
     /* Form Styles */
     .form-group {
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       position: relative;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       font-weight: 500;
       color: var(--dark);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       padding-left: 0.5rem;
     }
 
@@ -134,12 +137,12 @@
 
     /* Left icon positioning */
     .left-icon {
-      left: 1.2rem;
+      left: 1rem;
     }
 
     /* Right icon positioning */
     .right-icon {
-      right: 1.2rem;
+      right: 1rem;
       cursor: pointer;
       transition: var(--transition);
       z-index: 2;
@@ -151,9 +154,9 @@
 
     .form-group input {
       width: 100%;
-      padding: 1.1rem 3.2rem; /* Padding for both sides */
+      padding: 0.9rem 3rem;
       border: 1px solid #E2E8F0;
-      border-radius: var(--radius);
+      border-radius: 12px;
       font-size: 1rem;
       transition: var(--transition);
       background-color: var(--light);
@@ -163,12 +166,12 @@
 
     /* Add extra padding on left for icons */
     .has-left-icon {
-      padding-left: 3.2rem;
+      padding-left: 3rem;
     }
 
     /* Add extra padding on right for icons */
     .has-right-icon {
-      padding-right: 3.2rem;
+      padding-right: 3rem;
     }
 
     .form-group input:focus {
@@ -183,9 +186,9 @@
 
     /* Buttons */
     .btn {
-      padding: 1.1rem;
-      border-radius: var(--radius);
-      font-size: 1.05rem;
+      padding: 0.9rem;
+      border-radius: 12px;
+      font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
       transition: var(--transition);
@@ -202,14 +205,14 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.3);
+      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.3);
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(69, 123, 157, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(94, 96, 206, 0.4);
     }
 
     .btn-primary:disabled {
@@ -238,33 +241,33 @@
     /* Links */
     .forgot-link {
       text-align: right;
-      margin-top: -1rem;
-      margin-bottom: 1.5rem;
+      margin-top: -0.5rem;
+      margin-bottom: 1.2rem;
     }
 
     .forgot-link a {
       color: var(--gray);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-decoration: none;
       transition: var(--transition);
       font-weight: 500;
     }
 
     .forgot-link a:hover {
-      color: var(--secondary);
+      color: var(--primary);
       text-decoration: underline;
     }
 
     .login-link {
       text-align: center;
-      margin-top: 2rem;
-      font-size: 0.95rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
       color: var(--dark);
       opacity: 0.9;
     }
 
     .login-link a {
-      color: var(--secondary);
+      color: var(--primary);
       text-decoration: none;
       font-weight: 600;
       transition: var(--transition);
@@ -282,7 +285,7 @@
       left: 0;
       width: 100%;
       height: 2px;
-      background: var(--secondary);
+      background: var(--primary);
       transform: scaleX(0);
       transform-origin: right;
       transition: transform 0.3s ease;
@@ -294,37 +297,37 @@
     }
 
     /* Floating Elements */
-    .floating-heart {
+    .floating-brain {
       position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 80px;
-      height: 80px;
+      top: -15px;
+      right: -15px;
+      width: 60px;
+      height: 60px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.8rem;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
       animation: float 6s ease-in-out infinite;
       z-index: 1;
     }
 
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(5deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
       100% { transform: translateY(0px) rotate(0deg); }
     }
     
-    .floating-heart-2 {
+    .floating-leaf {
       position: absolute;
-      bottom: -25px;
-      left: -25px;
+      bottom: -20px;
+      left: -20px;
       width: 60px;
       height: 60px;
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--secondary), #48bfe3);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -340,7 +343,7 @@
     /* Error Message */
     .error-message {
       color: var(--accent);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       margin-top: 0.5rem;
       display: none;
       padding-left: 0.5rem;
@@ -359,13 +362,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       border-radius: var(--radius);
     }
 
     .loading-spinner {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border: 3px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       border-top-color: white;
@@ -379,15 +382,15 @@
     /* Toast Notification */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--dark);
       color: white;
-      padding: 0.9rem 1.8rem;
+      padding: 0.8rem 1.5rem;
       border-radius: 50px;
-      font-size: 0.95rem;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      font-size: 0.9rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
       gap: 0.8rem;
@@ -395,6 +398,7 @@
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       transform: translate(-50%, 100px);
+      max-width: 90%;
     }
 
     .toast.show {
@@ -403,7 +407,7 @@
     }
 
     .toast.success {
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
 
     .toast.error {
@@ -411,106 +415,75 @@
     }
     
     .toast i {
-      font-size: 1.2rem;
-    }
-
-    /* Social Login */
-    .social-login {
-      display: flex;
-      gap: 1.2rem;
-      justify-content: center;
-      margin: 1.5rem 0;
-    }
-    
-    .social-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      color: white;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    
-    .social-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
-    
-    .google {
-      background: linear-gradient(135deg, #DB4437, #c53929);
-    }
-    
-    .facebook {
-      background: linear-gradient(135deg, #4267B2, #3b5998);
-    }
-    
-    .apple {
-      background: linear-gradient(135deg, #000, #333);
+      font-size: 1.1rem;
     }
 
     /* Responsive Design */
-    @media (max-width: 768px) {
-      body {
-        padding: 1.5rem;
-      }
-      
+    @media (min-width: 480px) {
       .container {
-        padding: 2.5rem 1.8rem;
+        padding: 2.5rem;
       }
       
       .header h2 {
-        font-size: 1.9rem;
+        font-size: 2rem;
+      }
+      
+      .floating-brain {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+      
+      .floating-leaf {
+        width: 65px;
+        height: 65px;
+        font-size: 1.4rem;
       }
     }
 
-    @media (max-width: 480px) {
+    @media (min-width: 768px) {
       body {
-        padding: 1rem;
+        padding: 2rem;
       }
       
       .container {
-        padding: 2.2rem 1.5rem;
+        padding: 3rem;
       }
       
-      .floating-heart {
-        width: 65px;
-        height: 65px;
-        font-size: 1.5rem;
+      .floating-brain {
+        top: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
       }
       
-      .floating-heart-2 {
-        width: 50px;
-        height: 50px;
-        font-size: 1.1rem;
+      .floating-leaf {
+        bottom: -25px;
+        left: -25px;
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
       }
       
       .header h2 {
-        font-size: 1.7rem;
-      }
-      
-      .btn {
-        padding: 1rem;
+        font-size: 2.2rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="floating-heart">
-      <i class="fas fa-heart"></i>
+    <div class="floating-brain">
+      <i class="fas fa-brain"></i>
     </div>
     
-    <div class="floating-heart-2">
+    <div class="floating-leaf">
       <i class="fas fa-leaf"></i>
     </div>
     
     <div class="header">
-      <h2>Welcome to Serenity</h2>
+      <h2>Welcome to Therapathy</h2>
       <p>Continue your healing journey with us</p>
     </div>
     
@@ -546,8 +519,6 @@
         </div>
       </button>
       
-
-      
       <div class="login-link">
         Don't have an account? <a href="createaccount.html">Sign up</a>
       </div>
@@ -579,6 +550,7 @@
       const loginLoading = document.getElementById('loginLoading');
       const toast = document.getElementById('toast');
       const toastMessage = document.getElementById('toast-message');
+      const btnText = document.querySelector('.btn-text');
       
       // Toggle password visibility
       togglePassword.addEventListener('click', function() {
@@ -632,7 +604,7 @@
         
         // Disable button and show loading
         loginBtn.disabled = true;
-        document.querySelector('.btn-text').style.display = 'none';
+        btnText.style.display = 'none';
         loginLoading.style.display = 'flex';
         
         try {
@@ -679,7 +651,7 @@
         } finally {
           // Re-enable button and hide loading
           loginBtn.disabled = false;
-          document.querySelector('.btn-text').style.display = 'inline';
+          btnText.style.display = 'inline';
           loginLoading.style.display = 'none';
         }
       });
@@ -690,13 +662,6 @@
         const { email } = JSON.parse(savedUser);
         emailInput.value = email || '';
       }
-      
-      // Social login buttons
-      document.querySelectorAll('.social-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          showToast('Social login would be implemented here', 'info');
-        });
-      });
     });
   </script>
 </body>
