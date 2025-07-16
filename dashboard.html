@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Healing Journey | Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Therapathy - Healing Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --primary: #5D8BF4;
-      --primary-light: #85CDFD;
-      --primary-dark: #3D56B2;
-      --secondary: #FFB3C1;
+      --primary: #5E60CE;
+      --primary-light: #E0E1FF;
+      --primary-dark: #4A4DC7;
+      --secondary: #64DFDF;
       --accent: #FF6B6B;
-      --accent-light: #FFA8A7;
-      --dark: #2D3748;
-      --light: #F8FAFC;
-      --light-2: #EDF2F7;
-      --gray: #718096;
+      --dark: #25274D;
+      --light: #F8F9FF;
+      --gray: #8A9BA8;
       --gray-light: #E2E8F0;
       --success: #48BB78;
       --warning: #F6AD55;
       --error: #E53E3E;
-      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition: all 0.3s ease;
       --radius-lg: 24px;
       --radius-md: 16px;
       --radius-sm: 10px;
@@ -55,8 +53,8 @@
       -webkit-font-smoothing: antialiased;
       position: relative;
       overflow-x: hidden;
-      background: radial-gradient(circle at 20% 30%, rgba(93, 139, 244, 0.05) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 70%, rgba(255, 179, 193, 0.05) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 30%, rgba(94, 96, 206, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(100, 223, 223, 0.05) 0%, transparent 50%);
       padding-bottom: calc(70px + var(--safe-area-inset-bottom));
     }
 
@@ -93,108 +91,44 @@
       box-shadow: var(--shadow-light);
     }
     
-    .menu-toggle {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.2rem;
       color: var(--primary);
-      cursor: pointer;
     }
     
+    .app-logo i {
+      font-size: 1.5rem;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.25);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .user-avatar:hover {
+      transform: scale(1.1);
+    }
+
     /* Dashboard Content */
     .dashboard-content {
       padding: 0.5rem;
       position: relative;
       overflow: hidden;
-    }
-
-    /* Swipeable Sections */
-    .sections-container {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      padding-bottom: 1rem;
-    }
-    
-    .sections-container::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .section {
-      scroll-snap-align: start;
-      min-width: 100%;
-      background: rgba(255, 255, 255, 0.97);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin-right: 1rem;
-      box-shadow: var(--shadow-light);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-      animation: fadeInUp 0.6s ease-out;
-    }
-    
-    .section:last-child {
-      margin-right: 0;
-    }
-
-    .section:hover {
-      box-shadow: var(--shadow-medium);
-    }
-
-    .section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title i {
-      font-size: 1.2rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      box-shadow: 0 4px 12px rgba(93, 139, 244, 0.25);
-      transition: var(--transition);
-    }
-
-    .section-title h3 {
-      font-size: 1.3rem;
-      position: relative;
-      padding-bottom: 0.5rem;
-    }
-
-    .section-title h3::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 40px;
-      height: 3px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: 2px;
     }
 
     /* Dashboard Header */
@@ -228,66 +162,6 @@
       font-size: 0.9rem;
       color: var(--gray);
       font-weight: 500;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 12px rgba(93, 139, 244, 0.25);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .user-avatar:hover {
-      transform: scale(1.1);
-    }
-
-    /* Loss Type Selector */
-    .loss-type-selector {
-      display: flex;
-      overflow-x: auto;
-      gap: 0.6rem;
-      margin: 1.2rem 0;
-      padding-bottom: 0.6rem;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    
-    .loss-type-selector::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .loss-type {
-      background: rgba(93, 139, 244, 0.1);
-      color: var(--primary);
-      padding: 0.6rem 1rem;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      border: 1px solid rgba(93, 139, 244, 0.2);
-      font-weight: 600;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-    
-    .loss-type:hover {
-      background: rgba(93, 139, 244, 0.18);
-    }
-    
-    .loss-type.selected {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      border: 1px solid var(--primary);
-      box-shadow: 0 4px 12px rgba(93, 139, 244, 0.3);
     }
 
     /* Cards */
@@ -332,8 +206,8 @@
     }
 
     .affirmation-card {
-      background: linear-gradient(135deg, rgba(93, 139, 244, 0.08), rgba(255, 179, 193, 0.08));
-      border: 1px solid rgba(93, 139, 244, 0.18);
+      background: linear-gradient(135deg, rgba(94, 96, 206, 0.08), rgba(100, 223, 223, 0.08));
+      border: 1px solid rgba(94, 96, 206, 0.18);
     }
 
     #affirmation {
@@ -377,25 +251,25 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      box-shadow: 0 4px 12px rgba(93, 139, 244, 0.35);
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.35);
     }
 
     .btn-primary:hover {
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
       transform: translateY(-3px);
-      box-shadow: 0 6px 18px rgba(93, 139, 244, 0.45);
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.45);
     }
 
     .btn-secondary {
-      background: rgba(93, 139, 244, 0.12);
+      background: rgba(94, 96, 206, 0.12);
       color: var(--primary);
-      border: 1px solid rgba(93, 139, 244, 0.25);
+      border: 1px solid rgba(94, 96, 206, 0.25);
     }
 
     .btn-secondary:hover {
-      background: rgba(93, 139, 244, 0.18);
+      background: rgba(94, 96, 206, 0.18);
       transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(93, 139, 244, 0.15);
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.15);
     }
 
     .btn-accent {
@@ -418,9 +292,15 @@
     /* Action Cards */
     .action-cards {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 0.8rem;
       margin: 1.2rem 0;
+    }
+
+    @media (min-width: 768px) {
+      .action-cards {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .action-card {
@@ -449,7 +329,7 @@
       font-size: 1.8rem;
       color: var(--primary);
       margin-bottom: 0.8rem;
-      background: rgba(93, 139, 244, 0.12);
+      background: rgba(94, 96, 206, 0.12);
       width: 50px;
       height: 50px;
       border-radius: 50%;
@@ -500,7 +380,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      box-shadow: 0 6px 20px rgba(93, 139, 244, 0.35);
+      box-shadow: 0 6px 20px rgba(94, 96, 206, 0.35);
     }
     
     .breath-circle.pulse {
@@ -510,15 +390,15 @@
     @keyframes pulse {
       0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(93, 139, 244, 0.45);
+        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0.45);
       }
       70% {
         transform: scale(1);
-        box-shadow: 0 0 0 12px rgba(93, 139, 244, 0);
+        box-shadow: 0 0 0 12px rgba(94, 96, 206, 0);
       }
       100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(93, 139, 244, 0);
+        box-shadow: 0 0 0 0 rgba(94, 96, 206, 0);
       }
     }
     
@@ -552,7 +432,7 @@
       font-weight: 600;
       text-align: center;
       padding: 0.8rem;
-      background: rgba(93, 139, 244, 0.08);
+      background: rgba(94, 96, 206, 0.08);
       border-radius: var(--radius-sm);
     }
     
@@ -583,7 +463,7 @@
       width: 90px;
       height: 90px;
       border-radius: var(--radius-md);
-      background: linear-gradient(135deg, rgba(93, 139, 244, 0.12), rgba(255, 179, 193, 0.12));
+      background: linear-gradient(135deg, rgba(94, 96, 206, 0.12), rgba(100, 223, 223, 0.12));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -591,7 +471,7 @@
       font-size: 1.8rem;
       cursor: pointer;
       transition: var(--transition);
-      border: 1px solid rgba(93, 139, 244, 0.2);
+      border: 1px solid rgba(94, 96, 206, 0.2);
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow-light);
@@ -606,12 +486,12 @@
     
     .memory-item.add-memory {
       background: rgba(255, 255, 255, 0.7);
-      border: 2px dashed rgba(93, 139, 244, 0.35);
+      border: 2px dashed rgba(94, 96, 206, 0.35);
       color: var(--gray);
     }
     
     .memory-item.add-memory:hover {
-      background: rgba(93, 139, 244, 0.12);
+      background: rgba(94, 96, 206, 0.12);
       color: var(--primary);
     }
     
@@ -675,7 +555,7 @@
       border-radius: var(--radius-sm);
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(93, 139, 244, 0.15);
+      border: 1px solid rgba(94, 96, 206, 0.15);
       box-shadow: var(--shadow-light);
       flex: 0 0 auto;
       width: 75px;
@@ -699,10 +579,10 @@
     }
 
     .mood-option.selected {
-      background: rgba(93, 139, 244, 0.15);
-      border: 1px solid rgba(93, 139, 244, 0.35);
+      background: rgba(94, 96, 206, 0.15);
+      border: 1px solid rgba(94, 96, 206, 0.35);
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(93, 139, 244, 0.15);
+      box-shadow: 0 6px 15px rgba(94, 96, 206, 0.15);
     }
 
     .mood-option.selected .mood-emoji {
@@ -730,12 +610,12 @@
       border-radius: var(--radius-sm);
       transition: background 0.3s ease;
       background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(93, 139, 244, 0.15);
+      border: 1px solid rgba(94, 96, 206, 0.15);
       box-shadow: var(--shadow-light);
     }
 
     .activity-item:hover {
-      background: rgba(93, 139, 244, 0.08);
+      background: rgba(94, 96, 206, 0.08);
       transform: translateX(4px);
     }
 
@@ -750,7 +630,7 @@
       color: white;
       font-size: 1rem;
       flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(93, 139, 244, 0.25);
+      box-shadow: 0 4px 10px rgba(94, 96, 206, 0.25);
     }
 
     .activity-title {
@@ -782,7 +662,7 @@
       background: linear-gradient(to right, var(--primary), var(--secondary));
       border-radius: 6px;
       transition: width 1s ease;
-      box-shadow: 0 2px 8px rgba(93, 139, 244, 0.3);
+      box-shadow: 0 2px 8px rgba(94, 96, 206, 0.3);
     }
 
     .progress-info {
@@ -852,7 +732,7 @@
       justify-content: center;
       color: white;
       font-size: 2rem;
-      box-shadow: 0 6px 18px rgba(93, 139, 244, 0.35);
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.35);
       transition: transform 0.3s ease;
     }
     
@@ -882,19 +762,19 @@
     }
 
     .specialty-tag {
-      background: rgba(93, 139, 244, 0.12);
+      background: rgba(94, 96, 206, 0.12);
       color: var(--primary);
       padding: 0.4rem 0.8rem;
       border-radius: 30px;
       font-size: 0.85rem;
       font-weight: 700;
-      border: 1px solid rgba(93, 139, 244, 0.25);
+      border: 1px solid rgba(94, 96, 206, 0.25);
       transition: var(--transition);
       box-shadow: var(--shadow-light);
     }
     
     .specialty-tag:hover {
-      background: rgba(93, 139, 244, 0.2);
+      background: rgba(94, 96, 206, 0.2);
       transform: translateY(-2px);
       box-shadow: var(--shadow-medium);
     }
@@ -982,7 +862,7 @@
       text-align: center;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      background: rgba(45, 55, 72, 0.95);
+      background: rgba(37, 39, 77, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
@@ -1000,7 +880,7 @@
     }
     
     .toast.info {
-      background: rgba(93, 139, 244, 0.95);
+      background: rgba(94, 96, 206, 0.95);
     }
 
     /* Login Prompt */
@@ -1055,28 +935,6 @@
       box-shadow: var(--shadow-dark);
     }
 
-    /* Section Indicators */
-    .section-indicators {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 0.8rem;
-    }
-    
-    .indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gray-light);
-      transition: var(--transition);
-    }
-    
-    .indicator.active {
-      background: var(--primary);
-      width: 20px;
-      border-radius: 4px;
-    }
-
     /* Sign out button */
     .btn-signout {
       background: none;
@@ -1091,7 +949,7 @@
     
     .btn-signout:hover {
       color: var(--primary);
-      background: rgba(93, 139, 244, 0.12);
+      background: rgba(94, 96, 206, 0.12);
     }
     
     /* Modal styles */
@@ -1165,7 +1023,7 @@
     .form-control:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(93, 139, 244, 0.2);
+      box-shadow: 0 0 0 3px rgba(94, 96, 206, 0.2);
     }
     
     .btn-save {
@@ -1194,17 +1052,17 @@
     .memory-label-upload {
       display: block;
       padding: 1rem;
-      background: rgba(93, 139, 244, 0.1);
+      background: rgba(94, 96, 206, 0.1);
       border-radius: var(--radius-md);
       text-align: center;
       cursor: pointer;
-      border: 2px dashed rgba(93, 139, 244, 0.3);
+      border: 2px dashed rgba(94, 96, 206, 0.3);
       transition: var(--transition);
       margin-bottom: 1rem;
     }
     
     .memory-label-upload:hover {
-      background: rgba(93, 139, 244, 0.2);
+      background: rgba(94, 96, 206, 0.2);
     }
     
     .mood-history-container {
@@ -1234,7 +1092,7 @@
       width: 100%;
       height: 200px;
       border-radius: var(--radius-md);
-      background-color: var(--light-2);
+      background-color: var(--light);
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -1284,7 +1142,7 @@
       transform: translateY(100%);
       opacity: 0;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      border: 1px solid rgba(93, 139, 244, 0.1);
+      border: 1px solid rgba(94, 96, 206, 0.1);
       touch-action: none;
     }
     
@@ -1347,7 +1205,7 @@
       flex-direction: column;
       gap: 0.8rem;
       -webkit-overflow-scrolling: touch;
-      background: var(--light-2);
+      background: var(--light);
     }
     
     .message {
@@ -1366,7 +1224,7 @@
       align-self: flex-end;
       border-top-right-radius: 0;
       box-shadow: var(--shadow-light);
-      border: 1px solid rgba(93, 139, 244, 0.1);
+      border: 1px solid rgba(94, 96, 206, 0.1);
     }
     
     .message.companion {
@@ -1387,23 +1245,23 @@
     .chat-input {
       display: flex;
       padding: 0.8rem;
-      border-top: 1px solid rgba(93, 139, 244, 0.1);
+      border-top: 1px solid rgba(94, 96, 206, 0.1);
       background: white;
     }
     
     .chat-input input {
       flex: 1;
       padding: 0.8rem;
-      border: 1px solid rgba(93, 139, 244, 0.2);
+      border: 1px solid rgba(94, 96, 206, 0.2);
       border-radius: var(--radius-md);
       font-size: 0.95rem;
-      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Nunito', sans-serif;
       transition: var(--transition);
     }
     
     .chat-input input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(93, 139, 244, 0.2);
+      box-shadow: 0 0 0 2px rgba(94, 96, 206, 0.2);
       outline: none;
     }
     
@@ -1432,7 +1290,7 @@
       display: inline-block;
       width: 20px;
       height: 20px;
-      border: 3px solid rgba(93, 139, 244, 0.3);
+      border: 3px solid rgba(94, 96, 206, 0.3);
       border-radius: 50%;
       border-top-color: var(--primary);
       animation: spin 1s ease-in-out infinite;
@@ -1448,15 +1306,74 @@
       display: inline-block;
       vertical-align: middle;
     }
+    
+    /* Chat button */
+    .chat-fab {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-dark);
+      z-index: 50;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .chat-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(94, 96, 206, 0.4);
+    }
+    
+    .chat-fab i {
+      font-size: 1.5rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .card {
+        padding: 1rem;
+      }
+      
+      .dashboard-header {
+        padding: 0.8rem;
+      }
+      
+      .breath-container {
+        width: 140px;
+        height: 140px;
+      }
+      
+      .chat-container {
+        height: 70vh;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .container {
+        max-width: 800px;
+        padding: 0 1.5rem;
+      }
+      
+      .action-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- Mobile Header -->
   <div class="mobile-header">
-    <button class="menu-toggle" id="menu-toggle">
-      <i class="fas fa-bars"></i>
-    </button>
-    <h2>Serenity </h2>
+    <div class="app-logo">
+      <i class="fas fa-brain"></i>
+      <span>Therapathy</span>
+    </div>
     <div class="user-avatar" id="userInitialMobile" title="Settings">
       <span id="userInitialTextMobile">U</span>
     </div>
@@ -1475,240 +1392,140 @@
       </div>
     </div>
 
-    <!-- Swipeable Sections -->
+    <!-- Dashboard Content -->
     <div class="dashboard-content">
-      <div class="sections-container" id="sections-container">
-        <!-- Home Section -->
-        <section class="section">
-          <div class="section-title">
-            <i class="fas fa-home"></i>
-            <h3>Home</h3>
-          </div>
-          
-          <!-- Loss Type Selection -->
-          <div class="loss-type-selector">
-            <div class="loss-type selected">Relationship</div>
-            <div class="loss-type">Loved One</div>
-            <div class="loss-type">Pet</div>
-            <div class="loss-type">Job</div>
-            <div class="loss-type">Other</div>
-          </div>
-          
-          <div class="card affirmation-card" id="affirmationCard">
-            <p id="affirmation">"Healing isn't about forgetting, it's about learning to carry your loss with grace."</p>
-            <div class="card-actions">
-              <button class="btn btn-secondary" id="refreshAffirmation">
-                <i class="fas fa-sync-alt"></i> New
-              </button>
-              <button class="btn btn-accent" id="saveAffirmation">
-                <i class="far fa-heart"></i> Save
-              </button>
-            </div>
-          </div>
+      <!-- Affirmation Card -->
+      <div class="card affirmation-card" id="affirmationCard">
+        <h3><i class="fas fa-quote-left"></i> Daily Affirmation</h3>
+        <p id="affirmation">"Healing isn't about forgetting, it's about learning to carry your loss with grace."</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary" id="refreshAffirmation">
+            <i class="fas fa-sync-alt"></i> New
+          </button>
+          <button class="btn btn-accent" id="saveAffirmation">
+            <i class="far fa-heart"></i> Save
+          </button>
+        </div>
+      </div>
 
-          <div class="action-cards">
-            <div class="action-card" id="journal-btn">
-              <i class="fas fa-book-open"></i>
-              <h3>Journal</h3>
-              <p>Express your thoughts with guided prompts</p>
-              <button class="btn btn-primary">
-                Begin <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
+      <!-- Action Cards -->
+      <div class="action-cards">
+        <div class="action-card" id="journal-btn">
+          <i class="fas fa-book-open"></i>
+          <h3>Journal</h3>
+          <p>Express your thoughts with guided prompts</p>
+          <button class="btn btn-primary">
+            Begin <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
 
-            <div class="action-card" id="compassion-btn">
-              <i class="fas fa-hand-holding-heart"></i>
-              <h3>Self-Care</h3>
-              <p>Exercises to cultivate self-kindness</p>
-              <button class="btn btn-primary">
-                Explore <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
+        <div class="action-card" id="compassion-btn">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h3>Self-Care</h3>
+          <p>Exercises to cultivate self-kindness</p>
+          <button class="btn btn-primary">
+            Explore <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Breathing Exercise -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-wind"></i>
+          <h3>Calming Breath</h3>
+        </div>
+        <div class="breath-container">
+          <div class="breath-circle pulse">
+            <span id="breath-text">Breathe In</span>
           </div>
-        </section>
+        </div>
         
-        <!-- Tools Section -->
-        <section class="section">
-          <div class="section-title">
-            <i class="fas fa-tools"></i>
-            <h3>Healing Tools</h3>
+        <div class="breath-stats">
+          <div class="breath-stat">
+            <div class="stat-value" id="cycle-count">0</div>
+            <div class="stat-label">Cycles</div>
           </div>
-          
-          <div class="card fade-in">
-            <h3><i class="fas fa-lightbulb"></i> "Today's Reflection"</h3>
-            <p id="prompt">"What's one positive memory you can focus on today? How does remembering this make you feel?"</p>
-            <div class="card-actions">
-              <button class="btn btn-secondary" id="refreshPrompt">
-                <i class="fas fa-sync-alt"></i> New
-              </button>
-              <button class="btn btn-accent" id="savePrompt">
-                <i class="far fa-heart"></i> Save
-              </button>
-            </div>
+          <div class="breath-stat">
+            <div class="stat-value" id="timer">0:00</div>
+            <div class="stat-label">Time</div>
           </div>
-          
-          <!-- Breathing Exercise -->
-          <div class="card">
-            <div class="section-title">
-              <i class="fas fa-wind"></i>
-              <h3>Calming Breath</h3>
-            </div>
-            <div class="breath-container">
-              <div class="breath-circle pulse">
-                <span id="breath-text">Breathe In</span>
-              </div>
-            </div>
-            
-            <div class="breath-stats">
-              <div class="breath-stat">
-                <div class="stat-value" id="cycle-count">0</div>
-                <div class="stat-label">Cycles</div>
-              </div>
-              <div class="breath-stat">
-                <div class="stat-value" id="timer">0:00</div>
-                <div class="stat-label">Time</div>
-              </div>
-            </div>
-            
-            <div class="breath-instruction" id="instruction">
-              Breathe in slowly through your nose...
-            </div>
-            
-            <div class="breath-controls">
-              <button class="btn btn-primary" id="start-breath">
-                <i class="fas fa-play"></i> Start
-              </button>
-              <button class="btn btn-secondary" id="reset-breath">
-                <i class="fas fa-redo"></i> Reset
-              </button>
-            </div>
-          </div>
-        </section>
+        </div>
         
-        <!-- Memories Section -->
-        <section class="section">
-          <div class="section-title">
-            <i class="fas fa-memory"></i>
-            <h3>Memory Sanctuary</h3>
-          </div>
-          <p>Preserve meaningful memories</p>
-          <div class="memory-container" id="memories-container">
-            <div class="memory-item add-memory" id="add-memory-btn">
-              <i class="fas fa-plus"></i>
-            </div>
-          </div>
-          
-          <!-- Healing Progress -->
-          <div class="section-title" style="margin-top: 1.5rem;">
-            <i class="fas fa-chart-line"></i>
-            <h3>Your Progress</h3>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-info">
-            <span>Start</span>
-            <span id="progress-percent">0%</span>
-            <span>Healed</span>
-          </div>
-          
-          <!-- Progress Sources -->
-          <div class="progress-sources">
-            <div class="progress-source">
-              <div class="progress-source-icon">
-                <i class="fas fa-smile"></i>
-              </div>
-              <div class="progress-source-value" id="mood-source">0</div>
-              <div class="progress-source-label">Moods</div>
-            </div>
-            <div class="progress-source">
-              <div class="progress-source-icon">
-                <i class="fas fa-comments"></i>
-              </div>
-              <div class="progress-source-value" id="chat-source">0</div>
-              <div class="progress-source-label">Chats</div>
-            </div>
-            <div class="progress-source">
-              <div class="progress-source-icon">
-                <i class="fas fa-book"></i>
-              </div>
-              <div class="progress-source-value" id="journal-source">0</div>
-              <div class="progress-source-label">Journal</div>
-            </div>
-          </div>
-        </section>
+        <div class="breath-instruction" id="instruction">
+          Breathe in slowly through your nose...
+        </div>
         
-        <!-- Companion Section -->
-        <section class="section">
-          <div class="section-title">
-            <i class="fas fa-comments"></i>
-            <h3>Your Companion</h3>
-          </div>
-          
-          <div class="companion-container">
-            <div class="companion-avatar" id="companion-avatar">
-              <i class="fas fa-smile"></i>
-            </div>
-            <div class="companion-name" id="companion-name">Elena</div>
-            <div class="companion-role" id="companion-role">Healing Guide</div>
-            
-            <div class="companion-specialties" id="companion-specialties">
-              <div class="specialty-tag">Grief</div>
-              <div class="specialty-tag">Compassion</div>
-              <div class="specialty-tag">Support</div>
-            </div>
-            
-            <button class="btn btn-primary" id="start-chat-btn">
-              <i class="fas fa-comment"></i> Start Chat
-            </button>
-            
-            <button class="btn btn-secondary" id="change-companion-btn">
-              <i class="fas fa-sync-alt"></i> Change Companion
-            </button>
-          </div>
-          
-          <!-- Mood Tracker -->
-          <div class="section-title" style="margin-top: 1.5rem;">
-            <i class="fas fa-smile"></i>
-            <h3>How You Feel</h3>
-          </div>
-          
-          <div class="mood-options">
-            <div class="mood-option" data-mood="awful">
-              <div class="mood-emoji">😢</div>
-              <div class="mood-label">Awful</div>
-            </div>
-            <div class="mood-option" data-mood="sad">
-              <div class="mood-emoji">😞</div>
-              <div class="mood-label">Sad</div>
-            </div>
-            <div class="mood-option" data-mood="neutral">
-              <div class="mood-emoji">😐</div>
-              <div class="mood-label">Neutral</div>
-            </div>
-            <div class="mood-option selected" data-mood="great">
-              <div class="mood-emoji">😊</div>
-              <div class="mood-label">Great</div>
-            </div>
-          </div>
-          
-          <div class="quick-actions">
-            <button class="btn btn-secondary btn-sm" id="mood-history">
-              <i class="fas fa-history"></i> History
-            </button>
-            <button class="btn btn-secondary btn-sm" id="mood-insights">
-              <i class="fas fa-chart-pie"></i> Insights
-            </button>
-          </div>
-        </section>
+        <div class="breath-controls">
+          <button class="btn btn-primary" id="start-breath">
+            <i class="fas fa-play"></i> Start
+          </button>
+          <button class="btn btn-secondary" id="reset-breath">
+            <i class="fas fa-redo"></i> Reset
+          </button>
+        </div>
       </div>
       
-      <!-- Section Indicators -->
-      <div class="section-indicators" id="section-indicators">
-        <div class="indicator active"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
+      <!-- Companion Section -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-comments"></i>
+          <h3>Your Companion</h3>
+        </div>
+        
+        <div class="companion-container">
+          <div class="companion-avatar" id="companion-avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <div class="companion-name" id="companion-name">Elena</div>
+          <div class="companion-role" id="companion-role">Healing Guide</div>
+          
+          <div class="companion-specialties" id="companion-specialties">
+            <div class="specialty-tag">Grief</div>
+            <div class="specialty-tag">Compassion</div>
+            <div class="specialty-tag">Support</div>
+          </div>
+          
+          <button class="btn btn-primary" id="start-chat-btn">
+            <i class="fas fa-comment"></i> Start Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Mood Tracker -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-smile"></i>
+          <h3>How You Feel</h3>
+        </div>
+        
+        <div class="mood-options">
+          <div class="mood-option" data-mood="awful">
+            <div class="mood-emoji">😢</div>
+            <div class="mood-label">Awful</div>
+          </div>
+          <div class="mood-option" data-mood="sad">
+            <div class="mood-emoji">😞</div>
+            <div class="mood-label">Sad</div>
+          </div>
+          <div class="mood-option" data-mood="neutral">
+            <div class="mood-emoji">😐</div>
+            <div class="mood-label">Neutral</div>
+          </div>
+          <div class="mood-option selected" data-mood="great">
+            <div class="mood-emoji">😊</div>
+            <div class="mood-label">Great</div>
+          </div>
+        </div>
+        
+        <div class="quick-actions">
+          <button class="btn btn-secondary btn-sm" id="mood-history">
+            <i class="fas fa-history"></i> History
+          </button>
+          <button class="btn btn-secondary btn-sm" id="mood-insights">
+            <i class="fas fa-chart-pie"></i> Insights
+          </button>
+        </div>
       </div>
     </div>
     
@@ -1718,18 +1535,23 @@
         <i class="fas fa-sign-out-alt"></i> Sign Out
       </button>
     </div>
+    
+    <!-- Floating Chat Button -->
+    <div class="chat-fab" id="chat-fab">
+      <i class="fas fa-comment-dots"></i>
+    </div>
   </div>
 
   <!-- Login Prompt -->
   <div class="container login-prompt" id="login-prompt">
-    <h2>Welcome to Healing Journey</h2>
+    <h2>Welcome to Therapathy</h2>
     <p>Please sign in to access your personalized healing tools, resources, and progress tracking.</p>
     <button class="btn-login" id="go-to-login">
       <i class="fas fa-sign-in-alt"></i> Go to Login Page
     </button>
   </div>
 
-  <!-- Bottom Navigation (Mobile Only) -->
+  <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="#" class="nav-item active">
       <i class="fas fa-home"></i>
@@ -1744,8 +1566,8 @@
       <span class="nav-label">Memories</span>
     </a>
     <a href="#" class="nav-item">
-      <i class="fas fa-comments"></i>
-      <span class="nav-label">Companion</span>
+      <i class="fas fa-user"></i>
+      <span class="nav-label">Profile</span>
     </a>
   </nav>
 
@@ -1822,60 +1644,6 @@
     </div>
   </div>
   
-  <!-- Add Memory Modal -->
-  <div class="modal" id="add-memory-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add Memory</h3>
-        <button class="close-modal" id="close-memory">&times;</button>
-      </div>
-      
-      <div class="form-group">
-        <label for="memory-title">Memory Title</label>
-        <input type="text" id="memory-title" class="form-control" placeholder="Name this memory">
-      </div>
-      
-      <div class="form-group">
-        <label for="memory-description">Description</label>
-        <textarea id="memory-description" class="form-control" placeholder="Describe this memory" rows="3"></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>Add Photo</label>
-        <div class="memory-preview" id="memory-preview">
-          <i class="fas fa-image"></i>
-        </div>
-        <label for="memory-photo" class="memory-label-upload">
-          <i class="fas fa-cloud-upload-alt"></i> Click to upload an image
-        </label>
-        <input type="file" id="memory-photo" accept="image/*">
-      </div>
-      
-      <button class="btn-save" id="save-memory">Save Memory</button>
-    </div>
-  </div>
-  
-  <!-- View Memory Modal -->
-  <div class="modal" id="view-memory-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="view-memory-title"></h3>
-        <button class="close-modal" id="close-view-memory">&times;</button>
-      </div>
-      
-      <div class="memory-preview" id="view-memory-preview">
-        <i class="fas fa-image"></i>
-      </div>
-      
-      <p id="view-memory-description" style="margin: 1rem 0;"></p>
-      
-      <div class="memory-actions">
-        <button class="btn btn-secondary" id="edit-memory">Edit</button>
-        <button class="btn btn-accent" id="delete-memory">Delete</button>
-      </div>
-    </div>
-  </div>
-  
   <!-- Mood History Modal -->
   <div class="modal" id="mood-history-modal">
     <div class="modal-content">
@@ -1887,58 +1655,6 @@
       <div class="mood-history-container" id="mood-history-list">
         <!-- Mood entries will be loaded here -->
       </div>
-    </div>
-  </div>
-  
-  <!-- Mood Insights Modal -->
-  <div class="modal" id="mood-insights-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Mood Insights</h3>
-        <button class="close-modal" id="close-mood-insights">&times;</button>
-      </div>
-      
-      <div class="chart-container">
-        <canvas id="mood-chart"></canvas>
-      </div>
-      
-      <div style="margin-top: 1rem;">
-        <h4>Patterns & Insights</h4>
-        <p id="mood-insights-text">Loading insights...</p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Companion Selection Modal -->
-  <div class="modal" id="companion-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Select Your Companion</h3>
-        <button class="close-modal" id="close-companion">&times;</button>
-      </div>
-      
-      <div class="companion-container" style="margin-bottom: 1.5rem;">
-        <div class="companion-avatar" id="companion-preview-avatar">
-          <i class="fas fa-smile"></i>
-        </div>
-        <div class="companion-name" id="companion-preview-name">Elena</div>
-        <div class="companion-role" id="companion-preview-role">Healing Guide</div>
-      </div>
-      
-      <div class="form-group">
-        <label for="companion-select">Companion</label>
-        <select id="companion-select" class="form-control">
-          <option value="elena">Elena - Healing Guide</option>
-          <option value="david">David - Mindfulness Coach</option>
-          <option value="sophia">Sophia - Empathy Specialist</option>
-        </select>
-      </div>
-      
-      <div id="companion-description">
-        <p>Elena specializes in grief counseling and emotional support. She has 5 years of experience helping people navigate loss and find healing.</p>
-      </div>
-      
-      <button class="btn-save" id="save-companion">Select Companion</button>
     </div>
   </div>
   
@@ -1958,7 +1674,6 @@
     let currentPhase = 0;
     let progress = 0;
     let currentUser = null;
-    let currentSection = 0;
     let moodChart = null;
     let currentCompanion = "elena";
     let conversationHistory = [];
@@ -2015,11 +1730,9 @@
         initBreathingExercise();
         setupEventListeners();
         updateProgressBar();
-        setupSectionIndicators();
         showToast(`Welcome back!`, "success");
         
         // Load user-specific data
-        loadMemories();
         loadCompanion();
         loadMoodHistory();
         loadProgress();
@@ -2139,9 +1852,6 @@
       // Affirmation refresh
       document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
       
-      // Prompt refresh
-      document.getElementById('refreshPrompt').addEventListener('click', refreshPrompt);
-      
       // Mood tracking
       document.querySelectorAll('.mood-option').forEach(option => {
         option.addEventListener('click', function() {
@@ -2167,20 +1877,6 @@
         );
       });
       
-      document.getElementById('savePrompt').addEventListener('click', function() {
-        this.classList.toggle('active');
-        this.innerHTML = this.classList.contains('active') 
-          ? '<i class="fas fa-heart"></i> Saved' 
-          : '<i class="far fa-heart"></i> Save';
-        
-        showToast(
-          this.classList.contains('active') 
-            ? "Prompt saved" 
-            : "Prompt removed", 
-          "success"
-        );
-      });
-      
       // Sign out button
       document.getElementById('signout-btn').addEventListener('click', async function() {
         const { error } = await supabase.auth.signOut();
@@ -2192,17 +1888,6 @@
           // Redirect to login.html
           window.location.href = 'login.html';
         }
-      });
-      
-      // Loss type selection
-      document.querySelectorAll('.loss-type').forEach(type => {
-        type.addEventListener('click', function() {
-          document.querySelectorAll('.loss-type').forEach(t => t.classList.remove('selected'));
-          this.classList.add('selected');
-          refreshAffirmation();
-          refreshPrompt();
-          showToast(`Tools for ${this.textContent}`, "info");
-        });
       });
       
       // Breathing exercise controls
@@ -2232,25 +1917,7 @@
       // Mood insights
       document.getElementById('mood-insights').addEventListener('click', async function() {
         document.getElementById('mood-insights-modal').style.display = 'flex';
-        initMoodChart();
       });
-      
-      // Bottom navigation
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-          this.classList.add('active');
-          
-          // Scroll to the appropriate section
-          const navIndex = Array.from(this.parentElement.children).indexOf(this);
-          scrollToSection(navIndex);
-        });
-      });
-      
-      // Section scrolling
-      const sectionsContainer = document.getElementById('sections-container');
-      sectionsContainer.addEventListener('scroll', updateSectionIndicators);
       
       // Settings modal
       document.getElementById('userInitial').addEventListener('click', () => {
@@ -2270,51 +1937,11 @@
         document.getElementById('mood-history-modal').style.display = 'none';
       });
       
-      document.getElementById('close-mood-insights').addEventListener('click', () => {
-        document.getElementById('mood-insights-modal').style.display = 'none';
-      });
-      
-      // Save settings
-      document.getElementById('save-settings').addEventListener('click', saveSettings);
-      
-      // Memory handling - FIXED: Use event delegation for add memory button
-      document.getElementById('memories-container').addEventListener('click', function(e) {
-        if (e.target.id === 'add-memory-btn' || e.target.closest('#add-memory-btn')) {
-          document.getElementById('add-memory-modal').style.display = 'flex';
-        }
-      });
-      
-      document.getElementById('memory-photo').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const preview = document.getElementById('memory-preview');
-            preview.innerHTML = `<img src="${event.target.result}" alt="Memory preview">`;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-      
-      document.getElementById('save-memory').addEventListener('click', saveMemory);
-      
-      // Companion change
-      document.getElementById('change-companion-btn').addEventListener('click', () => {
-        document.getElementById('companion-modal').style.display = 'flex';
-      });
-      
-      document.getElementById('close-companion').addEventListener('click', () => {
-        document.getElementById('companion-modal').style.display = 'none';
-      });
-      
-      document.getElementById('companion-select').addEventListener('change', (e) => {
-        changeCompanionPreview(e.target.value);
-      });
-      
-      document.getElementById('save-companion').addEventListener('click', saveCompanion);
-      
       // Start chat with companion
       document.getElementById('start-chat-btn').addEventListener('click', startCompanionChat);
+      
+      // Floating chat button
+      document.getElementById('chat-fab').addEventListener('click', startCompanionChat);
       
       // Chat interface
       document.getElementById('close-chat').addEventListener('click', closeChat);
@@ -2322,45 +1949,6 @@
       document.getElementById('chat-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           sendMessage();
-        }
-      });
-    }
-    
-    // Setup section indicators
-    function setupSectionIndicators() {
-      const indicators = document.querySelectorAll('.indicator');
-      indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => {
-          scrollToSection(index);
-        });
-      });
-    }
-    
-    // Scroll to specific section
-    function scrollToSection(index) {
-      const sectionsContainer = document.getElementById('sections-container');
-      const sectionWidth = sectionsContainer.clientWidth;
-      sectionsContainer.scrollTo({
-        left: index * sectionWidth,
-        behavior: 'smooth'
-      });
-      currentSection = index;
-      updateSectionIndicators();
-    }
-    
-    // Update section indicators based on scroll position
-    function updateSectionIndicators() {
-      const sectionsContainer = document.getElementById('sections-container');
-      const scrollPosition = sectionsContainer.scrollLeft;
-      const sectionWidth = sectionsContainer.clientWidth;
-      const currentSection = Math.round(scrollPosition / sectionWidth);
-      
-      const indicators = document.querySelectorAll('.indicator');
-      indicators.forEach((indicator, index) => {
-        if (index === currentSection) {
-          indicator.classList.add('active');
-        } else {
-          indicator.classList.remove('active');
         }
       });
     }
@@ -2434,133 +2022,33 @@
     async function refreshAffirmation() {
       const card = document.getElementById('affirmationCard');
       const affirmationElement = document.getElementById('affirmation');
-      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
       
       card.style.opacity = '0.7';
       affirmationElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
       
       try {
-        // Call OpenAI Edge Function
-        const response = await fetch('/api/generate-affirmation', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            lossType: selectedLoss,
-            userId: currentUser.id
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to generate affirmation');
-        }
-        
-        const data = await response.json();
-        affirmationElement.textContent = `"${data.affirmation}"`;
-        showToast("AI-generated affirmation created", "success");
-      } catch (error) {
         // Fallback to local generation
-        const affirmations = {
-          "Relationship": [
-            "I am whole and complete just as I am.",
-            "Every ending creates space for new beginnings.",
-            "I release what no longer serves me and welcome new possibilities."
-          ],
-          "Loved One": [
-            "Their love remains with me always.",
-            "I carry their memory in my heart with gratitude.",
-            "Grief is the price of love, and I am grateful for the love we shared."
-          ],
-          "Pet": [
-            "The love we shared remains forever in my heart.",
-            "I am grateful for every moment we had together.",
-            "Their paw prints are forever on my soul."
-          ],
-          "Job": [
-            "My worth is not defined by my job title.",
-            "Endings create space for new opportunities.",
-            "I trust that the right path will reveal itself in time."
-          ],
-          "Other": [
-            "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
-            "Healing isn't linear, and that's okay.",
-            "I give myself permission to feel whatever I'm feeling."
-          ]
-        };
+        const affirmations = [
+          "I am whole and complete just as I am.",
+          "Every ending creates space for new beginnings.",
+          "I release what no longer serves me and welcome new possibilities.",
+          "Their love remains with me always.",
+          "I carry their memory in my heart with gratitude.",
+          "Grief is the price of love, and I am grateful for the love we shared.",
+          "The love we shared remains forever in my heart.",
+          "I am grateful for every moment we had together.",
+          "Their paw prints are forever on my soul.",
+          "My worth is not defined by my job title.",
+          "Endings create space for new opportunities.",
+          "I trust that the right path will reveal itself in time.",
+          "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
+          "Healing isn't linear, and that's okay.",
+          "I give myself permission to feel whatever I'm feeling."
+        ];
         
-        const categoryAffirmations = affirmations[selectedLoss] || affirmations["Other"];
-        const affirmation = categoryAffirmations[Math.floor(Math.random() * categoryAffirmations.length)];
+        const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
         affirmationElement.textContent = `"${affirmation}"`;
-        showToast("Local affirmation generated", "info");
-      } finally {
-        card.style.opacity = '1';
-      }
-    }
-    
-    // Generate new reflection prompt using OpenAI Edge Function
-    async function refreshPrompt() {
-      const card = document.querySelector('.card');
-      const promptElement = document.getElementById('prompt');
-      const selectedLoss = document.querySelector('.loss-type.selected').textContent;
-      
-      card.style.opacity = '0.7';
-      promptElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
-      
-      try {
-        // Call OpenAI Edge Function
-        const response = await fetch('/api/generate-prompt', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            lossType: selectedLoss,
-            userId: currentUser.id
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to generate prompt');
-        }
-        
-        const data = await response.json();
-        promptElement.textContent = data.prompt;
-        showToast("AI-generated reflection prompt created", "success");
-      } catch (error) {
-        // Fallback to local generation
-        const prompts = {
-          "Relationship": [
-            "What have you learned about yourself through this experience?",
-            "How might you show yourself kindness today?",
-            "What boundaries have you set that make you feel empowered?"
-          ],
-          "Loved One": [
-            "What's your favorite memory of them? Why does it stand out?",
-            "How have they influenced who you are today?",
-            "What lessons did they teach you that you still carry?"
-          ],
-          "Pet": [
-            "What was their most endearing habit or quirk?",
-            "What lessons about unconditional love did they teach you?",
-            "How did they show their affection for you?"
-          ],
-          "Job": [
-            "What skills or strengths did you gain from this experience?",
-            "What did you learn about what you truly value in work?",
-            "What possibilities excite you as you look forward?"
-          ],
-          "Other": [
-            "What's one thing you're grateful for today?",
-            "How have you grown through this experience?",
-            "What small step toward healing can you take today?"
-          ]
-        };
-        
-        const categoryPrompts = prompts[selectedLoss] || prompts["Other"];
-        const prompt = categoryPrompts[Math.floor(Math.random() * categoryPrompts.length)];
-        promptElement.textContent = prompt;
-        showToast("Local reflection prompt generated", "info");
+        showToast("Affirmation generated", "info");
       } finally {
         card.style.opacity = '1';
       }
@@ -2586,249 +2074,6 @@
       else greeting = 'Good evening';
       
       document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
-    }
-    
-    // Load user memories from Supabase - FIXED VERSION
-    async function loadMemories() {
-      if (!currentUser) return;
-      
-      try {
-        const { data: memories, error } = await supabase
-          .from('memories')
-          .select('id, title, description, image_url, created_at')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false })
-          .limit(5);
-        
-        if (error) throw error;
-        
-        const container = document.getElementById('memories-container');
-        // Clear existing memories except the add button
-        container.innerHTML = '<div class="memory-item add-memory" id="add-memory-btn"><i class="fas fa-plus"></i></div>';
-        
-        memories.forEach(memory => {
-          const memoryItem = document.createElement('div');
-          memoryItem.className = 'memory-item';
-          memoryItem.dataset.id = memory.id;
-          
-          // Add background image if exists
-          if (memory.image_url) {
-            memoryItem.style.backgroundImage = `url('${memory.image_url}')`;
-            memoryItem.classList.add('has-image');
-          }
-          
-          memoryItem.innerHTML = `
-            ${memory.image_url ? '' : `<i class="fas fa-image"></i>`}
-            <div class="memory-label">${memory.title}</div>
-          `;
-          container.insertBefore(memoryItem, container.firstChild);
-          
-          memoryItem.addEventListener('click', function() {
-            viewMemory(memory.id);
-          });
-        });
-      } catch (error) {
-        showToast("Error loading memories: " + error.message, "error");
-      }
-    }
-    
-    // View memory
-    async function viewMemory(id) {
-      try {
-        const { data: memory, error } = await supabase
-          .from('memories')
-          .select('*')
-          .eq('id', id)
-          .single();
-        
-        if (error) throw error;
-        
-        document.getElementById('view-memory-title').textContent = memory.title;
-        document.getElementById('view-memory-description').textContent = memory.description || '(No description)';
-        
-        const preview = document.getElementById('view-memory-preview');
-        if (memory.image_url) {
-          preview.innerHTML = `<img src="${memory.image_url}" alt="${memory.title}" style="max-width: 100%; max-height: 200px; border-radius: 10px;">`;
-        } else {
-          preview.innerHTML = '<i class="fas fa-image" style="font-size: 3rem;"></i>';
-        }
-        
-        document.getElementById('view-memory-modal').style.display = 'flex';
-        
-        // Set up memory actions
-        document.getElementById('edit-memory').onclick = function() {
-          document.getElementById('view-memory-modal').style.display = 'none';
-          editMemory(memory);
-        };
-        
-        document.getElementById('delete-memory').onclick = function() {
-          deleteMemory(memory.id);
-        };
-      } catch (error) {
-        showToast("Error loading memory: " + error.message, "error");
-      }
-    }
-    
-    // Edit memory
-    function editMemory(memory) {
-      document.getElementById('memory-title').value = memory.title;
-      document.getElementById('memory-description').value = memory.description || '';
-      
-      const preview = document.getElementById('memory-preview');
-      if (memory.image_url) {
-        preview.innerHTML = `<img src="${memory.image_url}" alt="${memory.title}">`;
-      } else {
-        preview.innerHTML = '<i class="fas fa-image"></i>';
-      }
-      
-      document.getElementById('add-memory-modal').style.display = 'flex';
-      
-      // Change save button to update
-      const saveBtn = document.getElementById('save-memory');
-      saveBtn.textContent = 'Update Memory';
-      saveBtn.onclick = function() {
-        updateMemory(memory.id);
-      };
-    }
-    
-    // Save a new memory
-    async function saveMemory() {
-      const title = document.getElementById('memory-title').value;
-      const description = document.getElementById('memory-description').value;
-      
-      if (!title) {
-        showToast("Please enter a title for your memory", "error");
-        return;
-      }
-      
-      try {
-        let imageUrl = null;
-        const fileInput = document.getElementById('memory-photo');
-        
-        // Upload image if exists
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const fileName = `${currentUser.id}/${Date.now()}-${file.name}`;
-          
-          // Upload to Supabase storage
-          const { error: uploadError } = await supabase.storage
-            .from('memories')
-            .upload(fileName, file);
-          
-          if (uploadError) throw uploadError;
-          
-          // Get public URL
-          const { data: urlData } = supabase.storage
-            .from('memories')
-            .getPublicUrl(fileName);
-          
-          imageUrl = urlData.publicUrl;
-        }
-        
-        // Save to database
-        const { error: dbError } = await supabase
-          .from('memories')
-          .insert([{ 
-            user_id: currentUser.id, 
-            title: title, 
-            description: description,
-            image_url: imageUrl,
-            created_at: new Date().toISOString()
-          }]);
-        
-        if (dbError) throw dbError;
-        
-        showToast("Memory saved successfully", "success");
-        document.getElementById('add-memory-modal').style.display = 'none';
-        loadMemories();
-        
-        // Reset form
-        document.getElementById('memory-title').value = '';
-        document.getElementById('memory-description').value = '';
-        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
-        fileInput.value = '';
-      } catch (error) {
-        showToast("Error saving memory: " + error.message, "error");
-      }
-    }
-    
-    // Update memory
-    async function updateMemory(id) {
-      const title = document.getElementById('memory-title').value;
-      const description = document.getElementById('memory-description').value;
-      
-      if (!title) {
-        showToast("Please enter a title for your memory", "error");
-        return;
-      }
-      
-      try {
-        let imageUrl = null;
-        const fileInput = document.getElementById('memory-photo');
-        
-        // Upload image if exists
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const fileName = `${currentUser.id}/${Date.now()}-${file.name}`;
-          
-          // Upload to Supabase storage
-          const { error: uploadError } = await supabase.storage
-            .from('memories')
-            .upload(fileName, file);
-          
-          if (uploadError) throw uploadError;
-          
-          // Get public URL
-          const { data: urlData } = supabase.storage
-            .from('memories')
-            .getPublicUrl(fileName);
-          
-          imageUrl = urlData.publicUrl;
-        }
-        
-        // Update database
-        const { error: dbError } = await supabase
-          .from('memories')
-          .update({ 
-            title: title, 
-            description: description,
-            image_url: imageUrl,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', id);
-        
-        if (dbError) throw dbError;
-        
-        showToast("Memory updated successfully", "success");
-        document.getElementById('add-memory-modal').style.display = 'none';
-        loadMemories();
-        
-        // Reset form
-        document.getElementById('memory-title').value = '';
-        document.getElementById('memory-description').value = '';
-        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
-        fileInput.value = '';
-      } catch (error) {
-        showToast("Error updating memory: " + error.message, "error");
-      }
-    }
-    
-    // Delete memory
-    async function deleteMemory(id) {
-      try {
-        const { error } = await supabase
-          .from('memories')
-          .delete()
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        showToast("Memory deleted successfully", "success");
-        document.getElementById('view-memory-modal').style.display = 'none';
-        loadMemories();
-      } catch (error) {
-        showToast("Error deleting memory: " + error.message, "error");
-      }
     }
     
     // Load companion information
@@ -2857,36 +2102,6 @@
         
       } catch (error) {
         showToast("Error loading companion: " + error.message, "error");
-      }
-    }
-    
-    // Change companion preview
-    function changeCompanionPreview(companionId) {
-      const companion = companions[companionId];
-      document.getElementById('companion-preview-name').textContent = companion.name;
-      document.getElementById('companion-preview-role').textContent = companion.role;
-      document.getElementById('companion-preview-avatar').innerHTML = `<i class="${companion.avatar}"></i>`;
-      document.getElementById('companion-description').innerHTML = `<p>${companion.intro}</p>`;
-    }
-    
-    // Save companion selection
-    async function saveCompanion() {
-      const companionId = document.getElementById('companion-select').value;
-      
-      try {
-        // Update user metadata
-        const { error } = await supabase.auth.updateUser({
-          data: { companion: companionId }
-        });
-        
-        if (error) throw error;
-        
-        // Update UI
-        loadCompanion();
-        showToast(`Companion changed to ${companionId === 'elena' ? 'Elena' : companionId === 'david' ? 'David' : 'Sophia'}`, "success");
-        document.getElementById('companion-modal').style.display = 'none';
-      } catch (error) {
-        showToast("Error changing companion: " + error.message, "error");
       }
     }
     
@@ -2960,60 +2175,43 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
       
       try {
-        // Get current session for access token
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError || !sessionData.session) {
-          throw new Error("Not authenticated. Please sign in again.");
-        }
-        const accessToken = sessionData.session.access_token;
-        
-        // Use the correct Supabase Function URL
-        const OPENAI_ENDPOINT = `https://minchdfasfsrfrmvgqdn.supabase.co/functions/v1/openai`;
-        
-        const response = await fetch(OPENAI_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-          },
-          body: JSON.stringify({
-            messages: conversationHistory.filter(msg => msg.role !== 'system'),
-            systemPrompt: companions[currentCompanion].systemPrompt
-          })
-        });
-        
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`API error: ${errorData.error || response.status}`);
-        }
-        
-        const data = await response.json();
-        const aiResponse = data.response;
-        
-        // Remove thinking indicator
-        chatMessages.removeChild(thinkingMessage);
-        
-        // Add AI response to UI
-        const responseTime = new Date();
-        const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        const companionMessage = document.createElement('div');
-        companionMessage.className = 'message companion';
-        companionMessage.innerHTML = `${aiResponse}<div class="message-time">${responseTimeString}</div>`;
-        chatMessages.appendChild(companionMessage);
-        
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Add to conversation history
-        conversationHistory.push({
-          role: "assistant",
-          content: aiResponse
-        });
-        
-        // Update progress
-        progressSources.chat++;
-        updateProgressBar();
-        saveProgress();
+        // Simulate AI response
+        setTimeout(() => {
+          // Remove thinking indicator
+          chatMessages.removeChild(thinkingMessage);
+          
+          // Add AI response to UI
+          const responseTime = new Date();
+          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          const responses = [
+            "I understand how you feel. Would you like to talk more about this?",
+            "That sounds challenging. Remember to be gentle with yourself during this process.",
+            "Thank you for sharing that with me. How has this been affecting your daily life?",
+            "I appreciate you opening up about this. What's one thing that brought you comfort today?",
+            "Your feelings are valid. Would it help to explore some coping strategies together?"
+          ];
+          
+          const response = responses[Math.floor(Math.random() * responses.length)];
+          
+          const companionMessage = document.createElement('div');
+          companionMessage.className = 'message companion';
+          companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
+          chatMessages.appendChild(companionMessage);
+          
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Add to conversation history
+          conversationHistory.push({
+            role: "assistant",
+            content: response
+          });
+          
+          // Update progress
+          progressSources.chat++;
+          updateProgressBar();
+          saveProgress();
+        }, 1500);
         
       } catch (error) {
         console.error("Companion chat error:", error);
@@ -3021,7 +2219,7 @@
         
         const errorMessage = document.createElement('div');
         errorMessage.className = 'message companion';
-        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?<br><small>Error: ${error.message}</small>`;
+        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
         chatMessages.appendChild(errorMessage);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
@@ -3070,139 +2268,6 @@
         });
       } catch (error) {
         showToast("Error loading mood history: " + error.message, "error");
-      }
-    }
-    
-    // Initialize mood chart
-    async function initMoodChart() {
-      if (!currentUser) return;
-      
-      try {
-        const ctx = document.getElementById('mood-chart').getContext('2d');
-        
-        // Get mood data from Supabase
-        const { data: moods, error } = await supabase
-          .from('mood_entries')
-          .select('mood, created_at')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: true })
-          .limit(30);
-        
-        if (error) throw error;
-        
-        // Prepare chart data
-        const moodValues = {
-          "awful": 1,
-          "sad": 2,
-          "neutral": 3,
-          "great": 4
-        };
-        
-        const moodData = moods.map(entry => ({
-          x: new Date(entry.created_at),
-          y: moodValues[entry.mood] || 0
-        }));
-        
-        // Destroy existing chart if it exists
-        if (moodChart) {
-          moodChart.destroy();
-        }
-        
-        moodChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            datasets: [{
-              label: 'Mood Level',
-              data: moodData,
-              backgroundColor: 'rgba(93, 139, 244, 0.2)',
-              borderColor: 'rgba(93, 139, 244, 1)',
-              borderWidth: 2,
-              tension: 0.3,
-              pointBackgroundColor: 'rgba(93, 139, 244, 1)',
-              pointRadius: 5
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  unit: 'day'
-                }
-              },
-              y: {
-                beginAtZero: false,
-                min: 0,
-                max: 5,
-                ticks: {
-                  callback: function(value) {
-                    const moodLabels = {
-                      1: 'Awful',
-                      2: 'Sad',
-                      3: 'Neutral',
-                      4: 'Great'
-                    };
-                    return moodLabels[value] || '';
-                  }
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    const moodLabels = {
-                      1: 'Awful',
-                      2: 'Sad',
-                      3: 'Neutral',
-                      4: 'Great'
-                    };
-                    return moodLabels[context.parsed.y] || context.parsed.y;
-                  }
-                }
-              }
-            }
-          }
-        });
-        
-        // Generate AI insights
-        generateMoodInsights(moods);
-        
-      } catch (error) {
-        showToast("Error loading mood insights: " + error.message, "error");
-      }
-    }
-    
-    // Generate AI-powered mood insights
-    async function generateMoodInsights(moods) {
-      try {
-        // Call OpenAI Edge Function for mood insights
-        const response = await fetch('/api/mood-insights', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            userId: currentUser.id,
-            moodData: moods
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to generate mood insights');
-        }
-        
-        const data = await response.json();
-        document.getElementById('mood-insights-text').innerHTML = 
-          `<p>${data.insights}</p>`;
-      } catch (error) {
-        document.getElementById('mood-insights-text').innerHTML = 
-          `<p>Your mood has been recorded ${moods.length} times. The chart shows your mood fluctuations over time.</p>`;
       }
     }
     
