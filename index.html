@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serenity | AI-Powered Emotional Support</title>
-  <meta name="description" content="Serenity provides compassionate AI-powered support for emotional healing with science-backed techniques and 24/7 availability.">
+  <title>Therapathy | Compassionate AI for Mental Wellness</title>
+  <meta name="description" content="Find emotional balance with Therapathy - your AI-powered companion for mental wellness and personal growth">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --primary: #A8DADC;
-      --primary-light: #E1F0F0;
-      --primary-dark: #8AC0C2;
-      --secondary: #457B9D;
-      --accent: #E63946;
-      --dark: #1D3557;
-      --light: #F1FAEE;
+      --primary: #8CB9BD;
+      --primary-light: #D6E4E5;
+      --primary-dark: #6A9CA0;
+      --secondary: #5D8EA9;
+      --accent: #E6A2A8;
+      --dark: #2D4A5D;
+      --light: #F8FBF9;
       --gray: #8A9BA8;
-      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
     * {
@@ -31,58 +30,49 @@
       font-family: 'Poppins', sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      line-height: 1.7;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
     h1, h2, h3, h4 {
       font-family: 'Playfair Display', serif;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 1.3;
+      color: var(--dark);
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1.5rem;
     }
 
     section {
-      padding: 4rem 0; /* Reduced padding */
+      padding: 3.5rem 0;
     }
 
-    /* Navigation */
-    nav {
+    /* Mobile Navigation */
+    .mobile-nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(241, 250, 238, 0.95);
-      padding: 1.5rem 0;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+      background: rgba(248, 251, 249, 0.95);
+      padding: 1.2rem 1.5rem;
       z-index: 1000;
-      transition: var(--transition);
-    }
-
-    nav.scrolled {
-      padding: 1rem 0;
-      background: rgba(241, 250, 238, 0.95);
-      backdrop-filter: blur(5px);
-    }
-
-    .nav-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
     }
 
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       color: var(--secondary);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -92,37 +82,164 @@
       color: var(--accent);
     }
 
-    .nav-links {
+    .mobile-menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--dark);
+      cursor: pointer;
+      z-index: 1001;
+      transition: var(--transition);
       display: flex;
-      gap: 2.5rem;
       align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.8rem;
+      z-index: 999;
+      transform: translateY(-100%);
+      transition: transform 0.4s ease;
+      padding: 5rem 1.5rem;
+    }
+
+    .nav-links.active {
+      transform: translateY(0);
     }
 
     .nav-links a {
       color: var(--dark);
       text-decoration: none;
       font-weight: 500;
+      font-size: 1.2rem;
       transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-links a:after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover:after {
+      padding: 0.6rem 1.2rem;
+      text-align: center;
+      border-radius: 30px;
       width: 100%;
+      max-width: 220px;
     }
 
     .nav-links a:hover {
       color: var(--secondary);
+      background: rgba(140, 185, 189, 0.1);
+    }
+
+    .nav-cta {
+      background: var(--secondary);
+      color: white;
+      border-radius: 50px;
+      padding: 0.8rem 1.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .nav-cta:hover {
+      background: #4e7d98;
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 6rem 0 2.5rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, var(--light) 0%, rgba(248, 251, 249, 0.7) 100%);
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 2rem;
+      opacity: 0.85;
+      font-weight: 400;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-image-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+      z-index: 2;
+      border: 1px solid rgba(140, 185, 189, 0.2);
+      background: rgba(255, 255, 255, 0.4);
+      margin: 0 auto;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: var(--transition);
+      border-radius: 20px;
+    }
+
+    .companion-badge {
+      position: absolute;
+      bottom: -15px;
+      right: -15px;
+      background: white;
+      padding: 1.2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      z-index: 3;
+      width: 160px;
+      transform: rotate(-5deg);
+      border: 1px solid var(--primary);
+      font-size: 0.9rem;
+    }
+
+    .companion-badge h4 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: var(--secondary);
+    }
+
+    .companion-badge p {
+      font-size: 0.85rem;
+      color: var(--dark);
+      opacity: 0.8;
     }
 
     /* Buttons */
@@ -138,141 +255,54 @@
       display: inline-flex;
       align-items: center;
       gap: 0.8rem;
-      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.2);
       font-weight: 500;
       letter-spacing: 0.5px;
       text-decoration: none;
+      box-shadow: 0 4px 15px rgba(93, 142, 169, 0.2);
+      margin: 0.5rem auto;
     }
 
     .cta-button:hover {
-      background: #3a6b8a;
+      background: #4e7d98;
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(69, 123, 157, 0.3);
+      box-shadow: 0 6px 20px rgba(93, 142, 169, 0.25);
     }
 
     .cta-button.primary {
       background: var(--primary);
       color: var(--dark);
-      box-shadow: 0 4px 15px rgba(168, 218, 220, 0.3);
+      box-shadow: 0 4px 15px rgba(140, 185, 189, 0.2);
     }
 
     .cta-button.primary:hover {
       background: var(--primary-dark);
-      box-shadow: 0 6px 20px rgba(168, 218, 220, 0.4);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding: 8rem 0 4rem; /* Reduced padding */
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(to bottom, var(--light) 0%, rgba(241, 250, 238, 0.7) 100%);
-    }
-
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem; /* Reduced gap */
-      align-items: center;
-    }
-
-    .hero-text {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-text h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1.5rem;
-      color: var(--dark);
-      line-height: 1.2;
-    }
-
-    .hero-text p {
-      font-size: 1.2rem;
-      color: var(--dark);
-      margin-bottom: 2rem; /* Reduced margin */
-      max-width: 90%;
-      opacity: 0.9;
-    }
-
-    .hero-image-container {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(29, 53, 87, 0.1);
-      transition: var(--transition);
-      z-index: 2;
-    }
-
-    .hero-image {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: var(--transition);
-    }
-
-    .hero-image-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 30px 60px -12px rgba(29, 53, 87, 0.15);
-    }
-
-    .companion-badge {
-      position: absolute;
-      bottom: -20px;
-      right: -20px;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      z-index: 3;
-      width: 180px;
-      transform: rotate(-5deg);
-      border: 2px solid var(--primary);
-    }
-
-    .companion-badge h4 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: var(--secondary);
-    }
-
-    .companion-badge p {
-      font-size: 0.9rem;
-      color: var(--dark);
-      opacity: 0.8;
+      box-shadow: 0 6px 20px rgba(140, 185, 189, 0.25);
     }
 
     /* Features Grid */
     .features {
       background: linear-gradient(to bottom, var(--light) 50%, #ffffff 100%);
-      padding-top: 2rem; /* Reduced top padding */
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 3rem; /* Reduced margin */
+      margin-bottom: 2.5rem;
     }
 
     .section-header h2 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       margin-bottom: 1rem;
       position: relative;
       display: inline-block;
-      color: var(--dark);
     }
 
     .section-header h2:after {
       content: '';
       position: absolute;
-      bottom: -10px;
+      bottom: -8px;
       left: 50%;
       transform: translateX(-50%);
-      width: 60px;
+      width: 50px;
       height: 3px;
       background: var(--primary);
       border-radius: 2px;
@@ -280,25 +310,27 @@
 
     .section-header p {
       max-width: 700px;
-      margin: 1rem auto 0;
+      margin: 1.2rem auto 0;
       color: var(--dark);
       opacity: 0.8;
+      font-size: 1.05rem;
     }
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2.5rem;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
     }
 
     .feature-card {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 2rem;
+      border-radius: 20px;
       transition: var(--transition);
       text-align: center;
-      border: 1px solid var(--primary-light);
+      border: 1px solid rgba(140, 185, 189, 0.2);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
       position: relative;
       overflow: hidden;
     }
@@ -321,19 +353,19 @@
     }
 
     .feature-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(168, 218, 220, 0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(140, 185, 189, 0.15);
     }
 
     .feature-icon {
       width: 70px;
       height: 70px;
-      background: var(--primary-light);
-      border-radius: 20px;
+      background: rgba(140, 185, 189, 0.15);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1.2rem;
       color: var(--secondary);
       font-size: 1.8rem;
       transition: var(--transition);
@@ -346,13 +378,14 @@
     }
 
     .feature-card h3 {
-      margin-bottom: 1rem;
-      color: var(--dark);
+      margin-bottom: 0.8rem;
+      font-size: 1.4rem;
     }
 
     .feature-card p {
       color: var(--dark);
       opacity: 0.8;
+      font-size: 1rem;
     }
 
     /* Companions Section */
@@ -364,27 +397,30 @@
 
     .companion-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2.5rem;
-      margin-top: 3rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
     }
 
     .companion-card {
-      background: white;
+      background: rgba(255, 255, 255, 0.7);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       transition: var(--transition);
       position: relative;
-      border: 1px solid var(--primary-light);
+      border: 1px solid rgba(140, 185, 189, 0.2);
       display: flex;
       flex-direction: column;
       height: 100%;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .companion-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(168, 218, 220, 0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(140, 185, 189, 0.2);
     }
 
     .companion-image {
@@ -395,7 +431,7 @@
     }
 
     .companion-info {
-      padding: 2rem;
+      padding: 1.8rem;
       text-align: center;
       flex-grow: 1;
       display: flex;
@@ -404,22 +440,24 @@
 
     .companion-info h3 {
       margin-bottom: 0.5rem;
-      color: var(--dark);
+      font-size: 1.5rem;
     }
 
     .companion-role {
       color: var(--secondary);
       font-weight: 500;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       display: block;
+      font-size: 1rem;
     }
 
     .companion-bio {
       color: var(--dark);
       opacity: 0.8;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       font-size: 0.95rem;
       flex-grow: 1;
+      line-height: 1.7;
     }
 
     .specialty-tags {
@@ -431,11 +469,11 @@
     }
 
     .specialty-tag {
-      background: var(--primary-light);
+      background: rgba(140, 185, 189, 0.15);
       color: var(--secondary);
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
       font-weight: 500;
     }
 
@@ -446,25 +484,28 @@
 
     .steps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      margin-top: 3rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
     }
 
     .step-card {
       padding: 2rem;
       position: relative;
       text-align: center;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
       transition: var(--transition);
-      border: 1px solid var(--primary-light);
+      border: 1px solid rgba(140, 185, 189, 0.2);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .step-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(168, 218, 220, 0.15);
+      box-shadow: 0 12px 25px rgba(140, 185, 189, 0.15);
     }
 
     .step-number {
@@ -476,7 +517,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1.2rem;
       font-weight: 600;
       font-size: 1.3rem;
       transition: var(--transition);
@@ -489,13 +530,15 @@
     }
 
     .step-card h3 {
-      margin-bottom: 1rem;
-      color: var(--dark);
+      margin-bottom: 0.8rem;
+      font-size: 1.3rem;
     }
 
     .step-card p {
       color: var(--dark);
       opacity: 0.8;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
     /* Testimonials */
@@ -504,46 +547,50 @@
     }
 
     .testimonial-cards {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+      margin-top: 2rem;
     }
 
     .testimonial-card {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 15px;
-      max-width: 380px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 2rem;
+      border-radius: 20px;
       transition: var(--transition);
       position: relative;
-      border: 1px solid var(--primary-light);
+      border: 1px solid rgba(140, 185, 189, 0.2);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .testimonial-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(168, 218, 220, 0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(140, 185, 189, 0.2);
     }
 
     .testimonial-card:before {
       content: '\201C';
       font-family: 'Playfair Display', serif;
-      font-size: 5rem;
+      font-size: 4rem;
       position: absolute;
       top: -10px;
       left: 15px;
-      color: rgba(168, 218, 220, 0.2);
+      color: rgba(140, 185, 189, 0.2);
       line-height: 1;
       z-index: 0;
     }
 
     .testimonial-text {
       font-style: italic;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       color: var(--dark);
       position: relative;
       z-index: 1;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
     .testimonial-author {
@@ -553,16 +600,17 @@
     }
 
     .author-avatar {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid var(--primary);
+      border: 2px solid var(--primary);
     }
 
     .author-info h4 {
       margin-bottom: 0.3rem;
       color: var(--secondary);
+      font-size: 1.1rem;
     }
 
     .author-info p {
@@ -576,27 +624,31 @@
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
       text-align: center;
-      padding: 5rem 0; /* Reduced padding */
+      padding: 4rem 1.5rem;
       position: relative;
       overflow: hidden;
+      border-radius: 0 0 30px 30px;
+      margin-top: 2rem;
     }
 
     .cta-section h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
     }
 
     .cta-section p {
       max-width: 600px;
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 2rem;
       opacity: 0.9;
+      font-size: 1.05rem;
     }
 
     .cta-buttons {
       display: flex;
-      gap: 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
       justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
     }
 
     .cta-button.white {
@@ -613,18 +665,22 @@
     footer {
       background: var(--dark);
       color: white;
-      padding: 4rem 0 2rem; /* Reduced padding */
+      padding: 3rem 0 1.5rem;
     }
 
     .footer-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      margin-bottom: 3rem;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-section {
+      text-align: center;
     }
 
     .footer-section h4 {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       color: var(--primary);
       font-size: 1.2rem;
     }
@@ -634,13 +690,14 @@
     }
 
     .footer-links li {
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.7rem;
     }
 
     .footer-links a {
       color: var(--gray);
       text-decoration: none;
       transition: var(--transition);
+      font-size: 0.95rem;
     }
 
     .footer-links a:hover {
@@ -650,16 +707,17 @@
 
     .footer-bottom {
       text-align: center;
-      padding-top: 2rem;
+      padding-top: 1.5rem;
       border-top: 1px solid rgba(255,255,255,0.1);
       color: var(--gray);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .social-links {
       display: flex;
       gap: 1rem;
-      margin-top: 1.5rem;
+      justify-content: center;
+      margin-top: 1.2rem;
     }
 
     .social-links a {
@@ -678,17 +736,6 @@
       background: var(--primary);
       color: var(--dark);
       transform: translateY(-3px);
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      color: var(--dark);
-      cursor: pointer;
-      z-index: 1001;
     }
 
     /* Animation Enhancements */
@@ -724,400 +771,254 @@
     .floating {
       position: absolute;
       z-index: 1;
-      opacity: 0.15;
+      opacity: 0.1;
+      animation: float 15s ease-in-out infinite;
+      filter: blur(1px);
+      display: none; /* Hide on mobile */
     }
 
-    .floating-1 {
-      top: 20%;
-      left: 5%;
-      width: 120px;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .floating-2 {
-      bottom: 15%;
-      right: 8%;
-      width: 100px;
-      animation: float 10s ease-in-out infinite;
-    }
-
-    .floating-3 {
-      top: 40%;
-      right: 10%;
-      width: 80px;
-      animation: float 7s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(5deg); }
-      100% { transform: translateY(0px) rotate(0deg); }
-    }
-
-    /* Chat Bubbles */
-    .chat-bubble {
-      position: absolute;
-      background: white;
-      border-radius: 20px;
-      padding: 1rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      max-width: 200px;
-      z-index: 2;
-      font-size: 0.9rem;
-      opacity: 0;
-      transform: scale(0);
-      animation: popIn 0.5s forwards;
-      display: none;
-    }
-
-    .chat-bubble:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 0;
-      border: 10px solid transparent;
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0); }
-      80% { opacity: 1; transform: scale(1.05); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    .bubble-1 {
-      top: 15%;
-      right: 25%;
-      animation-delay: 0.8s;
-    }
-
-    .bubble-1:after {
-      bottom: -20px;
-      left: 20px;
-      border-top-color: white;
-      border-bottom: 0;
-    }
-
-    .bubble-2 {
-      bottom: 20%;
-      left: 20%;
-      animation-delay: 1.2s;
-    }
-
-    .bubble-2:after {
-      top: -20px;
-      right: 20px;
-      border-bottom-color: white;
-      border-top: 0;
-    }
-
-    /* New AI-themed elements */
-    .ai-gradient {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background: radial-gradient(circle at 20% 30%, rgba(168, 218, 220, 0.1) 0%, transparent 40%),
-                  radial-gradient(circle at 80% 70%, rgba(69, 123, 157, 0.1) 0%, transparent 40%);
-      z-index: 1;
-      pointer-events: none;
-    }
-    
-    .ai-grid-pattern {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-image: 
-        linear-gradient(rgba(29, 53, 87, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(29, 53, 87, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: 0;
-      pointer-events: none;
-    }
-    
-    .ai-particle {
+    /* Calming Particles */
+    .calming-particle {
       position: absolute;
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: var(--primary);
-      opacity: 0.5;
+      opacity: 0.3;
       z-index: 1;
+      animation: float 8s ease-in-out infinite;
     }
 
-    /* Responsive Design */
-    @media (min-width: 1025px) {
-      .chat-bubble {
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Responsive Design - Tablet & Desktop */
+    @media (min-width: 768px) {
+      section {
+        padding: 4.5rem 0;
+      }
+      
+      .hero {
+        padding: 8rem 0 3.5rem;
+      }
+      
+      .hero-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 3.5rem;
+      }
+      
+      .hero-text {
+        text-align: left;
+        flex: 1;
+      }
+      
+      .hero-text p {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .hero-image-container {
+        flex: 1;
+        margin: 0;
+      }
+      
+      .cta-button {
+        margin: 0.5rem 0;
+      }
+      
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .companion-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      
+      .testimonial-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .cta-buttons {
+        flex-direction: row;
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .floating {
         display: block;
       }
-      
-      .bubble-1 {
-        top: 15%;
-        right: 25%;
-      }
-      
-      .bubble-2 {
-        bottom: 20%;
-        left: 20%;
-      }
     }
 
-    @media (max-width: 1024px) {
+    @media (min-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .companion-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
       .hero-text h1 {
         font-size: 3rem;
       }
       
-      .chat-bubble {
-        display: none;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .mobile-menu-btn {
-        display: block;
-      }
-      
-      .nav-links {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--light);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
-        z-index: 1000;
-      }
-      
-      .nav-links.active {
-        display: flex;
-      }
-
-      .hero-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 2rem;
-      }
-
-      .hero-text p {
-        max-width: 100%;
-        margin: 0 auto 2rem;
-      }
-
-      .hero-image-container {
-        margin: 0 auto;
-        order: -1;
-        max-width: 400px;
-      }
-
-      .companion-badge {
-        position: relative;
-        width: 100%;
-        max-width: 250px;
-        margin: -20px auto 0;
-        transform: rotate(0);
-        right: auto;
-        bottom: auto;
-      }
-
-      section {
-        padding: 3rem 0; /* Reduced padding */
-      }
-
       .section-header h2 {
-        font-size: 2rem;
-      }
-
-      .cta-section h2 {
-        font-size: 2rem;
+        font-size: 2.4rem;
       }
       
-      .companion-grid {
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 1.5rem;
-      }
-
-      .hero-text h1 {
-        font-size: 2.3rem;
-      }
-
-      .hero {
-        padding: 7rem 0 3rem; /* Reduced padding */
-      }
-
-      .feature-card {
-        padding: 2rem;
-      }
-
-      .cta-buttons {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .cta-button {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .companion-card {
-        max-width: 350px;
-        margin: 0 auto;
-      }
-      
-      .section-header {
-        margin-bottom: 2rem; /* Reduced margin */
+      .mobile-nav {
+        padding: 1.2rem 2rem;
       }
     }
   </style>
 </head>
 <body>
-  <nav id="mainNav">
-    <div class="container nav-content">
-      <a href="#" class="logo">
-        <i class="fas fa-brain logo-icon"></i>
-        Serenity
-      </a>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-      <div class="nav-links" id="navLinks">
-        <a href="#features">Features</a>
-        <a href="#companions">Companions</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="dashboard.html" class="cta-button" id="navAuthBtn">Dashboard <i class="fas fa-arrow-right"></i></a>
-      </div>
-    </div>
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav">
+    <a href="#" class="logo">
+      <i class="fas fa-hands-helping logo-icon"></i>
+      Therapathy
+    </a>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
   </nav>
 
+  <div class="nav-links" id="navLinks">
+    <a href="#features">Features</a>
+    <a href="#companions">Companions</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="login.html" class="nav-cta">Get Started</a>
+  </div>
+
   <main>
-    <div class="ai-gradient"></div>
-    <div class="ai-grid-pattern"></div>
-    
+    <!-- Hero Section -->
     <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="animate">Your Healing Journey<br>Starts Here</h1>
-            <p class="animate delay-1">Serenity is your compassionate AI companion, offering gentle guidance through emotional challenges with science-backed techniques and always-available support.</p>
-            <div class="animate delay-2">
-              <a href="login.html" id="beginHealingBtn" class="cta-button"> Begin Healing Today
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
+          <div class="hero-text animate">
+            <h1>Your Path to Emotional Wellness Starts Here</h1>
+            <p>Therapathy is your compassionate AI companion, offering science-backed support for your mental health journey, available whenever you need it.</p>
+            <a href="login.html" class="cta-button">Begin Healing Journey</a>
           </div>
+          
           <div class="hero-image-container animate delay-1">
-            <!-- Updated hero image to warmer version -->
-            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Warm welcoming AI emotional support" class="hero-image">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Calming nature scene" class="hero-image">
             <div class="companion-badge animate delay-2">
-              <h4>Meet Your AI Companions</h4>
-              <p>Always available to listen and support you</p>
+              <h4>AI Companion</h4>
+              <p>Always here to listen</p>
             </div>
           </div>
         </div>
       </div>
+      
+      <!-- Floating elements for desktop -->
       <svg class="floating floating-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <path fill="var(--primary)" d="M45.5,-59.3C58.9,-48.8,69.6,-34.7,73.1,-18.9C76.6,-3.1,72.9,14.4,63.5,29.3C54.1,44.2,39,56.5,21.8,65.8C4.6,75.1,-14.7,81.4,-30.2,75.3C-45.7,69.2,-57.5,50.7,-64.9,31.5C-72.2,12.3,-75.1,-7.6,-68.5,-23.9C-61.9,-40.2,-45.9,-52.9,-29.6,-62.5C-13.3,-72.1,3.3,-78.6,19.8,-74.7C36.3,-70.8,52.6,-56.5,45.5,-59.3Z" transform="translate(100 100)" />
       </svg>
-      <svg class="floating floating-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <path fill="var(--secondary)" d="M42.7,-58.8C55.1,-50.3,64.8,-38.2,69.3,-23.9C73.8,-9.6,73.1,6.9,66.7,21.1C60.3,35.3,48.2,47.2,33.7,56.3C19.2,65.4,2.3,71.7,-13.6,67.9C-29.5,64.1,-44.4,50.2,-54.7,33.6C-65,17,-70.6,-2.3,-66.8,-19.3C-63,-36.3,-49.7,-51,-34.4,-59.8C-19.1,-68.6,-1.8,-71.5,14.1,-67.1C30,-62.7,44.9,-51.1,42.7,-58.8Z" transform="translate(100 100)" />
-      </svg>
-      <svg class="floating floating-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <path fill="var(--primary)" d="M38.7,-59.1C49.5,-49.2,57.1,-36.5,62.6,-22.8C68.1,-9.1,71.5,5.6,67.8,18.1C64.1,30.7,53.3,41.1,40.9,49.7C28.4,58.3,14.2,65.1,-0.8,66.2C-15.8,67.3,-31.6,62.7,-45.3,54.8C-59.1,46.8,-70.9,35.5,-75.2,21.5C-79.5,7.5,-76.4,-9.2,-69.2,-23.5C-62,-37.8,-50.8,-49.7,-37.9,-58.9C-25,-68.1,-10.4,-74.5,3.4,-79.4C17.1,-84.3,34.3,-87.6,38.7,-59.1Z" transform="translate(100 100)" />
-      </svg>
-      <div class="chat-bubble bubble-1">"I'm here whenever you need to talk"</div>
       
-      <!-- AI Particles -->
-      <div class="ai-particle" style="top: 15%; left: 12%;"></div>
-      <div class="ai-particle" style="top: 25%; right: 15%;"></div>
-      <div class="ai-particle" style="bottom: 20%; left: 18%;"></div>
-      <div class="ai-particle" style="bottom: 30%; right: 22%;"></div>
+      <!-- Calming Particles -->
+      <div class="calming-particle" style="top: 15%; left: 12%;"></div>
+      <div class="calming-particle" style="top: 25%; right: 15%;"></div>
     </section>
 
+    <!-- Features Section -->
     <section id="features" class="features">
       <div class="container">
         <div class="section-header animate">
-          <h2>Your Healing Toolkit</h2>
-          <p>Comprehensive features designed to support your emotional recovery journey</p>
+          <h2>Your Mental Wellness Toolkit</h2>
+          <p>Therapathy combines therapeutic techniques with AI technology to support your emotional health</p>
         </div>
         <div class="features-grid">
           <div class="feature-card animate delay-1">
             <div class="feature-icon">
               <i class="fas fa-comments"></i>
             </div>
-            <h3>24/7 Emotional Support</h3>
-            <p>Always-available compassionate listening and guidance whenever you need it most</p>
+            <h3>Thoughtful Conversations</h3>
+            <p>Engage in meaningful dialogues that help process emotions and gain new perspectives</p>
           </div>
+          
           <div class="feature-card animate delay-2">
             <div class="feature-icon">
               <i class="fas fa-brain"></i>
             </div>
             <h3>Cognitive Exercises</h3>
-            <p>Science-backed CBT techniques to reframe negative thoughts and build resilience</p>
+            <p>Science-backed techniques to reframe negative thoughts and build resilience</p>
           </div>
+          
           <div class="feature-card animate delay-3">
             <div class="feature-icon">
               <i class="fas fa-book-open"></i>
             </div>
             <h3>Guided Journaling</h3>
-            <p>Structured prompts to process emotions and track your healing progress</p>
+            <p>Structured prompts to explore your inner world and track emotional patterns</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Companions Section -->
     <section id="companions" class="companions">
       <div class="container">
         <div class="section-header animate">
-          <h2>Meet Your Compassionate Companions</h2>
-          <p>Our AI companions are designed to provide personalized support whenever you need it</p>
+          <h2>Meet Your AI Companions</h2>
+          <p>Our specialized AI companions are designed to provide personalized emotional support</p>
         </div>
         <div class="companion-grid">
           <div class="companion-card animate delay-1">
-            <!-- Updated to AI-generated companion images -->
-            <img src="https://images.thispersondoesnotexist.com/" alt="Elena AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elena AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Elena</h3>
               <span class="companion-role">Empathy Specialist</span>
-              <p class="companion-bio">Elena specializes in active listening and providing emotional validation during difficult moments. She creates a safe space for you to express your feelings without judgment.</p>
+              <p class="companion-bio">Creates a safe, non-judgmental space where you can freely express your feelings</p>
               <div class="specialty-tags">
                 <span class="specialty-tag">Active Listening</span>
-                <span class="specialty-tag">Validation</span>
-                <span class="specialty-tag">Comfort</span>
+                <span class="specialty-tag">Emotional Validation</span>
               </div>
             </div>
           </div>
+          
           <div class="companion-card animate delay-2">
-            <img src="https://images.thispersondoesnotexist.com/" alt="David AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David AI companion" class="companion-image">
             <div class="companion-info">
               <h3>David</h3>
               <span class="companion-role">Resilience Coach</span>
-              <p class="companion-bio">David helps you build emotional resilience through cognitive exercises and positive reframing. He provides practical tools to overcome negative thought patterns.</p>
+              <p class="companion-bio">Helps develop coping strategies and tools to navigate challenges</p>
               <div class="specialty-tags">
                 <span class="specialty-tag">CBT Techniques</span>
                 <span class="specialty-tag">Growth Mindset</span>
-                <span class="specialty-tag">Goal Setting</span>
               </div>
             </div>
           </div>
+          
           <div class="companion-card animate delay-3">
-            <img src="https://images.thispersondoesnotexist.com/" alt="Sophia AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sophia AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Sophia</h3>
               <span class="companion-role">Mindfulness Guide</span>
-              <p class="companion-bio">Sophia leads guided meditations and mindfulness practices to help you find peace in the present moment. Her techniques reduce anxiety and promote emotional balance.</p>
+              <p class="companion-bio">Leads calming mindfulness practices to reduce anxiety and cultivate peace</p>
               <div class="specialty-tags">
                 <span class="specialty-tag">Meditation</span>
-                <span class="specialty-tag">Mindfulness</span>
-                <span class="specialty-tag">Grounding</span>
+                <span class="specialty-tag">Breathwork</span>
               </div>
             </div>
           </div>
@@ -1125,41 +1026,45 @@
       </div>
     </section>
 
+    <!-- How It Works Section -->
     <section id="how-it-works" class="steps">
       <div class="container">
         <div class="section-header animate">
-          <h2>Simple Path to Healing</h2>
-          <p>Serenity guides you through each step of the recovery process</p>
+          <h2>Your Healing Journey</h2>
+          <p>A simple, supportive process designed for your mental health journey</p>
         </div>
         <div class="steps-grid">
           <div class="step-card animate delay-1">
             <div class="step-number">1</div>
-            <h3>Share Your Story</h3>
-            <p>Begin with a confidential conversation about your experience and needs</p>
+            <h3>Share Comfortably</h3>
+            <p>Begin by sharing what's on your mind in a safe, confidential space</p>
           </div>
+          
           <div class="step-card animate delay-2">
             <div class="step-number">2</div>
-            <h3>Meet Your Companion</h3>
-            <p>Connect with an AI companion that matches your emotional needs</p>
+            <h3>Connect with Compassion</h3>
+            <p>Be matched with an AI companion attuned to your emotional needs</p>
           </div>
+          
           <div class="step-card animate delay-3">
             <div class="step-number">3</div>
-            <h3>Daily Support</h3>
-            <p>Engage with guided exercises, check-ins, and progress tracking</p>
+            <h3>Grow Gradually</h3>
+            <p>Engage with personalized practices and track your progress</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials">
       <div class="container">
         <div class="section-header animate">
-          <h2>Stories of Renewed Hope</h2>
-          <p>Real people who found healing with Serenity</p>
+          <h2>Stories of Healing</h2>
+          <p>Real people who found support through Therapathy</p>
         </div>
         <div class="testimonial-cards">
           <div class="testimonial-card animate delay-1">
-            <p class="testimonial-text">"Serenity was there for me at 3 AM when the loneliness felt unbearable. Talking to Elena helped me process emotions I couldn't share with anyone else."</p>
+            <p class="testimonial-text">"Therapathy became my safe space during a difficult time. Having Elena available whenever I needed to talk made a huge difference in my emotional wellbeing."</p>
             <div class="testimonial-author">
               <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="author-avatar">
               <div class="author-info">
@@ -1168,8 +1073,9 @@
               </div>
             </div>
           </div>
+          
           <div class="testimonial-card animate delay-2">
-            <p class="testimonial-text">"David became my daily resilience coach. His cognitive exercises helped me break negative thought patterns I'd been stuck in for months."</p>
+            <p class="testimonial-text">"David's cognitive exercises helped me break negative thought patterns I'd struggled with for years. The daily check-ins created consistency in my mental health practice."</p>
             <div class="testimonial-author">
               <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael" class="author-avatar">
               <div class="author-info">
@@ -1178,30 +1084,21 @@
               </div>
             </div>
           </div>
-          <div class="testimonial-card animate delay-3">
-            <p class="testimonial-text">"Sophia's mindfulness sessions gave me tools to manage anxiety. Having a compassionate companion available 24/7 made all the difference."</p>
-            <div class="testimonial-author">
-              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jessica" class="author-avatar">
-              <div class="author-info">
-                <h4>Jessica, 35</h4>
-                <p>Los Angeles</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
+    <!-- CTA Section -->
     <section class="cta-section">
       <div class="container">
-        <h2 class="animate">Ready to Begin Your Healing Journey?</h2>
-        <p class="animate delay-1">Take the first step towards emotional recovery today with our supportive AI companions</p>
-        <div class="cta-buttons animate delay-2">
-          <a href="#" id="startTrialBtn" class="cta-button white">
+        <h2 class="animate">Begin Your Journey to Emotional Wellness</h2>
+        <p class="animate delay-1">Take the first step toward greater peace and emotional balance</p>
+        <div class="cta-buttons">
+          <a href="#" class="cta-button white animate delay-2">
             Start Free Trial
             <i class="fas fa-heart"></i>
           </a>
-          <a href="#companions" class="cta-button primary">
+          <a href="#companions" class="cta-button primary animate delay-2">
             Meet Companions
             <i class="fas fa-comment"></i>
           </a>
@@ -1210,118 +1107,81 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-content">
         <div class="footer-section">
-          <h4>Serenity</h4>
-          <p>Compassionate AI-powered support for emotional recovery and personal growth.</p>
+          <h4>Therapathy</h4>
+          <p>Compassionate AI-powered support for emotional wellness and personal growth.</p>
           <div class="social-links">
-            <!-- Updated with actual social media links -->
-            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
+        
         <div class="footer-section">
-          <h4>Quick Links</h4>
+          <h4>Resources</h4>
           <ul class="footer-links">
             <li><a href="#features">Features</a></li>
             <li><a href="#companions">Companions</a></li>
             <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="blog.html">Blog</a></li>
+            <li><a href="#">Wellness Blog</a></li>
           </ul>
         </div>
+        
         <div class="footer-section">
           <h4>Support</h4>
           <ul class="footer-links">
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
           </ul>
         </div>
+        
         <div class="footer-section">
-          <h4>Newsletter</h4>
-          <p>Subscribe for tips and updates on emotional wellness</p>
+          <h4>Mindful Moments</h4>
+          <p>Subscribe for weekly mindfulness tips and emotional wellness insights</p>
           <form class="newsletter-form">
-            <input type="email" placeholder="Your email" required>
+            <input type="email" placeholder="Your email" required class="footer-input">
             <button type="submit" class="cta-button primary" style="margin-top: 1rem;">Subscribe</button>
           </form>
         </div>
       </div>
+      
       <div class="footer-bottom">
-        <p>&copy; 2023 Serenity. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary);"></i> for healing hearts</p>
+        <p>&copy; 2023 Therapathy. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary);"></i> for emotional wellness</p>
       </div>
     </div>
   </footer>
 
   <script>
-    // Initialize Supabase
-    const supabaseUrl = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-    
-
-    // Check auth state
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      updateAuthState(!!session);
-    });
-
-    // Check initial auth state
-    async function checkAuthState() {
-      const { data: { session } } = await supabase.auth.getSession();
-      updateAuthState(!!session);
-    }
-
-    // Update UI based on auth state
-    function updateAuthState(loggedIn) {
-      const beginHealingBtn = document.getElementById('beginHealingBtn');
-      const startTrialBtn = document.getElementById('startTrialBtn');
-      const navAuthBtn = document.getElementById('navAuthBtn');
-      
-      if (loggedIn) {
-        beginHealingBtn.href = 'dashboard.html';
-        startTrialBtn.href = 'dashboard.html';
-        navAuthBtn.innerHTML = 'Go to Dashboard <i class="fas fa-arrow-right"></i>';
-        navAuthBtn.href = 'dashboard.html';
-      } else {
-        beginHealingBtn.href = 'login.html';
-        startTrialBtn.href = 'login.html';
-        navAuthBtn.innerHTML = 'Get Started <i class="fas fa-arrow-right"></i>';
-        navAuthBtn.href = 'login.html';
-      }
-    }
-
-    // Initialize auth state
-    checkAuthState();
-
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const navLinks = document.getElementById('navLinks');
     
     mobileMenuBtn.addEventListener('click', () => {
       navLinks.classList.toggle('active');
-      mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+      // Change icon based on state
+      if (navLinks.classList.contains('active')) {
+        mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+      } else {
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.style.overflow = 'auto'; // Restore scrolling
+      }
     });
 
     // Close mobile menu when clicking a link
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('active');
-        mobileMenuBtn.textContent = '☰';
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.style.overflow = 'auto'; // Restore scrolling
       });
-    });
-
-    // Navbar scroll effect
-    const navbar = document.getElementById('mainNav');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
     });
 
     // Animation on scroll
@@ -1341,26 +1201,19 @@
     animateOnScroll();
     window.addEventListener('scroll', animateOnScroll);
 
-    // Chat bubble animation
-    setTimeout(() => {
-      document.querySelectorAll('.chat-bubble').forEach(bubble => {
-        bubble.style.opacity = '1';
-        bubble.style.transform = 'scale(1)';
-      });
-    }, 500);
-    
-    // Create floating particles
+    // Create calming particles
     function createParticles() {
       const heroSection = document.querySelector('.hero');
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 10; i++) {
         const particle = document.createElement('div');
-        particle.className = 'ai-particle';
+        particle.className = 'calming-particle';
         particle.style.left = `${Math.random() * 100}%`;
         particle.style.top = `${Math.random() * 100}%`;
-        particle.style.width = `${Math.random() * 8 + 2}px`;
+        particle.style.width = `${Math.random() * 6 + 4}px`;
         particle.style.height = particle.style.width;
         particle.style.animation = `float ${Math.random() * 10 + 5}s ease-in-out infinite`;
-        particle.style.opacity = Math.random() * 0.5 + 0.2;
+        particle.style.animationDelay = `${Math.random() * 3}s`;
+        particle.style.opacity = Math.random() * 0.4 + 0.1;
         heroSection.appendChild(particle);
       }
     }
