@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account | Serenity Healing Companion</title>
+  <title>Create Account | Therapathy</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     :root {
-      --primary: #A8DADC;
-      --primary-light: #E1F0F0;
-      --primary-dark: #8AC0C2;
-      --secondary: #457B9D;
-      --accent: #E63946;
-      --dark: #1D3557;
-      --light: #F1FAEE;
+      --primary: #5E60CE;
+      --primary-light: #E0E1FF;
+      --primary-dark: #4A4DC7;
+      --secondary: #64DFDF;
+      --accent: #FF6B6B;
+      --dark: #25274D;
+      --light: #F8F9FF;
       --gray: #8A9BA8;
-      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition: all 0.3s ease;
     }
 
     * {
@@ -30,18 +30,18 @@
       font-family: 'Poppins', sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      line-height: 1.7;
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       -webkit-font-smoothing: antialiased;
-      background-image: url('https://images.unsplash.com/photo-1516589091380-5d6019716b86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-image: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
       background-size: cover;
       background-position: center;
       background-blend-mode: overlay;
-      background-color: rgba(241, 250, 238, 0.92);
-      padding: 2rem;
+      background-color: rgba(248, 249, 255, 0.92);
+      padding: 1rem;
     }
 
     h1, h2, h3 {
@@ -52,11 +52,11 @@
 
     .container {
       background: white;
-      border-radius: 20px;
-      box-shadow: 0 25px 50px rgba(29, 53, 87, 0.15);
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(37, 39, 77, 0.15);
       width: 100%;
       max-width: 500px;
-      padding: 3rem;
+      padding: 2rem;
       position: relative;
       overflow: hidden;
       border: 1px solid var(--primary-light);
@@ -74,11 +74,11 @@
 
     .header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.8rem;
     }
 
     .header h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: var(--dark);
       margin-bottom: 0.5rem;
       position: relative;
@@ -100,17 +100,18 @@
     .header p {
       color: var(--dark);
       opacity: 0.8;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
+      font-size: 0.95rem;
     }
 
     .form-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       position: relative;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       font-weight: 500;
       color: var(--dark);
       font-size: 0.9rem;
@@ -143,7 +144,7 @@
 
     .form-group input {
       width: 100%;
-      padding: 1rem 3rem;
+      padding: 0.9rem 3rem;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
       font-size: 1rem;
@@ -169,7 +170,7 @@
       display: flex;
       align-items: flex-start;
       gap: 0.8rem;
-      margin: 2rem 0;
+      margin: 1.5rem 0;
     }
 
     .terms input {
@@ -197,7 +198,7 @@
     }
 
     .btn {
-      padding: 1rem;
+      padding: 0.9rem;
       border-radius: 10px;
       font-size: 1rem;
       font-weight: 500;
@@ -213,20 +214,20 @@
     }
 
     .btn-primary {
-      background: var(--secondary);
+      background: var(--primary);
       color: white;
-      box-shadow: 0 4px 15px rgba(69, 123, 157, 0.2);
+      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.2);
     }
 
     .btn-primary:hover {
-      background: #3a6b8a;
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(69, 123, 157, 0.3);
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(94, 96, 206, 0.3);
     }
 
     .login-link {
       text-align: center;
-      margin-top: 1.5rem;
+      margin-top: 1.2rem;
       font-size: 0.9rem;
       color: var(--dark);
       opacity: 0.8;
@@ -244,40 +245,40 @@
       text-decoration: underline;
     }
 
-    .floating-heart {
+    .floating-brain {
       position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 80px;
-      height: 80px;
+      top: -15px;
+      right: -15px;
+      width: 60px;
+      height: 60px;
       background: var(--primary-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--secondary);
-      font-size: 1.8rem;
+      color: var(--primary);
+      font-size: 1.5rem;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       animation: float 6s ease-in-out infinite;
     }
 
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-8px); }
       100% { transform: translateY(0px); }
     }
 
     .error-message {
       color: var(--accent);
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
       display: none;
     }
 
     .spinner {
       display: inline-block;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 3px solid rgba(255,255,255,.3);
       border-radius: 50%;
       border-top-color: white;
@@ -311,7 +312,7 @@
     
     .success-box {
       background: white;
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 15px;
       text-align: center;
       max-width: 400px;
@@ -325,26 +326,26 @@
     }
     
     .success-icon {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       background: var(--primary-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1.2rem;
     }
     
     .success-icon i {
-      font-size: 2.5rem;
-      color: var(--secondary);
+      font-size: 2rem;
+      color: var(--primary);
     }
     
     .success-btn {
-      background: var(--secondary);
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 0.8rem 2rem;
+      padding: 0.7rem 1.8rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 500;
@@ -353,12 +354,12 @@
     }
     
     .success-btn:hover {
-      background: #3a6b8a;
+      background: var(--primary-dark);
     }
 
     /* Password strength meter */
     .password-strength {
-      height: 5px;
+      height: 4px;
       border-radius: 3px;
       margin-top: 5px;
       background: #e0e0e0;
@@ -378,18 +379,18 @@
     .strength-4 { background: #388e3c; width: 100%; }
     
     .strength-text {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       margin-top: 3px;
       text-align: right;
     }
     
     .resend-link {
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
+      margin-top: 1.2rem;
+      font-size: 0.85rem;
     }
     
     .resend-link a {
-      color: var(--secondary);
+      color: var(--primary);
       text-decoration: none;
       font-weight: 500;
     }
@@ -401,14 +402,14 @@
     /* Toast notification */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--dark);
       color: white;
-      padding: 0.8rem 1.5rem;
+      padding: 0.7rem 1.3rem;
       border-radius: 50px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
@@ -416,6 +417,7 @@
       z-index: 1000;
       opacity: 0;
       transition: opacity 0.3s ease;
+      max-width: 90%;
     }
     
     .toast.show {
@@ -423,7 +425,7 @@
     }
     
     .toast.success {
-      background: var(--secondary);
+      background: var(--primary);
     }
     
     .toast.error {
@@ -432,7 +434,7 @@
     
     /* Recaptcha container */
     .recaptcha-container {
-      margin: 1.5rem 0;
+      margin: 1.2rem 0;
       display: flex;
       justify-content: center;
     }
@@ -446,50 +448,63 @@
       display: block;
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
-      }
-      
+    /* Mobile-first adjustments */
+    @media (min-width: 480px) {
       .container {
-        padding: 2.5rem 1.8rem;
+        padding: 2.5rem;
       }
       
       .header h2 {
-        font-size: 1.8rem;
+        font-size: 2rem;
       }
       
       .success-box {
-        padding: 1.5rem;
+        padding: 2rem;
+      }
+      
+      .floating-brain {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
       }
     }
 
-    @media (max-width: 480px) {
+    @media (min-width: 768px) {
+      body {
+        padding: 2rem;
+      }
+      
       .container {
-        padding: 2rem 1.5rem;
+        padding: 3rem;
       }
       
-      .floating-heart {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
+      .floating-brain {
+        top: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
       }
       
-      .form-group input {
-        padding: 0.8rem 2.8rem;
+      .header h2 {
+        font-size: 2.2rem;
+      }
+      
+      .success-box {
+        padding: 2.5rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="floating-heart">
-      <i class="fas fa-heart"></i>
+    <div class="floating-brain">
+      <i class="fas fa-brain"></i>
     </div>
     
     <div class="header">
       <h2>Begin Your Healing Journey</h2>
-      <p>Create your account to access personalized support</p>
+      <p>Create your Therapathy account for personalized mental wellness</p>
     </div>
     
     <form id="signupForm">
@@ -764,7 +779,7 @@
         // Show success message
         successTitle.textContent = 'Verify Your Email';
         successMessage.innerHTML = `
-          <p>Welcome to Serenity, <strong>${name}</strong>!</p>
+          <p>Welcome to Therapathy, <strong>${name}</strong>!</p>
           <p>We've sent a verification link to:</p>
           <p><strong>${email}</strong></p>
           <p>Please check your inbox and click the link to activate your account.</p>
