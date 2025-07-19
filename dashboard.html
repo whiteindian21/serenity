@@ -1896,591 +1896,380 @@
   </div>
   
   <script>
-    // Initialize Supabase
-    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+// Initialize Supabase
+const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// State variables
+let currentMood = "great";
+let breathInterval;
+let isBreathingActive = false;
+let cycleCount = 0;
+let secondsElapsed = 0;
+let currentPhase = 0;
+let progress = 0;
+let currentUser = null;
+let moodChart = null;
+let currentCompanion = "elena";
+let conversationHistory = [];
+let memories = [];
+
+// Progress tracking
+let progressSources = {
+  mood: 12,
+  chat: 8,
+  journal: 5,
+  memories: 0
+};
+
+// Define companions
+const companions = {
+  "elena": {
+    name: "Elena",
+    role: "Healing Guide",
+    specialties: ["Grief", "Compassion", "Support"],
+    avatar: "fas fa-smile",
+    personality: "compassionate",
+    intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
+    systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
+  },
+  "david": {
+    name: "David",
+    role: "Mindfulness Coach",
+    specialties: ["Mindfulness", "Resilience", "Meditation"],
+    avatar: "fas fa-leaf",
+    personality: "calm",
+    intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
+    systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
+  },
+  "sophia": {
+    name: "Sophia",
+    role: "Therapeutic Guide",
+    specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
+    avatar: "fas fa-lightbulb",
+    personality: "insightful",
+    intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+    systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
+  }
+};
+
+// Helper function to safely get DOM elements
+function getElement(id) {
+  const el = document.getElementById(id);
+  if (!el) console.warn(`Element with ID ${id} not found`);
+  return el;
+}
+
+// Check user session
+async function checkSession() {
+  try {
+    const { data, error } = await supabase.auth.getSession();
+    if (error) throw error;
     
-    const supabaseclient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // State variables
-    let currentMood = "great";
-    let breathInterval;
-    let isBreathingActive = false;
-    let cycleCount = 0;
-    let secondsElapsed = 0;
-    let currentPhase = 0;
-    let progress = 0;
-    let currentUser = null;
-    let moodChart = null;
-    let currentCompanion = "elena";
-    let conversationHistory = [];
-    let memories = [];
-    
-    // Progress tracking
-    let progressSources = {
-      mood: 12,
-      chat: 8,
-      journal: 5,
-      memories: 0
-    };
-    
-    // Define companions
-    const companions = {
-      "elena": {
-        name: "Elena",
-        role: "Healing Guide",
-        specialties: ["Grief", "Compassion", "Support"],
-        avatar: "fas fa-smile",
-        personality: "compassionate",
-        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
-        systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
-      },
-      "david": {
-        name: "David",
-        role: "Mindfulness Coach",
-        specialties: ["Mindfulness", "Resilience", "Meditation"],
-        avatar: "fas fa-leaf",
-        personality: "calm",
-        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
-        systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
-      },
-      "sophia": {
-        name: "Sophia",
-        role: "Therapeutic Guide",
-        specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
-        avatar: "fas fa-lightbulb",
-        personality: "insightful",
-        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
-        systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
-      }
-    };
-    
-    // Initialize the dashboard
-    document.addEventListener('DOMContentLoaded', async function() {
-      // Check if user is logged in
-      const isAuthenticated = await checkSession();
+    if (data.session) {
+      currentUser = data.session.user;
+      const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
       
-      if (isAuthenticated) {
-        // Show dashboard for logged-in users
-        document.getElementById('login-prompt').style.display = 'none';
-        document.getElementById('dashboard-container').style.display = 'block';
-        
-        setGreeting();
-        initBreathingExercise();
-        setupEventListeners();
-        updateProgressBar();
-        showToast(`Welcome back!`, "success");
-        
-        // Load user-specific data
-        loadCompanion();
-        loadMoodHistory();
-        loadProgress();
-        loadMemories();
-        
-        // Initialize mood chart
-        initMoodChart();
-      } else {
-        // Show login prompt for unauthenticated users
-        document.getElementById('login-prompt').style.display = 'block';
-        document.getElementById('dashboard-container').style.display = 'none';
+      // Safely update user initials
+      ['userInitialText', 'userInitialTextMobile', 'profile-initial'].forEach(id => {
+        const el = getElement(id);
+        if (el) el.textContent = initial;
+      });
+      
+      // Update profile name if available
+      const profileName = getElement('profile-name');
+      if (profileName && currentUser.user_metadata?.name) {
+        profileName.textContent = currentUser.user_metadata.name;
       }
       
-      // Setup login redirection button
-      document.getElementById('go-to-login').addEventListener('click', function() {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Session check failed:', error.message);
+    return false;
+  }
+}
+
+// Initialize the dashboard
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    const isAuthenticated = await checkSession();
+    const loginPrompt = getElement('login-prompt');
+    const dashboardContainer = getElement('dashboard-container');
+    
+    if (isAuthenticated) {
+      // Show dashboard for logged-in users
+      if (loginPrompt) loginPrompt.style.display = 'none';
+      if (dashboardContainer) dashboardContainer.style.display = 'block';
+      
+      setGreeting();
+      initBreathingExercise();
+      setupEventListeners();
+      updateProgressBar();
+      showToast(`Welcome back!`, "success");
+      
+      // Load user-specific data
+      loadCompanion();
+      loadMoodHistory();
+      loadProgress();
+      loadMemories();
+      
+      // Initialize mood chart
+      initMoodChart();
+    } else {
+      // Show login prompt for unauthenticated users
+      if (loginPrompt) loginPrompt.style.display = 'block';
+      if (dashboardContainer) dashboardContainer.style.display = 'none';
+    }
+    
+    // Setup login redirection button
+    const goToLoginBtn = getElement('go-to-login');
+    if (goToLoginBtn) {
+      goToLoginBtn.addEventListener('click', () => {
         window.location.href = 'login.html';
       });
+    }
+  } catch (error) {
+    console.error('Initialization failed:', error);
+    showToast("Failed to initialize app", "error");
+  }
+});
+
+// Initialize breathing exercise
+function initBreathingExercise() {
+  const cycleCountEl = getElement('cycle-count');
+  const timerEl = getElement('timer');
+  
+  if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+  if (timerEl) timerEl.textContent = '0:00';
+  
+  updateBreathingCircleColor();
+}
+
+// Update breathing circle color based on phase
+function updateBreathingCircleColor() {
+  const breathCircle = document.querySelector('.breath-circle');
+  if (!breathCircle) return;
+  
+  const colors = {
+    0: { bg: 'linear-gradient(135deg, var(--primary), var(--secondary))', shadow: '0 6px 20px rgba(94, 96, 206, 0.35)' },
+    1: { bg: 'linear-gradient(135deg, #5E60CE, #4A4DC7)', shadow: '0 6px 20px rgba(74, 77, 199, 0.35)' },
+    2: { bg: 'linear-gradient(135deg, #64DFDF, #48BB78)', shadow: '0 6px 20px rgba(100, 223, 223, 0.35)' },
+    3: { bg: 'linear-gradient(135deg, #48BB78, #64DFDF)', shadow: '0 6px 20px rgba(72, 187, 120, 0.35)' }
+  };
+  
+  const phaseColors = colors[currentPhase] || colors[0];
+  breathCircle.style.background = phaseColors.bg;
+  breathCircle.style.boxShadow = phaseColors.shadow;
+}
+
+// Start/stop breathing exercise
+function toggleBreathing() {
+  const startBtn = getElement('start-breath');
+  if (!startBtn) return;
+  
+  if (!isBreathingActive) {
+    startBreathing();
+    startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+  } else {
+    pauseBreathing();
+    startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+  }
+  isBreathingActive = !isBreathingActive;
+}
+
+// Start breathing exercise
+function startBreathing() {
+  const breathCircle = document.querySelector('.breath-circle');
+  if (breathCircle) breathCircle.classList.add('pulse');
+  
+  breathInterval = setInterval(() => {
+    secondsElapsed++;
+    const minutes = Math.floor(secondsElapsed / 60);
+    const seconds = secondsElapsed % 60;
+    const timerEl = getElement('timer');
+    if (timerEl) timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    
+    const phaseTime = secondsElapsed % 16;
+    let newPhase = currentPhase;
+    
+    if (phaseTime < 4) newPhase = 0;
+    else if (phaseTime < 8) newPhase = 1;
+    else if (phaseTime < 12) newPhase = 2;
+    else newPhase = 3;
+    
+    if (newPhase !== currentPhase) {
+      currentPhase = newPhase;
+      updateBreathingUI();
+    }
+  }, 1000);
+}
+
+function updateBreathingUI() {
+  const breathText = getElement('breath-text');
+  const instruction = getElement('instruction');
+  const cycleCountEl = getElement('cycle-count');
+  
+  const phases = {
+    0: { text: 'Breathe In', instruction: 'Breathe in slowly through your nose...' },
+    1: { text: 'Hold', instruction: 'Hold your breath...' },
+    2: { text: 'Breathe Out', instruction: 'Exhale slowly through your mouth...' },
+    3: { text: 'Hold', instruction: 'Hold your breath...' }
+  };
+  
+  const phase = phases[currentPhase] || phases[0];
+  
+  if (breathText) breathText.textContent = phase.text;
+  if (instruction) instruction.textContent = phase.instruction;
+  
+  if (currentPhase === 2) {
+    cycleCount++;
+    if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+  }
+  
+  updateBreathingCircleColor();
+}
+
+// Pause breathing exercise
+function pauseBreathing() {
+  clearInterval(breathInterval);
+  const breathCircle = document.querySelector('.breath-circle');
+  if (breathCircle) breathCircle.classList.remove('pulse');
+}
+
+// Reset breathing exercise
+function resetBreathing() {
+  pauseBreathing();
+  isBreathingActive = false;
+  cycleCount = 0;
+  secondsElapsed = 0;
+  currentPhase = 0;
+  
+  const cycleCountEl = getElement('cycle-count');
+  const timerEl = getElement('timer');
+  const startBtn = getElement('start-breath');
+  
+  if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+  if (timerEl) timerEl.textContent = '0:00';
+  if (startBtn) startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+  
+  updateBreathingUI();
+}
+
+// Set up all event listeners
+function setupEventListeners() {
+  // Navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = this.dataset.target;
+      
+      // Update active nav item
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Show target section
+      document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+      const targetSection = getElement(target);
+      if (targetSection) targetSection.classList.add('active');
     });
+  });
+  
+  // Profile avatar click
+  const userInitialMobile = getElement('userInitialMobile');
+  if (userInitialMobile) {
+    userInitialMobile.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Navigate to profile section
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
+      if (profileNav) profileNav.classList.add('active');
+      
+      document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+      const profileSection = getElement('profile-section');
+      if (profileSection) profileSection.classList.add('active');
+    });
+  }
+  
+  // Add other event listeners similarly with null checks
+  // [Rest of your event listeners...]
+}
+
+// [Rest of your functions with similar null checks...]
+
+// Show toast notification
+function showToast(message, type = 'success') {
+  const toast = getElement('toast');
+  if (!toast) return;
+  
+  toast.textContent = message;
+  toast.className = `toast ${type} show`;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Update progress bar
+function updateProgressBar() {
+  const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + 
+                     progressSources.journal * 3 + progressSources.memories * 2;
+  progress = Math.min(100, Math.round(totalPoints * 100 / 50));
+  
+  const progressFill = getElement('progressFill');
+  const progressPercent = getElement('progress-percent');
+  
+  if (progressFill) progressFill.style.width = `${progress}%`;
+  if (progressPercent) progressPercent.textContent = `${progress}%`;
+  
+  // Update progress sources
+  const sources = {
+    'mood-source': progressSources.mood,
+    'chat-source': progressSources.chat,
+    'journal-source': progressSources.journal
+  };
+  
+  Object.entries(sources).forEach(([id, value]) => {
+    const el = getElement(id);
+    if (el) el.textContent = value;
+  });
+}
+
+// Load companion information
+async function loadCompanion() {
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) throw error;
     
-    // Check user session
-    async function checkSession() {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error('Error getting session:', error.message);
-        return false;
-      }
-      
-      if (data.session) {
-        currentUser = data.session.user;
-        document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
-        document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
-        document.getElementById('profile-initial').textContent = currentUser.email[0].toUpperCase();
-        return true;
-      }
-      
-      return false;
-    }
+    currentCompanion = user.user_metadata?.companion || "elena";
+    const companion = companions[currentCompanion];
     
-    // Initialize breathing exercise
-    function initBreathingExercise() {
-      document.getElementById('cycle-count').textContent = cycleCount;
-      document.getElementById('timer').textContent = '0:00';
-      
-      // Set initial color for breathing circle
-      updateBreathingCircleColor();
-    }
+    // Update UI
+    const nameEl = getElement('companion-name');
+    const roleEl = getElement('companion-role');
+    const avatarEl = getElement('companion-avatar');
+    const specialtiesContainer = getElement('companion-specialties');
     
-    // Update breathing circle color based on phase
-    function updateBreathingCircleColor() {
-      const breathCircle = document.querySelector('.breath-circle');
-      switch(currentPhase) {
-        case 0: // Inhale
-          breathCircle.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
-          breathCircle.style.boxShadow = '0 6px 20px rgba(94, 96, 206, 0.35)';
-          break;
-        case 1: // Hold
-          breathCircle.style.background = 'linear-gradient(135deg, #5E60CE, #4A4DC7)';
-          breathCircle.style.boxShadow = '0 6px 20px rgba(74, 77, 199, 0.35)';
-          break;
-        case 2: // Exhale
-          breathCircle.style.background = 'linear-gradient(135deg, #64DFDF, #48BB78)';
-          breathCircle.style.boxShadow = '0 6px 20px rgba(100, 223, 223, 0.35)';
-          break;
-        case 3: // Hold
-          breathCircle.style.background = 'linear-gradient(135deg, #48BB78, #64DFDF)';
-          breathCircle.style.boxShadow = '0 6px 20px rgba(72, 187, 120, 0.35)';
-          break;
-      }
-    }
+    if (nameEl) nameEl.textContent = companion.name;
+    if (roleEl) roleEl.textContent = companion.role;
+    if (avatarEl) avatarEl.innerHTML = `<i class="${companion.avatar}"></i>`;
     
-    // Start/stop breathing exercise
-    function toggleBreathing() {
-      if (!isBreathingActive) {
-        startBreathing();
-        document.getElementById('start-breath').innerHTML = '<i class="fas fa-pause"></i> Pause';
-      } else {
-        pauseBreathing();
-        document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Resume';
-      }
-      isBreathingActive = !isBreathingActive;
-    }
-    
-    // Start breathing exercise
-    function startBreathing() {
-      const breathCircle = document.querySelector('.breath-circle');
-      breathCircle.classList.add('pulse');
-      
-      breathInterval = setInterval(() => {
-        secondsElapsed++;
-        const minutes = Math.floor(secondsElapsed / 60);
-        const seconds = secondsElapsed % 60;
-        document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        
-        const phaseTime = secondsElapsed % 16;
-        
-        if (phaseTime < 4) {
-          if (currentPhase !== 0) {
-            currentPhase = 0;
-            document.getElementById('breath-text').textContent = 'Breathe In';
-            document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
-            updateBreathingCircleColor();
-          }
-        } else if (phaseTime < 8) {
-          if (currentPhase !== 1) {
-            currentPhase = 1;
-            document.getElementById('breath-text').textContent = 'Hold';
-            document.getElementById('instruction').textContent = 'Hold your breath...';
-            updateBreathingCircleColor();
-          }
-        } else if (phaseTime < 12) {
-          if (currentPhase !== 2) {
-            currentPhase = 2;
-            document.getElementById('breath-text').textContent = 'Breathe Out';
-            document.getElementById('instruction').textContent = 'Exhale slowly through your mouth...';
-            cycleCount++;
-            document.getElementById('cycle-count').textContent = cycleCount;
-            updateBreathingCircleColor();
-          }
-        } else {
-          if (currentPhase !== 3) {
-            currentPhase = 3;
-            document.getElementById('breath-text').textContent = 'Hold';
-            document.getElementById('instruction').textContent = 'Hold your breath...';
-            updateBreathingCircleColor();
-          }
-        }
-      }, 1000);
-    }
-    
-    // Pause breathing exercise
-    function pauseBreathing() {
-      clearInterval(breathInterval);
-      document.querySelector('.breath-circle').classList.remove('pulse');
-    }
-    
-    // Reset breathing exercise
-    function resetBreathing() {
-      pauseBreathing();
-      isBreathingActive = false;
-      cycleCount = 0;
-      secondsElapsed = 0;
-      currentPhase = 0;
-      document.getElementById('cycle-count').textContent = cycleCount;
-      document.getElementById('timer').textContent = '0:00';
-      document.getElementById('breath-text').textContent = 'Breathe In';
-      document.getElementById('instruction').textContent = 'Breathe in slowly through your nose...';
-      document.getElementById('start-breath').innerHTML = '<i class="fas fa-play"></i> Start';
-      updateBreathingCircleColor();
-    }
-    
-    // Set up all event listeners
-    function setupEventListeners() {
-      // Navigation
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = this.dataset.target;
-          
-          // Update active nav item
-          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-          this.classList.add('active');
-          
-          // Show target section
-          document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-          document.getElementById(target).classList.add('active');
-        });
-      });
-      
-      // Profile avatar click
-      document.getElementById('userInitialMobile').addEventListener('click', function(e) {
-        e.preventDefault();
-        // Navigate to profile section
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        document.querySelector('.nav-item[data-target="profile-section"]').classList.add('active');
-        
-        document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-        document.getElementById('profile-section').classList.add('active');
-      });
-      
-      // Affirmation refresh
-      document.getElementById('refreshAffirmation').addEventListener('click', refreshAffirmation);
-      
-      // Mood tracking
-      document.querySelectorAll('.mood-option').forEach(option => {
-        option.addEventListener('click', function() {
-          document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
-          this.classList.add('selected');
-          currentMood = this.dataset.mood;
-          trackMood(currentMood);
-        });
-      });
-      
-      // Save buttons
-      document.getElementById('saveAffirmation').addEventListener('click', function() {
-        this.classList.toggle('active');
-        this.innerHTML = this.classList.contains('active') 
-          ? '<i class="fas fa-heart"></i> Saved' 
-          : '<i class="far fa-heart"></i> Save';
-        
-        showToast(
-          this.classList.contains('active') 
-            ? "Affirmation saved" 
-            : "Affirmation removed", 
-          "success"
-        );
-      });
-      
-      // Sign out button
-      document.getElementById('signout-btn').addEventListener('click', async function() {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-          showToast("Sign out failed: " + error.message, "error");
-        } else {
-          showToast("Signed out successfully", "success");
-          currentUser = null;
-          // Redirect to login.html
-          window.location.href = 'login.html';
-        }
-      });
-      
-      // Breathing exercise controls
-      document.getElementById('start-breath').addEventListener('click', toggleBreathing);
-      document.getElementById('reset-breath').addEventListener('click', resetBreathing);
-      
-      // Journal button
-      document.getElementById('journal-btn').addEventListener('click', function() {
-        // Simulate journal entry creation
-        progressSources.journal++;
-        updateProgressBar();
-        saveProgress();
-        showToast("Journal entry created", "success");
-        window.location.href = 'journal.html';
-      });
-      
-      // Compassion button
-      document.getElementById('compassion-btn').addEventListener('click', function() {
-        window.location.href = 'self-care.html';
-      });
-      
-      // Mood history
-      document.getElementById('mood-history').addEventListener('click', function() {
-        document.getElementById('mood-history-modal').style.display = 'flex';
-      });
-      
-      // Mood insights
-      document.getElementById('mood-insights').addEventListener('click', async function() {
-        document.getElementById('mood-history-modal').style.display = 'flex';
-      });
-      
-      // Account settings button
-      document.getElementById('account-settings-btn').addEventListener('click', function() {
-        document.getElementById('settings-modal').style.display = 'flex';
-      });
-      
-      // Close modals
-      document.getElementById('close-settings').addEventListener('click', () => {
-        document.getElementById('settings-modal').style.display = 'none';
-      });
-      
-      document.getElementById('close-mood-history').addEventListener('click', () => {
-        document.getElementById('mood-history-modal').style.display = 'none';
-      });
-      
-      // Start chat with companion
-      document.getElementById('start-chat-btn').addEventListener('click', startCompanionChat);
-      
-      // Floating chat button
-      document.getElementById('chat-fab').addEventListener('click', startCompanionChat);
-      
-      // Chat interface
-      document.getElementById('close-chat').addEventListener('click', closeChat);
-      document.getElementById('send-btn').addEventListener('click', sendMessage);
-      document.getElementById('chat-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          sendMessage();
-        }
-      });
-      
-      // Memory book button
-      document.getElementById('memory-book-btn').addEventListener('click', function() {
-        document.getElementById('memory-book-modal').style.display = 'flex';
-        loadMemoryBook();
-      });
-      
-      // Add memory button
-      document.getElementById('add-memory-btn').addEventListener('click', function() {
-        document.getElementById('add-memory-modal').style.display = 'flex';
-      });
-      
-      // Close memory modals
-      document.getElementById('close-add-memory').addEventListener('click', () => {
-        document.getElementById('add-memory-modal').style.display = 'none';
-      });
-      
-      document.getElementById('close-memory-book').addEventListener('click', () => {
-        document.getElementById('memory-book-modal').style.display = 'none';
-      });
-      
-      // Memory image preview
-      document.getElementById('memory-image').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const preview = document.getElementById('memory-preview');
-            preview.innerHTML = '';
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            preview.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-      
-      // Save memory form
-      document.getElementById('memory-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        await saveMemory();
+    if (specialtiesContainer) {
+      specialtiesContainer.innerHTML = '';
+      companion.specialties.forEach(specialty => {
+        const tag = document.createElement('div');
+        tag.className = 'specialty-tag';
+        tag.textContent = specialty;
+        specialtiesContainer.appendChild(tag);
       });
     }
-    
-    // Initialize mood chart
-    function initMoodChart() {
-      const ctx = document.getElementById('moodChart').getContext('2d');
-      moodChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Mood Level',
-            data: [3, 1, 2, 3, 4, 3, 4],
-            borderColor: '#5E60CE',
-            backgroundColor: 'rgba(94, 96, 206, 0.1)',
-            borderWidth: 3,
-            tension: 0.3,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              min: 0,
-              max: 4,
-              ticks: {
-                callback: function(value) {
-                  const moods = ['Awful', 'Sad', 'Neutral', 'Good', 'Great'];
-                  return moods[value];
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-    
-    // Track mood
-    async function trackMood(mood) {
-      const moodLabels = {
-        "awful": "Awful",
-        "sad": "Sad",
-        "neutral": "Neutral",
-        "great": "Great"
-      };
-      
-      try {
-        const { error } = await supabase
-          .from('mood_entries')
-          .insert([
-            { 
-              user_id: currentUser.id, 
-              mood: mood,
-              created_at: new Date().toISOString()
-            }
-          ]);
-        
-        if (error) throw error;
-        
-        // Update progress
-        progressSources.mood++;
-        updateProgressBar();
-        saveProgress();
-        
-        showToast(`Mood recorded: ${moodLabels[mood]}`, "success");
-        loadMoodHistory();
-      } catch (error) {
-        showToast("Error saving mood: " + error.message, "error");
-      }
-    }
-    
-    // Update progress bar
-    function updateProgressBar() {
-      // Calculate total progress points
-      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + progressSources.journal * 3 + progressSources.memories * 2;
-      progress = Math.min(100, Math.round(totalPoints * 100 / 50)); // 50 points = 100%
-      
-      document.getElementById('progressFill').style.width = `${progress}%`;
-      document.getElementById('progress-percent').textContent = `${progress}%`;
-      
-      // Update progress sources
-      document.getElementById('mood-source').textContent = progressSources.mood;
-      document.getElementById('chat-source').textContent = progressSources.chat;
-      document.getElementById('journal-source').textContent = progressSources.journal;
-    }
-    
-    // Save progress to localStorage
-    function saveProgress() {
-      if (!currentUser) return;
-      localStorage.setItem(`progress_${currentUser.id}`, JSON.stringify(progressSources));
-    }
-    
-    // Load progress from localStorage
-    function loadProgress() {
-      if (!currentUser) return;
-      const savedProgress = localStorage.getItem(`progress_${currentUser.id}`);
-      if (savedProgress) {
-        progressSources = JSON.parse(savedProgress);
-        updateProgressBar();
-      }
-    }
-    
-    // Generate new affirmation using OpenAI Edge Function
-    async function refreshAffirmation() {
-      const card = document.getElementById('affirmationCard');
-      const affirmationElement = document.getElementById('affirmation');
-      
-      card.style.opacity = '0.7';
-      affirmationElement.innerHTML = '<span class="spinner"></span> <span class="spinner-text">Generating with AI...</span>';
-      
-      try {
-        // Fallback to local generation
-        const affirmations = [
-          "I am whole and complete just as I am.",
-          "Every ending creates space for new beginnings.",
-          "I release what no longer serves me and welcome new possibilities.",
-          "Their love remains with me always.",
-          "I carry their memory in my heart with gratitude.",
-          "Grief is the price of love, and I am grateful for the love we shared.",
-          "The love we shared remains forever in my heart.",
-          "I am grateful for every moment we had together.",
-          "Their paw prints are forever on my soul.",
-          "My worth is not defined by my job title.",
-          "Endings create space for new opportunities.",
-          "I trust that the right path will reveal itself in time.",
-          "I am stronger than I feel, wiser than I know, and more resilient than I realize.",
-          "Healing isn't linear, and that's okay.",
-          "I give myself permission to feel whatever I'm feeling."
-        ];
-        
-        const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
-        affirmationElement.textContent = `"${affirmation}"`;
-        showToast("Affirmation generated", "info");
-      } finally {
-        card.style.opacity = '1';
-      }
-    }
-    
-    // Show toast notification
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
-    
-    // Set greeting based on time of day
-    function setGreeting() {
-      const hour = new Date().getHours();
-      let greeting = 'Hello';
-      if (hour < 12) greeting = 'Good morning';
-      else if (hour < 18) greeting = 'Good afternoon';
-      else greeting = 'Good evening';
-      
-      document.getElementById('greeting').textContent = `${greeting}, welcome to your healing space`;
-    }
-    
-    // Load companion information
-    async function loadCompanion() {
-      try {
-        // Get companion index from user metadata
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) throw error;
-        
-        currentCompanion = user.user_metadata?.companion || "elena";
-        
-        // Update UI
-        document.getElementById('companion-name').textContent = companions[currentCompanion].name;
-        document.getElementById('companion-role').textContent = companions[currentCompanion].role;
-        document.getElementById('companion-avatar').innerHTML = `<i class="${companions[currentCompanion].avatar}"></i>`;
-        
-        // Update specialties
-        const specialtiesContainer = document.getElementById('companion-specialties');
-        specialtiesContainer.innerHTML = '';
-        companions[currentCompanion].specialties.forEach(specialty => {
-          const tag = document.createElement('div');
-          tag.className = 'specialty-tag';
-          tag.textContent = specialty;
-          specialtiesContainer.appendChild(tag);
-        });
-        
-      } catch (error) {
-        showToast("Error loading companion: " + error.message, "error");
-      }
-    }
-    
+  } catch (error) {
+    showToast("Error loading companion: " + error.message, "error");
+  }
+}
     // Start chat with companion
     function startCompanionChat() {
       document.getElementById('chat-container').classList.add('active');
