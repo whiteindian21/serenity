@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Therapathy - Enhanced Dashboard</title>
+  <title>Therapathy - Healing Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -129,6 +131,8 @@
       overflow: hidden;
     }
 
+    /* Dashboard Header - Removed */
+    
     /* Cards */
     .card {
       background: rgba(255, 255, 255, 0.97);
@@ -1135,6 +1139,55 @@
       margin-top: 1rem;
     }
     
+    /* Memory Book Modal */
+    .memory-book {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .memory-book-entry {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-light);
+      gap: 1rem;
+    }
+    
+    .memory-book-thumbnail {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+    
+    .memory-book-details {
+      flex: 1;
+    }
+    
+    .memory-book-title {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .memory-book-date {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .memory-book-progress {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(94, 96, 206, 0.05);
+      border-radius: var(--radius-md);
+    }
+    
+    .memory-book-progress h4 {
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    
     @keyframes scaleIn {
       from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
@@ -1369,52 +1422,6 @@
       margin-top: 1rem;
     }
     
-    /* Memory book */
-    .memory-book-container {
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    
-    .memory-book-item {
-      display: flex;
-      align-items: center;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-light);
-    }
-    
-    .memory-book-thumb {
-      width: 80px;
-      height: 80px;
-      border-radius: var(--radius-sm);
-      margin-right: 1rem;
-      object-fit: cover;
-    }
-    
-    .memory-book-content {
-      flex: 1;
-    }
-    
-    .memory-book-title {
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-      color: var(--dark);
-    }
-    
-    .memory-book-date {
-      font-size: 0.85rem;
-      color: var(--gray);
-      margin-bottom: 0.5rem;
-    }
-    
-    .memory-book-message {
-      font-size: 0.9rem;
-      color: var(--dark);
-      font-style: italic;
-    }
-    
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .card {
@@ -1628,33 +1635,14 @@
         <p>Preserve and revisit special moments</p>
         
         <div class="memory-container" id="memory-container">
-          <div class="memory-item has-image" style="background-image: url('https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300')">
-            <img class="memory-image" src="https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300" alt="Memory">
-            <div class="memory-label">Beach Day</div>
-          </div>
-          <div class="memory-item has-image" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300')">
-            <img class="memory-image" src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300" alt="Memory">
-            <div class="memory-label">Birthday</div>
-          </div>
-          <div class="memory-item">
-            <i class="fas fa-paw"></i>
-            <div class="memory-label">Luna</div>
-          </div>
-          <div class="memory-item">
-            <i class="fas fa-tree"></i>
-            <div class="memory-label">Park Walk</div>
-          </div>
-          <div class="memory-item add-memory" id="add-memory-btn">
-            <i class="fas fa-plus"></i>
-            <div class="memory-label">Add Memory</div>
-          </div>
+          <!-- Memories will be loaded here -->
         </div>
         
         <div class="memory-actions">
-          <button class="btn btn-primary" id="view-memory-book">
+          <button class="btn btn-primary" id="memory-book-btn">
             <i class="fas fa-book"></i> Memory Book
           </button>
-          <button class="btn btn-secondary" id="add-memory">
+          <button class="btn btn-secondary" id="add-memory-btn">
             <i class="fas fa-plus"></i> Add New
           </button>
         </div>
@@ -1704,7 +1692,7 @@
           </div>
         </div>
         
-        <button class="btn btn-primary" id="account-settings-btn" style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" style="margin-top: 1.5rem;" id="account-settings-btn">
           <i class="fas fa-cog"></i> Account Settings
         </button>
       </div>
@@ -1838,7 +1826,7 @@
       </div>
       
       <div class="mood-history-container" id="mood-history-list">
-        <!-- Filled by JavaScript -->
+        <!-- Mood history will be loaded here -->
       </div>
     </div>
   </div>
@@ -1847,38 +1835,41 @@
   <div class="modal" id="add-memory-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Add Cherished Memory</h3>
+        <h3>Add New Memory</h3>
         <button class="close-modal" id="close-add-memory">&times;</button>
       </div>
       
       <form id="memory-form">
         <div class="form-group">
-          <label for="memory-title">Title</label>
-          <input type="text" id="memory-title" class="form-control" placeholder="Memory title">
-        </div>
-        
-        <div class="form-group">
-          <label for="memory-description">Description</label>
-          <textarea id="memory-description" class="form-control" placeholder="Describe this memory" rows="3"></textarea>
+          <label for="memory-title">Memory Title</label>
+          <input type="text" id="memory-title" class="form-control" placeholder="Enter a title for this memory" required>
         </div>
         
         <div class="form-group">
           <label for="memory-date">Date</label>
-          <input type="date" id="memory-date" class="form-control">
+          <input type="date" id="memory-date" class="form-control" required>
         </div>
         
         <div class="form-group">
-          <label>Upload Image (Optional)</label>
-          <label class="memory-label-upload" for="memory-image">
-            <i class="fas fa-cloud-upload-alt"></i> Choose Image
+          <label for="memory-description">Description</label>
+          <textarea id="memory-description" class="form-control" rows="3" placeholder="Describe this memory"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Add Photo</label>
+          <label for="memory-image" class="memory-label-upload">
+            <i class="fas fa-camera"></i> Choose Image
           </label>
           <input type="file" id="memory-image" accept="image/*">
+          
           <div class="memory-preview" id="memory-preview">
             <i class="fas fa-image"></i>
           </div>
         </div>
         
-        <button type="submit" class="btn-save">Save Memory</button>
+        <button type="submit" class="btn-save">
+          <i class="fas fa-save"></i> Save Memory
+        </button>
       </form>
     </div>
   </div>
@@ -1891,61 +1882,27 @@
         <button class="close-modal" id="close-memory-book">&times;</button>
       </div>
       
-      <div class="memory-book-container" id="memory-book-list">
-        <div class="memory-book-item">
-          <img src="https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300" class="memory-book-thumb" alt="Memory">
-          <div class="memory-book-content">
-            <div class="memory-book-title">Beach Day</div>
-            <div class="memory-book-date">May 15, 2023</div>
-            <div class="memory-book-message">A beautiful sunny day at the beach with family</div>
-          </div>
+      <div class="memory-book">
+        <div class="memory-book-progress">
+          <h4>Your Healing Journey</h4>
+          <p>You've collected <span id="memory-count">0</span> memories so far. Each one represents a step in your healing journey.</p>
         </div>
-        <div class="memory-book-item">
-          <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300" class="memory-book-thumb" alt="Memory">
-          <div class="memory-book-content">
-            <div class="memory-book-title">Birthday Celebration</div>
-            <div class="memory-book-date">Apr 22, 2023</div>
-            <div class="memory-book-message">Surprise party with close friends</div>
-          </div>
+        
+        <div id="memory-book-entries">
+          <!-- Memory entries will be loaded here -->
         </div>
-        <div class="memory-book-item">
-          <div class="memory-book-thumb" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-paw" style="font-size: 2rem; color: white;"></i>
-          </div>
-          <div class="memory-book-content">
-            <div class="memory-book-title">Luna</div>
-            <div class="memory-book-date">Mar 10, 2023</div>
-            <div class="memory-book-message">Our beloved pet who brought us so much joy</div>
-          </div>
-        </div>
-        <div class="memory-book-item">
-          <div class="memory-book-thumb" style="background: linear-gradient(135deg, #48BB78, #64DFDF); display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-tree" style="font-size: 2rem; color: white;"></i>
-          </div>
-          <div class="memory-book-content">
-            <div class="memory-book-title">Park Walk</div>
-            <div class="memory-book-date">Feb 28, 2023</div>
-            <div class="memory-book-message">Peaceful autumn walk in the park</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="progress-bar" style="margin: 1.5rem 0;">
-        <div class="progress-fill" style="width: 75%"></div>
-      </div>
-      <div class="progress-info">
-        <span>Your Healing Journey</span>
-        <span>75% Complete</span>
-      </div>
-      
-      <div style="text-align: center; margin-top: 1.5rem;">
-        <p>You've come a long way in your healing journey. Cherish these memories as milestones of your progress.</p>
       </div>
     </div>
   </div>
-
+  
   <script>
-    // Initialize state
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // State variables
     let currentMood = "great";
     let breathInterval;
     let isBreathingActive = false;
@@ -1953,22 +1910,18 @@
     let secondsElapsed = 0;
     let currentPhase = 0;
     let progress = 0;
-    let currentUser = { id: "user123", email: "user@example.com" };
+    let currentUser = null;
     let moodChart = null;
     let currentCompanion = "elena";
     let conversationHistory = [];
-    let memories = [
-      { id: 1, title: "Beach Day", type: "image", date: "2023-05-15", image: "https://images.unsplash.com/photo-1542662565-7e4b66bae529?auto=format&fit=crop&w=300" },
-      { id: 2, title: "Birthday", type: "image", date: "2023-04-22", image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=300" },
-      { id: 3, title: "Luna", type: "icon", icon: "fas fa-paw", date: "2023-03-10" },
-      { id: 4, title: "Park Walk", type: "icon", icon: "fas fa-tree", date: "2023-02-28" }
-    ];
+    let memories = [];
     
     // Progress tracking
     let progressSources = {
       mood: 12,
       chat: 8,
-      journal: 5
+      journal: 5,
+      memories: 0
     };
     
     // Define companions
@@ -1981,32 +1934,81 @@
         personality: "compassionate",
         intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
         systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
+      },
+      "david": {
+        name: "David",
+        role: "Mindfulness Coach",
+        specialties: ["Mindfulness", "Resilience", "Meditation"],
+        avatar: "fas fa-leaf",
+        personality: "calm",
+        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
+        systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
+      },
+      "sophia": {
+        name: "Sophia",
+        role: "Therapeutic Guide",
+        specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
+        avatar: "fas fa-lightbulb",
+        personality: "insightful",
+        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+        systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
       }
     };
     
     // Initialize the dashboard
     document.addEventListener('DOMContentLoaded', async function() {
-      // Show dashboard for demo
-      document.getElementById('login-prompt').style.display = 'none';
-      document.getElementById('dashboard-container').style.display = 'block';
+      // Check if user is logged in
+      const isAuthenticated = await checkSession();
       
-      setGreeting();
-      initBreathingExercise();
-      setupEventListeners();
-      updateProgressBar();
-      showToast(`Welcome back!`, "success");
-      
-      // Load user-specific data
-      loadCompanion();
-      loadMoodHistory();
-      loadProgress();
-      renderMemories();
+      if (isAuthenticated) {
+        // Show dashboard for logged-in users
+        document.getElementById('login-prompt').style.display = 'none';
+        document.getElementById('dashboard-container').style.display = 'block';
+        
+        setGreeting();
+        initBreathingExercise();
+        setupEventListeners();
+        updateProgressBar();
+        showToast(`Welcome back!`, "success");
+        
+        // Load user-specific data
+        loadCompanion();
+        loadMoodHistory();
+        loadProgress();
+        loadMemories();
+        
+        // Initialize mood chart
+        initMoodChart();
+      } else {
+        // Show login prompt for unauthenticated users
+        document.getElementById('login-prompt').style.display = 'block';
+        document.getElementById('dashboard-container').style.display = 'none';
+      }
       
       // Setup login redirection button
       document.getElementById('go-to-login').addEventListener('click', function() {
         window.location.href = 'login.html';
       });
     });
+    
+    // Check user session
+    async function checkSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+        return false;
+      }
+      
+      if (data.session) {
+        currentUser = data.session.user;
+        document.getElementById('userInitialText').textContent = currentUser.email[0].toUpperCase();
+        document.getElementById('userInitialTextMobile').textContent = currentUser.email[0].toUpperCase();
+        document.getElementById('profile-initial').textContent = currentUser.email[0].toUpperCase();
+        return true;
+      }
+      
+      return false;
+    }
     
     // Initialize breathing exercise
     function initBreathingExercise() {
@@ -2138,13 +2140,13 @@
         });
       });
       
-      // Profile icon navigation
-      document.getElementById('userInitialMobile').addEventListener('click', function() {
-        // Update active nav item
+      // Profile avatar click
+      document.getElementById('userInitialMobile').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Navigate to profile section
         document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
         document.querySelector('.nav-item[data-target="profile-section"]').classList.add('active');
         
-        // Show profile section
         document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
         document.getElementById('profile-section').classList.add('active');
       });
@@ -2179,10 +2181,15 @@
       
       // Sign out button
       document.getElementById('signout-btn').addEventListener('click', async function() {
-        showToast("Signed out successfully", "success");
-        currentUser = null;
-        // Redirect to login.html
-        window.location.href = 'login.html';
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          showToast("Sign out failed: " + error.message, "error");
+        } else {
+          showToast("Signed out successfully", "success");
+          currentUser = null;
+          // Redirect to login.html
+          window.location.href = 'login.html';
+        }
       });
       
       // Breathing exercise controls
@@ -2243,31 +2250,24 @@
         }
       });
       
-      // Memory buttons
+      // Memory book button
+      document.getElementById('memory-book-btn').addEventListener('click', function() {
+        document.getElementById('memory-book-modal').style.display = 'flex';
+        loadMemoryBook();
+      });
+      
+      // Add memory button
       document.getElementById('add-memory-btn').addEventListener('click', function() {
         document.getElementById('add-memory-modal').style.display = 'flex';
       });
       
-      document.getElementById('add-memory').addEventListener('click', function() {
-        document.getElementById('add-memory-modal').style.display = 'flex';
-      });
-      
-      document.getElementById('view-memory-book').addEventListener('click', function() {
-        document.getElementById('memory-book-modal').style.display = 'flex';
-      });
-      
-      document.getElementById('close-add-memory').addEventListener('click', function() {
+      // Close memory modals
+      document.getElementById('close-add-memory').addEventListener('click', () => {
         document.getElementById('add-memory-modal').style.display = 'none';
       });
       
-      document.getElementById('close-memory-book').addEventListener('click', function() {
+      document.getElementById('close-memory-book').addEventListener('click', () => {
         document.getElementById('memory-book-modal').style.display = 'none';
-      });
-      
-      // Memory form submission
-      document.getElementById('memory-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveMemory();
       });
       
       // Memory image preview
@@ -2276,10 +2276,55 @@
         if (file) {
           const reader = new FileReader();
           reader.onload = function(event) {
-            document.getElementById('memory-preview').innerHTML = 
-              `<img src="${event.target.result}" alt="Preview" style="max-width:100%; max-height:100%;">`;
+            const preview = document.getElementById('memory-preview');
+            preview.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            preview.appendChild(img);
           };
           reader.readAsDataURL(file);
+        }
+      });
+      
+      // Save memory form
+      document.getElementById('memory-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await saveMemory();
+      });
+    }
+    
+    // Initialize mood chart
+    function initMoodChart() {
+      const ctx = document.getElementById('moodChart').getContext('2d');
+      moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Mood Level',
+            data: [3, 1, 2, 3, 4, 3, 4],
+            borderColor: '#5E60CE',
+            backgroundColor: 'rgba(94, 96, 206, 0.1)',
+            borderWidth: 3,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 4,
+              ticks: {
+                callback: function(value) {
+                  const moods = ['Awful', 'Sad', 'Neutral', 'Good', 'Great'];
+                  return moods[value];
+                }
+              }
+            }
+          }
         }
       });
     }
@@ -2294,6 +2339,18 @@
       };
       
       try {
+        const { error } = await supabase
+          .from('mood_entries')
+          .insert([
+            { 
+              user_id: currentUser.id, 
+              mood: mood,
+              created_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (error) throw error;
+        
         // Update progress
         progressSources.mood++;
         updateProgressBar();
@@ -2309,7 +2366,7 @@
     // Update progress bar
     function updateProgressBar() {
       // Calculate total progress points
-      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + progressSources.journal * 3;
+      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + progressSources.journal * 3 + progressSources.memories * 2;
       progress = Math.min(100, Math.round(totalPoints * 100 / 50)); // 50 points = 100%
       
       document.getElementById('progressFill').style.width = `${progress}%`;
@@ -2337,7 +2394,7 @@
       }
     }
     
-    // Generate new affirmation
+    // Generate new affirmation using OpenAI Edge Function
     async function refreshAffirmation() {
       const card = document.getElementById('affirmationCard');
       const affirmationElement = document.getElementById('affirmation');
@@ -2398,6 +2455,12 @@
     // Load companion information
     async function loadCompanion() {
       try {
+        // Get companion index from user metadata
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        
+        currentCompanion = user.user_metadata?.companion || "elena";
+        
         // Update UI
         document.getElementById('companion-name').textContent = companions[currentCompanion].name;
         document.getElementById('companion-role').textContent = companions[currentCompanion].role;
@@ -2470,6 +2533,12 @@
       userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
       chatMessages.appendChild(userMessage);
       
+      // Add to conversation history
+      conversationHistory.push({
+        role: "user",
+        content: message
+      });
+      
       // Clear input
       input.value = '';
       chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -2481,37 +2550,55 @@
       chatMessages.appendChild(thinkingMessage);
       chatMessages.scrollTop = chatMessages.scrollHeight;
       
-      // Simulate AI response
-      setTimeout(() => {
-        // Remove thinking indicator
+      try {
+        // Simulate AI response
+        setTimeout(() => {
+          // Remove thinking indicator
+          chatMessages.removeChild(thinkingMessage);
+          
+          // Add AI response to UI
+          const responseTime = new Date();
+          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          const responses = [
+            "I understand how you feel. Would you like to talk more about this?",
+            "That sounds challenging. Remember to be gentle with yourself during this process.",
+            "Thank you for sharing that with me. How has this been affecting your daily life?",
+            "I appreciate you opening up about this. What's one thing that brought you comfort today?",
+            "Your feelings are valid. Would it help to explore some coping strategies together?"
+          ];
+          
+          const response = responses[Math.floor(Math.random() * responses.length)];
+          
+          const companionMessage = document.createElement('div');
+          companionMessage.className = 'message companion';
+          companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
+          chatMessages.appendChild(companionMessage);
+          
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Add to conversation history
+          conversationHistory.push({
+            role: "assistant",
+            content: response
+          });
+          
+          // Update progress
+          progressSources.chat++;
+          updateProgressBar();
+          saveProgress();
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Companion chat error:", error);
         chatMessages.removeChild(thinkingMessage);
         
-        // Add AI response to UI
-        const responseTime = new Date();
-        const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        const responses = [
-          "I understand how you feel. Would you like to talk more about this?",
-          "That sounds challenging. Remember to be gentle with yourself during this process.",
-          "Thank you for sharing that with me. How has this been affecting your daily life?",
-          "I appreciate you opening up about this. What's one thing that brought you comfort today?",
-          "Your feelings are valid. Would it help to explore some coping strategies together?"
-        ];
-        
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        
-        const companionMessage = document.createElement('div');
-        companionMessage.className = 'message companion';
-        companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
-        chatMessages.appendChild(companionMessage);
-        
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'message companion';
+        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
+        chatMessages.appendChild(errorMessage);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Update progress
-        progressSources.chat++;
-        updateProgressBar();
-        saveProgress();
-      }, 1500);
+      }
     }
     
     // Load mood history
@@ -2519,21 +2606,19 @@
       if (!currentUser) return;
       
       try {
-        // Create mock mood data
-        const moodData = [
-          { mood: "great", date: new Date() },
-          { mood: "sad", date: new Date(Date.now() - 86400000) }, // 1 day ago
-          { mood: "neutral", date: new Date(Date.now() - 2 * 86400000) },
-          { mood: "great", date: new Date(Date.now() - 3 * 86400000) },
-          { mood: "awful", date: new Date(Date.now() - 4 * 86400000) },
-          { mood: "neutral", date: new Date(Date.now() - 5 * 86400000) },
-          { mood: "great", date: new Date(Date.now() - 6 * 86400000) }
-        ];
+        const { data: moods, error } = await supabase
+          .from('mood_entries')
+          .select('mood, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(7);
+        
+        if (error) throw error;
         
         const historyContainer = document.getElementById('mood-history-list');
         historyContainer.innerHTML = '';
         
-        moodData.forEach(mood => {
+        moods.forEach(mood => {
           const moodLabels = {
             "awful": { emoji: "😢", label: "Awful" },
             "sad": { emoji: "😞", label: "Sad" },
@@ -2541,15 +2626,16 @@
             "great": { emoji: "😊", label: "Great" }
           };
           
-          const moodInfo = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
-          const formattedDate = `${mood.date.toLocaleDateString()}, ${mood.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+          const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
+          const date = new Date(mood.created_at);
+          const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
           
           const entry = document.createElement('div');
           entry.className = 'mood-entry';
           entry.innerHTML = `
             <div>
-              <span class="mood-emoji-history">${moodInfo.emoji}</span>
-              <span>${moodInfo.label}</span>
+              <span class="mood-emoji-history">${moodData.emoji}</span>
+              <span>${moodData.label}</span>
             </div>
             <div>${formattedDate}</div>
           `;
@@ -2561,100 +2647,245 @@
       }
     }
     
-    // Render memories
-    function renderMemories() {
-      const container = document.getElementById('memory-container');
-      container.innerHTML = '';
+    // Load memories
+    async function loadMemories() {
+      if (!currentUser) return;
       
-      memories.forEach(memory => {
-        const memoryItem = document.createElement('div');
-        memoryItem.className = 'memory-item has-image';
+      try {
+        const { data, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
         
-        if (memory.type === 'image') {
-          memoryItem.style.backgroundImage = `url('${memory.image}')`;
-          memoryItem.innerHTML = `
-            <img class="memory-image" src="${memory.image}" alt="Memory">
-            <div class="memory-label">${memory.title}</div>
-          `;
-        } else {
-          memoryItem.innerHTML = `
-            <i class="${memory.icon}"></i>
-            <div class="memory-label">${memory.title}</div>
-          `;
-        }
+        if (error) throw error;
         
-        container.appendChild(memoryItem);
-      });
-      
-      // Add the "Add Memory" button at the end
-      const addMemoryBtn = document.createElement('div');
-      addMemoryBtn.className = 'memory-item add-memory';
-      addMemoryBtn.id = 'add-memory-btn';
-      addMemoryBtn.innerHTML = `
-        <i class="fas fa-plus"></i>
-        <div class="memory-label">Add Memory</div>
-      `;
-      container.appendChild(addMemoryBtn);
-      
-      // Reattach event listener
-      addMemoryBtn.addEventListener('click', function() {
-        document.getElementById('add-memory-modal').style.display = 'flex';
-      });
+        memories = data || [];
+        progressSources.memories = memories.length;
+        updateProgressBar();
+        
+        const container = document.getElementById('memory-container');
+        container.innerHTML = '';
+        
+        // Add existing memories
+        memories.forEach(memory => {
+          const memoryItem = document.createElement('div');
+          memoryItem.className = 'memory-item has-image';
+          
+          if (memory.image_url) {
+            memoryItem.style.backgroundImage = `url(${memory.image_url})`;
+            const img = document.createElement('img');
+            img.className = 'memory-image';
+            img.src = memory.image_url;
+            img.alt = 'Memory';
+            memoryItem.appendChild(img);
+          } else {
+            const icon = document.createElement('i');
+            icon.className = memory.icon || 'fas fa-heart';
+            memoryItem.appendChild(icon);
+          }
+          
+          const label = document.createElement('div');
+          label.className = 'memory-label';
+          label.textContent = memory.title || 'Memory';
+          memoryItem.appendChild(label);
+          
+          memoryItem.addEventListener('click', () => viewMemory(memory));
+          container.appendChild(memoryItem);
+        });
+        
+        // Add "Add Memory" button
+        const addMemory = document.createElement('div');
+        addMemory.className = 'memory-item add-memory';
+        addMemory.innerHTML = `
+          <i class="fas fa-plus"></i>
+          <div class="memory-label">Add Memory</div>
+        `;
+        addMemory.addEventListener('click', () => {
+          document.getElementById('add-memory-modal').style.display = 'flex';
+        });
+        container.appendChild(addMemory);
+        
+      } catch (error) {
+        showToast("Error loading memories: " + error.message, "error");
+      }
     }
     
     // Save memory
-    function saveMemory() {
+    async function saveMemory() {
       const title = document.getElementById('memory-title').value;
-      const description = document.getElementById('memory-description').value;
       const date = document.getElementById('memory-date').value;
-      const imageInput = document.getElementById('memory-image');
+      const description = document.getElementById('memory-description').value;
+      const imageFile = document.getElementById('memory-image').files[0];
       
       if (!title) {
         showToast("Please enter a title for your memory", "error");
         return;
       }
       
-      // Create new memory object
-      const newMemory = {
-        id: memories.length + 1,
-        title: title,
-        date: date || new Date().toISOString().split('T')[0],
-        description: description
-      };
-      
-      // Check if an image was uploaded
-      if (imageInput.files.length > 0) {
-        const file = imageInput.files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          newMemory.type = "image";
-          newMemory.image = event.target.result;
-          memories.push(newMemory);
-          renderMemories();
-          document.getElementById('add-memory-modal').style.display = 'none';
-          showToast("Memory saved successfully", "success");
-          resetMemoryForm();
-        };
-        reader.readAsDataURL(file);
-      } else {
-        // Use default icon
-        newMemory.type = "icon";
-        newMemory.icon = "fas fa-heart";
-        memories.push(newMemory);
-        renderMemories();
-        document.getElementById('add-memory-modal').style.display = 'none';
+      try {
+        let imageUrl = null;
+        
+        // Upload image if provided
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+          const filePath = `memories/${fileName}`;
+          
+          const { data, error: uploadError } = await supabase.storage
+            .from('memory-images')
+            .upload(filePath, imageFile);
+          
+          if (uploadError) throw uploadError;
+          
+          // Get public URL
+          const { data: { publicUrl } } = supabase.storage
+            .from('memory-images')
+            .getPublicUrl(filePath);
+          
+          imageUrl = publicUrl;
+        }
+        
+        // Save memory to database
+        const { error } = await supabase
+          .from('memories')
+          .insert([{
+            user_id: currentUser.id,
+            title: title,
+            date: date,
+            description: description,
+            image_url: imageUrl,
+            created_at: new Date().toISOString()
+          }]);
+        
+        if (error) throw error;
+        
         showToast("Memory saved successfully", "success");
-        resetMemoryForm();
+        document.getElementById('add-memory-modal').style.display = 'none';
+        document.getElementById('memory-form').reset();
+        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+        
+        // Reload memories
+        loadMemories();
+        
+      } catch (error) {
+        showToast("Error saving memory: " + error.message, "error");
       }
     }
     
-    // Reset memory form
-    function resetMemoryForm() {
-      document.getElementById('memory-title').value = '';
-      document.getElementById('memory-description').value = '';
-      document.getElementById('memory-date').value = '';
-      document.getElementById('memory-image').value = '';
-      document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+    // View memory details
+    function viewMemory(memory) {
+      // Create a modal to view memory details
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'flex';
+      
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>${memory.title || 'Memory'}</h3>
+            <button class="close-modal" id="close-view-memory">&times;</button>
+          </div>
+          
+          ${memory.image_url ? `
+            <div class="memory-preview">
+              <img src="${memory.image_url}" alt="${memory.title}">
+            </div>
+          ` : ''}
+          
+          <div class="form-group">
+            <label>Date</label>
+            <p>${memory.date || 'No date specified'}</p>
+          </div>
+          
+          ${memory.description ? `
+            <div class="form-group">
+              <label>Description</label>
+              <p>${memory.description}</p>
+            </div>
+          ` : ''}
+          
+          <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
+            Close
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Close modal handlers
+      document.getElementById('close-view-memory').addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+      
+      document.getElementById('close-view-memory-btn').addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+    }
+    
+    // Load memory book
+    function loadMemoryBook() {
+      const container = document.getElementById('memory-book-entries');
+      container.innerHTML = '';
+      
+      document.getElementById('memory-count').textContent = memories.length;
+      
+      if (memories.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--gray);">No memories yet. Add some to track your healing journey.</p>';
+        return;
+      }
+      
+      memories.forEach(memory => {
+        const entry = document.createElement('div');
+        entry.className = 'memory-book-entry';
+        
+        entry.innerHTML = `
+          <div class="memory-book-thumbnail" style="background-image: url(${memory.image_url || 'none'})">
+            ${!memory.image_url ? `<i class="${memory.icon || 'fas fa-heart'}"></i>` : ''}
+          </div>
+          <div class="memory-book-details">
+            <div class="memory-book-title">${memory.title || 'Memory'}</div>
+            <div class="memory-book-date">${memory.date || 'No date'}</div>
+          </div>
+        `;
+        
+        entry.addEventListener('click', () => viewMemory(memory));
+        container.appendChild(entry);
+      });
+    }
+    
+    // Save user settings
+    async function saveSettings() {
+      const name = document.getElementById('user-name').value;
+      const email = document.getElementById('user-email').value;
+      const lossType = document.getElementById('loss-type').value;
+      
+      try {
+        const { error } = await supabase.auth.updateUser({
+          email: email,
+          data: { 
+            name: name,
+            loss_type: lossType,
+            journal_reminders: document.getElementById('journal-reminders').checked,
+            affirmation_reminders: document.getElementById('affirmation-reminders').checked
+          }
+        });
+        
+        if (error) throw error;
+        
+        showToast("Settings saved successfully", "success");
+        document.getElementById('settings-modal').style.display = 'none';
+        
+        // Update UI with new name if available
+        if (name) {
+          document.getElementById('userInitialText').textContent = name[0].toUpperCase();
+          document.getElementById('userInitialTextMobile').textContent = name[0].toUpperCase();
+          document.getElementById('profile-initial').textContent = name[0].toUpperCase();
+          document.getElementById('profile-name').textContent = name;
+        }
+      } catch (error) {
+        showToast("Error saving settings: " + error.message, "error");
+      }
     }
   </script>
 </body>
