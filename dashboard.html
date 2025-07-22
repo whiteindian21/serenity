@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Therapathy - Healing Dashboard</title>
+  <title>Therapathy - AI Healing Companion</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,11 +15,14 @@
       --primary-dark: #4A4DC7;
       --secondary: #64DFDF;
       --accent: #FF6B6B;
+      --accent-light: #FFD8D8;
       --dark: #25274D;
       --light: #F8F9FF;
+      --light-alt: #F0F3FF;
       --gray: #8A9BA8;
       --gray-light: #E2E8F0;
       --success: #48BB78;
+      --success-light: #C6F6D5;
       --warning: #F6AD55;
       --error: #E53E3E;
       --transition: all 0.3s ease;
@@ -89,6 +92,9 @@
       top: 0;
       z-index: 100;
       box-shadow: var(--shadow-light);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
     }
     
     .app-logo {
@@ -98,6 +104,7 @@
       font-weight: 800;
       font-size: 1.2rem;
       color: var(--primary);
+      text-shadow: 0 1px 2px rgba(94, 96, 206, 0.1);
     }
     
     .app-logo i {
@@ -122,6 +129,7 @@
 
     .user-avatar:hover {
       transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.35);
     }
 
     /* Dashboard Content */
@@ -131,23 +139,21 @@
       overflow: hidden;
     }
 
-    /* Dashboard Header - Removed */
-    
     /* Cards */
     .card {
       background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-md);
-      padding: 1.2rem;
+      padding: 1.5rem;
       margin: 1rem 0;
       position: relative;
       transition: var(--transition);
       border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: var(--shadow-light);
       animation: fadeIn 0.7s ease-out;
-    }
-
-    .card:hover {
-      box-shadow: var(--shadow-medium);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.92);
+      overflow: hidden;
     }
 
     .card::before {
@@ -161,8 +167,13 @@
       border-radius: var(--radius-md) 0 0 var(--radius-md);
     }
 
+    .card:hover {
+      box-shadow: var(--shadow-medium);
+      transform: translateY(-5px);
+    }
+
     .card h3 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       margin-bottom: 0.8rem;
       display: flex;
       align-items: center;
@@ -172,6 +183,13 @@
     .card h3 i {
       font-size: 1.1rem;
       color: var(--primary);
+      background: var(--primary-light);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .affirmation-card {
@@ -180,30 +198,31 @@
     }
 
     #affirmation {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 500;
       color: var(--dark);
       position: relative;
       z-index: 1;
       line-height: 1.6;
       font-style: italic;
-      padding: 0.8rem;
+      padding: 1rem;
       background: rgba(255, 255, 255, 0.7);
       border-radius: var(--radius-sm);
       border-left: 3px solid var(--primary);
+      margin: 1rem 0;
     }
 
     .card-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
+      gap: 0.8rem;
       margin-top: 1rem;
     }
 
     .btn {
-      padding: 0.8rem;
+      padding: 0.9rem;
       border-radius: var(--radius-md);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
@@ -253,8 +272,14 @@
       box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
     }
 
+    .btn-success {
+      background: rgba(72, 187, 120, 0.12);
+      color: var(--success);
+      border: 1px solid rgba(72, 187, 120, 0.25);
+    }
+
     .btn-sm {
-      padding: 0.6rem;
+      padding: 0.7rem;
       font-size: 0.85rem;
     }
 
@@ -262,7 +287,7 @@
     .action-cards {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.8rem;
+      gap: 1rem;
       margin: 1.2rem 0;
     }
 
@@ -275,7 +300,7 @@
     .action-card {
       background: rgba(255, 255, 255, 0.97);
       border-radius: var(--radius-md);
-      padding: 1.2rem;
+      padding: 1.5rem;
       transition: var(--transition);
       box-shadow: var(--shadow-light);
       display: flex;
@@ -287,11 +312,14 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       animation: fadeIn 0.8s ease-out;
       height: 100%;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .action-card:hover {
       box-shadow: var(--shadow-medium);
-      transform: translateY(-4px);
+      transform: translateY(-8px);
     }
 
     .action-card i {
@@ -311,7 +339,7 @@
     .action-card h3 {
       margin-bottom: 0.6rem;
       color: var(--dark);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
     }
 
     .action-card p {
@@ -326,12 +354,12 @@
       width: 100%;
     }
 
-    /* Enhanced Breathing Exercise */
+    /* Breathing Exercise */
     .breath-container {
       position: relative;
       margin: 1.5rem auto;
-      width: 180px;
-      height: 180px;
+      width: 200px;
+      height: 200px;
     }
     
     .breath-circle {
@@ -342,7 +370,7 @@
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 700;
       transition: all 1.5s ease-in-out;
       position: absolute;
@@ -411,34 +439,37 @@
     }
     
     .stat-value {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--primary);
     }
     
     .stat-label {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--gray);
       margin-top: 0.3rem;
       font-weight: 600;
     }
     
     .breath-instruction {
-      font-size: 1.1rem;
-      margin: 1.2rem 0;
+      font-size: 1.2rem;
+      margin: 1.5rem 0;
       color: var(--dark);
       font-weight: 600;
       text-align: center;
-      padding: 0.8rem;
+      padding: 1rem;
       background: rgba(94, 96, 206, 0.08);
       border-radius: var(--radius-sm);
       transition: all 0.5s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.8);
     }
     
     .breath-controls {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
+      gap: 0.8rem;
       margin-top: 0.8rem;
     }
 
@@ -446,8 +477,8 @@
     .memory-container {
       display: flex;
       overflow-x: auto;
-      gap: 0.8rem;
-      margin-top: 1.2rem;
+      gap: 1rem;
+      margin-top: 1.5rem;
       padding-bottom: 0.5rem;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -459,15 +490,15 @@
     
     .memory-item {
       flex: 0 0 auto;
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       border-radius: var(--radius-md);
       background: linear-gradient(135deg, rgba(94, 96, 206, 0.12), rgba(100, 223, 223, 0.12));
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--primary);
-      font-size: 1.8rem;
+      font-size: 2rem;
       cursor: pointer;
       transition: var(--transition);
       border: 1px solid rgba(94, 96, 206, 0.2);
@@ -479,7 +510,7 @@
     }
     
     .memory-item:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-medium);
     }
     
@@ -499,7 +530,7 @@
       bottom: 8px;
       left: 0;
       right: 0;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       text-align: center;
       color: var(--dark);
       padding: 0 5px;
@@ -535,8 +566,8 @@
     .mood-options {
       display: flex;
       overflow-x: auto;
-      gap: 0.6rem;
-      margin: 1.2rem 0;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
       padding-bottom: 0.5rem;
       scrollbar-width: none;
     }
@@ -550,29 +581,31 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      padding: 0.8rem 0.5rem;
-      border-radius: var(--radius-sm);
+      padding: 1rem 0.8rem;
+      border-radius: var(--radius-md);
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid rgba(94, 96, 206, 0.15);
       box-shadow: var(--shadow-light);
       flex: 0 0 auto;
-      width: 75px;
+      width: 85px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .mood-option:hover {
-      transform: translateY(-3px);
+      transform: translateY(-5px);
       box-shadow: var(--shadow-medium);
     }
 
     .mood-emoji {
-      font-size: 1.8rem;
-      margin-bottom: 0.4rem;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
       transition: var(--transition);
     }
 
     .mood-label {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--gray);
       font-weight: 600;
     }
@@ -580,77 +613,79 @@
     .mood-option.selected {
       background: rgba(94, 96, 206, 0.15);
       border: 1px solid rgba(94, 96, 206, 0.35);
-      transform: translateY(-3px);
+      transform: translateY(-5px);
       box-shadow: 0 6px 15px rgba(94, 96, 206, 0.15);
     }
 
     .mood-option.selected .mood-emoji {
-      transform: scale(1.2);
+      transform: scale(1.3);
     }
 
     .quick-actions {
       display: flex;
-      gap: 0.6rem;
-      margin-top: 1rem;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
     }
 
     /* Activity Section */
     .activity-list {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 1rem;
     }
 
     .activity-item {
       display: flex;
       align-items: flex-start;
-      gap: 0.8rem;
-      padding: 0.8rem;
-      border-radius: var(--radius-sm);
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius-md);
       transition: background 0.3s ease;
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid rgba(94, 96, 206, 0.15);
       box-shadow: var(--shadow-light);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .activity-item:hover {
       background: rgba(94, 96, 206, 0.08);
-      transform: translateX(4px);
+      transform: translateX(5px);
     }
 
     .activity-icon {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1rem;
+      font-size: 1.1rem;
       flex-shrink: 0;
       box-shadow: 0 4px 10px rgba(94, 96, 206, 0.25);
     }
 
     .activity-title {
       font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 0.2rem;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
       color: var(--dark);
     }
 
     .activity-time {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--gray);
       font-weight: 500;
     }
 
     /* Progress Section */
     .progress-bar {
-      height: 10px;
+      height: 12px;
       background: var(--gray-light);
       border-radius: 6px;
-      margin: 1.2rem 0;
+      margin: 1.5rem 0;
       overflow: hidden;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     }
@@ -667,17 +702,18 @@
     .progress-info {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--gray);
       font-weight: 600;
+      margin-top: 0.5rem;
     }
     
     /* Progress sources indicator */
     .progress-sources {
       display: flex;
       justify-content: space-between;
-      margin-top: 1rem;
-      gap: 0.5rem;
+      margin-top: 1.5rem;
+      gap: 0.8rem;
     }
     
     .progress-source {
@@ -688,8 +724,8 @@
     }
     
     .progress-source-icon {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: var(--primary-light);
       display: flex;
@@ -697,16 +733,18 @@
       justify-content: center;
       margin-bottom: 0.5rem;
       color: white;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-light);
     }
     
     .progress-source-value {
-      font-weight: 700;
-      font-size: 0.9rem;
+      font-weight: 800;
+      font-size: 1rem;
       color: var(--primary);
     }
     
     .progress-source-label {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--gray);
       text-align: center;
     }
@@ -717,36 +755,38 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 0.8rem;
-      margin-top: 1rem;
+      gap: 1rem;
+      margin-top: 1.2rem;
     }
 
     .companion-avatar {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 2rem;
+      font-size: 2.5rem;
       box-shadow: 0 6px 18px rgba(94, 96, 206, 0.35);
       transition: transform 0.3s ease;
+      border: 3px solid white;
     }
     
     .companion-avatar:hover {
-      transform: scale(1.08);
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(94, 96, 206, 0.45);
     }
 
     .companion-name {
       font-weight: 800;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: var(--dark);
     }
 
     .companion-role {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--gray);
       margin-bottom: 0.5rem;
       font-weight: 600;
@@ -754,8 +794,8 @@
 
     .companion-specialties {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
       flex-wrap: wrap;
       justify-content: center;
     }
@@ -763,9 +803,9 @@
     .specialty-tag {
       background: rgba(94, 96, 206, 0.12);
       color: var(--primary);
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 1rem;
       border-radius: 30px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border: 1px solid rgba(94, 96, 206, 0.25);
       transition: var(--transition);
@@ -774,7 +814,7 @@
     
     .specialty-tag:hover {
       background: rgba(94, 96, 206, 0.2);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-medium);
     }
 
@@ -788,12 +828,13 @@
       border-top: 1px solid var(--gray-light);
       display: flex;
       justify-content: space-around;
-      padding: 0.6rem 0;
+      padding: 0.8rem 0;
       z-index: 100;
       box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding-bottom: calc(0.6rem + var(--safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.9);
+      padding-bottom: calc(0.8rem + var(--safe-area-inset-bottom));
     }
     
     .nav-item {
@@ -801,7 +842,7 @@
       flex-direction: column;
       align-items: center;
       color: var(--gray);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-decoration: none;
       transition: var(--transition);
       flex: 1;
@@ -809,8 +850,8 @@
     }
     
     .nav-item i {
-      font-size: 1.2rem;
-      margin-bottom: 0.2rem;
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
     }
     
     .nav-item.active {
@@ -818,7 +859,7 @@
     }
     
     .nav-item:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       color: var(--primary);
     }
     
@@ -844,7 +885,7 @@
       }
       70% {
         transform: scale(1);
-        box-shadow: 0 0 0 12px rgba(94, 96, 206, 0);
+        box-shadow: 0 0 0 15px rgba(94, 96, 206, 0);
       }
       100% {
         transform: scale(0.95);
@@ -871,9 +912,9 @@
       transform: translateX(-50%) translateY(100px);
       background: var(--dark);
       color: white;
-      padding: 0.8rem 1.2rem;
+      padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       box-shadow: var(--shadow-dark);
       z-index: 3000;
@@ -908,25 +949,28 @@
     .login-prompt {
       background: white;
       border-radius: var(--radius-md);
-      padding: 2rem 1.2rem;
+      padding: 2.5rem 1.5rem;
       text-align: center;
       max-width: 500px;
       margin: 2rem auto;
       box-shadow: var(--shadow-light);
       border: 1px solid var(--gray-light);
       animation: fadeIn 0.8s ease-out;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.92);
     }
     
     .login-prompt h2 {
       color: var(--primary);
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.6rem;
     }
     
     .login-prompt p {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       color: var(--gray);
-      font-size: 1rem;
+      font-size: 1.05rem;
       line-height: 1.7;
     }
     
@@ -934,12 +978,12 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
-      padding: 1rem 2rem;
+      padding: 1.2rem 2.5rem;
       border-radius: var(--radius-md);
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
-      font-size: 1rem;
+      font-size: 1.1rem;
       display: inline-flex;
       align-items: center;
       gap: 0.8rem;
@@ -964,8 +1008,11 @@
       font-size: 1.1rem;
       cursor: pointer;
       transition: var(--transition);
-      padding: 0.4rem;
-      border-radius: 50%;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     
     .btn-signout:hover {
@@ -991,26 +1038,29 @@
     .modal-content {
       background: white;
       border-radius: var(--radius-lg);
-      padding: 2rem;
+      padding: 2.5rem;
       width: 90%;
       max-width: 500px;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: var(--shadow-dark);
       animation: scaleIn 0.3s ease-out;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
     }
     
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
     }
     
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: var(--gray);
       cursor: pointer;
       transition: var(--transition);
@@ -1021,24 +1071,25 @@
     }
     
     .form-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
     }
     
     .form-group label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       font-weight: 600;
       color: var(--dark);
     }
     
     .form-control {
       width: 100%;
-      padding: 0.8rem;
+      padding: 1rem;
       border-radius: var(--radius-md);
       border: 1px solid var(--gray-light);
       font-family: 'Nunito', sans-serif;
       font-size: 1rem;
       transition: var(--transition);
+      background: white;
     }
     
     .form-control:focus {
@@ -1051,14 +1102,14 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
       border: none;
-      padding: 1rem;
+      padding: 1.2rem;
       border-radius: var(--radius-md);
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
-      font-size: 1rem;
+      font-size: 1.1rem;
       width: 100%;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
     
     .btn-save:hover {
@@ -1072,14 +1123,16 @@
     
     .memory-label-upload {
       display: block;
-      padding: 1rem;
+      padding: 1.2rem;
       background: rgba(94, 96, 206, 0.1);
       border-radius: var(--radius-md);
       text-align: center;
       cursor: pointer;
       border: 2px dashed rgba(94, 96, 206, 0.3);
       transition: var(--transition);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
     }
     
     .memory-label-upload:hover {
@@ -1089,36 +1142,40 @@
     .mood-history-container {
       max-height: 300px;
       overflow-y: auto;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
     
     .mood-entry {
       display: flex;
       justify-content: space-between;
-      padding: 0.8rem;
+      padding: 1rem;
       border-bottom: 1px solid var(--gray-light);
+      align-items: center;
     }
     
     .mood-emoji-history {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      margin-right: 1rem;
     }
     
     .chart-container {
       height: 250px;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
     
     /* Memory preview */
     .memory-preview {
       width: 100%;
-      height: 200px;
+      height: 220px;
       border-radius: var(--radius-md);
       background-color: var(--light);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      background: var(--light-alt);
+      border: 1px dashed var(--primary-light);
     }
     
     .memory-preview img {
@@ -1128,15 +1185,15 @@
     }
     
     .memory-preview i {
-      font-size: 3rem;
+      font-size: 3.5rem;
       color: var(--gray);
     }
     
     /* View memory modal */
     .memory-actions {
       display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
     }
     
     /* Memory Book Modal */
@@ -1148,18 +1205,33 @@
     .memory-book-entry {
       display: flex;
       align-items: center;
-      padding: 1rem;
+      padding: 1.2rem;
       border-bottom: 1px solid var(--gray-light);
-      gap: 1rem;
+      gap: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .memory-book-entry:hover {
+      background: rgba(94, 96, 206, 0.05);
     }
     
     .memory-book-thumbnail {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       border-radius: var(--radius-sm);
       background-size: cover;
       background-position: center;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--light-alt);
+    }
+    
+    .memory-book-thumbnail i {
+      font-size: 1.8rem;
+      color: var(--gray);
     }
     
     .memory-book-details {
@@ -1167,25 +1239,28 @@
     }
     
     .memory-book-title {
-      font-weight: 600;
+      font-weight: 700;
       color: var(--dark);
+      font-size: 1.1rem;
     }
     
     .memory-book-date {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--gray);
+      margin-top: 0.3rem;
     }
     
     .memory-book-progress {
-      margin-top: 1rem;
-      padding: 1rem;
+      margin-top: 1.5rem;
+      padding: 1.2rem;
       background: rgba(94, 96, 206, 0.05);
       border-radius: var(--radius-md);
     }
     
     .memory-book-progress h4 {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
       color: var(--primary);
+      font-size: 1.1rem;
     }
     
     @keyframes scaleIn {
@@ -1195,45 +1270,32 @@
     
     /* Chat Interface */
     .chat-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       width: 100%;
-      height: 65vh;
-      max-height: 100%;
+      height: 400px;
       background: white;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      box-shadow: var(--shadow-dark);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
       display: flex;
       flex-direction: column;
-      z-index: 1000;
       overflow: hidden;
-      transform: translateY(100%);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       border: 1px solid rgba(94, 96, 206, 0.1);
-      touch-action: none;
-    }
-    
-    .chat-container.active {
-      transform: translateY(0);
-      opacity: 1;
+      margin-top: 1.5rem;
     }
     
     .chat-header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      padding: 1rem;
+      padding: 1.2rem;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 1rem;
       position: relative;
     }
     
     .chat-header .avatar {
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       background: white;
       display: flex;
@@ -1241,48 +1303,62 @@
       justify-content: center;
       color: var(--primary);
       font-weight: 600;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     
     .chat-header h3 {
       flex: 1;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 500;
       font-family: 'Nunito', sans-serif;
+    }
+    
+    .chat-settings {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.6rem;
+      border-radius: 50%;
+      transition: var(--transition);
+      margin-left: auto;
+      margin-right: 0.5rem;
+    }
+    
+    .chat-settings:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
     
     .close-chat {
       background: none;
       border: none;
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0.6rem;
       border-radius: 50%;
       transition: var(--transition);
-    }
-    
-    .close-chat:hover {
-      background: rgba(255, 255, 255, 0.2);
+      display: none; /* Hide close button */
     }
     
     .chat-messages {
       flex: 1;
-      padding: 1rem;
+      padding: 1.2rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 1rem;
       -webkit-overflow-scrolling: touch;
       background: var(--light);
     }
     
     .message {
       max-width: 85%;
-      padding: 0.8rem 1rem;
+      padding: 1rem 1.2rem;
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 1rem;
       position: relative;
       word-break: break-word;
       line-height: 1.5;
@@ -1306,25 +1382,25 @@
     }
     
     .message-time {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--gray);
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
       text-align: right;
     }
     
     .chat-input {
       display: flex;
-      padding: 0.8rem;
+      padding: 1rem;
       border-top: 1px solid rgba(94, 96, 206, 0.1);
       background: white;
     }
     
     .chat-input input {
       flex: 1;
-      padding: 0.8rem;
+      padding: 1rem;
       border: 1px solid rgba(94, 96, 206, 0.2);
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-family: 'Nunito', sans-serif;
       transition: var(--transition);
     }
@@ -1339,15 +1415,16 @@
       background: var(--primary);
       color: white;
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      margin-left: 0.8rem;
+      margin-left: 1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: var(--transition);
+      font-size: 1.2rem;
     }
     
     .send-btn:hover {
@@ -1379,30 +1456,7 @@
     
     /* Chat button */
     .chat-fab {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-dark);
-      z-index: 50;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    
-    .chat-fab:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(94, 96, 206, 0.4);
-    }
-    
-    .chat-fab i {
-      font-size: 1.5rem;
+      display: none; /* Hide floating chat button */
     }
     
     /* Page sections for navigation */
@@ -1419,22 +1473,76 @@
     .mood-chart {
       width: 100%;
       height: 200px;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    /* Companion selection */
+    .companion-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (min-width: 480px) {
+      .companion-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .companion-select {
+      border: 2px solid var(--gray-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: white;
+    }
+    
+    .companion-select:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-light);
+    }
+    
+    .companion-select.selected {
+      border-color: var(--primary);
+      background: rgba(94, 96, 206, 0.05);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .companion-select .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    
+    .companion-select h4 {
+      margin-bottom: 0.5rem;
+      color: var(--dark);
     }
     
     /* Responsive adjustments */
     @media (max-width: 480px) {
       .card {
-        padding: 1rem;
+        padding: 1.2rem;
       }
       
       .breath-container {
-        width: 160px;
-        height: 160px;
+        width: 180px;
+        height: 180px;
       }
       
       .chat-container {
-        height: 70vh;
+        height: 350px;
       }
     }
     
@@ -1447,6 +1555,129 @@
       .action-cards {
         grid-template-columns: 1fr 1fr;
       }
+      
+      .chat-container {
+        height: 380px;
+      }
+    }
+    
+    /* UI Enhancements */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    
+    .section-title i {
+      font-size: 1.2rem;
+      color: var(--primary);
+      background: var(--primary-light);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .app-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+    
+    .app-header h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .app-header p {
+      color: var(--gray);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .card-content {
+      padding: 1rem 0;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .stat-card i {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+    }
+    
+    .stat-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .stat-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .divider {
+      height: 1px;
+      background: var(--gray-light);
+      margin: 1.5rem 0;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--gray);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--gray-light);
+    }
+    
+    .empty-state h4 {
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Improved companion section */
+    .companion-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(94, 96, 206, 0.1);
+      transition: var(--transition);
+    }
+    
+    .companion-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
     }
   </style>
 </head>
@@ -1480,12 +1711,34 @@
         </div>
       </div>
 
+      <!-- Chat Interface -->
+      <div class="chat-container" id="chat-container">
+        <div class="chat-header">
+          <div class="avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <h3 id="chat-title">Chat with Elena</h3>
+          <button class="chat-settings" id="chat-settings" aria-label="Change companion">
+            <i class="fas fa-user-friends"></i>
+          </button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="message companion">
+            Hi there! I'm Elena, your healing companion. How are you feeling today?
+            <div class="message-time">Just now</div>
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chat-input" placeholder="Type your message...">
+          <button class="send-btn" id="send-btn" aria-label="Send message">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
       <!-- Breathing Exercise -->
       <div class="card">
-        <div class="section-title">
-          <i class="fas fa-wind"></i>
-          <h3>Calming Breath</h3>
-        </div>
+        <h3><i class="fas fa-wind"></i> Calming Breath</h3>
         <div class="breath-container">
           <div class="breath-visual"></div>
           <div class="breath-phase"></div>
@@ -1519,38 +1772,9 @@
         </div>
       </div>
       
-      <!-- Companion Section -->
-      <div class="card">
-        <div class="section-title">
-          <i class="fas fa-comments"></i>
-          <h3>Your Companion</h3>
-        </div>
-        
-        <div class="companion-container">
-          <div class="companion-avatar" id="companion-avatar">
-            <i class="fas fa-smile"></i>
-          </div>
-          <div class="companion-name" id="companion-name">Elena</div>
-          <div class="companion-role" id="companion-role">Healing Guide</div>
-          
-          <div class="companion-specialties" id="companion-specialties">
-            <div class="specialty-tag">Grief</div>
-            <div class="specialty-tag">Compassion</div>
-            <div class="specialty-tag">Support</div>
-          </div>
-          
-          <button class="btn btn-primary" id="start-chat-btn">
-            <i class="fas fa-comment"></i> Start Chat
-          </button>
-        </div>
-      </div>
-
       <!-- Mood Tracker -->
       <div class="card">
-        <div class="section-title">
-          <i class="fas fa-smile"></i>
-          <h3>How You Feel</h3>
-        </div>
+        <h3><i class="fas fa-smile"></i> How You Feel</h3>
         
         <div class="mood-options">
           <div class="mood-option" data-mood="awful">
@@ -1580,53 +1804,79 @@
           </button>
         </div>
       </div>
-    </div>
-    
-    <!-- Tools Page -->
-    <div id="tools-section" class="page-section">
+      
+      <!-- Companion Section -->
       <div class="card">
-        <h3><i class="fas fa-tools"></i> Healing Tools</h3>
-        <p>Explore our collection of therapeutic tools</p>
+        <h3><i class="fas fa-comments"></i> Your Companion</h3>
         
-        <div class="action-cards">
-          <div class="action-card" id="journal-btn">
-            <i class="fas fa-book-open"></i>
-            <h3>Journal</h3>
-            <p>Express your thoughts with guided prompts</p>
-            <button class="btn btn-primary">
-              Begin <i class="fas fa-chevron-right"></i>
-            </button>
+        <div class="companion-container">
+          <div class="companion-avatar" id="companion-avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <div class="companion-name" id="companion-name">Elena</div>
+          <div class="companion-role" id="companion-role">Healing Guide</div>
+          
+          <div class="companion-specialties" id="companion-specialties">
+            <div class="specialty-tag">Grief</div>
+            <div class="specialty-tag">Compassion</div>
+            <div class="specialty-tag">Support</div>
           </div>
           
-          <div class="action-card" id="compassion-btn">
-            <i class="fas fa-hand-holding-heart"></i>
-            <h3>Self-Care</h3>
-            <p>Exercises to cultivate self-kindness</p>
-            <button class="btn btn-primary">
-              Explore <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-          
-          <div class="action-card">
-            <i class="fas fa-headphones"></i>
-            <h3>Meditation Library</h3>
-            <p>Calming meditations for grief and healing</p>
-            <button class="btn btn-primary">
-              Explore <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-          
-          <div class="action-card">
-            <i class="fas fa-brain"></i>
-            <h3>Cognitive Exercises</h3>
-            <p>Tools to reframe negative thoughts</p>
-            <button class="btn btn-primary">
-              Begin <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
+          <button class="btn btn-primary" id="change-companion-btn">
+            <i class="fas fa-user-friends"></i> Change Companion
+          </button>
         </div>
       </div>
     </div>
+    <!-- Tools Page -->
+<div id="tools-section" class="page-section">
+  <div class="card">
+    <h3><i class="fas fa-tools"></i> Healing Tools</h3>
+    <p>Explore our collection of therapeutic tools</p>
+    
+    <div class="action-cards">
+      <!-- Journal Button -->
+      <div class="action-card" id="journal-btn">
+        <i class="fas fa-book-open"></i>
+        <h3>Journal</h3>
+        <p>Express your thoughts with guided prompts</p>
+        <a href="/journal" class="btn btn-primary">
+          Begin <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      
+      <!-- Self-Care Button -->
+      <div class="action-card" id="compassion-btn">
+        <i class="fas fa-hand-holding-heart"></i>
+        <h3>Self-Care</h3>
+        <p>Exercises to cultivate self-kindness</p>
+        <a href="/self-care" class="btn btn-primary">
+          Explore <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      
+      <!-- Meditation Button -->
+      <div class="action-card">
+        <i class="fas fa-headphones"></i>
+        <h3>Meditation Library</h3>
+        <p>Calming meditations for grief and healing</p>
+        <a href="/meditation" class="btn btn-primary">
+          Explore <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      
+      <!-- Cognitive Exercises Button -->
+      <div class="action-card">
+        <i class="fas fa-brain"></i>
+        <h3>Cognitive Exercises</h3>
+        <p>Tools to reframe negative thoughts</p>
+        <a href="/cognitive-exercises" class="btn btn-primary">
+          Begin <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
     
     <!-- Memories Page -->
     <div id="memories-section" class="page-section">
@@ -1653,7 +1903,7 @@
     <div id="profile-section" class="page-section">
       <div class="card">
         <div class="companion-container">
-          <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2rem;">
+          <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2.2rem;">
             <span id="profile-initial">U</span>
           </div>
           <div class="companion-name" id="profile-name">User Name</div>
@@ -1695,6 +1945,10 @@
         <button class="btn btn-primary" style="margin-top: 1.5rem;" id="account-settings-btn">
           <i class="fas fa-cog"></i> Account Settings
         </button>
+        
+        <button class="btn btn-secondary" style="margin-top: 1rem;" id="change-companion-btn-profile">
+          <i class="fas fa-user-friends"></i> Change Companion
+        </button>
       </div>
       
       <!-- Sign Out Button -->
@@ -1704,17 +1958,12 @@
         </button>
       </div>
     </div>
-    
-    <!-- Floating Chat Button -->
-    <div class="chat-fab" id="chat-fab">
-      <i class="fas fa-comment-dots"></i>
-    </div>
   </div>
 
   <!-- Login Prompt -->
   <div class="container login-prompt" id="login-prompt">
     <h2>Welcome to Therapathy</h2>
-    <p>Please sign in to access your personalized healing tools, resources, and progress tracking.</p>
+    <p>Your AI-powered healing companion for grief counseling and emotional support</p>
     <button class="btn-login" id="go-to-login">
       <i class="fas fa-sign-in-alt"></i> Go to Login Page
     </button>
@@ -1742,31 +1991,6 @@
 
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
-  
-  <!-- Chat Interface -->
-  <div class="chat-container" id="chat-container">
-    <div class="chat-header">
-      <div class="avatar">
-        <i class="fas fa-smile"></i>
-      </div>
-      <h3 id="chat-title">Chat with Elena</h3>
-      <button class="close-chat" id="close-chat" aria-label="Close chat">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="chat-messages" id="chat-messages">
-      <div class="message companion">
-        Hi there! I'm Elena, your healing companion. How are you feeling today?
-        <div class="message-time">Just now</div>
-      </div>
-    </div>
-    <div class="chat-input">
-      <input type="text" id="chat-input" placeholder="Type your message...">
-      <button class="send-btn" id="send-btn" aria-label="Send message">
-        <i class="fas fa-paper-plane"></i>
-      </button>
-    </div>
-  </div>
   
   <!-- Settings Modal -->
   <div class="modal" id="settings-modal">
@@ -1895,6 +2119,51 @@
     </div>
   </div>
   
+  <!-- Companion Selection Modal -->
+  <div class="modal" id="companion-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Choose Your Companion</h3>
+        <button class="close-modal" id="close-companion">&times;</button>
+      </div>
+      
+      <p style="margin-bottom: 1.5rem;">Select an AI companion who best matches your healing needs</p>
+      
+      <div class="companion-grid">
+        <div class="companion-select" data-companion="elena">
+          <div class="avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <h4>Elena</h4>
+          <p>Healing Guide</p>
+          <p class="specialty-tag">Grief & Compassion</p>
+        </div>
+        
+        <div class="companion-select" data-companion="david">
+          <div class="avatar">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h4>David</h4>
+          <p>Mindfulness Coach</p>
+          <p class="specialty-tag">Meditation & Resilience</p>
+        </div>
+        
+        <div class="companion-select" data-companion="sophia">
+          <div class="avatar">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h4>Sophia</h4>
+          <p>Therapeutic Guide</p>
+          <p class="specialty-tag">Cognitive Therapy</p>
+        </div>
+      </div>
+      
+      <button class="btn-save" id="save-companion" style="margin-top: 1.5rem;">
+        Select Companion
+      </button>
+    </div>
+  </div>
+  
   <script>
 // Initialize Supabase
 const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
@@ -1915,6 +2184,7 @@ let moodChart = null;
 let currentCompanion = "elena";
 let conversationHistory = [];
 let memories = [];
+let firstLoad = true;
 
 // Progress tracking
 let progressSources = {
@@ -1933,7 +2203,17 @@ const companions = {
     avatar: "fas fa-smile",
     personality: "compassionate",
     intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
-    systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental."
+    systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental.",
+    responses: [
+      "I understand how you feel. Would you like to talk more about this?",
+      "That sounds challenging. Remember to be gentle with yourself during this process.",
+      "Thank you for sharing that with me. How has this been affecting your daily life?",
+      "I appreciate you opening up about this. What's one thing that brought you comfort today?",
+      "Your feelings are valid. Would it help to explore some coping strategies together?",
+      "It takes courage to share what you're going through. I'm here to support you.",
+      "Let's take a moment to breathe together. Would that help right now?",
+      "I'm listening. Would you like to share more about what you're experiencing?"
+    ]
   },
   "david": {
     name: "David",
@@ -1942,7 +2222,17 @@ const companions = {
     avatar: "fas fa-leaf",
     personality: "calm",
     intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
-    systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques."
+    systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques.",
+    responses: [
+      "Let's take a deep breath together. Inhale slowly... and exhale.",
+      "Mindfulness can help us navigate difficult emotions. Would you like to try a grounding exercise?",
+      "I hear you. Remember that emotions are temporary visitors. How can we find calm right now?",
+      "Notice your breathing. Where do you feel this emotion in your body?",
+      "Let's practice being present. Name three things you can see around you.",
+      "Difficult moments are opportunities for growth. What is this experience teaching you?",
+      "I'm here to guide you back to the present moment whenever you feel overwhelmed.",
+      "Would a short guided meditation help you right now?"
+    ]
   },
   "sophia": {
     name: "Sophia",
@@ -1951,7 +2241,17 @@ const companions = {
     avatar: "fas fa-lightbulb",
     personality: "insightful",
     intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
-    systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery."
+    systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery.",
+    responses: [
+      "That's an interesting perspective. What evidence supports this thought?",
+      "How might you reframe that situation in a more balanced way?",
+      "What strengths have helped you through difficult times in the past?",
+      "Let's explore alternative perspectives. What might be another way to view this?",
+      "I notice a pattern here. How might we challenge that thought together?",
+      "What would you tell a friend who was experiencing what you're going through?",
+      "Let's examine the evidence for and against that thought.",
+      "What small step could you take today to move toward healing?"
+    ]
   }
 };
 
@@ -1973,7 +2273,7 @@ async function checkSession() {
       const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
       
       // Safely update user initials
-      ['userInitialText', 'userInitialTextMobile', 'profile-initial'].forEach(id => {
+      ['userInitialTextMobile', 'profile-initial'].forEach(id => {
         const el = getElement(id);
         if (el) el.textContent = initial;
       });
@@ -1990,6 +2290,25 @@ async function checkSession() {
   } catch (error) {
     console.error('Session check failed:', error.message);
     return false;
+  }
+}
+
+// Set greeting based on time of day
+function setGreeting() {
+  const hour = new Date().getHours();
+  let greeting;
+  
+  if (hour < 12) {
+    greeting = "Good morning";
+  } else if (hour < 18) {
+    greeting = "Good afternoon";
+  } else {
+    greeting = "Good evening";
+  }
+  
+  const greetingEl = document.getElementById('greeting');
+  if (greetingEl) {
+    greetingEl.textContent = greeting;
   }
 }
 
@@ -2019,6 +2338,10 @@ document.addEventListener('DOMContentLoaded', async function() {
       
       // Initialize mood chart
       initMoodChart();
+      
+      // Start companion chat
+      startCompanionChat();
+      firstLoad = false;
     } else {
       // Show login prompt for unauthenticated users
       if (loginPrompt) loginPrompt.style.display = 'block';
@@ -2194,11 +2517,128 @@ function setupEventListeners() {
     });
   }
   
-  // Add other event listeners similarly with null checks
-  // [Rest of your event listeners...]
+  // Breathing exercise controls
+  const startBtn = getElement('start-breath');
+  if (startBtn) startBtn.addEventListener('click', toggleBreathing);
+  
+  const resetBtn = getElement('reset-breath');
+  if (resetBtn) resetBtn.addEventListener('click', resetBreathing);
+  
+  // Mood selection
+  document.querySelectorAll('.mood-option').forEach(option => {
+    option.addEventListener('click', function() {
+      document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+      this.classList.add('selected');
+      currentMood = this.dataset.mood;
+      trackMood();
+    });
+  });
+  
+  // Mood history button
+  const moodHistoryBtn = getElement('mood-history');
+  if (moodHistoryBtn) moodHistoryBtn.addEventListener('click', () => {
+    getElement('mood-history-modal').style.display = 'flex';
+  });
+  
+  // Close modals
+  const closeButtons = [
+    { id: 'close-settings', modal: 'settings-modal' },
+    { id: 'close-mood-history', modal: 'mood-history-modal' },
+    { id: 'close-add-memory', modal: 'add-memory-modal' },
+    { id: 'close-memory-book', modal: 'memory-book-modal' },
+    { id: 'close-companion', modal: 'companion-modal' }
+  ];
+  
+  closeButtons.forEach(btn => {
+    const element = getElement(btn.id);
+    if (element) {
+      element.addEventListener('click', () => {
+        const modal = getElement(btn.modal);
+        if (modal) modal.style.display = 'none';
+      });
+    }
+  });
+  
+  // Chat controls
+  const sendBtn = getElement('send-btn');
+  if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+  
+  const chatInput = getElement('chat-input');
+  if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  }
+  
+  // Chat settings button
+  const chatSettingsBtn = getElement('chat-settings');
+  if (chatSettingsBtn) {
+    chatSettingsBtn.addEventListener('click', () => {
+      getElement('companion-modal').style.display = 'flex';
+    });
+  }
+  
+  // Memory controls
+  const addMemoryBtn = getElement('add-memory-btn');
+  if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
+    getElement('add-memory-modal').style.display = 'flex';
+  });
+  
+  const memoryBookBtn = getElement('memory-book-btn');
+  if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
+    getElement('memory-book-modal').style.display = 'flex';
+    loadMemoryBook();
+  });
+  
+  const memoryForm = getElement('memory-form');
+  if (memoryForm) memoryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    saveMemory();
+  });
+  
+  const memoryImage = getElement('memory-image');
+  if (memoryImage) memoryImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const preview = getElement('memory-preview');
+        preview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width:100%;max-height:100%;">`;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Settings controls
+  const accountSettingsBtn = getElement('account-settings-btn');
+  if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
+    getElement('settings-modal').style.display = 'flex';
+    loadUserSettings();
+  });
+  
+  const saveSettingsBtn = getElement('save-settings');
+  if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
+  
+  // Sign out button
+  const signoutBtn = getElement('signout-btn');
+  if (signoutBtn) signoutBtn.addEventListener('click', signOut);
+  
+  // Companion selection buttons
+  const changeCompanionBtn = getElement('change-companion-btn');
+  if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
+    getElement('companion-modal').style.display = 'flex';
+    initCompanionSelection();
+  });
+  
+  const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
+  if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
+    getElement('companion-modal').style.display = 'flex';
+    initCompanionSelection();
+  });
+  
+  const saveCompanionBtn = getElement('save-companion');
+  if (saveCompanionBtn) saveCompanionBtn.addEventListener('click', saveCompanion);
 }
-
-// [Rest of your functions with similar null checks...]
 
 // Show toast notification
 function showToast(message, type = 'success') {
@@ -2238,6 +2678,56 @@ function updateProgressBar() {
   });
 }
 
+// Load user progress
+async function loadProgress() {
+  if (!currentUser) return;
+  
+  try {
+    const { data, error } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error; // Ignore "no rows" error
+    
+    if (data) {
+      progressSources = {
+        mood: data.mood_entries || 0,
+        chat: data.chat_sessions || 0,
+        journal: data.journal_entries || 0,
+        memories: data.memories || 0
+      };
+      
+      updateProgressBar();
+    }
+  } catch (error) {
+    showToast("Error loading progress: " + error.message, "error");
+  }
+}
+
+// Save user progress
+async function saveProgress() {
+  if (!currentUser) return;
+  
+  try {
+    const { error } = await supabase
+      .from('user_progress')
+      .upsert({
+        user_id: currentUser.id,
+        mood_entries: progressSources.mood,
+        chat_sessions: progressSources.chat,
+        journal_entries: progressSources.journal,
+        memories: progressSources.memories,
+        updated_at: new Date().toISOString()
+      });
+    
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error saving progress:", error.message);
+  }
+}
+
 // Load companion information
 async function loadCompanion() {
   try {
@@ -2252,10 +2742,12 @@ async function loadCompanion() {
     const roleEl = getElement('companion-role');
     const avatarEl = getElement('companion-avatar');
     const specialtiesContainer = getElement('companion-specialties');
+    const chatTitle = getElement('chat-title');
     
     if (nameEl) nameEl.textContent = companion.name;
     if (roleEl) roleEl.textContent = companion.role;
     if (avatarEl) avatarEl.innerHTML = `<i class="${companion.avatar}"></i>`;
+    if (chatTitle) chatTitle.textContent = `Chat with ${companion.name}`;
     
     if (specialtiesContainer) {
       specialtiesContainer.innerHTML = '';
@@ -2270,412 +2762,565 @@ async function loadCompanion() {
     showToast("Error loading companion: " + error.message, "error");
   }
 }
-    // Start chat with companion
-    function startCompanionChat() {
-      document.getElementById('chat-container').classList.add('active');
-      document.getElementById('chat-title').textContent = `Chat with ${companions[currentCompanion].name}`;
-      
-      // Reset conversation history
-      conversationHistory = [
-        {
-          role: "system",
-          content: companions[currentCompanion].systemPrompt
-        },
-        {
-          role: "assistant",
-          content: companions[currentCompanion].intro
-        }
-      ];
-      
-      // Clear chat messages and add intro
-      const chatMessages = document.getElementById('chat-messages');
-      chatMessages.innerHTML = '';
-      
-      const introMessage = document.createElement('div');
-      introMessage.className = 'message companion';
-      introMessage.innerHTML = `
-        ${companions[currentCompanion].intro}
-        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-      `;
-      chatMessages.appendChild(introMessage);
+
+// Start chat with companion
+function startCompanionChat() {
+  // Reset conversation history
+  conversationHistory = [
+    {
+      role: "system",
+      content: companions[currentCompanion].systemPrompt
+    },
+    {
+      role: "assistant",
+      content: companions[currentCompanion].intro
     }
+  ];
+  
+  // Clear chat messages and add intro
+  const chatMessages = getElement('chat-messages');
+  if (chatMessages) {
+    chatMessages.innerHTML = '';
     
-    // Close chat
-    function closeChat() {
-      document.getElementById('chat-container').classList.remove('active');
-    }
-    
-    // Send message to companion
-    async function sendMessage() {
-      const input = document.getElementById('chat-input');
-      const message = input.value.trim();
+    const introMessage = document.createElement('div');
+    introMessage.className = 'message companion';
+    introMessage.innerHTML = `
+      ${companions[currentCompanion].intro}
+      <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+    `;
+    chatMessages.appendChild(introMessage);
+  }
+}
+
+// Send message to companion
+async function sendMessage() {
+  const input = getElement('chat-input');
+  if (!input) return;
+  
+  const message = input.value.trim();
+  if (!message) return;
+  
+  const chatMessages = getElement('chat-messages');
+  if (!chatMessages) return;
+  
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+  // Add user message to UI
+  const userMessage = document.createElement('div');
+  userMessage.className = 'message user';
+  userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
+  chatMessages.appendChild(userMessage);
+  
+  // Add to conversation history
+  conversationHistory.push({
+    role: "user",
+    content: message
+  });
+  
+  // Clear input
+  input.value = '';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  // Show thinking indicator
+  const thinkingMessage = document.createElement('div');
+  thinkingMessage.className = 'message companion';
+  thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
+  chatMessages.appendChild(thinkingMessage);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  try {
+    // Simulate AI response with a delay
+    setTimeout(() => {
+      // Remove thinking indicator
+      chatMessages.removeChild(thinkingMessage);
       
-      if (!message) return;
+      // Add AI response to UI
+      const responseTime = new Date();
+      const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       
-      const chatMessages = document.getElementById('chat-messages');
-      const now = new Date();
-      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      // Select a random response from the companion's responses
+      const companionResponses = companions[currentCompanion].responses;
+      const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
       
-      // Add user message to UI
-      const userMessage = document.createElement('div');
-      userMessage.className = 'message user';
-      userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
-      chatMessages.appendChild(userMessage);
+      const companionMessage = document.createElement('div');
+      companionMessage.className = 'message companion';
+      companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
+      chatMessages.appendChild(companionMessage);
+      
+      chatMessages.scrollTop = chatMessages.scrollHeight;
       
       // Add to conversation history
       conversationHistory.push({
-        role: "user",
-        content: message
+        role: "assistant",
+        content: response
       });
       
-      // Clear input
-      input.value = '';
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      // Show thinking indicator
-      const thinkingMessage = document.createElement('div');
-      thinkingMessage.className = 'message companion';
-      thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
-      chatMessages.appendChild(thinkingMessage);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      try {
-        // Simulate AI response
-        setTimeout(() => {
-          // Remove thinking indicator
-          chatMessages.removeChild(thinkingMessage);
-          
-          // Add AI response to UI
-          const responseTime = new Date();
-          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          
-          const responses = [
-            "I understand how you feel. Would you like to talk more about this?",
-            "That sounds challenging. Remember to be gentle with yourself during this process.",
-            "Thank you for sharing that with me. How has this been affecting your daily life?",
-            "I appreciate you opening up about this. What's one thing that brought you comfort today?",
-            "Your feelings are valid. Would it help to explore some coping strategies together?"
-          ];
-          
-          const response = responses[Math.floor(Math.random() * responses.length)];
-          
-          const companionMessage = document.createElement('div');
-          companionMessage.className = 'message companion';
-          companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
-          chatMessages.appendChild(companionMessage);
-          
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-          
-          // Add to conversation history
-          conversationHistory.push({
-            role: "assistant",
-            content: response
-          });
-          
-          // Update progress
-          progressSources.chat++;
-          updateProgressBar();
-          saveProgress();
-        }, 1500);
-        
-      } catch (error) {
-        console.error("Companion chat error:", error);
-        chatMessages.removeChild(thinkingMessage);
-        
-        const errorMessage = document.createElement('div');
-        errorMessage.className = 'message companion';
-        errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
-        chatMessages.appendChild(errorMessage);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-    }
+      // Update progress
+      progressSources.chat++;
+      updateProgressBar();
+      saveProgress();
+    }, 1500);
     
-    // Load mood history
-    async function loadMoodHistory() {
-      if (!currentUser) return;
-      
-      try {
-        const { data: moods, error } = await supabase
-          .from('mood_entries')
-          .select('mood, created_at')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false })
-          .limit(7);
-        
-        if (error) throw error;
-        
-        const historyContainer = document.getElementById('mood-history-list');
-        historyContainer.innerHTML = '';
-        
-        moods.forEach(mood => {
-          const moodLabels = {
-            "awful": { emoji: "😢", label: "Awful" },
-            "sad": { emoji: "😞", label: "Sad" },
-            "neutral": { emoji: "😐", label: "Neutral" },
-            "great": { emoji: "😊", label: "Great" }
-          };
-          
-          const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
-          const date = new Date(mood.created_at);
-          const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-          
-          const entry = document.createElement('div');
-          entry.className = 'mood-entry';
-          entry.innerHTML = `
-            <div>
-              <span class="mood-emoji-history">${moodData.emoji}</span>
-              <span>${moodData.label}</span>
-            </div>
-            <div>${formattedDate}</div>
-          `;
-          
-          historyContainer.appendChild(entry);
-        });
-      } catch (error) {
-        showToast("Error loading mood history: " + error.message, "error");
-      }
-    }
+  } catch (error) {
+    console.error("Companion chat error:", error);
+    if (chatMessages) chatMessages.removeChild(thinkingMessage);
     
-    // Load memories
-    async function loadMemories() {
-      if (!currentUser) return;
-      
-      try {
-        const { data, error } = await supabase
-          .from('memories')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        memories = data || [];
-        progressSources.memories = memories.length;
-        updateProgressBar();
-        
-        const container = document.getElementById('memory-container');
-        container.innerHTML = '';
-        
-        // Add existing memories
-        memories.forEach(memory => {
-          const memoryItem = document.createElement('div');
-          memoryItem.className = 'memory-item has-image';
-          
-          if (memory.image_url) {
-            memoryItem.style.backgroundImage = `url(${memory.image_url})`;
-            const img = document.createElement('img');
-            img.className = 'memory-image';
-            img.src = memory.image_url;
-            img.alt = 'Memory';
-            memoryItem.appendChild(img);
-          } else {
-            const icon = document.createElement('i');
-            icon.className = memory.icon || 'fas fa-heart';
-            memoryItem.appendChild(icon);
-          }
-          
-          const label = document.createElement('div');
-          label.className = 'memory-label';
-          label.textContent = memory.title || 'Memory';
-          memoryItem.appendChild(label);
-          
-          memoryItem.addEventListener('click', () => viewMemory(memory));
-          container.appendChild(memoryItem);
-        });
-        
-        // Add "Add Memory" button
-        const addMemory = document.createElement('div');
-        addMemory.className = 'memory-item add-memory';
-        addMemory.innerHTML = `
-          <i class="fas fa-plus"></i>
-          <div class="memory-label">Add Memory</div>
-        `;
-        addMemory.addEventListener('click', () => {
-          document.getElementById('add-memory-modal').style.display = 'flex';
-        });
-        container.appendChild(addMemory);
-        
-      } catch (error) {
-        showToast("Error loading memories: " + error.message, "error");
-      }
-    }
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'message companion';
+    errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
+    if (chatMessages) chatMessages.appendChild(errorMessage);
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+}
+
+// Track user mood
+async function trackMood() {
+  if (!currentUser) return;
+  
+  try {
+    const { error } = await supabase
+      .from('mood_entries')
+      .insert([{
+        user_id: currentUser.id,
+        mood: currentMood,
+        created_at: new Date().toISOString()
+      }]);
     
-    // Save memory
-    async function saveMemory() {
-      const title = document.getElementById('memory-title').value;
-      const date = document.getElementById('memory-date').value;
-      const description = document.getElementById('memory-description').value;
-      const imageFile = document.getElementById('memory-image').files[0];
-      
-      if (!title) {
-        showToast("Please enter a title for your memory", "error");
-        return;
-      }
-      
-      try {
-        let imageUrl = null;
-        
-        // Upload image if provided
-        if (imageFile) {
-          const fileExt = imageFile.name.split('.').pop();
-          const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
-          const filePath = `memories/${fileName}`;
-          
-          const { data, error: uploadError } = await supabase.storage
-            .from('memory-images')
-            .upload(filePath, imageFile);
-          
-          if (uploadError) throw uploadError;
-          
-          // Get public URL
-          const { data: { publicUrl } } = supabase.storage
-            .from('memory-images')
-            .getPublicUrl(filePath);
-          
-          imageUrl = publicUrl;
-        }
-        
-        // Save memory to database
-        const { error } = await supabase
-          .from('memories')
-          .insert([{
-            user_id: currentUser.id,
-            title: title,
-            date: date,
-            description: description,
-            image_url: imageUrl,
-            created_at: new Date().toISOString()
-          }]);
-        
-        if (error) throw error;
-        
-        showToast("Memory saved successfully", "success");
-        document.getElementById('add-memory-modal').style.display = 'none';
-        document.getElementById('memory-form').reset();
-        document.getElementById('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
-        
-        // Reload memories
-        loadMemories();
-        
-      } catch (error) {
-        showToast("Error saving memory: " + error.message, "error");
-      }
-    }
+    if (error) throw error;
     
-    // View memory details
-    function viewMemory(memory) {
-      // Create a modal to view memory details
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'flex';
+    showToast("Mood recorded successfully", "success");
+    progressSources.mood++;
+    updateProgressBar();
+    saveProgress();
+    loadMoodHistory();
+  } catch (error) {
+    showToast("Error recording mood: " + error.message, "error");
+  }
+}
+
+// Load mood history
+async function loadMoodHistory() {
+  if (!currentUser) return;
+  
+  try {
+    const { data: moods, error } = await supabase
+      .from('mood_entries')
+      .select('mood, created_at')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(7);
+    
+    if (error) throw error;
+    
+    const historyContainer = getElement('mood-history-list');
+    if (!historyContainer) return;
+    
+    historyContainer.innerHTML = '';
+    
+    moods.forEach(mood => {
+      const moodLabels = {
+        "awful": { emoji: "😢", label: "Awful" },
+        "sad": { emoji: "😞", label: "Sad" },
+        "neutral": { emoji: "😐", label: "Neutral" },
+        "great": { emoji: "😊", label: "Great" }
+      };
       
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>${memory.title || 'Memory'}</h3>
-            <button class="close-modal" id="close-view-memory">&times;</button>
-          </div>
-          
-          ${memory.image_url ? `
-            <div class="memory-preview">
-              <img src="${memory.image_url}" alt="${memory.title}">
-            </div>
-          ` : ''}
-          
-          <div class="form-group">
-            <label>Date</label>
-            <p>${memory.date || 'No date specified'}</p>
-          </div>
-          
-          ${memory.description ? `
-            <div class="form-group">
-              <label>Description</label>
-              <p>${memory.description}</p>
-            </div>
-          ` : ''}
-          
-          <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
-            Close
-          </button>
+      const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
+      const date = new Date(mood.created_at);
+      const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      
+      const entry = document.createElement('div');
+      entry.className = 'mood-entry';
+      entry.innerHTML = `
+        <div>
+          <span class="mood-emoji-history">${moodData.emoji}</span>
+          <span>${moodData.label}</span>
         </div>
+        <div>${formattedDate}</div>
       `;
       
-      document.body.appendChild(modal);
-      
-      // Close modal handlers
-      document.getElementById('close-view-memory').addEventListener('click', () => {
-        document.body.removeChild(modal);
-      });
-      
-      document.getElementById('close-view-memory-btn').addEventListener('click', () => {
-        document.body.removeChild(modal);
-      });
-    }
-    
-    // Load memory book
-    function loadMemoryBook() {
-      const container = document.getElementById('memory-book-entries');
-      container.innerHTML = '';
-      
-      document.getElementById('memory-count').textContent = memories.length;
-      
-      if (memories.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--gray);">No memories yet. Add some to track your healing journey.</p>';
-        return;
-      }
-      
-      memories.forEach(memory => {
-        const entry = document.createElement('div');
-        entry.className = 'memory-book-entry';
-        
-        entry.innerHTML = `
-          <div class="memory-book-thumbnail" style="background-image: url(${memory.image_url || 'none'})">
-            ${!memory.image_url ? `<i class="${memory.icon || 'fas fa-heart'}"></i>` : ''}
-          </div>
-          <div class="memory-book-details">
-            <div class="memory-book-title">${memory.title || 'Memory'}</div>
-            <div class="memory-book-date">${memory.date || 'No date'}</div>
-          </div>
-        `;
-        
-        entry.addEventListener('click', () => viewMemory(memory));
-        container.appendChild(entry);
-      });
-    }
-    
-    // Save user settings
-    async function saveSettings() {
-      const name = document.getElementById('user-name').value;
-      const email = document.getElementById('user-email').value;
-      const lossType = document.getElementById('loss-type').value;
-      
-      try {
-        const { error } = await supabase.auth.updateUser({
-          email: email,
-          data: { 
-            name: name,
-            loss_type: lossType,
-            journal_reminders: document.getElementById('journal-reminders').checked,
-            affirmation_reminders: document.getElementById('affirmation-reminders').checked
+      historyContainer.appendChild(entry);
+    });
+  } catch (error) {
+    showToast("Error loading mood history: " + error.message, "error");
+  }
+}
+
+// Initialize mood chart
+function initMoodChart() {
+  const ctx = document.getElementById('moodChart');
+  if (!ctx) return;
+  
+  moodChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Mood',
+        data: [3, 2, 4, 3, 4, 2, 3],
+        borderColor: 'rgba(94, 96, 206, 1)',
+        backgroundColor: 'rgba(94, 96, 206, 0.1)',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 1,
+          max: 4,
+          ticks: {
+            callback: function(value) {
+              const moods = {
+                1: 'Awful',
+                2: 'Sad',
+                3: 'Neutral',
+                4: 'Great'
+              };
+              return moods[value] || '';
+            }
           }
-        });
-        
-        if (error) throw error;
-        
-        showToast("Settings saved successfully", "success");
-        document.getElementById('settings-modal').style.display = 'none';
-        
-        // Update UI with new name if available
-        if (name) {
-          document.getElementById('userInitialText').textContent = name[0].toUpperCase();
-          document.getElementById('userInitialTextMobile').textContent = name[0].toUpperCase();
-          document.getElementById('profile-initial').textContent = name[0].toUpperCase();
-          document.getElementById('profile-name').textContent = name;
         }
-      } catch (error) {
-        showToast("Error saving settings: " + error.message, "error");
       }
     }
+  });
+}
+
+// Load memories
+async function loadMemories() {
+  if (!currentUser) return;
+  
+  try {
+    const { data, error } = await supabase
+      .from('memories')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    memories = data || [];
+    progressSources.memories = memories.length;
+    updateProgressBar();
+    
+    const container = getElement('memory-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // Add existing memories
+    memories.forEach(memory => {
+      const memoryItem = document.createElement('div');
+      memoryItem.className = 'memory-item has-image';
+      
+      if (memory.image_url) {
+        memoryItem.style.backgroundImage = `url(${memory.image_url})`;
+        const img = document.createElement('img');
+        img.className = 'memory-image';
+        img.src = memory.image_url;
+        img.alt = 'Memory';
+        memoryItem.appendChild(img);
+      } else {
+        const icon = document.createElement('i');
+        icon.className = memory.icon || 'fas fa-heart';
+        memoryItem.appendChild(icon);
+      }
+      
+      const label = document.createElement('div');
+      label.className = 'memory-label';
+      label.textContent = memory.title || 'Memory';
+      memoryItem.appendChild(label);
+      
+      memoryItem.addEventListener('click', () => viewMemory(memory));
+      container.appendChild(memoryItem);
+    });
+    
+    // Add "Add Memory" button
+    const addMemory = document.createElement('div');
+    addMemory.className = 'memory-item add-memory';
+    addMemory.innerHTML = `
+      <i class="fas fa-plus"></i>
+      <div class="memory-label">Add Memory</div>
+    `;
+    addMemory.addEventListener('click', () => {
+      getElement('add-memory-modal').style.display = 'flex';
+    });
+    container.appendChild(addMemory);
+    
+  } catch (error) {
+    showToast("Error loading memories: " + error.message, "error");
+  }
+}
+
+// Save memory
+async function saveMemory() {
+  const title = getElement('memory-title')?.value;
+  const date = getElement('memory-date')?.value;
+  const description = getElement('memory-description')?.value;
+  const imageFile = getElement('memory-image')?.files[0];
+  
+  if (!title) {
+    showToast("Please enter a title for your memory", "error");
+    return;
+  }
+  
+  try {
+    let imageUrl = null;
+    
+    // Upload image if provided
+    if (imageFile) {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+      const filePath = `memories/${fileName}`;
+      
+      const { data, error: uploadError } = await supabase.storage
+        .from('memory-images')
+        .upload(filePath, imageFile);
+      
+      if (uploadError) throw uploadError;
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('memory-images')
+        .getPublicUrl(filePath);
+      
+      imageUrl = publicUrl;
+    }
+    
+    // Save memory to database
+    const { error } = await supabase
+      .from('memories')
+      .insert([{
+        user_id: currentUser.id,
+        title: title,
+        date: date,
+        description: description,
+        image_url: imageUrl,
+        created_at: new Date().toISOString()
+      }]);
+    
+    if (error) throw error;
+    
+    showToast("Memory saved successfully", "success");
+    getElement('add-memory-modal').style.display = 'none';
+    getElement('memory-form').reset();
+    getElement('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+    
+    // Reload memories
+    loadMemories();
+    
+  } catch (error) {
+    showToast("Error saving memory: " + error.message, "error");
+  }
+}
+
+// View memory details
+function viewMemory(memory) {
+  // Create a modal to view memory details
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'flex';
+  
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>${memory.title || 'Memory'}</h3>
+        <button class="close-modal" id="close-view-memory">&times;</button>
+      </div>
+      
+      ${memory.image_url ? `
+        <div class="memory-preview">
+          <img src="${memory.image_url}" alt="${memory.title}">
+        </div>
+      ` : `
+        <div class="memory-preview">
+          <i class="fas fa-heart"></i>
+        </div>
+      `}
+      
+      <div class="form-group">
+        <label>Date</label>
+        <p>${memory.date || 'No date specified'}</p>
+      </div>
+      
+      ${memory.description ? `
+        <div class="form-group">
+          <label>Description</label>
+          <p>${memory.description}</p>
+        </div>
+      ` : ''}
+      
+      <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
+        Close
+      </button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Close modal handlers
+  const closeBtn = modal.querySelector('#close-view-memory');
+  if (closeBtn) closeBtn.addEventListener('click', () => {
+    document.body.removeChild(modal);
+  });
+  
+  const closeBtn2 = modal.querySelector('#close-view-memory-btn');
+  if (closeBtn2) closeBtn2.addEventListener('click', () => {
+    document.body.removeChild(modal);
+  });
+}
+
+// Load memory book
+function loadMemoryBook() {
+  const container = getElement('memory-book-entries');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const memoryCount = getElement('memory-count');
+  if (memoryCount) memoryCount.textContent = memories.length;
+  
+  if (memories.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No memories yet. Add some to track your healing journey.</p>';
+    return;
+  }
+  
+  memories.forEach(memory => {
+    const entry = document.createElement('div');
+    entry.className = 'memory-book-entry';
+    
+    entry.innerHTML = `
+      <div class="memory-book-thumbnail" style="${memory.image_url ? `background-image: url(${memory.image_url})` : ''}">
+        ${!memory.image_url ? `<i class="fas fa-heart"></i>` : ''}
+      </div>
+      <div class="memory-book-details">
+        <div class="memory-book-title">${memory.title || 'Memory'}</div>
+        <div class="memory-book-date">${memory.date || 'No date'}</div>
+      </div>
+    `;
+    
+    entry.addEventListener('click', () => viewMemory(memory));
+    container.appendChild(entry);
+  });
+}
+
+// Load user settings
+async function loadUserSettings() {
+  if (!currentUser) return;
+  
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    
+    const nameInput = getElement('user-name');
+    const emailInput = getElement('user-email');
+    const lossTypeSelect = getElement('loss-type');
+    const journalReminders = getElement('journal-reminders');
+    const affirmationReminders = getElement('affirmation-reminders');
+    
+    if (nameInput) nameInput.value = user.user_metadata?.name || '';
+    if (emailInput) emailInput.value = user.email || '';
+    if (lossTypeSelect) lossTypeSelect.value = user.user_metadata?.loss_type || 'relationship';
+    if (journalReminders) journalReminders.checked = user.user_metadata?.journal_reminders !== false;
+    if (affirmationReminders) affirmationReminders.checked = user.user_metadata?.affirmation_reminders !== false;
+  } catch (error) {
+    showToast("Error loading settings: " + error.message, "error");
+  }
+}
+
+// Save user settings
+async function saveSettings() {
+  const name = getElement('user-name')?.value;
+  const email = getElement('user-email')?.value;
+  const lossType = getElement('loss-type')?.value;
+  
+  try {
+    const { error } = await supabase.auth.updateUser({
+      email: email,
+      data: { 
+        name: name,
+        loss_type: lossType,
+        journal_reminders: getElement('journal-reminders')?.checked,
+        affirmation_reminders: getElement('affirmation-reminders')?.checked
+      }
+    });
+    
+    if (error) throw error;
+    
+    showToast("Settings saved successfully", "success");
+    getElement('settings-modal').style.display = 'none';
+    
+    // Update UI with new name if available
+    if (name) {
+      getElement('profile-initial').textContent = name[0].toUpperCase();
+      getElement('profile-name').textContent = name;
+    }
+  } catch (error) {
+    showToast("Error saving settings: " + error.message, "error");
+  }
+}
+
+// Initialize companion selection
+function initCompanionSelection() {
+  const companionSelects = document.querySelectorAll('.companion-select');
+  companionSelects.forEach(select => {
+    select.classList.remove('selected');
+    if (select.dataset.companion === currentCompanion) {
+      select.classList.add('selected');
+    }
+    
+    select.addEventListener('click', function() {
+      companionSelects.forEach(s => s.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+}
+
+// Save companion selection
+async function saveCompanion() {
+  const selected = document.querySelector('.companion-select.selected');
+  if (!selected) {
+    showToast("Please select a companion", "error");
+    return;
+  }
+  
+  const companion = selected.dataset.companion;
+  
+  try {
+    const { error } = await supabase.auth.updateUser({
+      data: { 
+        companion: companion
+      }
+    });
+    
+    if (error) throw error;
+    
+    currentCompanion = companion;
+    loadCompanion();
+    showToast("Companion updated successfully", "success");
+    getElement('companion-modal').style.display = 'none';
+    
+    // Restart chat with new companion
+    startCompanionChat();
+  } catch (error) {
+    showToast("Error saving companion: " + error.message, "error");
+  }
+}
+
+// Sign out user
+async function signOut() {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    
+    window.location.reload();
+  } catch (error) {
+    showToast("Error signing out: " + error.message, "error");
+  }
+}
   </script>
 </body>
 </html>
