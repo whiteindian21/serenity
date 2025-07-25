@@ -279,6 +279,121 @@
       box-shadow: 0 6px 20px rgba(140, 185, 189, 0.25);
     }
 
+    /* Pricing Section */
+    .pricing {
+      background: linear-gradient(to bottom, var(--primary-light) 0%, white 100%);
+      padding: 4rem 0;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      border: 1px solid rgba(140, 185, 189, 0.2);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(140, 185, 189, 0.15);
+    }
+
+    .pricing-card.free {
+      border-top: 5px solid var(--primary);
+    }
+
+    .pricing-card.premium {
+      border-top: 5px solid var(--secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: 20px;
+      right: -30px;
+      background: var(--accent);
+      color: white;
+      padding: 0.3rem 2.5rem;
+      transform: rotate(45deg);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pricing-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-header h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-header .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-header .price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--gray);
+    }
+
+    .pricing-features {
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .pricing-features li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+      list-style: none;
+    }
+
+    .pricing-features li:before {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    .pricing-features li.disabled {
+      opacity: 0.5;
+    }
+
+    .pricing-features li.disabled:before {
+      content: '\f00d';
+      color: var(--gray);
+    }
+
+    /* PayPal Button Styles */
+    .paypal-button-container {
+      margin-top: 1.5rem;
+      min-height: 40px;
+    }
+
+    .paypal-button {
+      border-radius: 50px !important;
+      min-height: 40px !important;
+    }
+
     /* Features Grid */
     .features {
       background: linear-gradient(to bottom, var(--light) 50%, #ffffff 100%);
@@ -835,6 +950,10 @@
         gap: 2rem;
       }
       
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
       .companion-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
@@ -865,6 +984,10 @@
 
     @media (min-width: 1024px) {
       .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .pricing-grid {
         grid-template-columns: repeat(3, 1fr);
       }
       
@@ -904,6 +1027,7 @@
 
   <div class="nav-links" id="navLinks">
     <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
     <a href="#companions">Companions</a>
     <a href="#how-it-works">How It Works</a>
     <a href="#testimonials">Testimonials</a>
@@ -918,7 +1042,7 @@
           <div class="hero-text animate">
             <h1>Your Path to Emotional Wellness Starts Here</h1>
             <p>Therapathy is your compassionate AI companion, offering science-backed support for your mental health journey, available whenever you need it.</p>
-            <a href="login.html" class="cta-button">Begin Healing Journey</a>
+            <a href="#pricing" class="cta-button">View Plans</a>
           </div>
           
           <div class="hero-image-container animate delay-1">
@@ -971,6 +1095,69 @@
             </div>
             <h3>Guided Journaling</h3>
             <p>Structured prompts to explore your inner world and track emotional patterns</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div class="section-header animate">
+          <h2>Simple, Transparent Pricing</h2>
+          <p>Choose the plan that fits your mental wellness journey</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="pricing-card free animate delay-1">
+            <div class="pricing-header">
+              <h3>Free Tier</h3>
+              <div class="price">$0<span>/forever</span></div>
+              <p>Start with our basic features</p>
+            </div>
+            <ul class="pricing-features">
+              <li><strong>50 free credits</strong> upon signup</li>
+              <li><strong>10 credits/month</strong> ongoing</li>
+              <li>Basic AI conversations</li>
+              <li>Limited tools access</li>
+              <li class="disabled">Unlimited chats</li>
+              <li class="disabled">Premium companions</li>
+            </ul>
+            <a href="signup.html" class="cta-button primary">Get Started</a>
+          </div>
+          
+          <div class="pricing-card premium animate delay-2">
+            <div class="popular-badge">Best Value</div>
+            <div class="pricing-header">
+              <h3>Premium Monthly</h3>
+              <div class="price">$15<span>/month</span></div>
+              <p>Unlock full potential</p>
+            </div>
+            <ul class="pricing-features">
+              <li><strong>Unlimited</strong> AI conversations</li>
+              <li><strong>Full access</strong> to all tools</li>
+              <li>All premium companions</li>
+              <li>Priority support</li>
+              <li>Advanced analytics</li>
+              <li>Cancel anytime</li>
+            </ul>
+            <div id="paypal-button-container-monthly" class="paypal-button-container"></div>
+          </div>
+          
+          <div class="pricing-card premium animate delay-3">
+            <div class="pricing-header">
+              <h3>Premium Yearly</h3>
+              <div class="price">$110<span>/year</span></div>
+              <p>Save with annual commitment</p>
+            </div>
+            <ul class="pricing-features">
+              <li><strong>Everything in Monthly</strong></li>
+              <li><strong>Save $70</strong> vs monthly</li>
+              <li><strong>Bonus 100 credits</strong> upfront</li>
+              <li>Exclusive content</li>
+              <li>First access to new features</li>
+              <li>7-day free trial</li>
+            </ul>
+            <div id="paypal-button-container-yearly" class="paypal-button-container"></div>
           </div>
         </div>
       </div>
@@ -1094,8 +1281,8 @@
         <h2 class="animate">Begin Your Journey to Emotional Wellness</h2>
         <p class="animate delay-1">Take the first step toward greater peace and emotional balance</p>
         <div class="cta-buttons">
-          <a href="#" class="cta-button white animate delay-2">
-            Start Free Trial
+          <a href="#pricing" class="cta-button white animate delay-2">
+            View Plans
             <i class="fas fa-heart"></i>
           </a>
           <a href="#companions" class="cta-button primary animate delay-2">
@@ -1126,8 +1313,8 @@
           <h4>Resources</h4>
           <ul class="footer-links">
             <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
             <li><a href="#companions">Companions</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#">Wellness Blog</a></li>
           </ul>
         </div>
@@ -1158,6 +1345,9 @@
     </div>
   </footer>
 
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+  
   <script>
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -1219,6 +1409,41 @@
     }
     
     createParticles();
+
+    // PayPal Subscription Buttons
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'blue',
+        layout: 'vertical',
+        label: 'subscribe'
+      },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': 'YOUR_MONTHLY_PLAN_ID' // Replace with your monthly plan ID
+        });
+      },
+      onApprove: function(data, actions) {
+        alert('You have successfully subscribed to Therapathy Premium Monthly!');
+      }
+    }).render('#paypal-button-container-monthly');
+
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'subscribe'
+      },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': 'YOUR_YEARLY_PLAN_ID' // Replace with your yearly plan ID
+        });
+      },
+      onApprove: function(data, actions) {
+        alert('You have successfully subscribed to Therapathy Premium Yearly!');
+      }
+    }).render('#paypal-button-container-yearly');
   </script>
 </body>
 </html>
