@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meditation Library | Calming Exercises</title>
+  <title>Mindful Moments | Meditation App</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -30,7 +29,6 @@
       --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
       --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
       --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
-      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
@@ -52,23 +50,620 @@
       line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
-      position: relative;
-      overflow-x: hidden;
       background: radial-gradient(circle at 20% 30%, rgba(94, 96, 206, 0.05) 0%, transparent 50%),
                   radial-gradient(circle at 80% 70%, rgba(100, 223, 223, 0.05) 0%, transparent 50%);
-      padding-bottom: calc(70px + var(--safe-area-inset-bottom));
+      padding-bottom: 70px;
     }
 
-    h1, h2, h3, h4 {
-      font-family: 'Merriweather', serif;
-      font-weight: 700;
-      line-height: 1.3;
+    /* Mobile-first layout */
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.95);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-light);
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    
+    .app-logo i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .page-header p {
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    .page-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* User Profile */
+    .user-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background: white;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--gray-light);
+      text-align: center;
+    }
+
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.3);
+    }
+
+    .user-info h3 {
+      margin-bottom: 0.2rem;
+      font-size: 1.3rem;
       color: var(--dark);
     }
 
-    p {
+    .user-info p {
       color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .streak-counter {
+      background: var(--primary-light);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(94, 96, 206, 0.2);
+      margin-top: 0.5rem;
+    }
+
+    .streak-counter i {
+      color: var(--accent);
+    }
+
+    /* Category Filters */
+    .category-filters {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .filter-btn {
+      padding: 0.7rem 1.2rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 50px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    
+    .filter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .filter-btn i {
+      font-size: 1rem;
+    }
+
+    /* Meditation Grid */
+    .meditation-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .meditation-card {
+      background: white;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      border: 1px solid var(--gray-light);
+      position: relative;
+    }
+    
+    .meditation-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .card-image {
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .card-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(94, 96, 206, 0.2), rgba(37, 39, 77, 0.7));
+    }
+    
+    .play-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .play-button:hover {
+      transform: scale(1.1);
+      background: white;
+    }
+    
+    .play-button i {
+      color: var(--primary);
+      font-size: 1.3rem;
+      margin-left: 4px;
+    }
+    
+    .card-content {
+      padding: 1.2rem;
+    }
+    
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    
+    .tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 0.3rem 0.7rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .meditation-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+    
+    .duration, .level {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Featured Section */
+    .featured-section {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--light-alt) 100%);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .featured-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    
+    .featured-header h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .featured-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .featured-image {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+      max-height: 200px;
+    }
+    
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .featured-info h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      color: var(--primary);
+    }
+    
+    .featured-info p {
+      margin-bottom: 1.2rem;
       font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .featured-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin: 1.2rem 0;
+      justify-content: space-between;
+    }
+    
+    .stat-item {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.2rem;
+    }
+    
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+
+    /* Player Controls */
+    .player-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    
+    .progress-container {
+      width: 100%;
+      background: var(--gray-light);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .control-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .control-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 10px rgba(94, 96, 206, 0.3);
+    }
+    
+    .control-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .control-btn.secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .loop-btn {
+      background: transparent;
+      color: var(--gray);
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem;
+    }
+    
+    .loop-btn.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Audio Player */
+    #audio-player {
+      display: none;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-dark);
+      z-index: 3000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      max-width: 90%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      background: rgba(37, 39, 77, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: rgba(72, 187, 120, 0.95);
+    }
+    
+    .toast.info {
+      background: rgba(94, 96, 206, 0.95);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.8rem 0;
+      z-index: 100;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray);
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: var(--transition);
+      flex: 1;
+      padding: 0.3rem;
+    }
+    
+    .nav-item i {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .nav-item.active {
+      color: var(--primary);
+    }
+    
+    .nav-item:hover {
+      color: var(--primary);
+    }
+    
+    .nav-item .nav-label {
+      font-weight: 600;
+    }
+
+    /* Tablet and Desktop Styles */
+    @media (min-width: 768px) {
+      body {
+        padding: 1rem;
+        padding-bottom: 70px;
+      }
+      
+      .container {
+        max-width: 768px;
+        margin: 0 auto;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-light);
+        margin-top: 1rem;
+        margin-bottom: 5rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+      }
+      
+      .meditation-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .user-profile {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+      }
+      
+      .streak-counter {
+        margin-top: 0;
+        margin-left: auto;
+      }
+      
+      .category-filters {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-x: visible;
+      }
+      
+      .featured-section {
+        padding: 2rem;
+      }
+      
+      .featured-content {
+        flex-direction: row;
+      }
+      
+      .featured-image {
+        flex: 1;
+        max-height: 300px;
+      }
+      
+      .featured-info {
+        flex: 1;
+      }
+      
+      .player-controls {
+        flex-direction: row;
+        align-items: center;
+      }
+      
+      .control-buttons {
+        width: auto;
+        gap: 0.8rem;
+      }
+      
+      .loop-container {
+        margin-left: auto;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .container {
+        max-width: 992px;
+      }
+      
+      .meditation-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
     /* Floating elements */
@@ -103,703 +698,25 @@
       50% { transform: translate(-25px, 30px) rotate(-5deg); }
       75% { transform: translate(35px, 25px) rotate(8deg); }
     }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-light);
-      position: relative;
-      z-index: 10;
-      backdrop-filter: blur(5px);
-      border: 1px solid var(--gray-light);
-      margin-top: 1rem;
-      margin-bottom: 5rem;
-    }
-
-    /* Mobile Header */
-    .mobile-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background: white;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow-light);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.85);
-      border-bottom: 1px solid rgba(94, 96, 206, 0.1);
-    }
-    
-    .app-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 800;
-      font-size: 1.2rem;
-      color: var(--primary);
-      text-shadow: 0 1px 2px rgba(94, 96, 206, 0.1);
-    }
-    
-    .app-logo i {
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-
-    /* Page Header */
-    .page-header {
-      text-align: center;
-      margin-bottom: 2rem;
-      position: relative;
-      padding-bottom: 1.5rem;
-    }
-
-    .page-header h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    .page-header p {
-      color: var(--gray);
-      max-width: 700px;
-      margin: 0 auto;
-      font-size: 1.1rem;
-    }
-
-    .page-header:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: 2px;
-    }
-
-    /* User Profile */
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      background: white;
-      padding: 1.2rem;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-light);
-      animation: slideIn 0.8s ease-out;
-      border: 1px solid var(--gray-light);
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .user-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .user-avatar:hover {
-      transform: rotate(10deg) scale(1.1);
-    }
-
-    .user-info h3 {
-      margin-bottom: 0.2rem;
-      font-size: 1.4rem;
-      color: var(--dark);
-    }
-
-    .user-info p {
-      color: var(--gray);
-      font-size: 0.9rem;
-    }
-
-    .streak-counter {
-      margin-left: auto;
-      background: var(--primary-light);
-      padding: 0.7rem 1.2rem;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 600;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(94, 96, 206, 0.2);
-    }
-
-    .streak-counter i {
-      color: var(--accent);
-      animation: pulse 1.5s infinite;
-    }
-
-    /* Login Prompt */
-    .login-prompt {
-      text-align: center;
-      padding: 3rem 1.5rem;
-      background: white;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-medium);
-      margin: 2rem auto;
-      max-width: 500px;
-    }
-    
-    .login-prompt h2 {
-      color: var(--primary);
-      margin-bottom: 1.2rem;
-      font-size: 1.8rem;
-    }
-    
-    .login-prompt p {
-      margin-bottom: 1.8rem;
-      color: var(--gray);
-      font-size: 1.1rem;
-      line-height: 1.7;
-    }
-    
-    .btn-login {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      padding: 1.2rem 2.5rem;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 1.1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      box-shadow: var(--shadow-medium);
-      font-family: 'Nunito', sans-serif;
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      justify-content: center;
-    }
-    
-    .btn-login:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-dark);
-    }
-
-    /* Category Filters */
-    .category-filters {
-      display: flex;
-      gap: 0.8rem;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    
-    .filter-btn {
-      padding: 0.8rem 1.5rem;
-      background: white;
-      border: 1px solid var(--gray-light);
-      border-radius: 50px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow-light);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .filter-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-medium);
-    }
-    
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    .filter-btn i {
-      font-size: 1.1rem;
-    }
-
-    /* Meditation Grid */
-    .meditation-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .meditation-card {
-      background: white;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--shadow-light);
-      transition: var(--transition);
-      border: 1px solid var(--gray-light);
-      position: relative;
-    }
-    
-    .meditation-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-medium);
-    }
-    
-    .card-image {
-      height: 180px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .card-image::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(to bottom, rgba(94, 96, 206, 0.2), rgba(37, 39, 77, 0.7));
-    }
-    
-    .play-button {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    }
-    
-    .play-button:hover {
-      transform: scale(1.1);
-      background: white;
-    }
-    
-    .play-button i {
-      color: var(--primary);
-      font-size: 1.5rem;
-      margin-left: 4px;
-    }
-    
-    .card-content {
-      padding: 1.5rem;
-    }
-    
-    .card-tags {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.8rem;
-      flex-wrap: wrap;
-    }
-    
-    .tag {
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-    
-    .meditation-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
-      color: var(--gray);
-      font-size: 0.9rem;
-    }
-    
-    .duration, .level {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    /* Featured Section */
-    .featured-section {
-      background: linear-gradient(135deg, var(--primary-light) 0%, var(--light-alt) 100%);
-      border-radius: var(--radius-md);
-      padding: 2rem;
-      margin: 3rem 0;
-      box-shadow: var(--shadow-light);
-    }
-    
-    .featured-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .featured-header h2 {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-    
-    .featured-content {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-    
-    .featured-image {
-      flex: 1;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--shadow-medium);
-      max-height: 300px;
-    }
-    
-    .featured-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    
-    .featured-info {
-      flex: 1;
-    }
-    
-    .featured-info h3 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-    
-    .featured-info p {
-      margin-bottom: 1.5rem;
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    
-    .featured-stats {
-      display: flex;
-      gap: 2rem;
-      margin: 1.5rem 0;
-    }
-    
-    .stat-item {
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 0.3rem;
-    }
-    
-    .stat-label {
-      color: var(--gray);
-      font-size: 0.9rem;
-    }
-
-    /* Player Controls */
-    .player-controls {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    
-    .progress-container {
-      flex: 1;
-      background: var(--gray-light);
-      height: 6px;
-      border-radius: 3px;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    
-    .progress-bar {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.1s linear;
-    }
-    
-    .time-display {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-    
-    .control-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.3);
-    }
-    
-    .control-btn:hover {
-      transform: scale(1.1);
-    }
-    
-    .control-btn.secondary {
-      background: white;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-    }
-    
-    /* Audio Player */
-    #audio-player {
-      display: none;
-    }
-
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 1.2rem;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--dark);
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: var(--radius-md);
-      font-size: 1rem;
-      font-weight: 600;
-      box-shadow: var(--shadow-dark);
-      z-index: 3000;
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      max-width: 90%;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(37, 39, 77, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-    
-    .toast.success {
-      background: rgba(72, 187, 120, 0.95);
-    }
-    
-    .toast.error {
-      background: rgba(229, 62, 62, 0.95);
-    }
-    
-    .toast.info {
-      background: rgba(94, 96, 206, 0.95);
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid var(--gray-light);
-      display: flex;
-      justify-content: space-around;
-      padding: 0.8rem 0;
-      z-index: 100;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.95);
-      padding-bottom: calc(0.8rem + var(--safe-area-inset-bottom));
-    }
-    
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: var(--gray);
-      font-size: 0.8rem;
-      text-decoration: none;
-      transition: var(--transition);
-      flex: 1;
-      padding: 0.3rem;
-    }
-    
-    .nav-item i {
-      font-size: 1.3rem;
-      margin-bottom: 0.3rem;
-    }
-    
-    .nav-item.active {
-      color: var(--primary);
-    }
-    
-    .nav-item:hover {
-      transform: translateY(-4px);
-      color: var(--primary);
-    }
-    
-    .nav-item .nav-label {
-      font-weight: 600;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 992px) {
-      .featured-content {
-        flex-direction: column;
-      }
-      
-      .featured-image {
-        width: 100%;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .container {
-        padding: 1rem;
-        margin-top: 0;
-        border-radius: 0;
-        box-shadow: none;
-        border: none;
-      }
-      
-      .page-header h1 {
-        font-size: 1.8rem;
-      }
-      
-      .meditation-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      
-      .featured-section {
-        padding: 1.5rem;
-      }
-      
-      .user-profile {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .streak-counter {
-        margin-left: 0;
-        margin-top: 1rem;
-      }
-    }
-    
-    @media (max-width: 576px) {
-      .meditation-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .category-filters {
-        justify-content: flex-start;
-      }
-      
-      .filter-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-      }
-      
-      .featured-stats {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .player-controls {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .progress-container {
-        width: 100%;
-      }
-    }
-
-    /* Now Playing Indicator */
-    .now-playing {
-      background: linear-gradient(135deg, rgba(100, 223, 223, 0.15), rgba(94, 96, 206, 0.15));
-      border-left: 4px solid var(--secondary);
-    }
-    
-    .now-playing-icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--primary);
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      animation: pulse 1.5s infinite;
-    }
   </style>
 </head>
 <body>
   <div class="mobile-header">
     <div class="app-logo">
-      <i class="fas fa-heart"></i>
-      <span>Therapathy</span>
+      <i class="fas fa-spa"></i>
+      <span>Mindful Moments</span>
     </div>
-    <div class="user-avatar" id="userAvatar">☺</div>
+    <div class="user-avatar" id="userAvatar">U</div>
   </div>
   
-  <div class="container" id="dashboard">
+  <div class="container">
     <header class="page-header">
-      <h1><i class="fas fa-spa"></i> Meditation Library</h1>
+      <h1><i class="fas fa-headphones"></i> Meditation Library</h1>
       <p>Discover guided meditations to deepen your practice and find inner peace</p>
     </header>
 
     <!-- User Profile Section -->
-    <div class="user-profile" id="userProfile">
+    <div class="user-profile">
       <div class="user-avatar" id="userInitial">U</div>
       <div class="user-info">
         <h3 id="userGreeting">Welcome Back, Friend!</h3>
@@ -813,23 +730,23 @@
 
     <!-- Category Filters -->
     <div class="category-filters">
-      <button class="filter-btn active" data-category="all"><i class="fas fa-star"></i> All Meditations</button>
+      <button class="filter-btn active" data-category="all"><i class="fas fa-star"></i> All</button>
       <button class="filter-btn" data-category="sleep"><i class="fas fa-moon"></i> Sleep</button>
-      <button class="filter-btn" data-category="anxiety"><i class="fas fa-wind"></i> Anxiety Relief</button>
+      <button class="filter-btn" data-category="anxiety"><i class="fas fa-wind"></i> Anxiety</button>
       <button class="filter-btn" data-category="focus"><i class="fas fa-brain"></i> Focus</button>
       <button class="filter-btn" data-category="self-love"><i class="fas fa-heart"></i> Self-Love</button>
       <button class="filter-btn" data-category="beginners"><i class="fas fa-seedling"></i> Beginners</button>
     </div>
 
     <!-- Featured Meditation / Now Playing -->
-    <div class="featured-section" id="featuredSection">
+    <div class="featured-section">
       <div class="featured-header">
         <h2 id="featuredHeader"><i class="fas fa-crown"></i> Featured Meditation</h2>
         <div class="duration"><i class="fas fa-clock"></i> <span id="featuredDuration">25 min</span></div>
       </div>
       <div class="featured-content">
-        <div class="featured-image" id="featuredImage">
-          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%235E60CE'/><circle cx='300' cy='200' r='80' fill='%2364DFDF'/><path d='M250,150 Q300,120 350,150 T450,200' stroke='white' stroke-width='10' fill='none'/></svg>" alt="Peaceful Mind Meditation">
+        <div class="featured-image">
+          <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Peaceful Mind Meditation">
         </div>
         <div class="featured-info">
           <h3 id="featuredTitle">Peaceful Mind Journey</h3>
@@ -851,22 +768,30 @@
           </div>
           
           <div class="player-controls">
-            <button class="control-btn secondary" id="prevBtn">
-              <i class="fas fa-step-backward"></i>
-            </button>
-            <button class="control-btn" id="playBtn">
-              <i class="fas fa-play" id="playIcon"></i>
-            </button>
-            <button class="control-btn secondary" id="nextBtn">
-              <i class="fas fa-step-forward"></i>
-            </button>
-            
-            <div class="progress-container" id="progressContainer">
+            <div class="progress-container">
               <div class="progress-bar" id="progressBar"></div>
               <div class="time-display">
                 <span id="currentTime">0:00</span>
                 <span id="duration">0:00</span>
               </div>
+            </div>
+            
+            <div class="control-buttons">
+              <button class="control-btn secondary" id="prevBtn">
+                <i class="fas fa-step-backward"></i>
+              </button>
+              <button class="control-btn" id="playBtn">
+                <i class="fas fa-play" id="playIcon"></i>
+              </button>
+              <button class="control-btn secondary" id="nextBtn">
+                <i class="fas fa-step-forward"></i>
+              </button>
+            </div>
+            
+            <div class="loop-container">
+              <button class="loop-btn" id="loopBtn">
+                <i class="fas fa-redo"></i> Loop
+              </button>
             </div>
           </div>
         </div>
@@ -892,15 +817,6 @@
     </div>
   </div>
 
-  <!-- Login Prompt -->
-  <div class="container login-prompt" id="loginPrompt" style="display: none;">
-    <h2>Welcome to Therapathy</h2>
-    <p>Please sign in to access our full meditation library and track your progress</p>
-    <button class="btn-login" id="loginBtn">
-      <i class="fas fa-sign-in-alt"></i> Sign In
-    </button>
-  </div>
-
   <!-- Audio Player -->
   <audio id="audioPlayer" preload="metadata"></audio>
 
@@ -908,20 +824,18 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // Initialize Supabase
-    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
     // State variables
-    let currentUser = null;
-    let meditationSessions = 0;
-    let streak = 0;
+    let currentUser = {
+      name: "Demo User",
+      email: "demo@mindfulmoments.com",
+      sessions: 12,
+      streak: 5
+    };
+    
     let currentAudio = null;
     let currentTrack = null;
     let isPlaying = false;
-    let currentFeatured = null;
+    let isLooping = false;
     
     // Meditation library data with real audio tracks
     const meditationLibrary = {
@@ -931,7 +845,7 @@
           title: 'Deep Sleep Meditation',
           category: 'sleep',
           description: 'Fall asleep faster with this calming guided meditation designed to quiet your mind.',
-          duration: 'on loop',
+          duration: '10 min',
           level: 'Easy',
           color: '#64DFDF',
           tags: ['Sleep', 'Beginners'],
@@ -942,7 +856,7 @@
           title: 'Anxiety Relief Session',
           category: 'anxiety',
           description: 'Release tension and calm your nervous system with this powerful anxiety-reducing practice.',
-          duration: '20 min',
+          duration: '15 min',
           level: 'Medium',
           color: '#5E60CE',
           tags: ['Anxiety', 'Stress Relief'],
@@ -953,7 +867,7 @@
           title: 'Loving-Kindness Practice',
           category: 'self-love',
           description: 'Cultivate compassion for yourself and others with this heart-opening meditation.',
-          duration: '15 min',
+          duration: '12 min',
           level: 'Easy',
           color: '#FF6B6B',
           tags: ['Self-Love', 'Compassion'],
@@ -986,7 +900,7 @@
           title: 'Deep Mindfulness',
           category: 'mindfulness',
           description: 'Dive deep into present-moment awareness with this advanced mindfulness practice.',
-          duration: '45 min',
+          duration: '30 min',
           level: 'Advanced',
           color: '#4A4DC7',
           tags: ['Advanced', 'Mindfulness'],
@@ -1030,161 +944,72 @@
       ]
     };
 
-    // Helper function to safely get DOM elements
-    function getElement(id) {
-      const el = document.getElementById(id);
-      if (!el) console.warn(`Element with ID ${id} not found`);
-      return el;
-    }
-
-    // Show toast notification
-    function showToast(message, type = 'success') {
-      const toast = getElement('toast');
-      if (!toast) return;
-      
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
-
-    // Check user session
-    async function checkSession() {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        
-        if (data.session) {
-          currentUser = data.session.user;
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error('Session check failed:', error.message);
-        return false;
-      }
-    }
-
     // Initialize the app
-    document.addEventListener('DOMContentLoaded', async function() {
-      try {
-        const isAuthenticated = await checkSession();
-        const dashboard = getElement('dashboard');
-        const loginPrompt = getElement('loginPrompt');
-        
-        if (isAuthenticated) {
-          // Show dashboard for logged-in users
-          if (loginPrompt) loginPrompt.style.display = 'none';
-          if (dashboard) dashboard.style.display = 'block';
-          
-          // Load user data
-          loadUserData();
-          
-          // Initialize UI
-          setupEventListeners();
-          renderMeditationGrid();
-          renderBreathingGrid();
-          
-          // Initialize audio player
-          initAudioPlayer();
-          
-          // Set default featured meditation
-          setFeaturedMeditation(meditationLibrary.guided[0]);
-          
-        } else {
-          // Show login prompt for unauthenticated users
-          if (loginPrompt) loginPrompt.style.display = 'block';
-          if (dashboard) dashboard.style.display = 'none';
-        }
-      } catch (error) {
-        console.error('Initialization failed:', error);
-        showToast("Failed to initialize app", "error");
-      }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load user data
+      loadUserData();
+      
+      // Initialize UI
+      setupEventListeners();
+      renderMeditationGrid();
+      renderBreathingGrid();
+      
+      // Initialize audio player
+      initAudioPlayer();
+      
+      // Set default featured meditation
+      setFeaturedMeditation(meditationLibrary.guided[0]);
       
       // Create floating elements
       createFloatingElements();
     });
 
-    // Load user data from Supabase
-    async function loadUserData() {
-      if (!currentUser) return;
+    // Load user data
+    function loadUserData() {
+      const userInitial = document.getElementById('userInitial');
+      const userAvatar = document.getElementById('userAvatar');
+      const userGreeting = document.getElementById('userGreeting');
+      const sessionCount = document.getElementById('sessionCount');
+      const streakCount = document.getElementById('streakCount');
       
-      try {
-        // Update UI with user info
-        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
-        const userInitial = getElement('userInitial');
-        const userAvatar = getElement('userAvatar');
-        const userGreeting = getElement('userGreeting');
-        
-        if (userInitial) userInitial.textContent = initial;
-        if (userAvatar) userAvatar.textContent = initial;
-        
-        // Set greeting based on time of day
-        const hour = new Date().getHours();
-        let greeting = "Welcome back";
-        
-        if (hour < 12) {
-          greeting = "Good morning";
-        } else if (hour < 18) {
-          greeting = "Good afternoon";
-        } else {
-          greeting = "Good evening";
-        }
-        
-        if (userGreeting) userGreeting.textContent = `${greeting}, ${currentUser.email.split('@')[0]}`;
-        
-        // Load user meditation stats (simulated for demo)
-        meditationSessions = Math.floor(Math.random() * 20) + 5;
-        streak = Math.floor(Math.random() * 10) + 1;
-        
-        const sessionCount = getElement('sessionCount');
-        const streakCount = getElement('streakCount');
-        
-        if (sessionCount) sessionCount.textContent = meditationSessions;
-        if (streakCount) streakCount.textContent = `${streak} Day Streak`;
-        
-      } catch (error) {
-        showToast("Error loading user data", "error");
+      if (userInitial) userInitial.textContent = currentUser.name[0];
+      if (userAvatar) userAvatar.textContent = currentUser.name[0];
+      
+      // Set greeting based on time of day
+      const hour = new Date().getHours();
+      let greeting = "Welcome back";
+      
+      if (hour < 12) {
+        greeting = "Good morning";
+      } else if (hour < 18) {
+        greeting = "Good afternoon";
+      } else {
+        greeting = "Good evening";
       }
+      
+      if (userGreeting) userGreeting.textContent = `${greeting}, ${currentUser.name}`;
+      if (sessionCount) sessionCount.textContent = currentUser.sessions;
+      if (streakCount) streakCount.textContent = `${currentUser.streak} Day Streak`;
     }
 
     // Set featured meditation
     function setFeaturedMeditation(meditation) {
-      currentFeatured = meditation;
+      currentTrack = meditation;
       
-      const featuredTitle = getElement('featuredTitle');
-      const featuredDescription = getElement('featuredDescription');
-      const featuredDuration = getElement('featuredDuration');
-      const featuredDurationStat = getElement('featuredDurationStat');
-      const featuredImage = getElement('featuredImage');
+      const featuredTitle = document.getElementById('featuredTitle');
+      const featuredDescription = document.getElementById('featuredDescription');
+      const featuredDuration = document.getElementById('featuredDuration');
+      const featuredDurationStat = document.getElementById('featuredDurationStat');
       
       if (featuredTitle) featuredTitle.textContent = meditation.title;
       if (featuredDescription) featuredDescription.textContent = meditation.description;
       if (featuredDuration) featuredDuration.textContent = meditation.duration;
       if (featuredDurationStat) featuredDurationStat.textContent = meditation.duration;
-      if (featuredImage) featuredImage.querySelector('img').src = getImageForMeditation(meditation);
-    }
-
-    // Get image for meditation based on category
-    function getImageForMeditation(meditation) {
-      const images = {
-        sleep: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%2364DFDF'/><circle cx='300' cy='200' r='80' fill='%235E60CE'/><path d='M250,150 Q300,120 350,150 T450,200' stroke='white' stroke-width='10' fill='none'/><circle cx='300' cy='100' r='30' fill='white'/></svg>",
-        anxiety: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%235E60CE'/><path d='M250,200 C250,150 350,150 350,200 C350,250 300,300 300,300 C300,300 250,250 250,200 Z' fill='white'/><circle cx='280' cy='180' r='10' fill='%235E60CE'/><circle cx='320' cy='180' r='10' fill='%235E60CE'/></svg>",
-        "self-love": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%23FF6B6B'/><path d='M300,180 C350,150 400,200 300,280 C200,200 250,150 300,180 Z' fill='white'/></svg>",
-        focus: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%2348BB78'/><circle cx='300' cy='200' r='100' fill='white'/><circle cx='300' cy='200' r='50' fill='%2348BB78'/></svg>",
-        energy: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%23F6AD55'/><path d='M300,100 L350,200 L300,180 L250,200 Z' fill='white'/><path d='M300,300 L250,200 L300,220 L350,200 Z' fill='white'/></svg>",
-        mindfulness: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%234A4DC7'/><circle cx='300' cy='200' r='80' fill='white'/><circle cx='300' cy='200' r='40' fill='%234A4DC7'/></svg>",
-        calming: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%23E0E1FF'/><path d='M200,250 C250,200 350,200 400,250' stroke='white' stroke-width='20' fill='none'/></svg>"
-      };
-      
-      return images[meditation.category] || images.sleep;
     }
 
     // Render meditation grid
     function renderMeditationGrid() {
-      const grid = getElement('meditationGrid');
+      const grid = document.getElementById('meditationGrid');
       if (!grid) return;
       
       grid.innerHTML = '';
@@ -1197,7 +1022,6 @@
         
         card.innerHTML = `
           <div class="card-image" style="background-color: ${meditation.color};">
-            <img src="${getImageForMeditation(meditation)}" alt="${meditation.title}" style="width:100%; height:100%; object-fit:cover;">
             <div class="play-button">
               <i class="fas fa-play"></i>
             </div>
@@ -1221,7 +1045,7 @@
 
     // Render breathing grid
     function renderBreathingGrid() {
-      const grid = getElement('breathingGrid');
+      const grid = document.getElementById('breathingGrid');
       if (!grid) return;
       
       grid.innerHTML = '';
@@ -1234,7 +1058,6 @@
         
         card.innerHTML = `
           <div class="card-image" style="background-color: ${meditation.color};">
-            <img src="${getImageForMeditation(meditation)}" alt="${meditation.title}" style="width:100%; height:100%; object-fit:cover;">
             <div class="play-button">
               <i class="fas fa-play"></i>
             </div>
@@ -1258,13 +1081,14 @@
 
     // Initialize audio player
     function initAudioPlayer() {
-      const audioPlayer = getElement('audioPlayer');
-      const playBtn = getElement('playBtn');
-      const playIcon = getElement('playIcon');
-      const progressBar = getElement('progressBar');
-      const progressContainer = getElement('progressContainer');
-      const currentTimeEl = getElement('currentTime');
-      const durationEl = getElement('duration');
+      const audioPlayer = document.getElementById('audioPlayer');
+      const playBtn = document.getElementById('playBtn');
+      const playIcon = document.getElementById('playIcon');
+      const progressBar = document.getElementById('progressBar');
+      const progressContainer = document.getElementById('progressContainer');
+      const currentTimeEl = document.getElementById('currentTime');
+      const durationEl = document.getElementById('duration');
+      const loopBtn = document.getElementById('loopBtn');
       
       if (!audioPlayer) return;
       
@@ -1298,12 +1122,15 @@
       });
       
       audioPlayer.addEventListener('ended', () => {
-        isPlaying = false;
-        if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
-        
-        // Track meditation completion
-        if (currentUser && currentTrack) {
-          trackMeditationCompletion(currentTrack.id);
+        if (isLooping) {
+          // Loop the track
+          audioPlayer.currentTime = 0;
+          audioPlayer.play();
+          showToast("Track looped", "info");
+        } else {
+          // Stop playing
+          isPlaying = false;
+          if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
         }
       });
       
@@ -1322,13 +1149,22 @@
           isPlaying = !isPlaying;
         });
       }
+      
+      // Loop button functionality
+      if (loopBtn) {
+        loopBtn.addEventListener('click', () => {
+          isLooping = !isLooping;
+          loopBtn.classList.toggle('active', isLooping);
+          showToast(`Loop ${isLooping ? 'enabled' : 'disabled'}`, "info");
+        });
+      }
     }
 
     // Play meditation audio
     function playMeditation(meditation) {
-      const audioPlayer = getElement('audioPlayer');
-      const playIcon = getElement('playIcon');
-      const featuredHeader = getElement('featuredHeader');
+      const audioPlayer = document.getElementById('audioPlayer');
+      const playIcon = document.getElementById('playIcon');
+      const featuredHeader = document.getElementById('featuredHeader');
       
       if (!audioPlayer) return;
       
@@ -1350,9 +1186,6 @@
           // Update featured meditation to show the current track
           setFeaturedMeditation(meditation);
           
-          // Set current track
-          currentTrack = meditation;
-          
           showToast(`Now playing: ${meditation.title}`, 'info');
         })
         .catch(error => {
@@ -1361,47 +1194,21 @@
         });
     }
 
-    // Track meditation completion in Supabase
-    async function trackMeditationCompletion(meditationId) {
-      if (!currentUser) return;
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
       
-      try {
-        const { error } = await supabase
-          .from('meditation_sessions')
-          .insert([
-            {
-              user_id: currentUser.id,
-              meditation_id: meditationId,
-              duration: 0, // Actual duration would be calculated
-              completed_at: new Date().toISOString()
-            }
-          ]);
-        
-        if (error) throw error;
-        
-        // Update UI
-        meditationSessions++;
-        const sessionCount = getElement('sessionCount');
-        if (sessionCount) sessionCount.textContent = meditationSessions;
-        
-        showToast('Meditation completed! Great job!', 'success');
-      } catch (error) {
-        console.error('Error tracking meditation:', error);
-      }
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
     }
 
     // Setup all event listeners
     function setupEventListeners() {
-      // Login button
-      const loginBtn = getElement('loginBtn');
-      if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-          // In a real app, this would redirect to login page
-          // For demo, we'll simulate login
-          simulateLogin();
-        });
-      }
-      
       // Play buttons
       document.querySelectorAll('.play-button').forEach(button => {
         button.addEventListener('click', function() {
@@ -1415,12 +1222,6 @@
           
           if (meditation) {
             playMeditation(meditation);
-            
-            // Pulse animation
-            this.classList.add('pulse');
-            setTimeout(() => {
-              this.classList.remove('pulse');
-            }, 500);
           }
         });
       });
@@ -1449,8 +1250,8 @@
       });
       
       // Player controls
-      const prevBtn = getElement('prevBtn');
-      const nextBtn = getElement('nextBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
       
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
@@ -1465,41 +1266,6 @@
       }
     }
 
-    // Simulate login for demo purposes
-    function simulateLogin() {
-      // In a real app, this would be handled by Supabase auth
-      currentUser = {
-        id: 'demo-user',
-        email: 'demo@therapathy.com',
-        user_metadata: {
-          name: 'Demo User'
-        }
-      };
-      
-      // Hide login, show dashboard
-      const loginPrompt = getElement('loginPrompt');
-      const dashboard = getElement('dashboard');
-      
-      if (loginPrompt) loginPrompt.style.display = 'none';
-      if (dashboard) dashboard.style.display = 'block';
-      
-      // Load user data
-      loadUserData();
-      
-      // Initialize UI
-      setupEventListeners();
-      renderMeditationGrid();
-      renderBreathingGrid();
-      
-      // Initialize audio player
-      initAudioPlayer();
-      
-      // Set default featured meditation
-      setFeaturedMeditation(meditationLibrary.guided[0]);
-      
-      showToast('Welcome to Therapathy!', 'success');
-    }
-
     // Create floating elements
     function createFloatingElements() {
       const container = document.body;
@@ -1512,7 +1278,7 @@
         element.classList.add('floating-element', type);
         
         // Random size
-        const size = Math.floor(Math.random() * 120) + 40;
+        const size = Math.floor(Math.random() * 80) + 30;
         
         if (type === 'cloud') {
           element.style.width = `${size}px`;
