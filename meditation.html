@@ -6,6 +6,7 @@
   <title>Mindful Moments | Meditation App</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -29,6 +30,7 @@
       --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
       --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
       --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
@@ -52,7 +54,7 @@
       -webkit-font-smoothing: antialiased;
       background: radial-gradient(circle at 20% 30%, rgba(94, 96, 206, 0.05) 0%, transparent 50%),
                   radial-gradient(circle at 80% 70%, rgba(100, 223, 223, 0.05) 0%, transparent 50%);
-      padding-bottom: 70px;
+      padding-bottom: calc(70px + var(--safe-area-inset-bottom));
     }
 
     /* Mobile-first layout */
@@ -496,6 +498,57 @@
       font-weight: 600;
     }
 
+    /* Login Prompt */
+    .login-prompt {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-medium);
+      margin: 2rem auto;
+      max-width: 500px;
+      display: none;
+    }
+    
+    .login-prompt h2 {
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      font-size: 1.8rem;
+    }
+    
+    .login-prompt p {
+      margin-bottom: 1.8rem;
+      color: var(--gray);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: var(--shadow-medium);
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-dark);
+    }
+
     /* Audio Player */
     #audio-player {
       display: none;
@@ -552,6 +605,7 @@
       box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.95);
+      padding-bottom: calc(0.8rem + var(--safe-area-inset-bottom));
     }
     
     .nav-item {
@@ -709,14 +763,14 @@
     <div class="user-avatar" id="userAvatar">U</div>
   </div>
   
-  <div class="container">
+  <div class="container" id="dashboard">
     <header class="page-header">
       <h1><i class="fas fa-headphones"></i> Meditation Library</h1>
       <p>Discover guided meditations to deepen your practice and find inner peace</p>
     </header>
 
     <!-- User Profile Section -->
-    <div class="user-profile">
+    <div class="user-profile" id="userProfile">
       <div class="user-avatar" id="userInitial">U</div>
       <div class="user-info">
         <h3 id="userGreeting">Welcome Back, Friend!</h3>
@@ -739,7 +793,7 @@
     </div>
 
     <!-- Featured Meditation / Now Playing -->
-    <div class="featured-section">
+    <div class="featured-section" id="featuredSection">
       <div class="featured-header">
         <h2 id="featuredHeader"><i class="fas fa-crown"></i> Featured Meditation</h2>
         <div class="duration"><i class="fas fa-clock"></i> <span id="featuredDuration">25 min</span></div>
@@ -817,25 +871,57 @@
     </div>
   </div>
 
+  <!-- Login Prompt -->
+  <div class="container login-prompt" id="loginPrompt">
+    <h2>Welcome to Mindful Moments</h2>
+    <p>Please sign in to access our full meditation library and track your progress</p>
+    <button class="btn-login" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i> Sign In
+    </button>
+  </div>
+
   <!-- Audio Player -->
   <audio id="audioPlayer" preload="metadata"></audio>
 
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <i class="fas fa-home"></i>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-compass"></i>
+      <span class="nav-label">Discover</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-heart"></i>
+      <span class="nav-label">Favorites</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-chart-line"></i>
+      <span class="nav-label">Stats</span>
+    </a>
+  </div>
+
   <script>
-    // State variables
-    let currentUser = {
-      name: "Demo User",
-      email: "demo@mindfulmoments.com",
-      sessions: 12,
-      streak: 5
-    };
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
     
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // State variables
+    let currentUser = null;
+    let meditationSessions = 0;
+    let streak = 0;
     let currentAudio = null;
     let currentTrack = null;
     let isPlaying = false;
     let isLooping = false;
+    let currentFeatured = null;
     
     // Meditation library data with real audio tracks
     const meditationLibrary = {
@@ -944,62 +1030,143 @@
       ]
     };
 
+    // Helper function to safely get DOM elements
+    function getElement(id) {
+      const el = document.getElementById(id);
+      if (!el) console.warn(`Element with ID ${id} not found`);
+      return el;
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = getElement('toast');
+      if (!toast) return;
+      
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Check user session
+    async function checkSession() {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        if (data.session) {
+          currentUser = data.session.user;
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Session check failed:', error.message);
+        return false;
+      }
+    }
+
     // Initialize the app
-    document.addEventListener('DOMContentLoaded', function() {
-      // Load user data
-      loadUserData();
-      
-      // Initialize UI
-      setupEventListeners();
-      renderMeditationGrid();
-      renderBreathingGrid();
-      
-      // Initialize audio player
-      initAudioPlayer();
-      
-      // Set default featured meditation
-      setFeaturedMeditation(meditationLibrary.guided[0]);
-      
-      // Create floating elements
-      createFloatingElements();
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const isAuthenticated = await checkSession();
+        const dashboard = getElement('dashboard');
+        const loginPrompt = getElement('loginPrompt');
+        
+        if (isAuthenticated) {
+          // Show dashboard for logged-in users
+          if (loginPrompt) loginPrompt.style.display = 'none';
+          if (dashboard) dashboard.style.display = 'block';
+          
+          // Load user data
+          loadUserData();
+          
+          // Initialize UI
+          setupEventListeners();
+          renderMeditationGrid();
+          renderBreathingGrid();
+          
+          // Initialize audio player
+          initAudioPlayer();
+          
+          // Set default featured meditation
+          setFeaturedMeditation(meditationLibrary.guided[0]);
+          
+          // Create floating elements
+          createFloatingElements();
+        } else {
+          // Show login prompt for unauthenticated users
+          if (loginPrompt) loginPrompt.style.display = 'block';
+          if (dashboard) dashboard.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Initialization failed:', error);
+        showToast("Failed to initialize app", "error");
+      }
     });
 
-    // Load user data
-    function loadUserData() {
-      const userInitial = document.getElementById('userInitial');
-      const userAvatar = document.getElementById('userAvatar');
-      const userGreeting = document.getElementById('userGreeting');
-      const sessionCount = document.getElementById('sessionCount');
-      const streakCount = document.getElementById('streakCount');
+    // Load user data from Supabase
+    async function loadUserData() {
+      if (!currentUser) return;
       
-      if (userInitial) userInitial.textContent = currentUser.name[0];
-      if (userAvatar) userAvatar.textContent = currentUser.name[0];
-      
-      // Set greeting based on time of day
-      const hour = new Date().getHours();
-      let greeting = "Welcome back";
-      
-      if (hour < 12) {
-        greeting = "Good morning";
-      } else if (hour < 18) {
-        greeting = "Good afternoon";
-      } else {
-        greeting = "Good evening";
+      try {
+        // Update UI with user info
+        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+        const userInitial = getElement('userInitial');
+        const userAvatar = getElement('userAvatar');
+        const userGreeting = getElement('userGreeting');
+        
+        if (userInitial) userInitial.textContent = initial;
+        if (userAvatar) userAvatar.textContent = initial;
+        
+        // Set greeting based on time of day
+        const hour = new Date().getHours();
+        let greeting = "Welcome back";
+        
+        if (hour < 12) {
+          greeting = "Good morning";
+        } else if (hour < 18) {
+          greeting = "Good afternoon";
+        } else {
+          greeting = "Good evening";
+        }
+        
+        const username = currentUser.email.split('@')[0];
+        if (userGreeting) userGreeting.textContent = `${greeting}, ${username}`;
+        
+        // Load user meditation stats
+        const { data, error } = await supabase
+          .from('user_stats')
+          .select('sessions, streak')
+          .eq('user_id', currentUser.id)
+          .single();
+        
+        if (error) throw error;
+        
+        meditationSessions = data?.sessions || 0;
+        streak = data?.streak || 0;
+        
+        const sessionCount = getElement('sessionCount');
+        const streakCount = getElement('streakCount');
+        
+        if (sessionCount) sessionCount.textContent = meditationSessions;
+        if (streakCount) streakCount.textContent = `${streak} Day Streak`;
+        
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        showToast("Error loading user data", "error");
       }
-      
-      if (userGreeting) userGreeting.textContent = `${greeting}, ${currentUser.name}`;
-      if (sessionCount) sessionCount.textContent = currentUser.sessions;
-      if (streakCount) streakCount.textContent = `${currentUser.streak} Day Streak`;
     }
 
     // Set featured meditation
     function setFeaturedMeditation(meditation) {
       currentTrack = meditation;
       
-      const featuredTitle = document.getElementById('featuredTitle');
-      const featuredDescription = document.getElementById('featuredDescription');
-      const featuredDuration = document.getElementById('featuredDuration');
-      const featuredDurationStat = document.getElementById('featuredDurationStat');
+      const featuredTitle = getElement('featuredTitle');
+      const featuredDescription = getElement('featuredDescription');
+      const featuredDuration = getElement('featuredDuration');
+      const featuredDurationStat = getElement('featuredDurationStat');
       
       if (featuredTitle) featuredTitle.textContent = meditation.title;
       if (featuredDescription) featuredDescription.textContent = meditation.description;
@@ -1009,7 +1176,7 @@
 
     // Render meditation grid
     function renderMeditationGrid() {
-      const grid = document.getElementById('meditationGrid');
+      const grid = getElement('meditationGrid');
       if (!grid) return;
       
       grid.innerHTML = '';
@@ -1045,7 +1212,7 @@
 
     // Render breathing grid
     function renderBreathingGrid() {
-      const grid = document.getElementById('breathingGrid');
+      const grid = getElement('breathingGrid');
       if (!grid) return;
       
       grid.innerHTML = '';
@@ -1081,14 +1248,14 @@
 
     // Initialize audio player
     function initAudioPlayer() {
-      const audioPlayer = document.getElementById('audioPlayer');
-      const playBtn = document.getElementById('playBtn');
-      const playIcon = document.getElementById('playIcon');
-      const progressBar = document.getElementById('progressBar');
-      const progressContainer = document.getElementById('progressContainer');
-      const currentTimeEl = document.getElementById('currentTime');
-      const durationEl = document.getElementById('duration');
-      const loopBtn = document.getElementById('loopBtn');
+      const audioPlayer = getElement('audioPlayer');
+      const playBtn = getElement('playBtn');
+      const playIcon = getElement('playIcon');
+      const progressBar = getElement('progressBar');
+      const progressContainer = getElement('progressContainer');
+      const currentTimeEl = getElement('currentTime');
+      const durationEl = getElement('duration');
+      const loopBtn = getElement('loopBtn');
       
       if (!audioPlayer) return;
       
@@ -1131,6 +1298,11 @@
           // Stop playing
           isPlaying = false;
           if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
+          
+          // Track meditation completion
+          if (currentUser && currentTrack) {
+            trackMeditationCompletion(currentTrack.id);
+          }
         }
       });
       
@@ -1162,9 +1334,9 @@
 
     // Play meditation audio
     function playMeditation(meditation) {
-      const audioPlayer = document.getElementById('audioPlayer');
-      const playIcon = document.getElementById('playIcon');
-      const featuredHeader = document.getElementById('featuredHeader');
+      const audioPlayer = getElement('audioPlayer');
+      const playIcon = getElement('playIcon');
+      const featuredHeader = getElement('featuredHeader');
       
       if (!audioPlayer) return;
       
@@ -1194,21 +1366,57 @@
         });
     }
 
-    // Show toast notification
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      if (!toast) return;
+    // Track meditation completion in Supabase
+    async function trackMeditationCompletion(meditationId) {
+      if (!currentUser) return;
       
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
+      try {
+        // Update session count
+        meditationSessions++;
+        const { error: updateError } = await supabase
+          .from('user_stats')
+          .update({ sessions: meditationSessions })
+          .eq('user_id', currentUser.id);
+        
+        if (updateError) throw updateError;
+        
+        // Add meditation session to history
+        const { error: historyError } = await supabase
+          .from('meditation_history')
+          .insert([
+            {
+              user_id: currentUser.id,
+              meditation_id: meditationId,
+              duration: 0, // Actual duration would be calculated
+              completed_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (historyError) throw historyError;
+        
+        // Update UI
+        const sessionCount = getElement('sessionCount');
+        if (sessionCount) sessionCount.textContent = meditationSessions;
+        
+        showToast('Meditation completed! Great job!', 'success');
+      } catch (error) {
+        console.error('Error tracking meditation:', error);
+        showToast('Failed to track meditation session', 'error');
+      }
     }
 
     // Setup all event listeners
     function setupEventListeners() {
+      // Login button
+      const loginBtn = getElement('loginBtn');
+      if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          // In a real app, this would redirect to login page
+          // For demo, we'll simulate login
+          simulateLogin();
+        });
+      }
+      
       // Play buttons
       document.querySelectorAll('.play-button').forEach(button => {
         button.addEventListener('click', function() {
@@ -1250,8 +1458,8 @@
       });
       
       // Player controls
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
+      const prevBtn = getElement('prevBtn');
+      const nextBtn = getElement('nextBtn');
       
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
@@ -1263,6 +1471,52 @@
         nextBtn.addEventListener('click', () => {
           showToast('Next track would play', 'info');
         });
+      }
+    }
+
+    // Simulate login for demo purposes
+    async function simulateLogin() {
+      try {
+        // In a real app, this would be handled by Supabase auth
+        // For demo, we'll simulate login with a test user
+        
+        // Create a test user session
+        currentUser = {
+          id: 'demo-user-id',
+          email: 'demo@mindfulmoments.com',
+          user_metadata: {
+            name: 'Demo User'
+          }
+        };
+        
+        // Hide login, show dashboard
+        const loginPrompt = getElement('loginPrompt');
+        const dashboard = getElement('dashboard');
+        
+        if (loginPrompt) loginPrompt.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+        
+        // Load user data
+        await loadUserData();
+        
+        // Initialize UI
+        setupEventListeners();
+        renderMeditationGrid();
+        renderBreathingGrid();
+        
+        // Initialize audio player
+        initAudioPlayer();
+        
+        // Set default featured meditation
+        setFeaturedMeditation(meditationLibrary.guided[0]);
+        
+        // Create floating elements
+        createFloatingElements();
+        
+        showToast('Welcome to Mindful Moments!', 'success');
+      } catch (error) {
+        console.error('Login simulation failed:', error);
+        showToast('Failed to log in', 'error');
       }
     }
 
