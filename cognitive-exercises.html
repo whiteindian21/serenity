@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MindGym | Cognitive Training</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
@@ -614,7 +614,6 @@
       max-width: 500px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: var(--shadow-dark);
       position: relative;
     }
     
@@ -821,6 +820,46 @@
       font-size: 1.8rem;
       color: var(--primary);
     }
+    
+    /* Therapathy Integration */
+    .therapathy-integration {
+      background: linear-gradient(135deg, rgba(94, 96, 206, 0.08), rgba(100, 223, 223, 0.08));
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(94, 96, 206, 0.18);
+      text-align: center;
+    }
+    
+    .integration-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .integration-btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(94, 96, 206, 0.3);
+    }
+    
+    .integration-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(94, 96, 206, 0.4);
+    }
 
     /* Mobile-first media queries */
     @media (min-width: 576px) {
@@ -902,9 +941,61 @@
   </div>
   
   <div class="container" id="appContent">
-   
-   
-
+    <!-- Login Form -->
+    <div class="auth-container" id="authContainer">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h2>Therapathy</h2>
+        <p>Train your brain, enhance your skills</p>
+      </div>
+      
+      <div class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button class="auth-btn" onclick="login()">Sign In</button>
+        <div class="auth-switch">
+          Don't have an account? <a href="#" onclick="showRegister()">Register</a>
+        </div>
+      </div>
+      
+      <div class="auth-form" id="registerForm" style="display: none;">
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label for="regConfirm">Confirm Password</label>
+          <input type="password" id="regConfirm" placeholder="••••••••" required>
+        </div>
+        <button class="auth-btn" onclick="register()">Create Account</button>
+        <div class="auth-switch">
+          Already have an account? <a href="#" onclick="showLogin()">Sign In</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- App Content (hidden initially) -->
+    <div id="mainContent" style="display: none;">
+      <header class="page-header">
+        <h1><i class="fas fa-brain"></i> Cognitive Exercises</h1>
+        <p>Challenge your mind and improve cognitive skills with these brain training activities</p>
+      </header>
 
       <!-- User Profile Section -->
       <div class="user-profile">
@@ -917,6 +1008,18 @@
           <i class="fas fa-fire"></i>
           <span id="streakCount">0 Day Streak</span>
         </div>
+      </div>
+      
+      <!-- Therapathy Integration Banner -->
+      <div class="therapathy-integration">
+        <div class="integration-header">
+          <i class="fas fa-heartbeat" style="font-size: 2rem; color: var(--accent);"></i>
+          <h3>Part of the Therapathy Wellness Suite</h3>
+        </div>
+        <p>MindGym is integrated with Therapathy for comprehensive mental wellness. Access your emotional health dashboard anytime.</p>
+        <button class="integration-btn" onclick="goToTherapathy()">
+          <i class="fas fa-external-link-alt"></i> Go to Therapathy Dashboard
+        </button>
       </div>
 
       <!-- Brain Stats -->
@@ -973,16 +1076,16 @@
       <i class="fas fa-brain"></i>
       <span class="nav-label">Cognitive</span>
     </a>
-    <a href="#" class="nav-item" onclick="logout()">
-      <i class="fas fa-user"></i>
-      <span class="nav-label">Logout</span>
+    <a href="#" class="nav-item">
+      <i class="fas fa-heart"></i>
+      <span class="nav-label">Therapathy</span>
     </a>
   </div>
 
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
-  <script>
+    <script>
     // Initialize Supabase
     const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
@@ -1065,11 +1168,12 @@
     };
     
     // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       // Check if user is already logged in
-      const user = JSON.parse(localStorage.getItem('mindgym_user'));
-      if (user && user.id) {
-        userData = user;
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (session) {
+        userData.id = session.user.id;
+        await loadUserData();
         showAppContent();
       } else {
         showAuthForm();
@@ -1098,13 +1202,8 @@
     function showAppContent() {
       authContainer.style.display = 'none';
       mainContent.style.display = 'block';
-      loadUserData();
       loadExercises();
       loadDailyChallenge();
-      
-      // Update avatar with initials
-      const avatar = document.querySelector('.user-avatar');
-      avatar.textContent = userData.name.charAt(0) || '☺';
     }
     
     // Show login form
@@ -1119,7 +1218,7 @@
       registerForm.style.display = 'flex';
     }
     
-    // User login - FIXED SUPABASE AUTHENTICATION
+    // User login
     async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
@@ -1130,7 +1229,6 @@
       }
       
       try {
-        // Updated to use signInWithPassword
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -1138,33 +1236,8 @@
         
         if (error) throw error;
         
-        const user = data.user;
-        
-        // Get user profile
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-        
-        if (profileError) throw profileError;
-        
-        // Update user data
-        userData = {
-          id: user.id,
-          name: profile.full_name || user.email,
-          streak: profile.streak || 0,
-          stats: {
-            problemSolving: profile.problem_solving || 75,
-            memory: profile.memory || 68,
-            processingSpeed: profile.processing_speed || 82,
-            attention: profile.attention || 71
-          }
-        };
-        
-        // Save to local storage
-        localStorage.setItem('mindgym_user', JSON.stringify(userData));
-        
+        userData.id = data.user.id;
+        await loadUserData();
         showAppContent();
         showToast('Login successful!', 'success');
       } catch (error) {
@@ -1173,7 +1246,7 @@
       }
     }
     
-    // User registration - FIXED SUPABASE AUTHENTICATION
+    // User registration
     async function register() {
       const name = document.getElementById('regName').value;
       const email = document.getElementById('regEmail').value;
@@ -1199,28 +1272,24 @@
         
         if (error) throw error;
         
-        const user = data.user;
-        
         // Create profile
         const { error: profileError } = await supabase
           .from('profiles')
-          .insert([
-            { 
-              id: user.id,
-              full_name: name,
-              streak: 0,
-              problem_solving: 75,
-              memory: 68,
-              processing_speed: 82,
-              attention: 71
-            }
-          ]);
+          .insert([{
+            id: data.user.id,
+            full_name: name,
+            streak: 0,
+            problem_solving: 75,
+            memory: 68,
+            processing_speed: 82,
+            attention: 71
+          }]);
         
         if (profileError) throw profileError;
         
-        // Update user data
+        // Update local user data
         userData = {
-          id: user.id,
+          id: data.user.id,
           name: name,
           streak: 0,
           stats: {
@@ -1231,9 +1300,6 @@
           }
         };
         
-        // Save to local storage
-        localStorage.setItem('mindgym_user', JSON.stringify(userData));
-        
         showAppContent();
         showToast('Account created successfully!', 'success');
       } catch (error) {
@@ -1242,25 +1308,7 @@
       }
     }
     
-    // User logout
-    function logout() {
-      localStorage.removeItem('mindgym_user');
-      userData = {
-        id: null,
-        name: 'Guest',
-        streak: 0,
-        stats: {
-          problemSolving: 0,
-          memory: 0,
-          processingSpeed: 0,
-          attention: 0
-        }
-      };
-      showAuthForm();
-      showToast('Logged out successfully', 'info');
-    }
-    
-    // Load user data
+    // Load user data with proper error handling
     async function loadUserData() {
       try {
         if (!userData.id) {
@@ -1272,50 +1320,80 @@
         userStreak.textContent = 'Fetching your data';
         
         // Fetch user data from Supabase
-        const { data, error } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', userData.id)
-          .single();
+          .maybeSingle();
         
-        if (error) throw error;
+        if (profileError) throw profileError;
         
-        if (data) {
+        if (profileData) {
           // Update user data
           userData = {
-            id: data.id,
-            name: data.full_name || userData.name,
-            streak: data.streak || 0,
+            id: profileData.id,
+            name: profileData.full_name || userData.name,
+            streak: profileData.streak || 0,
             stats: {
-              problemSolving: data.problem_solving || 75,
-              memory: data.memory || 68,
-              processingSpeed: data.processing_speed || 82,
-              attention: data.attention || 71
+              problemSolving: profileData.problem_solving || 75,
+              memory: profileData.memory || 68,
+              processingSpeed: profileData.processing_speed || 82,
+              attention: profileData.attention || 71
             }
           };
-          
-          // Update UI
-          userName.textContent = `Welcome Back, ${userData.name.split(' ')[0]}!`;
-          userStreak.textContent = 'Keep your mind sharp with daily cognitive training';
-          streakCount.textContent = `${userData.streak} Day Streak`;
-          renderBrainStats();
-          
-          // Update avatar with initials
-          const avatar = document.querySelector('.user-avatar');
-          avatar.textContent = userData.name.charAt(0) || '☺';
-          
-          showToast('Profile loaded successfully', 'success');
         } else {
-          showToast('No profile data found', 'info');
+          // Create default profile if none exists
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert([{
+              id: userData.id,
+              full_name: 'New User',
+              streak: 0,
+              problem_solving: 75,
+              memory: 68,
+              processing_speed: 82,
+              attention: 71
+            }]);
+          
+          if (insertError) throw insertError;
+          
+          // Set default values
+          userData = {
+            id: userData.id,
+            name: 'New User',
+            streak: 0,
+            stats: {
+              problemSolving: 75,
+              memory: 68,
+              processingSpeed: 82,
+              attention: 71
+            }
+          };
         }
+        
+        // Update UI
+        updateUserProfileUI();
+        showToast('Profile loaded successfully', 'success');
       } catch (error) {
         console.error('Error loading user data:', error);
         userName.textContent = `Welcome, ${userData.name.split(' ')[0]}!`;
         userStreak.textContent = 'Complete exercises to build your streak';
         streakCount.textContent = `${userData.streak} Day Streak`;
         renderBrainStats();
-        showToast('Using local profile data', 'info');
+        showToast('Error loading profile data', 'error');
       }
+    }
+    
+    // Helper function to update UI
+    function updateUserProfileUI() {
+      userName.textContent = `Welcome Back, ${userData.name.split(' ')[0]}!`;
+      userStreak.textContent = 'Keep your mind sharp with daily cognitive training';
+      streakCount.textContent = `${userData.streak} Day Streak`;
+      renderBrainStats();
+      
+      // Update avatar with initials
+      const avatar = document.querySelector('.user-avatar');
+      avatar.textContent = userData.name.charAt(0) || '☺';
     }
     
     // Render brain stats
@@ -1419,15 +1497,6 @@
               difficulty: 'Easy',
               duration: 3,
               icon: 'fas fa-calculator'
-            },
-            {
-              id: 'ex6',
-              title: 'Pattern Recognition',
-              description: 'Identify sequences and patterns to enhance logical thinking.',
-              category: 'Logic',
-              difficulty: 'Medium',
-              duration: 7,
-              icon: 'fas fa-project-diagram'
             }
           ];
           renderExercises(exercises);
@@ -1591,13 +1660,8 @@
       // Update UI
       renderBrainStats();
       
-      // Save to local storage
-      localStorage.setItem('mindgym_user', JSON.stringify(userData));
-      
-      // Update Supabase if logged in
-      if (userData.id) {
-        updateProfileStats();
-      }
+      // Update Supabase
+      updateProfileStats();
     }
     
     // Update profile stats in Supabase
@@ -1712,13 +1776,8 @@
             streakCount.textContent = `${userData.streak} Day Streak`;
             renderBrainStats();
             
-            // Save to local storage
-            localStorage.setItem('mindgym_user', JSON.stringify(userData));
-            
-            // Update Supabase if logged in
-            if (userData.id) {
-              updateProfileStats();
-            }
+            // Update Supabase
+            updateProfileStats();
           }
         }, 500);
       } catch (error) {
