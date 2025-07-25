@@ -95,6 +95,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(94, 96, 206, 0.1);
     }
     
     .app-logo {
@@ -109,6 +110,7 @@
     
     .app-logo i {
       font-size: 1.5rem;
+      color: var(--primary);
     }
     
     .user-avatar {
@@ -378,6 +380,7 @@
       left: 0;
       box-shadow: 0 6px 20px rgba(94, 96, 206, 0.35);
       z-index: 2;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
     }
     
     .breath-circle.pulse {
@@ -394,6 +397,7 @@
       z-index: 1;
       opacity: 0.3;
       transition: all 1.5s ease-in-out;
+      background: radial-gradient(circle, rgba(94, 96, 206, 0.2) 0%, rgba(94, 96, 206, 0) 70%);
     }
     
     .breath-phase {
@@ -1363,13 +1367,23 @@
       word-break: break-word;
       line-height: 1.5;
       animation: fadeIn 0.3s ease;
+      box-shadow: var(--shadow-light);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: messageAppear 0.3s ease forwards;
+    }
+    
+    @keyframes messageAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .message.user {
       background: white;
       align-self: flex-end;
       border-top-right-radius: 0;
-      box-shadow: var(--shadow-light);
       border: 1px solid rgba(94, 96, 206, 0.1);
     }
     
@@ -1377,7 +1391,6 @@
       background: white;
       align-self: flex-start;
       border-top-left-radius: 0;
-      box-shadow: var(--shadow-light);
       border: 1px solid rgba(0, 206, 201, 0.1);
     }
     
@@ -1679,6 +1692,300 @@
       transform: translateY(-5px);
       box-shadow: var(--shadow-medium);
     }
+    
+    /* New UI Enhancements */
+    .dashboard-header {
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .greeting {
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .date-display {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
+    .progress-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .progress-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-title h4 {
+      font-size: 1rem;
+      color: var(--dark);
+    }
+    
+    .progress-title span {
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .insight-card {
+      background: linear-gradient(135deg, rgba(100, 223, 223, 0.08), rgba(94, 96, 206, 0.08));
+      border: 1px solid rgba(100, 223, 223, 0.18);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+    }
+    
+    .insight-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    
+    .insight-card p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--dark);
+    }
+    
+    /* Breathing animation enhancements */
+    .breath-circle {
+      transition: all 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .breath-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      transition: all 0.5s ease;
+    }
+    
+    /* Mood colors */
+    .mood-option[data-mood="awful"] { background: rgba(229, 62, 62, 0.08); }
+    .mood-option[data-mood="sad"] { background: rgba(246, 173, 85, 0.08); }
+    .mood-option[data-mood="neutral"] { background: rgba(138, 155, 168, 0.08); }
+    .mood-option[data-mood="great"] { background: rgba(72, 187, 120, 0.08); }
+    
+    .mood-option.selected[data-mood="awful"] { background: rgba(229, 62, 62, 0.15); }
+    .mood-option.selected[data-mood="sad"] { background: rgba(246, 173, 85, 0.15); }
+    .mood-option.selected[data-mood="neutral"] { background: rgba(138, 155, 168, 0.15); }
+    .mood-option.selected[data-mood="great"] { background: rgba(72, 187, 120, 0.15); }
+    
+    /* Profile enhancements */
+    .profile-header {
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    
+    /* Tool cards */
+    .tool-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(94, 96, 206, 0.1);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .tool-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .tool-info {
+      flex: 1;
+    }
+    
+    .tool-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+      color: var(--dark);
+    }
+    
+    .tool-info p {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+  /* Added loading spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(94, 96, 206, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--gray);
+    }
+    
+    /* Companion change animation */
+    @keyframes companionChange {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .companion-change {
+      animation: companionChange 0.5s ease;
+    }
+    
+    /* Enhanced progress visualization */
+    .progress-details {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    
+    .progress-source {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+    }
+    
+    .progress-source-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .progress-source-value {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    
+    .progress-source-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: center;
+    }
+    
+    /* Improved companion card */
+    .companion-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      position: relative;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .companion-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .companion-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.35);
+      flex-shrink: 0;
+    }
+    
+    .companion-info {
+      flex: 1;
+    }
+    
+    .companion-name {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--dark);
+    }
+    
+    .companion-role {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+    }
+    
+    .specialties-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    
+    .specialty-tag {
+      background: rgba(94, 96, 206, 0.12);
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid rgba(94, 96, 206, 0.25);
+    }
+    
+    /* Chat improvements */
+    .message.companion {
+      border-left: 3px solid var(--secondary);
+    }
+    
+    .message.user {
+      border-right: 3px solid var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -1695,6 +2002,12 @@
 
   <!-- Dashboard Container -->
   <div class="container dashboard-container" id="dashboard-container" style="display: none;">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="greeting" id="greeting">Good afternoon</div>
+      <div class="date-display" id="currentDate"></div>
+    </div>
+    
     <!-- Page Sections -->
     <div id="home-section" class="page-section active">
       <!-- Affirmation Card -->
@@ -1711,11 +2024,33 @@
         </div>
       </div>
 
+
+      <!-- Companion Card -->
+      <div class="companion-card">
+        <div class="companion-header">
+          <div class="companion-avatar" id="companion-avatar">
+            <i class="fas fa-smile"></i>
+          </div>
+          <div class="companion-info">
+            <div class="companion-name" id="companion-name">Elena</div>
+            <div class="companion-role" id="companion-role">Healing Guide</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="change-companion-btn">
+            <i class="fas fa-exchange-alt"></i> Change
+          </button>
+        </div>
+        <div class="specialties-container" id="companion-specialties">
+          <div class="specialty-tag">Grief</div>
+          <div class="specialty-tag">Compassion</div>
+          <div class="specialty-tag">Support</div>
+        </div>
+      </div>
+
       <!-- Chat Interface -->
       <div class="chat-container" id="chat-container">
         <div class="chat-header">
           <div class="avatar">
-            <i class="fas fa-smile"></i>
+            <i class="fas fa-smile" id="chat-header-avatar"></i>
           </div>
           <h3 id="chat-title">Chat with Elena</h3>
           <button class="chat-settings" id="chat-settings" aria-label="Change companion">
@@ -1723,9 +2058,8 @@
           </button>
         </div>
         <div class="chat-messages" id="chat-messages">
-          <div class="message companion">
-            Hi there! I'm Elena, your healing companion. How are you feeling today?
-            <div class="message-time">Just now</div>
+          <div class="loading-text" id="chat-loading">
+            <div class="loading-spinner"></div> Connecting with your companion...
           </div>
         </div>
         <div class="chat-input">
@@ -1743,7 +2077,7 @@
           <div class="breath-visual"></div>
           <div class="breath-phase"></div>
           <div class="breath-circle pulse">
-            <span id="breath-text">Breathe In</span>
+            <span id="breath-text" class="breath-text">Breathe In</span>
           </div>
         </div>
         
@@ -1804,79 +2138,63 @@
           </button>
         </div>
       </div>
-      
-      <!-- Companion Section -->
+    </div>
+    
+    <!-- Tools Page -->
+    <div id="tools-section" class="page-section">
       <div class="card">
-        <h3><i class="fas fa-comments"></i> Your Companion</h3>
+        <h3><i class="fas fa-tools"></i> Healing Tools</h3>
+        <p>Explore our collection of therapeutic tools</p>
         
-        <div class="companion-container">
-          <div class="companion-avatar" id="companion-avatar">
-            <i class="fas fa-smile"></i>
-          </div>
-          <div class="companion-name" id="companion-name">Elena</div>
-          <div class="companion-role" id="companion-role">Healing Guide</div>
-          
-          <div class="companion-specialties" id="companion-specialties">
-            <div class="specialty-tag">Grief</div>
-            <div class="specialty-tag">Compassion</div>
-            <div class="specialty-tag">Support</div>
+        <div class="action-cards">
+          <!-- Journal Button -->
+          <div class="action-card" id="journal-btn">
+            <i class="fas fa-book-open"></i>
+            <h3>Journal</h3>
+            <p>Express your thoughts with guided prompts</p>
+            <a href="journal.html" class="btn btn-primary">
+              Begin <i class="fas fa-chevron-right"></i>
+            </a>
           </div>
           
-          <button class="btn btn-primary" id="change-companion-btn">
-            <i class="fas fa-user-friends"></i> Change Companion
-          </button>
+          <!-- Self-Care Button -->
+          <div class="action-card" id="compassion-btn">
+            <i class="fas fa-hand-holding-heart"></i>
+            <h3>Self-Care</h3>
+            <p>Exercises to cultivate self-kindness</p>
+            <a href="self-care.html" class="btn btn-primary">
+              Explore <i class="fas fa-chevron-right"></i>
+            </a>
+          </div>
+          
+          <!-- Meditation Button -->
+          <div class="action-card">
+            <i class="fas fa-headphones"></i>
+            <h3>Meditation Library</h3>
+            <p>Calming meditations for grief and healing</p>
+            <a href="meditation.html" class="btn btn-primary">
+              Explore <i class="fas fa-chevron-right"></i>
+            </a>
+          </div>
+          
+          <!-- Cognitive Exercises Button -->
+          <div class="action-card">
+            <i class="fas fa-brain"></i>
+            <h3>Cognitive Exercises</h3>
+            <p>Tools to reframe negative thoughts</p>
+            <a href="cognitive-exercises.html" class="btn btn-primary">
+              Begin <i class="fas fa-chevron-right"></i>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Tools Page -->
-<div id="tools-section" class="page-section">
-  <div class="card">
-    <h3><i class="fas fa-tools"></i> Healing Tools</h3>
-    <p>Explore our collection of therapeutic tools</p>
-    
-    <div class="action-cards">
-      <!-- Journal Button -->
-      <div class="action-card" id="journal-btn">
-        <i class="fas fa-book-open"></i>
-        <h3>Journal</h3>
-        <p>Express your thoughts with guided prompts</p>
-        <a href="journal.html" class="btn btn-primary">
-          Begin <i class="fas fa-chevron-right"></i>
-        </a>
-      </div>
       
-      <!-- Self-Care Button -->
-      <div class="action-card" id="compassion-btn">
-        <i class="fas fa-hand-holding-heart"></i>
-        <h3>Self-Care</h3>
-        <p>Exercises to cultivate self-kindness</p>
-        <a href="self-care.html" class="btn btn-primary">
-          Explore <i class="fas fa-chevron-right"></i>
-        </a>
-      </div>
-      
-      <!-- Meditation Button -->
-      <div class="action-card">
-        <i class="fas fa-headphones"></i>
-        <h3>Meditation Library</h3>
-        <p>Calming meditations for grief and healing</p>
-        <a href="meditation.html" class="btn btn-primary">
-          Explore <i class="fas fa-chevron-right"></i>
-        </a>
-      </div>
-      
-      <!-- Cognitive Exercises Button -->
-      <div class="action-card">
-        <i class="fas fa-brain"></i>
-        <h3>Cognitive Exercises</h3>
-        <p>Tools to reframe negative thoughts</p>
-        <a href="cognitive-exercises.html" class="btn btn-primary">
-          Begin <i class="fas fa-chevron-right"></i>
-        </a>
+      <!-- Healing Insights -->
+      <div class="insight-card">
+        <h3><i class="fas fa-lightbulb"></i> Today's Insight</h3>
+        <p>"Grief is not a disorder, a disease or a sign of weakness. It is an emotional, physical and spiritual necessity, the price you pay for love."</p>
       </div>
     </div>
-  </div>
-</div>
     
     <!-- Memories Page -->
     <div id="memories-section" class="page-section">
@@ -1885,7 +2203,9 @@
         <p>Preserve and revisit special moments</p>
         
         <div class="memory-container" id="memory-container">
-          <!-- Memories will be loaded here -->
+          <div class="loading-text" id="memories-loading">
+            <div class="loading-spinner"></div> Loading your memories...
+          </div>
         </div>
         
         <div class="memory-actions">
@@ -1901,44 +2221,51 @@
     
     <!-- Profile Page -->
     <div id="profile-section" class="page-section">
+      <div class="profile-header">
+        <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2.2rem; margin: 0 auto;">
+          <span id="profile-initial">U</span>
+        </div>
+        <div class="companion-name" id="profile-name">User Name</div>
+        <div class="companion-role">Member since <span id="join-date">Jan 2023</span></div>
+      </div>
+      
       <div class="card">
-        <div class="companion-container">
-          <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2.2rem;">
-            <span id="profile-initial">U</span>
-          </div>
-          <div class="companion-name" id="profile-name">User Name</div>
-          <div class="companion-role">Member since <span id="join-date">Jan 2023</span></div>
+        <div class="progress-title">
+          <h4>Healing Progress</h4>
+          <span id="profile-progress-percent">0%</span>
         </div>
-        
         <div class="progress-bar">
-          <div class="progress-fill" id="progressFill" style="width: 65%"></div>
-        </div>
-        <div class="progress-info">
-          <span>Healing Progress</span>
-          <span id="progress-percent">65%</span>
+          <div class="progress-fill" id="profile-progress-fill" style="width: 0%"></div>
         </div>
         
-        <div class="progress-sources">
+        <div class="progress-details">
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-smile"></i>
             </div>
-            <div class="progress-source-value" id="mood-source">12</div>
+            <div class="progress-source-value" id="profile-mood-source">0</div>
             <div class="progress-source-label">Moods</div>
           </div>
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-comment"></i>
             </div>
-            <div class="progress-source-value" id="chat-source">8</div>
-            <div class="progress-source-label">Chats</div>
+            <div class="progress-source-value" id="profile-chat-source">0</div>
+            <div class="progress-source-label">Messages</div>
           </div>
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-book"></i>
             </div>
-            <div class="progress-source-value" id="journal-source">5</div>
+            <div class="progress-source-value" id="profile-journal-source">0</div>
             <div class="progress-source-label">Journals</div>
+          </div>
+          <div class="progress-source">
+            <div class="progress-source-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div class="progress-source-value" id="profile-memory-source">0</div>
+            <div class="progress-source-label">Memories</div>
           </div>
         </div>
         
@@ -2165,1162 +2492,1162 @@
   </div>
   
   <script>
-// Initialize Supabase
-const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// State variables
-let currentMood = "great";
-let breathInterval;
-let isBreathingActive = false;
-let cycleCount = 0;
-let secondsElapsed = 0;
-let currentPhase = 0;
-let progress = 0;
-let currentUser = null;
-let moodChart = null;
-let currentCompanion = "elena";
-let conversationHistory = [];
-let memories = [];
-let firstLoad = true;
-
-// Progress tracking
-let progressSources = {
-  mood: 12,
-  chat: 8,
-  journal: 5,
-  memories: 0
-};
-
-// Define companions
-const companions = {
-  "elena": {
-    name: "Elena",
-    role: "Healing Guide",
-    specialties: ["Grief", "Compassion", "Support"],
-    avatar: "fas fa-smile",
-    personality: "compassionate",
-    intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
-    systemPrompt: "You are Elena, a compassionate healing guide specialized in grief support. Respond with warmth, empathy, and understanding. Ask open-ended questions to encourage reflection. Remember to be patient and non-judgmental.",
-    responses: [
-      "I understand how you feel. Would you like to talk more about this?",
-      "That sounds challenging. Remember to be gentle with yourself during this process.",
-      "Thank you for sharing that with me. How has this been affecting your daily life?",
-      "I appreciate you opening up about this. What's one thing that brought you comfort today?",
-      "Your feelings are valid. Would it help to explore some coping strategies together?",
-      "It takes courage to share what you're going through. I'm here to support you.",
-      "Let's take a moment to breathe together. Would that help right now?",
-      "I'm listening. Would you like to share more about what you're experiencing?"
-    ]
-  },
-  "david": {
-    name: "David",
-    role: "Mindfulness Coach",
-    specialties: ["Mindfulness", "Resilience", "Meditation"],
-    avatar: "fas fa-leaf",
-    personality: "calm",
-    intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
-    systemPrompt: "You are David, a mindfulness coach. Your responses should be calming and focused on present-moment awareness. Guide users through breathing exercises and mindfulness techniques.",
-    responses: [
-      "Let's take a deep breath together. Inhale slowly... and exhale.",
-      "Mindfulness can help us navigate difficult emotions. Would you like to try a grounding exercise?",
-      "I hear you. Remember that emotions are temporary visitors. How can we find calm right now?",
-      "Notice your breathing. Where do you feel this emotion in your body?",
-      "Let's practice being present. Name three things you can see around you.",
-      "Difficult moments are opportunities for growth. What is this experience teaching you?",
-      "I'm here to guide you back to the present moment whenever you feel overwhelmed.",
-      "Would a short guided meditation help you right now?"
-    ]
-  },
-  "sophia": {
-    name: "Sophia",
-    role: "Therapeutic Guide",
-    specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
-    avatar: "fas fa-lightbulb",
-    personality: "insightful",
-    intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
-    systemPrompt: "You are Sophia, a therapeutic guide. Help users reframe negative thoughts and discover inner strengths. Ask probing questions to encourage self-discovery.",
-    responses: [
-      "That's an interesting perspective. What evidence supports this thought?",
-      "How might you reframe that situation in a more balanced way?",
-      "What strengths have helped you through difficult times in the past?",
-      "Let's explore alternative perspectives. What might be another way to view this?",
-      "I notice a pattern here. How might we challenge that thought together?",
-      "What would you tell a friend who was experiencing what you're going through?",
-      "Let's examine the evidence for and against that thought.",
-      "What small step could you take today to move toward healing?"
-    ]
-  }
-};
-
-// Helper function to safely get DOM elements
-function getElement(id) {
-  const el = document.getElementById(id);
-  if (!el) console.warn(`Element with ID ${id} not found`);
-  return el;
-}
-
-// Check user session
-async function checkSession() {
-  try {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
+    // State variables
+    let currentMood = "great";
+    let breathInterval;
+    let isBreathingActive = false;
+    let cycleCount = 0;
+    let secondsElapsed = 0;
+    let currentPhase = 0;
+    let progress = 0;
+    let currentUser = null;
+    let moodChart = null;
+    let currentCompanion = "elena";
+    let conversationHistory = [];
+    let memories = [];
+    let progressSources = {
+      mood: 0,
+      chat: 0,
+      journal: 0,
+      memories: 0
+    };
     
-    if (data.session) {
-      currentUser = data.session.user;
-      const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+    // Define companions
+    const companions = {
+      "elena": {
+        name: "Elena",
+        role: "Healing Guide",
+        specialties: ["Grief", "Compassion", "Support"],
+        avatar: "fas fa-smile",
+        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
+        responses: [
+          "I understand how you feel. Would you like to talk more about this?",
+          "That sounds challenging. Remember to be gentle with yourself during this process.",
+          "Thank you for sharing that with me. How has this been affecting your daily life?",
+          "I appreciate you opening up about this. What's one thing that brought you comfort today?",
+          "Your feelings are valid. Would it help to explore some coping strategies together?",
+          "It takes courage to share what you're going through. I'm here to support you.",
+          "Let's take a moment to breathe together. Would that help right now?",
+          "I'm listening. Would you like to share more about what you're experiencing?"
+        ]
+      },
+      "david": {
+        name: "David",
+        role: "Mindfulness Coach",
+        specialties: ["Mindfulness", "Resilience", "Meditation"],
+        avatar: "fas fa-leaf",
+        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
+        responses: [
+          "Let's take a deep breath together. Inhale slowly... and exhale.",
+          "Mindfulness can help us navigate difficult emotions. Would you like to try a grounding exercise?",
+          "I hear you. Remember that emotions are temporary visitors. How can we find calm right now?",
+          "Notice your breathing. Where do you feel this emotion in your body?",
+          "Let's practice being present. Name three things you can see around you.",
+          "Difficult moments are opportunities for growth. What is this experience teaching you?",
+          "I'm here to guide you back to the present moment whenever you feel overwhelmed.",
+          "Would a short guided meditation help you right now?"
+        ]
+      },
+      "sophia": {
+        name: "Sophia",
+        role: "Therapeutic Guide",
+        specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
+        avatar: "fas fa-lightbulb",
+        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+        responses: [
+          "That's an interesting perspective. What evidence supports this thought?",
+          "How might you reframe that situation in a more balanced way?",
+          "What strengths have helped you through difficult times in the past?",
+          "Let's explore alternative perspectives. What might be another way to view this?",
+          "I notice a pattern here. How might we challenge that thought together?",
+          "What would you tell a friend who was experiencing what you're going through?",
+          "Let's examine the evidence for and against that thought.",
+          "What small step could you take today to move toward healing?"
+        ]
+      }
+    };
+
+    // Helper function to safely get DOM elements
+    function getElement(id) {
+      const el = document.getElementById(id);
+      if (!el) console.warn(`Element with ID ${id} not found`);
+      return el;
+    }
+
+    // Check user session
+    async function checkSession() {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        if (data.session) {
+          currentUser = data.session.user;
+          const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+          
+          // Safely update user initials
+          ['userInitialTextMobile', 'profile-initial'].forEach(id => {
+            const el = getElement(id);
+            if (el) el.textContent = initial;
+          });
+          
+          // Update profile name if available
+          const profileName = getElement('profile-name');
+          if (profileName && currentUser.user_metadata?.name) {
+            profileName.textContent = currentUser.user_metadata.name;
+          }
+          
+          // Load companion from user metadata
+          if (currentUser.user_metadata?.companion) {
+            currentCompanion = currentUser.user_metadata.companion;
+          }
+          
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Session check failed:', error.message);
+        return false;
+      }
+    }
+
+    // Set greeting based on time of day
+    function setGreeting() {
+      const hour = new Date().getHours();
+      let greeting;
       
-      // Safely update user initials
-      ['userInitialTextMobile', 'profile-initial'].forEach(id => {
-        const el = getElement(id);
-        if (el) el.textContent = initial;
-      });
-      
-      // Update profile name if available
-      const profileName = getElement('profile-name');
-      if (profileName && currentUser.user_metadata?.name) {
-        profileName.textContent = currentUser.user_metadata.name;
+      if (hour < 12) {
+        greeting = "Good morning";
+      } else if (hour < 18) {
+        greeting = "Good afternoon";
+      } else {
+        greeting = "Good evening";
       }
       
-      return true;
+      const greetingEl = document.getElementById('greeting');
+      if (greetingEl) {
+        greetingEl.textContent = greeting;
+      }
     }
-    return false;
-  } catch (error) {
-    console.error('Session check failed:', error.message);
-    return false;
-  }
-}
 
-// Set greeting based on time of day
-function setGreeting() {
-  const hour = new Date().getHours();
-  let greeting;
-  
-  if (hour < 12) {
-    greeting = "Good morning";
-  } else if (hour < 18) {
-    greeting = "Good afternoon";
-  } else {
-    greeting = "Good evening";
-  }
-  
-  const greetingEl = document.getElementById('greeting');
-  if (greetingEl) {
-    greetingEl.textContent = greeting;
-  }
-}
-
-// Initialize the dashboard
-document.addEventListener('DOMContentLoaded', async function() {
-  try {
-    const isAuthenticated = await checkSession();
-    const loginPrompt = getElement('login-prompt');
-    const dashboardContainer = getElement('dashboard-container');
-    
-    if (isAuthenticated) {
-      // Show dashboard for logged-in users
-      if (loginPrompt) loginPrompt.style.display = 'none';
-      if (dashboardContainer) dashboardContainer.style.display = 'block';
-      
-      setGreeting();
-      initBreathingExercise();
-      setupEventListeners();
-      updateProgressBar();
-      showToast(`Welcome back!`, "success");
-      
-      // Load user-specific data
-      loadCompanion();
-      loadMoodHistory();
-      loadProgress();
-      loadMemories();
-      
-      // Initialize mood chart
-      initMoodChart();
-      
-      // Start companion chat
-      startCompanionChat();
-      firstLoad = false;
-    } else {
-      // Show login prompt for unauthenticated users
-      if (loginPrompt) loginPrompt.style.display = 'block';
-      if (dashboardContainer) dashboardContainer.style.display = 'none';
+    // Set current date
+    function setCurrentDate() {
+      const dateEl = getElement('currentDate');
+      if (dateEl) {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateEl.textContent = new Date().toLocaleDateString(undefined, options);
+      }
     }
-    
-    // Setup login redirection button
-    const goToLoginBtn = getElement('go-to-login');
-    if (goToLoginBtn) {
-      goToLoginBtn.addEventListener('click', () => {
-        window.location.href = 'login.html';
-      });
-    }
-  } catch (error) {
-    console.error('Initialization failed:', error);
-    showToast("Failed to initialize app", "error");
-  }
-});
 
-// Initialize breathing exercise
-function initBreathingExercise() {
-  const cycleCountEl = getElement('cycle-count');
-  const timerEl = getElement('timer');
-  
-  if (cycleCountEl) cycleCountEl.textContent = cycleCount;
-  if (timerEl) timerEl.textContent = '0:00';
-  
-  updateBreathingCircleColor();
-}
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const isAuthenticated = await checkSession();
+        const loginPrompt = getElement('login-prompt');
+        const dashboardContainer = getElement('dashboard-container');
+        
+        if (isAuthenticated) {
+          // Show dashboard for logged-in users
+          if (loginPrompt) loginPrompt.style.display = 'none';
+          if (dashboardContainer) dashboardContainer.style.display = 'block';
+          
+          setGreeting();
+          setCurrentDate();
+          initBreathingExercise();
+          setupEventListeners();
+          
+          // Load user-specific data
+          loadCompanion();
+          loadProgress();
+          loadMemories();
+          loadMoodHistory();
+          
+          // Initialize mood chart
+          initMoodChart();
+          
+          // Start companion chat
+          startCompanionChat();
+        } else {
+          // Show login prompt for unauthenticated users
+          if (loginPrompt) loginPrompt.style.display = 'block';
+          if (dashboardContainer) dashboardContainer.style.display = 'none';
+        }
+        
+        // Setup login redirection button
+        const goToLoginBtn = getElement('go-to-login');
+        if (goToLoginBtn) {
+          goToLoginBtn.addEventListener('click', () => {
+            window.location.href = 'login.html';
+          });
+        }
+      } catch (error) {
+        console.error('Initialization failed:', error);
+        showToast("Failed to initialize app", "error");
+      }
+    });
 
-// Update breathing circle color based on phase
-function updateBreathingCircleColor() {
-  const breathCircle = document.querySelector('.breath-circle');
-  if (!breathCircle) return;
-  
-  const colors = {
-    0: { bg: 'linear-gradient(135deg, var(--primary), var(--secondary))', shadow: '0 6px 20px rgba(94, 96, 206, 0.35)' },
-    1: { bg: 'linear-gradient(135deg, #5E60CE, #4A4DC7)', shadow: '0 6px 20px rgba(74, 77, 199, 0.35)' },
-    2: { bg: 'linear-gradient(135deg, #64DFDF, #48BB78)', shadow: '0 6px 20px rgba(100, 223, 223, 0.35)' },
-    3: { bg: 'linear-gradient(135deg, #48BB78, #64DFDF)', shadow: '0 6px 20px rgba(72, 187, 120, 0.35)' }
-  };
-  
-  const phaseColors = colors[currentPhase] || colors[0];
-  breathCircle.style.background = phaseColors.bg;
-  breathCircle.style.boxShadow = phaseColors.shadow;
-}
-
-// Start/stop breathing exercise
-function toggleBreathing() {
-  const startBtn = getElement('start-breath');
-  if (!startBtn) return;
-  
-  if (!isBreathingActive) {
-    startBreathing();
-    startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-  } else {
-    pauseBreathing();
-    startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
-  }
-  isBreathingActive = !isBreathingActive;
-}
-
-// Start breathing exercise
-function startBreathing() {
-  const breathCircle = document.querySelector('.breath-circle');
-  if (breathCircle) breathCircle.classList.add('pulse');
-  
-  breathInterval = setInterval(() => {
-    secondsElapsed++;
-    const minutes = Math.floor(secondsElapsed / 60);
-    const seconds = secondsElapsed % 60;
-    const timerEl = getElement('timer');
-    if (timerEl) timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    
-    const phaseTime = secondsElapsed % 16;
-    let newPhase = currentPhase;
-    
-    if (phaseTime < 4) newPhase = 0;
-    else if (phaseTime < 8) newPhase = 1;
-    else if (phaseTime < 12) newPhase = 2;
-    else newPhase = 3;
-    
-    if (newPhase !== currentPhase) {
-      currentPhase = newPhase;
+    // Initialize breathing exercise
+    function initBreathingExercise() {
+      const cycleCountEl = getElement('cycle-count');
+      const timerEl = getElement('timer');
+      
+      if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+      if (timerEl) timerEl.textContent = '0:00';
+      
       updateBreathingUI();
     }
-  }, 1000);
-}
 
-function updateBreathingUI() {
-  const breathText = getElement('breath-text');
-  const instruction = getElement('instruction');
-  const cycleCountEl = getElement('cycle-count');
-  
-  const phases = {
-    0: { text: 'Breathe In', instruction: 'Breathe in slowly through your nose...' },
-    1: { text: 'Hold', instruction: 'Hold your breath...' },
-    2: { text: 'Breathe Out', instruction: 'Exhale slowly through your mouth...' },
-    3: { text: 'Hold', instruction: 'Hold your breath...' }
-  };
-  
-  const phase = phases[currentPhase] || phases[0];
-  
-  if (breathText) breathText.textContent = phase.text;
-  if (instruction) instruction.textContent = phase.instruction;
-  
-  if (currentPhase === 2) {
-    cycleCount++;
-    if (cycleCountEl) cycleCountEl.textContent = cycleCount;
-  }
-  
-  updateBreathingCircleColor();
-}
-
-// Pause breathing exercise
-function pauseBreathing() {
-  clearInterval(breathInterval);
-  const breathCircle = document.querySelector('.breath-circle');
-  if (breathCircle) breathCircle.classList.remove('pulse');
-}
-
-// Reset breathing exercise
-function resetBreathing() {
-  pauseBreathing();
-  isBreathingActive = false;
-  cycleCount = 0;
-  secondsElapsed = 0;
-  currentPhase = 0;
-  
-  const cycleCountEl = getElement('cycle-count');
-  const timerEl = getElement('timer');
-  const startBtn = getElement('start-breath');
-  
-  if (cycleCountEl) cycleCountEl.textContent = cycleCount;
-  if (timerEl) timerEl.textContent = '0:00';
-  if (startBtn) startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-  
-  updateBreathingUI();
-}
-
-// Set up all event listeners
-function setupEventListeners() {
-  // Navigation
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = this.dataset.target;
+    // Start/stop breathing exercise
+    function toggleBreathing() {
+      const startBtn = getElement('start-breath');
+      if (!startBtn) return;
       
-      // Update active nav item
-      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-      this.classList.add('active');
-      
-      // Show target section
-      document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-      const targetSection = getElement(target);
-      if (targetSection) targetSection.classList.add('active');
-    });
-  });
-  
-  // Profile avatar click
-  const userInitialMobile = getElement('userInitialMobile');
-  if (userInitialMobile) {
-    userInitialMobile.addEventListener('click', function(e) {
-      e.preventDefault();
-      // Navigate to profile section
-      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-      const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
-      if (profileNav) profileNav.classList.add('active');
-      
-      document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-      const profileSection = getElement('profile-section');
-      if (profileSection) profileSection.classList.add('active');
-    });
-  }
-  
-  // Breathing exercise controls
-  const startBtn = getElement('start-breath');
-  if (startBtn) startBtn.addEventListener('click', toggleBreathing);
-  
-  const resetBtn = getElement('reset-breath');
-  if (resetBtn) resetBtn.addEventListener('click', resetBreathing);
-  
-  // Mood selection
-  document.querySelectorAll('.mood-option').forEach(option => {
-    option.addEventListener('click', function() {
-      document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
-      this.classList.add('selected');
-      currentMood = this.dataset.mood;
-      trackMood();
-    });
-  });
-  
-  // Mood history button
-  const moodHistoryBtn = getElement('mood-history');
-  if (moodHistoryBtn) moodHistoryBtn.addEventListener('click', () => {
-    getElement('mood-history-modal').style.display = 'flex';
-  });
-  
-  // Close modals
-  const closeButtons = [
-    { id: 'close-settings', modal: 'settings-modal' },
-    { id: 'close-mood-history', modal: 'mood-history-modal' },
-    { id: 'close-add-memory', modal: 'add-memory-modal' },
-    { id: 'close-memory-book', modal: 'memory-book-modal' },
-    { id: 'close-companion', modal: 'companion-modal' }
-  ];
-  
-  closeButtons.forEach(btn => {
-    const element = getElement(btn.id);
-    if (element) {
-      element.addEventListener('click', () => {
-        const modal = getElement(btn.modal);
-        if (modal) modal.style.display = 'none';
-      });
+      if (!isBreathingActive) {
+        startBreathing();
+        startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+      } else {
+        pauseBreathing();
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+      }
+      isBreathingActive = !isBreathingActive;
     }
-  });
-  
-  // Chat controls
-  const sendBtn = getElement('send-btn');
-  if (sendBtn) sendBtn.addEventListener('click', sendMessage);
-  
-  const chatInput = getElement('chat-input');
-  if (chatInput) {
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
-  }
-  
-  // Chat settings button
-  const chatSettingsBtn = getElement('chat-settings');
-  if (chatSettingsBtn) {
-    chatSettingsBtn.addEventListener('click', () => {
-      getElement('companion-modal').style.display = 'flex';
-    });
-  }
-  
-  // Memory controls
-  const addMemoryBtn = getElement('add-memory-btn');
-  if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
-    getElement('add-memory-modal').style.display = 'flex';
-  });
-  
-  const memoryBookBtn = getElement('memory-book-btn');
-  if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
-    getElement('memory-book-modal').style.display = 'flex';
-    loadMemoryBook();
-  });
-  
-  const memoryForm = getElement('memory-form');
-  if (memoryForm) memoryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    saveMemory();
-  });
-  
-  const memoryImage = getElement('memory-image');
-  if (memoryImage) memoryImage.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const preview = getElement('memory-preview');
-        preview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width:100%;max-height:100%;">`;
-      };
-      reader.readAsDataURL(file);
+
+    // Start breathing exercise
+    function startBreathing() {
+      const breathCircle = document.querySelector('.breath-circle');
+      if (breathCircle) breathCircle.classList.add('pulse');
+      
+      breathInterval = setInterval(() => {
+        secondsElapsed++;
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed % 60;
+        const timerEl = getElement('timer');
+        if (timerEl) timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        const phaseTime = secondsElapsed % 16;
+        let newPhase = currentPhase;
+        
+        if (phaseTime < 4) newPhase = 0;
+        else if (phaseTime < 8) newPhase = 1;
+        else if (phaseTime < 12) newPhase = 2;
+        else newPhase = 3;
+        
+        if (newPhase !== currentPhase) {
+          currentPhase = newPhase;
+          updateBreathingUI();
+        }
+      }, 1000);
     }
-  });
-  
-  // Settings controls
-  const accountSettingsBtn = getElement('account-settings-btn');
-  if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
-    getElement('settings-modal').style.display = 'flex';
-    loadUserSettings();
-  });
-  
-  const saveSettingsBtn = getElement('save-settings');
-  if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
-  
-  // Sign out button
-  const signoutBtn = getElement('signout-btn');
-  if (signoutBtn) signoutBtn.addEventListener('click', signOut);
-  
-  // Companion selection buttons
-  const changeCompanionBtn = getElement('change-companion-btn');
-  if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
-    getElement('companion-modal').style.display = 'flex';
-    initCompanionSelection();
-  });
-  
-  const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
-  if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
-    getElement('companion-modal').style.display = 'flex';
-    initCompanionSelection();
-  });
-  
-  const saveCompanionBtn = getElement('save-companion');
-  if (saveCompanionBtn) saveCompanionBtn.addEventListener('click', saveCompanion);
-}
 
-// Show toast notification
-function showToast(message, type = 'success') {
-  const toast = getElement('toast');
-  if (!toast) return;
-  
-  toast.textContent = message;
-  toast.className = `toast ${type} show`;
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
-// Update progress bar
-function updateProgressBar() {
-  const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + 
-                     progressSources.journal * 3 + progressSources.memories * 2;
-  progress = Math.min(100, Math.round(totalPoints * 100 / 50));
-  
-  const progressFill = getElement('progressFill');
-  const progressPercent = getElement('progress-percent');
-  
-  if (progressFill) progressFill.style.width = `${progress}%`;
-  if (progressPercent) progressPercent.textContent = `${progress}%`;
-  
-  // Update progress sources
-  const sources = {
-    'mood-source': progressSources.mood,
-    'chat-source': progressSources.chat,
-    'journal-source': progressSources.journal
-  };
-  
-  Object.entries(sources).forEach(([id, value]) => {
-    const el = getElement(id);
-    if (el) el.textContent = value;
-  });
-}
-
-// Load user progress
-async function loadProgress() {
-  if (!currentUser) return;
-  
-  try {
-    const { data, error } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .single();
-    
-    if (error && error.code !== 'PGRST116') throw error; // Ignore "no rows" error
-    
-    if (data) {
-      progressSources = {
-        mood: data.mood_entries || 0,
-        chat: data.chat_sessions || 0,
-        journal: data.journal_entries || 0,
-        memories: data.memories || 0
+    function updateBreathingUI() {
+      const breathText = getElement('breath-text');
+      const instruction = getElement('instruction');
+      const cycleCountEl = getElement('cycle-count');
+      
+      const phases = {
+        0: { text: 'Breathe In', instruction: 'Breathe in slowly through your nose...', color: 'linear-gradient(135deg, #5E60CE, #64DFDF)' },
+        1: { text: 'Hold', instruction: 'Hold your breath...', color: 'linear-gradient(135deg, #64DFDF, #48BB78)' },
+        2: { text: 'Breathe Out', instruction: 'Exhale slowly through your mouth...', color: 'linear-gradient(135deg, #48BB78, #FF6B6B)' },
+        3: { text: 'Hold', instruction: 'Hold your breath...', color: 'linear-gradient(135deg, #FF6B6B, #5E60CE)' }
       };
       
-      updateProgressBar();
+      const phase = phases[currentPhase] || phases[0];
+      
+      if (breathText) breathText.textContent = phase.text;
+      if (instruction) instruction.textContent = phase.instruction;
+      
+      const breathCircle = document.querySelector('.breath-circle');
+      if (breathCircle) {
+        breathCircle.style.background = phase.color;
+        breathCircle.style.boxShadow = `0 6px 20px ${phase.color.replace('linear-gradient(135deg, ', '').split(')')[0]}, 0.35)`;
+      }
+      
+      if (currentPhase === 2) {
+        cycleCount++;
+        if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+      }
     }
-  } catch (error) {
-    showToast("Error loading progress: " + error.message, "error");
-  }
-}
 
-// Save user progress
-async function saveProgress() {
-  if (!currentUser) return;
-  
-  try {
-    const { error } = await supabase
-      .from('user_progress')
-      .upsert({
-        user_id: currentUser.id,
-        mood_entries: progressSources.mood,
-        chat_sessions: progressSources.chat,
-        journal_entries: progressSources.journal,
-        memories: progressSources.memories,
-        updated_at: new Date().toISOString()
+    // Pause breathing exercise
+    function pauseBreathing() {
+      clearInterval(breathInterval);
+      const breathCircle = document.querySelector('.breath-circle');
+      if (breathCircle) breathCircle.classList.remove('pulse');
+    }
+
+    // Reset breathing exercise
+    function resetBreathing() {
+      pauseBreathing();
+      isBreathingActive = false;
+      cycleCount = 0;
+      secondsElapsed = 0;
+      currentPhase = 0;
+      
+      const cycleCountEl = getElement('cycle-count');
+      const timerEl = getElement('timer');
+      const startBtn = getElement('start-breath');
+      
+      if (cycleCountEl) cycleCountEl.textContent = cycleCount;
+      if (timerEl) timerEl.textContent = '0:00';
+      if (startBtn) startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+      
+      updateBreathingUI();
+    }
+
+    // Set up all event listeners
+    function setupEventListeners() {
+      // Navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = this.dataset.target;
+          
+          // Update active nav item
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show target section
+          document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+          const targetSection = getElement(target);
+          if (targetSection) targetSection.classList.add('active');
+        });
       });
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error("Error saving progress:", error.message);
-  }
-}
+      
+      // Profile avatar click
+      const userInitialMobile = getElement('userInitialMobile');
+      if (userInitialMobile) {
+        userInitialMobile.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Navigate to profile section
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
+          if (profileNav) profileNav.classList.add('active');
+          
+          document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+          const profileSection = getElement('profile-section');
+          if (profileSection) profileSection.classList.add('active');
+        });
+      }
+      
+      // Breathing exercise controls
+      const startBtn = getElement('start-breath');
+      if (startBtn) startBtn.addEventListener('click', toggleBreathing);
+      
+      const resetBtn = getElement('reset-breath');
+      if (resetBtn) resetBtn.addEventListener('click', resetBreathing);
+      
+      // Mood selection
+      document.querySelectorAll('.mood-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+          currentMood = this.dataset.mood;
+          trackMood();
+        });
+      });
+      
+      // Mood history button
+      const moodHistoryBtn = getElement('mood-history');
+      if (moodHistoryBtn) moodHistoryBtn.addEventListener('click', () => {
+        getElement('mood-history-modal').style.display = 'flex';
+      });
+      
+      // Close modals
+      const closeButtons = [
+        { id: 'close-settings', modal: 'settings-modal' },
+        { id: 'close-mood-history', modal: 'mood-history-modal' },
+        { id: 'close-add-memory', modal: 'add-memory-modal' },
+        { id: 'close-memory-book', modal: 'memory-book-modal' },
+        { id: 'close-companion', modal: 'companion-modal' }
+      ];
+      
+      closeButtons.forEach(btn => {
+        const element = getElement(btn.id);
+        if (element) {
+          element.addEventListener('click', () => {
+            const modal = getElement(btn.modal);
+            if (modal) modal.style.display = 'none';
+          });
+        }
+      });
+      
+      // Chat controls
+      const sendBtn = getElement('send-btn');
+      if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+      
+      const chatInput = getElement('chat-input');
+      if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendMessage();
+        });
+      }
+      
+      // Chat settings button
+      const chatSettingsBtn = getElement('chat-settings');
+      if (chatSettingsBtn) {
+        chatSettingsBtn.addEventListener('click', () => {
+          getElement('companion-modal').style.display = 'flex';
+        });
+      }
+      
+      // Memory controls
+      const addMemoryBtn = getElement('add-memory-btn');
+      if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
+        getElement('add-memory-modal').style.display = 'flex';
+      });
+      
+      const memoryBookBtn = getElement('memory-book-btn');
+      if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
+        getElement('memory-book-modal').style.display = 'flex';
+        loadMemoryBook();
+      });
+      
+      const memoryForm = getElement('memory-form');
+      if (memoryForm) memoryForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveMemory();
+      });
+      
+      const memoryImage = getElement('memory-image');
+      if (memoryImage) memoryImage.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const preview = getElement('memory-preview');
+            preview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width:100%;max-height:100%;">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      // Settings controls
+      const accountSettingsBtn = getElement('account-settings-btn');
+      if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
+        getElement('settings-modal').style.display = 'flex';
+        loadUserSettings();
+      });
+      
+      const saveSettingsBtn = getElement('save-settings');
+      if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
+      
+      // Sign out button
+      const signoutBtn = getElement('signout-btn');
+      if (signoutBtn) signoutBtn.addEventListener('click', signOut);
+      
+      // Companion selection buttons
+      const changeCompanionBtn = getElement('change-companion-btn');
+      if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
+        getElement('companion-modal').style.display = 'flex';
+        initCompanionSelection();
+      });
+      
+      const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
+      if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
+        getElement('companion-modal').style.display = 'flex';
+        initCompanionSelection();
+      });
+      
+      const saveCompanionBtn = getElement('save-companion');
+      if (saveCompanionBtn) saveCompanionBtn.addEventListener('click', saveCompanion);
+    }
 
-// Load companion information
-async function loadCompanion() {
-  try {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) throw error;
-    
-    currentCompanion = user.user_metadata?.companion || "elena";
-    const companion = companions[currentCompanion];
-    
-    // Update UI
-    const nameEl = getElement('companion-name');
-    const roleEl = getElement('companion-role');
-    const avatarEl = getElement('companion-avatar');
-    const specialtiesContainer = getElement('companion-specialties');
-    const chatTitle = getElement('chat-title');
-    
-    if (nameEl) nameEl.textContent = companion.name;
-    if (roleEl) roleEl.textContent = companion.role;
-    if (avatarEl) avatarEl.innerHTML = `<i class="${companion.avatar}"></i>`;
-    if (chatTitle) chatTitle.textContent = `Chat with ${companion.name}`;
-    
-    if (specialtiesContainer) {
-      specialtiesContainer.innerHTML = '';
-      companion.specialties.forEach(specialty => {
-        const tag = document.createElement('div');
-        tag.className = 'specialty-tag';
-        tag.textContent = specialty;
-        specialtiesContainer.appendChild(tag);
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = getElement('toast');
+      if (!toast) return;
+      
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Update progress bar
+    function updateProgressBar() {
+      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + 
+                         progressSources.journal * 3 + progressSources.memories * 2;
+      progress = Math.min(100, Math.round(totalPoints * 100 / 50));
+      
+      const progressFill = getElement('progressFill');
+      const progressPercent = getElement('progress-percent');
+      const profileProgressFill = getElement('profile-progress-fill');
+      const profileProgressPercent = getElement('profile-progress-percent');
+      
+      if (progressFill) progressFill.style.width = `${progress}%`;
+      if (progressPercent) progressPercent.textContent = `${progress}%`;
+      if (profileProgressFill) profileProgressFill.style.width = `${progress}%`;
+      if (profileProgressPercent) profileProgressPercent.textContent = `${progress}%`;
+      
+      // Update progress sources
+      const sources = {
+        'mood-source': progressSources.mood,
+        'chat-source': progressSources.chat,
+        'journal-source': progressSources.journal,
+        'memory-source': progressSources.memories,
+        'profile-mood-source': progressSources.mood,
+        'profile-chat-source': progressSources.chat,
+        'profile-journal-source': progressSources.journal,
+        'profile-memory-source': progressSources.memories
+      };
+      
+      Object.entries(sources).forEach(([id, value]) => {
+        const el = getElement(id);
+        if (el) el.textContent = value;
       });
     }
-  } catch (error) {
-    showToast("Error loading companion: " + error.message, "error");
-  }
-}
 
-// Start chat with companion
-function startCompanionChat() {
-  // Reset conversation history
-  conversationHistory = [
-    {
-      role: "system",
-      content: companions[currentCompanion].systemPrompt
-    },
-    {
-      role: "assistant",
-      content: companions[currentCompanion].intro
+    // Load user progress
+    async function loadProgress() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('user_progress')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') throw error; // Ignore "no rows" error
+        
+        if (data) {
+          progressSources = {
+            mood: data.mood_entries || 0,
+            chat: data.chat_messages || 0,
+            journal: data.journal_entries || 0,
+            memories: data.memories || 0
+          };
+          
+          updateProgressBar();
+        } else {
+          // Create initial progress record if none exists
+          await saveProgress();
+        }
+      } catch (error) {
+        showToast("Error loading progress: " + error.message, "error");
+      }
     }
-  ];
-  
-  // Clear chat messages and add intro
-  const chatMessages = getElement('chat-messages');
-  if (chatMessages) {
-    chatMessages.innerHTML = '';
-    
-    const introMessage = document.createElement('div');
-    introMessage.className = 'message companion';
-    introMessage.innerHTML = `
-      ${companions[currentCompanion].intro}
-      <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-    `;
-    chatMessages.appendChild(introMessage);
-  }
-}
 
-// Send message to companion
-async function sendMessage() {
-  const input = getElement('chat-input');
-  if (!input) return;
-  
-  const message = input.value.trim();
-  if (!message) return;
-  
-  const chatMessages = getElement('chat-messages');
-  if (!chatMessages) return;
-  
-  const now = new Date();
-  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  
-  // Add user message to UI
-  const userMessage = document.createElement('div');
-  userMessage.className = 'message user';
-  userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
-  chatMessages.appendChild(userMessage);
-  
-  // Add to conversation history
-  conversationHistory.push({
-    role: "user",
-    content: message
-  });
-  
-  // Clear input
-  input.value = '';
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  
-  // Show thinking indicator
-  const thinkingMessage = document.createElement('div');
-  thinkingMessage.className = 'message companion';
-  thinkingMessage.innerHTML = `<span class="spinner"></span> Thinking...`;
-  chatMessages.appendChild(thinkingMessage);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  
-  try {
-    // Simulate AI response with a delay
-    setTimeout(() => {
-      // Remove thinking indicator
-      chatMessages.removeChild(thinkingMessage);
+    // Save user progress
+    async function saveProgress() {
+      if (!currentUser) return;
       
-      // Add AI response to UI
-      const responseTime = new Date();
-      const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      try {
+        const { error } = await supabase
+          .from('user_progress')
+          .upsert({
+            user_id: currentUser.id,
+            mood_entries: progressSources.mood,
+            chat_messages: progressSources.chat,
+            journal_entries: progressSources.journal,
+            memories: progressSources.memories,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'user_id' });
+        
+        if (error) throw error;
+      } catch (error) {
+        console.error("Error saving progress:", error.message);
+      }
+    }
+
+    // Load companion information
+    async function loadCompanion() {
+      const companion = companions[currentCompanion];
       
-      // Select a random response from the companion's responses
-      const companionResponses = companions[currentCompanion].responses;
-      const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
+      // Update UI
+      const nameEl = getElement('companion-name');
+      const roleEl = getElement('companion-role');
+      const avatarEl = getElement('companion-avatar');
+      const specialtiesContainer = getElement('companion-specialties');
+      const chatTitle = getElement('chat-title');
+      const chatHeaderAvatar = getElement('chat-header-avatar');
       
-      const companionMessage = document.createElement('div');
-      companionMessage.className = 'message companion';
-      companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
-      chatMessages.appendChild(companionMessage);
+      if (nameEl) nameEl.textContent = companion.name;
+      if (roleEl) roleEl.textContent = companion.role;
+      if (avatarEl) avatarEl.innerHTML = `<i class="${companion.avatar}"></i>`;
+      if (chatTitle) chatTitle.textContent = `Chat with ${companion.name}`;
+      if (chatHeaderAvatar) chatHeaderAvatar.className = companion.avatar;
       
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      if (specialtiesContainer) {
+        specialtiesContainer.innerHTML = '';
+        companion.specialties.forEach(specialty => {
+          const tag = document.createElement('div');
+          tag.className = 'specialty-tag';
+          tag.textContent = specialty;
+          specialtiesContainer.appendChild(tag);
+        });
+      }
+    }
+
+    // Start chat with companion
+    function startCompanionChat() {
+      const chatMessages = getElement('chat-messages');
+      if (!chatMessages) return;
+      
+      // Remove loading indicator if present
+      const loadingIndicator = getElement('chat-loading');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      // Reset conversation history
+      conversationHistory = [];
+      
+      // Add intro message
+      const introMessage = document.createElement('div');
+      introMessage.className = 'message companion';
+      introMessage.innerHTML = `
+        ${companions[currentCompanion].intro}
+        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatMessages.appendChild(introMessage);
       
       // Add to conversation history
       conversationHistory.push({
         role: "assistant",
-        content: response
+        content: companions[currentCompanion].intro
       });
       
-      // Update progress
-      progressSources.chat++;
-      updateProgressBar();
-      saveProgress();
-    }, 1500);
-    
-  } catch (error) {
-    console.error("Companion chat error:", error);
-    if (chatMessages) chatMessages.removeChild(thinkingMessage);
-    
-    const errorMessage = document.createElement('div');
-    errorMessage.className = 'message companion';
-    errorMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
-    if (chatMessages) chatMessages.appendChild(errorMessage);
-    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-}
+      // Add companion change animation
+      const chatContainer = getElement('chat-container');
+      chatContainer.classList.add('companion-change');
+      setTimeout(() => chatContainer.classList.remove('companion-change'), 500);
+    }
 
-// Track user mood
-async function trackMood() {
-  if (!currentUser) return;
-  
-  try {
-    const { error } = await supabase
-      .from('mood_entries')
-      .insert([{
-        user_id: currentUser.id,
-        mood: currentMood,
-        created_at: new Date().toISOString()
-      }]);
-    
-    if (error) throw error;
-    
-    showToast("Mood recorded successfully", "success");
-    progressSources.mood++;
-    updateProgressBar();
-    saveProgress();
-    loadMoodHistory();
-  } catch (error) {
-    showToast("Error recording mood: " + error.message, "error");
-  }
-}
-
-// Load mood history
-async function loadMoodHistory() {
-  if (!currentUser) return;
-  
-  try {
-    const { data: moods, error } = await supabase
-      .from('mood_entries')
-      .select('mood, created_at')
-      .eq('user_id', currentUser.id)
-      .order('created_at', { ascending: false })
-      .limit(7);
-    
-    if (error) throw error;
-    
-    const historyContainer = getElement('mood-history-list');
-    if (!historyContainer) return;
-    
-    historyContainer.innerHTML = '';
-    
-    moods.forEach(mood => {
-      const moodLabels = {
-        "awful": { emoji: "😢", label: "Awful" },
-        "sad": { emoji: "😞", label: "Sad" },
-        "neutral": { emoji: "😐", label: "Neutral" },
-        "great": { emoji: "😊", label: "Great" }
-      };
+    // Send message to companion
+    async function sendMessage() {
+      const input = getElement('chat-input');
+      if (!input) return;
       
-      const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
-      const date = new Date(mood.created_at);
-      const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const message = input.value.trim();
+      if (!message) return;
       
-      const entry = document.createElement('div');
-      entry.className = 'mood-entry';
-      entry.innerHTML = `
-        <div>
-          <span class="mood-emoji-history">${moodData.emoji}</span>
-          <span>${moodData.label}</span>
-        </div>
-        <div>${formattedDate}</div>
-      `;
+      const chatMessages = getElement('chat-messages');
+      if (!chatMessages) return;
       
-      historyContainer.appendChild(entry);
-    });
-  } catch (error) {
-    showToast("Error loading mood history: " + error.message, "error");
-  }
-}
-
-// Initialize mood chart
-function initMoodChart() {
-  const ctx = document.getElementById('moodChart');
-  if (!ctx) return;
-  
-  moodChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      datasets: [{
-        label: 'Mood',
-        data: [3, 2, 4, 3, 4, 2, 3],
-        borderColor: 'rgba(94, 96, 206, 1)',
-        backgroundColor: 'rgba(94, 96, 206, 0.1)',
-        tension: 0.3,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: false,
-          min: 1,
-          max: 4,
-          ticks: {
-            callback: function(value) {
-              const moods = {
-                1: 'Awful',
-                2: 'Sad',
-                3: 'Neutral',
-                4: 'Great'
-              };
-              return moods[value] || '';
-            }
-          }
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Add user message to UI
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
+      chatMessages.appendChild(userMessage);
+      
+      // Add to conversation history
+      conversationHistory.push({
+        role: "user",
+        content: message
+      });
+      
+      // Clear input
+      input.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Show thinking indicator
+      const thinkingMessage = document.createElement('div');
+      thinkingMessage.className = 'message companion';
+      thinkingMessage.innerHTML = `<span class="loading-spinner"></span> Thinking...`;
+      chatMessages.appendChild(thinkingMessage);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      try {
+        // Simulate AI response with a delay
+        setTimeout(() => {
+          // Remove thinking indicator
+          thinkingMessage.remove();
+          
+          // Add AI response to UI
+          const responseTime = new Date();
+          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          // Select a random response from the companion's responses
+          const companionResponses = companions[currentCompanion].responses;
+          const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
+          
+          const companionMessage = document.createElement('div');
+          companionMessage.className = 'message companion';
+          companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
+          chatMessages.appendChild(companionMessage);
+          
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Add to conversation history
+          conversationHistory.push({
+            role: "assistant",
+            content: response
+          });
+          
+          // Update progress
+          progressSources.chat++;
+          updateProgressBar();
+          saveProgress();
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Companion chat error:", error);
+        if (chatMessages) {
+          thinkingMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
         }
       }
     }
-  });
-}
 
-// Load memories
-async function loadMemories() {
-  if (!currentUser) return;
-  
-  try {
-    const { data, error } = await supabase
-      .from('memories')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    
-    memories = data || [];
-    progressSources.memories = memories.length;
-    updateProgressBar();
-    
-    const container = getElement('memory-container');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    // Add existing memories
-    memories.forEach(memory => {
-      const memoryItem = document.createElement('div');
-      memoryItem.className = 'memory-item has-image';
+    // Track user mood
+    async function trackMood() {
+      if (!currentUser) return;
       
-      if (memory.image_url) {
-        memoryItem.style.backgroundImage = `url(${memory.image_url})`;
-        const img = document.createElement('img');
-        img.className = 'memory-image';
-        img.src = memory.image_url;
-        img.alt = 'Memory';
-        memoryItem.appendChild(img);
-      } else {
-        const icon = document.createElement('i');
-        icon.className = memory.icon || 'fas fa-heart';
-        memoryItem.appendChild(icon);
+      try {
+        const { error } = await supabase
+          .from('mood_entries')
+          .insert([{
+            user_id: currentUser.id,
+            mood: currentMood,
+            created_at: new Date().toISOString()
+          }]);
+        
+        if (error) throw error;
+        
+        showToast("Mood recorded successfully", "success");
+        progressSources.mood++;
+        updateProgressBar();
+        saveProgress();
+        loadMoodHistory();
+      } catch (error) {
+        showToast("Error recording mood: " + error.message, "error");
+      }
+    }
+
+    // Load mood history
+    async function loadMoodHistory() {
+      if (!currentUser) return;
+      
+      try {
+        const { data: moods, error } = await supabase
+          .from('mood_entries')
+          .select('mood, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(7);
+        
+        if (error) throw error;
+        
+        const historyContainer = getElement('mood-history-list');
+        if (!historyContainer) return;
+        
+        historyContainer.innerHTML = '';
+        
+        moods.forEach(mood => {
+          const moodLabels = {
+            "awful": { emoji: "😢", label: "Awful" },
+            "sad": { emoji: "😞", label: "Sad" },
+            "neutral": { emoji: "😐", label: "Neutral" },
+            "great": { emoji: "😊", label: "Great" }
+          };
+          
+          const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
+          const date = new Date(mood.created_at);
+          const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+          
+          const entry = document.createElement('div');
+          entry.className = 'mood-entry';
+          entry.innerHTML = `
+            <div>
+              <span class="mood-emoji-history">${moodData.emoji}</span>
+              <span>${moodData.label}</span>
+            </div>
+            <div>${formattedDate}</div>
+          `;
+          
+          historyContainer.appendChild(entry);
+        });
+      } catch (error) {
+        showToast("Error loading mood history: " + error.message, "error");
+      }
+    }
+
+    // Initialize mood chart
+    function initMoodChart() {
+      const ctx = document.getElementById('moodChart');
+      if (!ctx) return;
+      
+      moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Mood',
+            data: [3, 2, 4, 3, 4, 2, 3],
+            borderColor: 'rgba(94, 96, 206, 1)',
+            backgroundColor: 'rgba(94, 96, 206, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 1,
+              max: 4,
+              ticks: {
+                callback: function(value) {
+                  const moods = {
+                    1: 'Awful',
+                    2: 'Sad',
+                    3: 'Neutral',
+                    4: 'Great'
+                  };
+                  return moods[value] || '';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Load memories
+    async function loadMemories() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        memories = data || [];
+        progressSources.memories = memories.length;
+        updateProgressBar();
+        
+        const container = getElement('memory-container');
+        if (!container) return;
+        
+        // Remove loading indicator
+        const loadingIndicator = getElement('memories-loading');
+        if (loadingIndicator) loadingIndicator.remove();
+        
+        container.innerHTML = '';
+        
+        // Add existing memories
+        memories.forEach(memory => {
+          const memoryItem = document.createElement('div');
+          memoryItem.className = 'memory-item has-image';
+          
+          if (memory.image_url) {
+            memoryItem.style.backgroundImage = `url(${memory.image_url})`;
+            const img = document.createElement('img');
+            img.className = 'memory-image';
+            img.src = memory.image_url;
+            img.alt = 'Memory';
+            memoryItem.appendChild(img);
+          } else {
+            const icon = document.createElement('i');
+            icon.className = memory.icon || 'fas fa-heart';
+            memoryItem.appendChild(icon);
+          }
+          
+          const label = document.createElement('div');
+          label.className = 'memory-label';
+          label.textContent = memory.title || 'Memory';
+          memoryItem.appendChild(label);
+          
+          memoryItem.addEventListener('click', () => viewMemory(memory));
+          container.appendChild(memoryItem);
+        });
+        
+        // Add "Add Memory" button
+        const addMemory = document.createElement('div');
+        addMemory.className = 'memory-item add-memory';
+        addMemory.innerHTML = `
+          <i class="fas fa-plus"></i>
+          <div class="memory-label">Add Memory</div>
+        `;
+        addMemory.addEventListener('click', () => {
+          getElement('add-memory-modal').style.display = 'flex';
+        });
+        container.appendChild(addMemory);
+        
+      } catch (error) {
+        showToast("Error loading memories: " + error.message, "error");
+      }
+    }
+
+    // Save memory
+    async function saveMemory() {
+      const title = getElement('memory-title')?.value;
+      const date = getElement('memory-date')?.value;
+      const description = getElement('memory-description')?.value;
+      const imageFile = getElement('memory-image')?.files[0];
+      
+      if (!title) {
+        showToast("Please enter a title for your memory", "error");
+        return;
       }
       
-      const label = document.createElement('div');
-      label.className = 'memory-label';
-      label.textContent = memory.title || 'Memory';
-      memoryItem.appendChild(label);
-      
-      memoryItem.addEventListener('click', () => viewMemory(memory));
-      container.appendChild(memoryItem);
-    });
-    
-    // Add "Add Memory" button
-    const addMemory = document.createElement('div');
-    addMemory.className = 'memory-item add-memory';
-    addMemory.innerHTML = `
-      <i class="fas fa-plus"></i>
-      <div class="memory-label">Add Memory</div>
-    `;
-    addMemory.addEventListener('click', () => {
-      getElement('add-memory-modal').style.display = 'flex';
-    });
-    container.appendChild(addMemory);
-    
-  } catch (error) {
-    showToast("Error loading memories: " + error.message, "error");
-  }
-}
-
-// Save memory
-async function saveMemory() {
-  const title = getElement('memory-title')?.value;
-  const date = getElement('memory-date')?.value;
-  const description = getElement('memory-description')?.value;
-  const imageFile = getElement('memory-image')?.files[0];
-  
-  if (!title) {
-    showToast("Please enter a title for your memory", "error");
-    return;
-  }
-  
-  try {
-    let imageUrl = null;
-    
-    // Upload image if provided
-    if (imageFile) {
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
-      const filePath = `memories/${fileName}`;
-      
-      const { data, error: uploadError } = await supabase.storage
-        .from('memory-images')
-        .upload(filePath, imageFile);
-      
-      if (uploadError) throw uploadError;
-      
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('memory-images')
-        .getPublicUrl(filePath);
-      
-      imageUrl = publicUrl;
-    }
-    
-    // Save memory to database
-    const { error } = await supabase
-      .from('memories')
-      .insert([{
-        user_id: currentUser.id,
-        title: title,
-        date: date,
-        description: description,
-        image_url: imageUrl,
-        created_at: new Date().toISOString()
-      }]);
-    
-    if (error) throw error;
-    
-    showToast("Memory saved successfully", "success");
-    getElement('add-memory-modal').style.display = 'none';
-    getElement('memory-form').reset();
-    getElement('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
-    
-    // Reload memories
-    loadMemories();
-    
-  } catch (error) {
-    showToast("Error saving memory: " + error.message, "error");
-  }
-}
-
-// View memory details
-function viewMemory(memory) {
-  // Create a modal to view memory details
-  const modal = document.createElement('div');
-  modal.className = 'modal';
-  modal.style.display = 'flex';
-  
-  modal.innerHTML = `
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>${memory.title || 'Memory'}</h3>
-        <button class="close-modal" id="close-view-memory">&times;</button>
-      </div>
-      
-      ${memory.image_url ? `
-        <div class="memory-preview">
-          <img src="${memory.image_url}" alt="${memory.title}">
-        </div>
-      ` : `
-        <div class="memory-preview">
-          <i class="fas fa-heart"></i>
-        </div>
-      `}
-      
-      <div class="form-group">
-        <label>Date</label>
-        <p>${memory.date || 'No date specified'}</p>
-      </div>
-      
-      ${memory.description ? `
-        <div class="form-group">
-          <label>Description</label>
-          <p>${memory.description}</p>
-        </div>
-      ` : ''}
-      
-      <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
-        Close
-      </button>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  
-  // Close modal handlers
-  const closeBtn = modal.querySelector('#close-view-memory');
-  if (closeBtn) closeBtn.addEventListener('click', () => {
-    document.body.removeChild(modal);
-  });
-  
-  const closeBtn2 = modal.querySelector('#close-view-memory-btn');
-  if (closeBtn2) closeBtn2.addEventListener('click', () => {
-    document.body.removeChild(modal);
-  });
-}
-
-// Load memory book
-function loadMemoryBook() {
-  const container = getElement('memory-book-entries');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  const memoryCount = getElement('memory-count');
-  if (memoryCount) memoryCount.textContent = memories.length;
-  
-  if (memories.length === 0) {
-    container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No memories yet. Add some to track your healing journey.</p>';
-    return;
-  }
-  
-  memories.forEach(memory => {
-    const entry = document.createElement('div');
-    entry.className = 'memory-book-entry';
-    
-    entry.innerHTML = `
-      <div class="memory-book-thumbnail" style="${memory.image_url ? `background-image: url(${memory.image_url})` : ''}">
-        ${!memory.image_url ? `<i class="fas fa-heart"></i>` : ''}
-      </div>
-      <div class="memory-book-details">
-        <div class="memory-book-title">${memory.title || 'Memory'}</div>
-        <div class="memory-book-date">${memory.date || 'No date'}</div>
-      </div>
-    `;
-    
-    entry.addEventListener('click', () => viewMemory(memory));
-    container.appendChild(entry);
-  });
-}
-
-// Load user settings
-async function loadUserSettings() {
-  if (!currentUser) return;
-  
-  try {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) throw error;
-    
-    const nameInput = getElement('user-name');
-    const emailInput = getElement('user-email');
-    const lossTypeSelect = getElement('loss-type');
-    const journalReminders = getElement('journal-reminders');
-    const affirmationReminders = getElement('affirmation-reminders');
-    
-    if (nameInput) nameInput.value = user.user_metadata?.name || '';
-    if (emailInput) emailInput.value = user.email || '';
-    if (lossTypeSelect) lossTypeSelect.value = user.user_metadata?.loss_type || 'relationship';
-    if (journalReminders) journalReminders.checked = user.user_metadata?.journal_reminders !== false;
-    if (affirmationReminders) affirmationReminders.checked = user.user_metadata?.affirmation_reminders !== false;
-  } catch (error) {
-    showToast("Error loading settings: " + error.message, "error");
-  }
-}
-
-// Save user settings
-async function saveSettings() {
-  const name = getElement('user-name')?.value;
-  const email = getElement('user-email')?.value;
-  const lossType = getElement('loss-type')?.value;
-  
-  try {
-    const { error } = await supabase.auth.updateUser({
-      email: email,
-      data: { 
-        name: name,
-        loss_type: lossType,
-        journal_reminders: getElement('journal-reminders')?.checked,
-        affirmation_reminders: getElement('affirmation-reminders')?.checked
+      try {
+        let imageUrl = null;
+        
+        // Upload image if provided
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+          const filePath = `memories/${fileName}`;
+          
+          const { data, error: uploadError } = await supabase.storage
+            .from('memory-images')
+            .upload(filePath, imageFile);
+          
+          if (uploadError) throw uploadError;
+          
+          // Get public URL
+          const { data: { publicUrl } } = supabase.storage
+            .from('memory-images')
+            .getPublicUrl(filePath);
+          
+          imageUrl = publicUrl;
+        }
+        
+        // Save memory to database
+        const { error } = await supabase
+          .from('memories')
+          .insert([{
+            user_id: currentUser.id,
+            title: title,
+            date: date,
+            description: description,
+            image_url: imageUrl,
+            created_at: new Date().toISOString()
+          }]);
+        
+        if (error) throw error;
+        
+        showToast("Memory saved successfully", "success");
+        getElement('add-memory-modal').style.display = 'none';
+        getElement('memory-form').reset();
+        getElement('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+        
+        // Reload memories
+        loadMemories();
+        
+      } catch (error) {
+        showToast("Error saving memory: " + error.message, "error");
       }
-    });
-    
-    if (error) throw error;
-    
-    showToast("Settings saved successfully", "success");
-    getElement('settings-modal').style.display = 'none';
-    
-    // Update UI with new name if available
-    if (name) {
-      getElement('profile-initial').textContent = name[0].toUpperCase();
-      getElement('profile-name').textContent = name;
     }
-  } catch (error) {
-    showToast("Error saving settings: " + error.message, "error");
-  }
-}
 
-// Initialize companion selection
-function initCompanionSelection() {
-  const companionSelects = document.querySelectorAll('.companion-select');
-  companionSelects.forEach(select => {
-    select.classList.remove('selected');
-    if (select.dataset.companion === currentCompanion) {
-      select.classList.add('selected');
+    // View memory details
+    function viewMemory(memory) {
+      // Create a modal to view memory details
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'flex';
+      
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>${memory.title || 'Memory'}</h3>
+            <button class="close-modal" id="close-view-memory">&times;</button>
+          </div>
+          
+          ${memory.image_url ? `
+            <div class="memory-preview">
+              <img src="${memory.image_url}" alt="${memory.title}">
+            </div>
+          ` : `
+            <div class="memory-preview">
+              <i class="fas fa-heart"></i>
+            </div>
+          `}
+          
+          <div class="form-group">
+            <label>Date</label>
+            <p>${memory.date || 'No date specified'}</p>
+          </div>
+          
+          ${memory.description ? `
+            <div class="form-group">
+              <label>Description</label>
+              <p>${memory.description}</p>
+            </div>
+          ` : ''}
+          
+          <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
+            Close
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Close modal handlers
+      const closeBtn = modal.querySelector('#close-view-memory');
+      if (closeBtn) closeBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+      
+      const closeBtn2 = modal.querySelector('#close-view-memory-btn');
+      if (closeBtn2) closeBtn2.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
     }
-    
-    select.addEventListener('click', function() {
-      companionSelects.forEach(s => s.classList.remove('selected'));
-      this.classList.add('selected');
-    });
-  });
-}
 
-// Save companion selection
-async function saveCompanion() {
-  const selected = document.querySelector('.companion-select.selected');
-  if (!selected) {
-    showToast("Please select a companion", "error");
-    return;
-  }
-  
-  const companion = selected.dataset.companion;
-  
-  try {
-    const { error } = await supabase.auth.updateUser({
-      data: { 
-        companion: companion
+    // Load memory book
+    function loadMemoryBook() {
+      const container = getElement('memory-book-entries');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      const memoryCount = getElement('memory-count');
+      if (memoryCount) memoryCount.textContent = memories.length;
+      
+      if (memories.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No memories yet. Add some to track your healing journey.</p>';
+        return;
       }
-    });
-    
-    if (error) throw error;
-    
-    currentCompanion = companion;
-    loadCompanion();
-    showToast("Companion updated successfully", "success");
-    getElement('companion-modal').style.display = 'none';
-    
-    // Restart chat with new companion
-    startCompanionChat();
-  } catch (error) {
-    showToast("Error saving companion: " + error.message, "error");
-  }
-}
+      
+      memories.forEach(memory => {
+        const entry = document.createElement('div');
+        entry.className = 'memory-book-entry';
+        
+        entry.innerHTML = `
+          <div class="memory-book-thumbnail" style="${memory.image_url ? `background-image: url(${memory.image_url})` : ''}">
+            ${!memory.image_url ? `<i class="fas fa-heart"></i>` : ''}
+          </div>
+          <div class="memory-book-details">
+            <div class="memory-book-title">${memory.title || 'Memory'}</div>
+            <div class="memory-book-date">${memory.date || 'No date'}</div>
+          </div>
+        `;
+        
+        entry.addEventListener('click', () => viewMemory(memory));
+        container.appendChild(entry);
+      });
+    }
 
-// Sign out user
-async function signOut() {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    window.location.reload();
-  } catch (error) {
-    showToast("Error signing out: " + error.message, "error");
-  }
-}
+    // Load user settings
+    async function loadUserSettings() {
+      if (!currentUser) return;
+      
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        
+        const nameInput = getElement('user-name');
+        const emailInput = getElement('user-email');
+        const lossTypeSelect = getElement('loss-type');
+        const journalReminders = getElement('journal-reminders');
+        const affirmationReminders = getElement('affirmation-reminders');
+        
+        if (nameInput) nameInput.value = user.user_metadata?.name || '';
+        if (emailInput) emailInput.value = user.email || '';
+        if (lossTypeSelect) lossTypeSelect.value = user.user_metadata?.loss_type || 'relationship';
+        if (journalReminders) journalReminders.checked = user.user_metadata?.journal_reminders !== false;
+        if (affirmationReminders) affirmationReminders.checked = user.user_metadata?.affirmation_reminders !== false;
+      } catch (error) {
+        showToast("Error loading settings: " + error.message, "error");
+      }
+    }
+
+    // Save user settings
+    async function saveSettings() {
+      const name = getElement('user-name')?.value;
+      const email = getElement('user-email')?.value;
+      const lossType = getElement('loss-type')?.value;
+      
+      try {
+        const { error } = await supabase.auth.updateUser({
+          email: email,
+          data: { 
+            name: name,
+            loss_type: lossType,
+            journal_reminders: getElement('journal-reminders')?.checked,
+            affirmation_reminders: getElement('affirmation-reminders')?.checked
+          }
+        });
+        
+        if (error) throw error;
+        
+        showToast("Settings saved successfully", "success");
+        getElement('settings-modal').style.display = 'none';
+        
+        // Update UI with new name if available
+        if (name) {
+          getElement('profile-initial').textContent = name[0].toUpperCase();
+          getElement('profile-name').textContent = name;
+        }
+      } catch (error) {
+        showToast("Error saving settings: " + error.message, "error");
+      }
+    }
+
+    // Initialize companion selection
+    function initCompanionSelection() {
+      const companionSelects = document.querySelectorAll('.companion-select');
+      companionSelects.forEach(select => {
+        select.classList.remove('selected');
+        if (select.dataset.companion === currentCompanion) {
+          select.classList.add('selected');
+        }
+        
+        select.addEventListener('click', function() {
+          companionSelects.forEach(s => s.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+    }
+
+    // Save companion selection
+    async function saveCompanion() {
+      const selected = document.querySelector('.companion-select.selected');
+      if (!selected) {
+        showToast("Please select a companion", "error");
+        return;
+      }
+      
+      const companion = selected.dataset.companion;
+      
+      try {
+        const { error } = await supabase.auth.updateUser({
+          data: { 
+            companion: companion
+          }
+        });
+        
+        if (error) throw error;
+        
+        currentCompanion = companion;
+        loadCompanion();
+        showToast("Companion updated successfully", "success");
+        getElement('companion-modal').style.display = 'none';
+        
+        // Restart chat with new companion
+        startCompanionChat();
+      } catch (error) {
+        showToast("Error saving companion: " + error.message, "error");
+      }
+    }
+
+    // Sign out user
+    async function signOut() {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        
+        window.location.reload();
+      } catch (error) {
+        showToast("Error signing out: " + error.message, "error");
+      }
+    }
   </script>
 </body>
 </html>
