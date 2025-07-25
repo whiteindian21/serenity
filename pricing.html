@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Therapathy | Pricing Plans</title>
+  <title>Therapathy Pricing | Choose Your Plan</title>
+  <meta name="description" content="Select the Therapathy plan that fits your mental wellness journey - from free credit-based options to premium unlimited support">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -32,8 +33,6 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%238CB9BD" opacity="0.1"/></svg>');
-      background-size: 40px 40px;
     }
 
     h1, h2, h3, h4 {
@@ -53,8 +52,8 @@
       padding: 3.5rem 0;
     }
 
-    /* Navigation */
-    .nav {
+    /* Mobile Navigation */
+    .mobile-nav {
       position: fixed;
       top: 0;
       left: 0;
@@ -83,20 +82,58 @@
       color: var(--accent);
     }
 
-    .nav-links {
+    .mobile-menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--dark);
+      cursor: pointer;
+      z-index: 1001;
+      transition: var(--transition);
       display: flex;
-      gap: 1.8rem;
       align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.8rem;
+      z-index: 999;
+      transform: translateY(-100%);
+      transition: transform 0.4s ease;
+      padding: 5rem 1.5rem;
+    }
+
+    .nav-links.active {
+      transform: translateY(0);
     }
 
     .nav-links a {
       color: var(--dark);
       text-decoration: none;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 1.2rem;
       transition: var(--transition);
       padding: 0.6rem 1.2rem;
+      text-align: center;
       border-radius: 30px;
+      width: 100%;
+      max-width: 220px;
     }
 
     .nav-links a:hover {
@@ -109,6 +146,7 @@
       color: white;
       border-radius: 50px;
       padding: 0.8rem 1.8rem;
+      margin-top: 0.5rem;
     }
 
     .nav-cta:hover {
@@ -118,71 +156,69 @@
 
     /* Hero Section */
     .pricing-hero {
-      padding: 9rem 0 3rem;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
+      padding: 8rem 0 3rem;
+      background: linear-gradient(to bottom, var(--primary-light) 0%, white 100%);
       text-align: center;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0 0 30px 30px;
-      margin-top: 70px;
     }
 
     .pricing-hero h1 {
-      font-size: 3.5rem;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
-      color: white;
     }
 
     .pricing-hero p {
-      font-size: 1.2rem;
       max-width: 700px;
-      margin: 0 auto 2rem;
+      margin: 0 auto;
+      font-size: 1.1rem;
       opacity: 0.9;
     }
 
-    /* Pricing Section */
-    .pricing {
-      padding: 4rem 0;
+    /* Pricing Tabs */
+    .pricing-tabs {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0 3rem;
+      border-bottom: 1px solid rgba(140, 185, 189, 0.3);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .section-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .section-header h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .pricing-tab {
+      padding: 1rem 2rem;
+      cursor: pointer;
       position: relative;
-      display: inline-block;
+      font-weight: 500;
+      color: var(--gray);
+      transition: var(--transition);
     }
 
-    .section-header h2:after {
+    .pricing-tab.active {
+      color: var(--secondary);
+    }
+
+    .pricing-tab.active:after {
       content: '';
       position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
+      bottom: -1px;
+      left: 0;
+      right: 0;
       height: 3px;
-      background: var(--primary);
-      border-radius: 2px;
+      background: var(--secondary);
+      border-radius: 3px 3px 0 0;
     }
 
-    .section-header p {
-      max-width: 700px;
-      margin: 1.2rem auto 0;
+    .pricing-tab:hover:not(.active) {
       color: var(--dark);
-      opacity: 0.8;
-      font-size: 1.1rem;
     }
 
-    .pricing-grid {
+    /* Pricing Cards */
+    .pricing-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2.5rem;
-      margin-top: 2rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .pricing-card {
@@ -193,57 +229,48 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       transition: var(--transition);
       border: 1px solid rgba(140, 185, 189, 0.2);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .pricing-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 35px rgba(140, 185, 189, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(140, 185, 189, 0.15);
     }
 
-    .pricing-card.free {
-      border-top: 5px solid var(--primary);
-    }
-
-    .pricing-card.premium {
-      border-top: 5px solid var(--secondary);
+    .pricing-card.popular {
+      border-top: 5px solid var(--accent);
+      position: relative;
     }
 
     .popular-badge {
       position: absolute;
       top: 20px;
-      right: -30px;
+      right: 20px;
       background: var(--accent);
       color: white;
-      padding: 0.3rem 2.5rem;
-      transform: rotate(45deg);
-      font-size: 0.8rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
       font-weight: 600;
     }
 
     .pricing-header {
       margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(140, 185, 189, 0.2);
     }
 
     .pricing-header h3 {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       margin-bottom: 0.5rem;
     }
 
     .pricing-header .price {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: var(--secondary);
       margin-bottom: 0.5rem;
     }
 
     .pricing-header .price span {
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 400;
       color: var(--gray);
     }
@@ -251,7 +278,6 @@
     .pricing-features {
       margin: 2rem 0;
       text-align: left;
-      flex-grow: 1;
     }
 
     .pricing-features li {
@@ -318,140 +344,137 @@
       box-shadow: 0 6px 20px rgba(140, 185, 189, 0.25);
     }
 
-    /* PayPal Button Styles */
-    .paypal-button-container {
-      margin-top: 1.5rem;
-      min-height: 40px;
-      display: flex;
-      justify-content: center;
+    .cta-button.secondary {
+      background: white;
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
     }
 
-    .paypal-button {
-      border-radius: 50px !important;
-      min-height: 40px !important;
-      width: 100%;
+    .cta-button.secondary:hover {
+      background: rgba(93, 142, 169, 0.05);
+    }
+
+    /* Credit System */
+    .credit-system {
+      background: rgba(140, 185, 189, 0.1);
+      padding: 3rem 0;
+      margin: 3rem 0;
+      border-radius: 20px;
+    }
+
+    .credit-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .credit-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(140, 185, 189, 0.2);
+    }
+
+    .credit-card h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .credit-card h4 i {
+      color: var(--accent);
     }
 
     /* FAQ Section */
     .faq-section {
-      background: var(--primary-light);
-      border-radius: 30px;
-      margin: 4rem 0;
-      padding: 4rem 0;
-    }
-
-    .faq-container {
       max-width: 800px;
       margin: 0 auto;
     }
 
     .faq-item {
       margin-bottom: 1.5rem;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      background: white;
+      border-bottom: 1px solid rgba(140, 185, 189, 0.2);
+      padding-bottom: 1.5rem;
     }
 
     .faq-question {
-      padding: 1.5rem;
       font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(140, 185, 189, 0.1);
+    }
+
+    .faq-question i {
+      transition: var(--transition);
+    }
+
+    .faq-question.active i {
+      transform: rotate(180deg);
     }
 
     .faq-answer {
-      padding: 0 1.5rem;
       max-height: 0;
       overflow: hidden;
-      transition: all 0.4s ease;
+      transition: max-height 0.3s ease;
     }
 
-    .faq-answer p {
-      padding: 1.5rem 0;
-    }
-
-    .faq-item.active .faq-answer {
+    .faq-answer.active {
       max-height: 500px;
     }
 
-    /* Testimonials */
-    .testimonials {
-      background: white;
-      padding: 4rem 0;
-    }
-
-    .testimonial-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.8rem;
-      margin-top: 2rem;
-    }
-
-    .testimonial-card {
-      background: rgba(255, 255, 255, 0.7);
-      padding: 2rem;
-      border-radius: 20px;
-      transition: var(--transition);
-      position: relative;
-      border: 1px solid rgba(140, 185, 189, 0.2);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-    }
-
-    .testimonial-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 30px rgba(140, 185, 189, 0.2);
-    }
-
-    .testimonial-card:before {
-      content: '\201C';
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      position: absolute;
-      top: -10px;
-      left: 15px;
-      color: rgba(140, 185, 189, 0.2);
-      line-height: 1;
-      z-index: 0;
-    }
-
-    .testimonial-text {
-      font-style: italic;
-      margin-bottom: 1.5rem;
+    .faq-answer p {
       color: var(--dark);
-      position: relative;
-      z-index: 1;
-      font-size: 1rem;
+      opacity: 0.9;
       line-height: 1.7;
     }
 
-    .testimonial-author {
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      margin-top: 3rem;
+    }
+
+    .cta-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .cta-section p {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+      font-size: 1.05rem;
+    }
+
+    .cta-buttons {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 1rem;
+      justify-content: center;
+      align-items: center;
     }
 
-    .author-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--primary);
-    }
-
-    .author-info h4 {
-      margin-bottom: 0.3rem;
+    .cta-button.white {
+      background: white;
       color: var(--secondary);
-      font-size: 1.1rem;
     }
 
-    .author-info p {
-      color: var(--dark);
-      opacity: 0.8;
-      font-size: 0.9rem;
+    .cta-button.white:hover {
+      background: rgba(255,255,255,0.95);
+      color: var(--secondary);
     }
 
     /* Footer */
@@ -459,11 +482,12 @@
       background: var(--dark);
       color: white;
       padding: 3rem 0 1.5rem;
+      margin-top: 4rem;
     }
 
     .footer-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: 1fr;
       gap: 2.5rem;
       margin-bottom: 2.5rem;
     }
@@ -531,152 +555,108 @@
       transform: translateY(-3px);
     }
 
-    /* Animation Enhancements */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate {
-      animation: fadeInUp 0.8s ease-out forwards;
-      opacity: 0;
-    }
-
-    .delay-1 {
-      animation-delay: 0.2s;
-    }
-
-    .delay-2 {
-      animation-delay: 0.4s;
-    }
-
-    .delay-3 {
-      animation-delay: 0.6s;
-    }
-
-    /* Floating Elements */
-    .floating {
-      position: absolute;
-      z-index: 1;
-      opacity: 0.1;
-      animation: float 15s ease-in-out infinite;
-      filter: blur(1px);
-    }
-
-    /* Calming Particles */
-    .calming-particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      opacity: 0.3;
-      z-index: 1;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(5deg); }
-      100% { transform: translateY(0px) rotate(0deg); }
-    }
-
     /* Responsive Design */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
+    @media (min-width: 768px) {
+      .pricing-hero {
+        padding: 10rem 0 4rem;
       }
       
       .pricing-hero h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
       }
       
-      .pricing-hero p {
-        font-size: 1rem;
+      .pricing-cards {
+        grid-template-columns: repeat(2, 1fr);
       }
       
-      .section-header h2 {
-        font-size: 2rem;
+      .credit-cards {
+        grid-template-columns: repeat(2, 1fr);
       }
       
-      .pricing-header .price {
-        font-size: 2.5rem;
+      .cta-buttons {
+        flex-direction: row;
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .pricing-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="nav">
-    <a href="#" class="logo">
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav">
+    <a href="index.html" class="logo">
       <i class="fas fa-hands-helping logo-icon"></i>
       Therapathy
     </a>
-    <div class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <a href="#">Companions</a>
-      <a href="#">How It Works</a>
-      <a href="#" class="nav-cta">Sign In</a>
-    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="pricing-hero">
-    <div class="container">
-      <h1>Simple, Transparent Pricing</h1>
-      <p>Choose the plan that fits your mental wellness journey. Start with free access or unlock unlimited support with Premium.</p>
-    </div>
-    
-    <!-- Floating elements -->
-    <svg class="floating floating-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="top: 20%; left: 10%; width: 150px;">
-      <path fill="white" opacity="0.1" d="M45.5,-59.3C58.9,-48.8,69.6,-34.7,73.1,-18.9C76.6,-3.1,72.9,14.4,63.5,29.3C54.1,44.2,39,56.5,21.8,65.8C4.6,75.1,-14.7,81.4,-30.2,75.3C-45.7,69.2,-57.5,50.7,-64.9,31.5C-72.2,12.3,-75.1,-7.6,-68.5,-23.9C-61.9,-40.2,-45.9,-52.9,-29.6,-62.5C-13.3,-72.1,3.3,-78.6,19.8,-74.7C36.3,-70.8,52.6,-56.5,45.5,-59.3Z" transform="translate(100 100)" />
-    </svg>
-    
-    <!-- Calming Particles -->
-    <div class="calming-particle" style="top: 15%; left: 12%;"></div>
-    <div class="calming-particle" style="top: 25%; right: 15%;"></div>
-  </section>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="index.html#companions">Companions</a>
+    <a href="index.html#how-it-works">How It Works</a>
+    <a href="index.html#testimonials">Testimonials</a>
+    <a href="signup.html" class="nav-cta">Get Started</a>
+  </div>
 
-  <!-- Pricing Section -->
-  <section id="pricing" class="pricing">
-    <div class="container">
-      <div class="section-header">
-        <h2>Choose Your Wellness Plan</h2>
-        <p>All plans include access to our AI companions and basic tools. Upgrade for unlimited conversations and full features.</p>
+  <main>
+    <!-- Hero Section -->
+    <section class="pricing-hero">
+      <div class="container">
+        <h1>Simple, Transparent Pricing</h1>
+        <p>Choose the plan that fits your mental wellness journey. Start with our free tier or unlock full access with premium.</p>
       </div>
-      <div class="pricing-grid">
-        <div class="pricing-card free animate">
+    </section>
+
+    <!-- Pricing Tabs -->
+    <div class="container">
+      <div class="pricing-tabs">
+        <div class="pricing-tab active" data-tab="subscription">Subscription Plans</div>
+        <div class="pricing-tab" data-tab="credits">Credit System</div>
+      </div>
+    </div>
+
+    <!-- Subscription Plans -->
+    <div class="container" id="subscription-plans">
+      <div class="pricing-cards">
+        <div class="pricing-card">
           <div class="pricing-header">
             <h3>Free Tier</h3>
             <div class="price">$0<span>/forever</span></div>
-            <p>Start your wellness journey</p>
+            <p>Start with basic features</p>
           </div>
           <ul class="pricing-features">
             <li><strong>50 free credits</strong> upon signup</li>
             <li><strong>10 credits/month</strong> ongoing</li>
             <li>Basic AI conversations</li>
             <li>Limited tools access</li>
-            <li>3 AI companion choices</li>
             <li class="disabled">Unlimited chats</li>
             <li class="disabled">Premium companions</li>
-            <li class="disabled">Advanced analytics</li>
           </ul>
-          <a href="#" class="cta-button primary">Get Started Free</a>
+          <a href="signup.html" class="cta-button primary">Get Started</a>
         </div>
         
-        <div class="pricing-card premium animate delay-1">
+        <div class="pricing-card popular">
           <div class="popular-badge">Most Popular</div>
           <div class="pricing-header">
             <h3>Premium Monthly</h3>
             <div class="price">$15<span>/month</span></div>
-            <p>Flexible monthly access</p>
+            <p>Unlock full potential</p>
           </div>
           <ul class="pricing-features">
             <li><strong>Unlimited</strong> AI conversations</li>
@@ -684,50 +664,78 @@
             <li>All premium companions</li>
             <li>Priority support</li>
             <li>Advanced analytics</li>
-            <li>Customizable experience</li>
             <li>Cancel anytime</li>
           </ul>
-          <div id="paypal-button-container-monthly" class="paypal-button-container"></div>
-          <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">No commitment - cancel anytime</p>
+          <a href="checkout.html?plan=monthly" class="cta-button">Choose Monthly</a>
         </div>
         
-        <div class="pricing-card premium animate delay-2">
+        <div class="pricing-card">
           <div class="pricing-header">
             <h3>Premium Yearly</h3>
             <div class="price">$110<span>/year</span></div>
-            <p>Best value for commitment</p>
+            <p>Save with annual commitment</p>
           </div>
           <ul class="pricing-features">
             <li><strong>Everything in Monthly</strong></li>
             <li><strong>Save $70</strong> vs monthly</li>
             <li><strong>Bonus 100 credits</strong> upfront</li>
-            <li>Exclusive mindfulness content</li>
+            <li>Exclusive content</li>
             <li>First access to new features</li>
-            <li>Personalized progress reports</li>
             <li>7-day free trial</li>
           </ul>
-          <div id="paypal-button-container-yearly" class="paypal-button-container"></div>
-          <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">Save 27% with annual billing</p>
+          <a href="checkout.html?plan=yearly" class="cta-button">Choose Yearly</a>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- FAQ Section -->
-  <section class="faq-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Frequently Asked Questions</h2>
-        <p>Find answers to common questions about our pricing and plans</p>
+    <!-- Credit System (Hidden by default) -->
+    <div class="container" id="credit-system" style="display: none;">
+      <div class="credit-system">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Credit-Based System</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem; opacity: 0.9;">
+          Our credit system lets you pay as you go. Each interaction uses credits based on length and complexity.
+          Perfect for those who want occasional support without a subscription.
+        </p>
+        
+        <div class="credit-cards">
+          <div class="credit-card">
+            <h4><i class="fas fa-coins"></i> Basic Package</h4>
+            <div class="price" style="font-size: 1.8rem; color: var(--secondary); margin-bottom: 1rem;">$5 <span style="font-size: 1rem; color: var(--gray);">for 50 credits</span></div>
+            <ul class="pricing-features">
+              <li>~10-15 conversations</li>
+              <li>Basic journaling sessions</li>
+              <li>Access to free companions</li>
+            </ul>
+            <a href="signup.html" class="cta-button secondary" style="margin-top: 1.5rem;">Purchase Credits</a>
+          </div>
+          
+          <div class="credit-card">
+            <h4><i class="fas fa-piggy-bank"></i> Value Package</h4>
+            <div class="price" style="font-size: 1.8rem; color: var(--secondary); margin-bottom: 1rem;">$20 <span style="font-size: 1rem; color: var(--gray);">for 250 credits</span></div>
+            <ul class="pricing-features">
+              <li>~50-60 conversations</li>
+              <li>Includes premium features</li>
+              <li>Access to all companions</li>
+              <li>Best value</li>
+            </ul>
+            <a href="signup.html" class="cta-button" style="margin-top: 1.5rem;">Purchase Credits</a>
+          </div>
+        </div>
       </div>
-      <div class="faq-container">
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 2.5rem;">Frequently Asked Questions</h2>
+        
         <div class="faq-item">
           <div class="faq-question">
-            <span>What are credits and how do they work?</span>
+            <span>What's the difference between free and premium?</span>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Credits are used for interactions with our AI companions. Each conversation or activity uses credits based on complexity. With the free plan, you receive 50 credits to start and 10 credits each month. Premium plans include unlimited conversations without credit restrictions.</p>
+            <p>Our free tier gives you limited access with 10 credits per month after your initial 50 credits. Premium provides unlimited conversations, full feature access, and all AI companions. Premium also includes priority support and advanced analytics.</p>
           </div>
         </div>
         
@@ -737,7 +745,27 @@
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Yes, you can upgrade or downgrade at any time. If you switch from yearly to monthly, we'll prorate your remaining time. Downgrading to free will take effect at the end of your billing cycle.</p>
+            <p>Yes! You can upgrade, downgrade, or switch between monthly and yearly plans at any time. Your unused credits will carry over when you change plans.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How does the credit system work?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Each interaction uses credits based on length and complexity. A typical conversation uses 3-5 credits. Journaling exercises use 1-2 credits. You can purchase additional credits anytime.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is there a free trial for premium?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>The yearly plan includes a 7-day free trial. The monthly plan doesn't have a trial but you can cancel anytime with no long-term commitment.</p>
           </div>
         </div>
         
@@ -747,85 +775,30 @@
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>We accept all major credit cards through PayPal. You can also use your PayPal balance for payments. We don't store your payment details directly - all transactions are securely handled by PayPal.</p>
-          </div>
-        </div>
-        
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Is there a free trial for Premium?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Our yearly plan includes a 7-day free trial. The monthly plan doesn't have a trial period, but you can cancel anytime within the first month for a full refund if you're not satisfied.</p>
-          </div>
-        </div>
-        
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>How do I cancel my subscription?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>You can cancel your Premium subscription anytime through your account settings. After cancellation, you'll retain Premium access until the end of your billing period, then revert to the Free tier.</p>
+            <p>We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through our payment partners.</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <div class="container">
-      <div class="section-header">
-        <h2>What Our Users Say</h2>
-        <p>Hear from people who found support through Therapathy</p>
-      </div>
-      <div class="testimonial-cards">
-        <div class="testimonial-card animate delay-1">
-          <p class="testimonial-text">"Upgrading to Premium was the best decision for my mental health journey. The unlimited conversations with my AI companion made a huge difference during a difficult time."</p>
-          <div class="testimonial-author">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="author-avatar">
-            <div class="author-info">
-              <h4>Sarah, 28</h4>
-              <p>Premium Member</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card animate delay-2">
-          <p class="testimonial-text">"The yearly plan is incredible value. I'm saving money while getting access to all the premium features that help me maintain my emotional balance daily."</p>
-          <div class="testimonial-author">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael" class="author-avatar">
-            <div class="author-info">
-              <h4>Michael, 32</h4>
-              <p>Yearly Subscriber</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card animate delay-3">
-          <p class="testimonial-text">"I started with the free plan and was impressed enough to upgrade. The PayPal integration made the payment process smooth and secure. Highly recommend!"</p>
-          <div class="testimonial-author">
-            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jessica" class="author-avatar">
-            <div class="author-info">
-              <h4>Jessica, 25</h4>
-              <p>Monthly Subscriber</p>
-            </div>
-          </div>
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <h2>Ready to Start Your Wellness Journey?</h2>
+        <p>Join thousands who've found emotional balance with Therapathy</p>
+        <div class="cta-buttons">
+          <a href="signup.html" class="cta-button white">
+            Try for Free
+            <i class="fas fa-heart"></i>
+          </a>
+          <a href="#subscription-plans" class="cta-button primary">
+            View Plans
+            <i class="fas fa-comment"></i>
+          </a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="pricing-hero" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);">
-    <div class="container">
-      <h2>Start Your Emotional Wellness Journey Today</h2>
-      <p>Join thousands who have found balance and support with Therapathy</p>
-      <a href="#pricing" class="cta-button" style="max-width: 300px; margin: 2rem auto 0;">Choose Your Plan</a>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer>
@@ -845,10 +818,10 @@
         <div class="footer-section">
           <h4>Resources</h4>
           <ul class="footer-links">
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Companions</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="index.html#companions">Companions</a></li>
             <li><a href="#">Wellness Blog</a></li>
-            <li><a href="#">Research</a></li>
           </ul>
         </div>
         
@@ -863,11 +836,11 @@
         </div>
         
         <div class="footer-section">
-          <h4>Subscribe</h4>
-          <p>Get mental wellness tips and updates</p>
+          <h4>Mindful Moments</h4>
+          <p>Subscribe for weekly mindfulness tips and emotional wellness insights</p>
           <form class="newsletter-form">
-            <input type="email" placeholder="Your email" required class="footer-input" style="width: 100%; padding: 0.8rem; border-radius: 50px; border: none; margin-bottom: 0.5rem;">
-            <button type="submit" class="cta-button primary" style="margin-top: 0.5rem;">Subscribe</button>
+            <input type="email" placeholder="Your email" required class="footer-input">
+            <button type="submit" class="cta-button primary" style="margin-top: 1rem;">Subscribe</button>
           </form>
         </div>
       </div>
@@ -878,69 +851,65 @@
     </div>
   </footer>
 
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
-  
   <script>
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(question => {
-      question.addEventListener('click', () => {
-        const faqItem = question.parentElement;
-        faqItem.classList.toggle('active');
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      if (navLinks.classList.contains('active')) {
+        mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.style.overflow = 'auto';
       });
     });
 
-    // PayPal Buttons
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'blue',
-        layout: 'vertical',
-        label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          'plan_id': 'P-3RX065706N3468051L5IFM4I' // Replace with your actual monthly plan ID
-        });
-      },
-      onApprove: function(data, actions) {
-        alert('You have successfully subscribed to Therapathy Premium Monthly!');
-      }
-    }).render('#paypal-button-container-monthly');
-
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          'plan_id': 'P-3RX065706N3468051L5IFM4I' // Replace with your actual yearly plan ID
-        });
-      },
-      onApprove: function(data, actions) {
-        alert('You have successfully subscribed to Therapathy Premium Yearly!');
-      }
-    }).render('#paypal-button-container-yearly');
-
-    // Animation on scroll
-    const animateOnScroll = () => {
-      const elements = document.querySelectorAll('.animate');
-      elements.forEach(el => {
-        const elementTop = el.getBoundingClientRect().top;
-        const elementVisible = 150;
+    // Pricing Tabs
+    const tabs = document.querySelectorAll('.pricing-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
         
-        if (elementTop < window.innerHeight - elementVisible) {
-          el.style.animationPlayState = 'running';
+        if (tab.dataset.tab === 'credits') {
+          document.getElementById('subscription-plans').style.display = 'none';
+          document.getElementById('credit-system').style.display = 'block';
+        } else {
+          document.getElementById('subscription-plans').style.display = 'block';
+          document.getElementById('credit-system').style.display = 'none';
         }
       });
-    };
+    });
 
-    // Initial check and then on scroll
-    animateOnScroll();
-    window.addEventListener('scroll', animateOnScroll);
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        question.classList.toggle('active');
+        answer.classList.toggle('active');
+        
+        // Close other open answers
+        faqQuestions.forEach(q => {
+          if (q !== question && q.classList.contains('active')) {
+            q.classList.remove('active');
+            q.nextElementSibling.classList.remove('active');
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>
