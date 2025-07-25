@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meditation Library | Calming Exercises</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #5E60CE;
+      --primary-light: #E0E1FF;
+      --primary-dark: #4A4DC7;
+      --secondary: #64DFDF;
+      --accent: #FF6B6B;
+      --accent-light: #FFD8D8;
+      --dark: #25274D;
+      --light: #F8F9FF;
+      --light-alt: #F0F3FF;
+      --gray: #8A9BA8;
+      --gray-light: #E2E8F0;
+      --success: #48BB78;
+      --warning: #F6AD55;
+      --error: #E53E3E;
+      --transition: all 0.3s ease;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
+      --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 20% 30%, rgba(94, 96, 206, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(100, 223, 223, 0.05) 0%, transparent 50%);
+      padding-bottom: calc(70px + var(--safe-area-inset-bottom));
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--dark);
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    /* Floating elements */
+    .floating-element {
+      position: absolute;
+      z-index: -1;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .cloud {
+      background: white;
+      border-radius: 50%;
+      animation: float 25s infinite linear;
+    }
+
+    .leaf {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%235E60CE" d="M50,10 C70,20 85,40 90,70 C85,90 65,95 50,90 C35,95 15,90 10,70 C15,40 30,20 50,10 Z"/></svg>');
+      background-size: contain;
+      animation: float 30s infinite ease-in-out;
+    }
+
+    .bubble {
+      background: rgba(94, 96, 206, 0.2);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(30px, -40px) rotate(5deg); }
+      50% { transform: translate(-25px, 30px) rotate(-5deg); }
+      75% { transform: translate(35px, 25px) rotate(8deg); }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--gray-light);
+      margin-top: 1rem;
+      margin-bottom: 5rem;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-light);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--primary);
+      text-shadow: 0 1px 2px rgba(94, 96, 206, 0.1);
+    }
+    
+    .app-logo i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .page-header p {
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    .page-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* User Profile */
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 1.2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      animation: slideIn 0.8s ease-out;
+      border: 1px solid var(--gray-light);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .user-avatar:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .user-info h3 {
+      margin-bottom: 0.2rem;
+      font-size: 1.4rem;
+      color: var(--dark);
+    }
+
+    .user-info p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .streak-counter {
+      margin-left: auto;
+      background: var(--primary-light);
+      padding: 0.7rem 1.2rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(94, 96, 206, 0.2);
+    }
+
+    .streak-counter i {
+      color: var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Category Filters */
+    .category-filters {
+      display: flex;
+      gap: 0.8rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .filter-btn {
+      padding: 0.8rem 1.5rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 50px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .filter-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .filter-btn i {
+      font-size: 1.1rem;
+    }
+
+    /* Meditation Grid */
+    .meditation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .meditation-card {
+      background: white;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      border: 1px solid var(--gray-light);
+      position: relative;
+    }
+    
+    .meditation-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .card-image {
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .card-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(94, 96, 206, 0.2), rgba(37, 39, 77, 0.7));
+    }
+    
+    .play-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .play-button:hover {
+      transform: scale(1.1);
+      background: white;
+    }
+    
+    .play-button i {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-left: 4px;
+    }
+    
+    .card-content {
+      padding: 1.5rem;
+    }
+    
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    
+    .tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .meditation-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .duration, .level {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Featured Section */
+    .featured-section {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--light-alt) 100%);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin: 3rem 0;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .featured-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .featured-header h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    
+    .featured-content {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .featured-image {
+      flex: 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+      max-height: 300px;
+    }
+    
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .featured-info {
+      flex: 1;
+    }
+    
+    .featured-info h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .featured-info p {
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    
+    .featured-stats {
+      display: flex;
+      gap: 2rem;
+      margin: 1.5rem 0;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    /* Player Controls */
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .progress-container {
+      flex: 1;
+      background: var(--gray-light);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 30%;
+    }
+    
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
+    .control-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.3);
+    }
+    
+    .control-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .control-btn.secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.8rem 0;
+      z-index: 100;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+      padding-bottom: calc(0.8rem + var(--safe-area-inset-bottom));
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray);
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: var(--transition);
+      flex: 1;
+      padding: 0.3rem;
+    }
+    
+    .nav-item i {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .nav-item.active {
+      color: var(--primary);
+    }
+    
+    .nav-item:hover {
+      transform: translateY(-4px);
+      color: var(--primary);
+    }
+    
+    .nav-item .nav-label {
+      font-weight: 600;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .featured-content {
+        flex-direction: column;
+      }
+      
+      .featured-image {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+      }
+      
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .meditation-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .featured-section {
+        padding: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .meditation-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .category-filters {
+        justify-content: flex-start;
+      }
+      
+      .filter-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .featured-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .player-controls {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .progress-container {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-header">
+    <div class="app-logo">
+      <i class="fas fa-heart"></i>
+      <span>CalmSpace</span>
+    </div>
+    <div class="user-avatar">☺</div>
+  </div>
+  
+  <div class="container">
+    <header class="page-header">
+      <h1><i class="fas fa-spa"></i> Meditation Library</h1>
+      <p>Discover guided meditations to deepen your practice and find inner peace</p>
+    </header>
+
+    <!-- User Profile Section -->
+    <div class="user-profile">
+      <div class="user-avatar">☺</div>
+      <div class="user-info">
+        <h3>Welcome Back, Friend!</h3>
+        <p>You've completed 12 meditation sessions this month</p>
+      </div>
+      <div class="streak-counter">
+        <i class="fas fa-fire"></i>
+        <span id="streakCount">7 Day Streak</span>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-filters">
+      <button class="filter-btn active"><i class="fas fa-star"></i> All Meditations</button>
+      <button class="filter-btn"><i class="fas fa-moon"></i> Sleep</button>
+      <button class="filter-btn"><i class="fas fa-wind"></i> Anxiety Relief</button>
+      <button class="filter-btn"><i class="fas fa-brain"></i> Focus</button>
+      <button class="filter-btn"><i class="fas fa-heart"></i> Self-Love</button>
+      <button class="filter-btn"><i class="fas fa-seedling"></i> Beginners</button>
+    </div>
+
+    <!-- Featured Meditation -->
+    <div class="featured-section">
+      <div class="featured-header">
+        <h2><i class="fas fa-crown"></i> Featured Meditation</h2>
+        <div class="duration"><i class="fas fa-clock"></i> 25 min</div>
+      </div>
+      <div class="featured-content">
+        <div class="featured-image">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%235E60CE'/><circle cx='300' cy='200' r='80' fill='%2364DFDF'/><path d='M250,150 Q300,120 350,150 T450,200' stroke='white' stroke-width='10' fill='none'/></svg>" alt="Peaceful Mind Meditation">
+        </div>
+        <div class="featured-info">
+          <h3>Peaceful Mind Journey</h3>
+          <p>This guided meditation will help you release stress and anxiety, creating space for peace and tranquility in your mind. Perfect for beginners and experienced practitioners alike.</p>
+          
+          <div class="featured-stats">
+            <div class="stat-item">
+              <div class="stat-value">4.9</div>
+              <div class="stat-label">Rating</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">15K+</div>
+              <div class="stat-label">Listens</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">25 min</div>
+              <div class="stat-label">Duration</div>
+            </div>
+          </div>
+          
+          <div class="player-controls">
+            <button class="control-btn secondary">
+              <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn">
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="control-btn secondary">
+              <i class="fas fa-step-forward"></i>
+            </button>
+            
+            <div class="progress-container">
+              <div class="progress-bar"></div>
+              <div class="time-display">
+                <span>5:24</span>
+                <span>25:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meditation Grid -->
+    <h2 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-headphones"></i> Guided Meditations
+    </h2>
+    
+    <div class="meditation-grid">
+      <!-- Meditation Card 1 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #64DFDF;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Sleep</span>
+            <span class="tag">Beginners</span>
+          </div>
+          <h3>Deep Sleep Meditation</h3>
+          <p>Fall asleep faster with this calming guided meditation designed to quiet your mind.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 30 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Easy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Meditation Card 2 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #5E60CE;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Anxiety</span>
+            <span class="tag">Stress Relief</span>
+          </div>
+          <h3>Anxiety Relief Session</h3>
+          <p>Release tension and calm your nervous system with this powerful anxiety-reducing practice.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 20 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Medium</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Meditation Card 3 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #FF6B6B;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Self-Love</span>
+            <span class="tag">Compassion</span>
+          </div>
+          <h3>Loving-Kindness Practice</h3>
+          <p>Cultivate compassion for yourself and others with this heart-opening meditation.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 15 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Easy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Meditation Card 4 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #48BB78;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Focus</span>
+            <span class="tag">Productivity</span>
+          </div>
+          <h3>Mindful Focus Session</h3>
+          <p>Sharpen your concentration and improve mental clarity with this focused attention practice.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 10 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Medium</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Meditation Card 5 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #F6AD55;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Morning</span>
+            <span class="tag">Energy</span>
+          </div>
+          <h3>Morning Energy Boost</h3>
+          <p>Start your day with intention and vitality using this energizing morning meditation.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 12 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Easy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Meditation Card 6 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #4A4DC7;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Advanced</span>
+            <span class="tag">Mindfulness</span>
+          </div>
+          <h3>Deep Mindfulness</h3>
+          <p>Dive deep into present-moment awareness with this advanced mindfulness practice.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 45 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Advanced</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Breathing Exercises Section -->
+    <h2 style="margin: 3rem 0 1.5rem; display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-lungs"></i> Breathing Exercises
+    </h2>
+    
+    <div class="meditation-grid">
+      <!-- Breathing Card 1 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #E0E1FF;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Calming</span>
+          </div>
+          <h3>4-7-8 Breathing</h3>
+          <p>Reduce anxiety and promote relaxation with this simple but powerful breathing technique.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 5 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Easy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Breathing Card 2 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #64DFDF;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Energy</span>
+          </div>
+          <h3>Box Breathing</h3>
+          <p>Improve focus and balance your nervous system with this tactical breathing method.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 7 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Medium</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Breathing Card 3 -->
+      <div class="meditation-card">
+        <div class="card-image" style="background-color: #FFD8D8;">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="card-tags">
+            <span class="tag">Sleep</span>
+          </div>
+          <h3>Deep Sleep Breath</h3>
+          <p>Prepare your body for restful sleep with this evening breathing practice.</p>
+          <div class="card-meta">
+            <div class="duration"><i class="fas fa-clock"></i> 10 min</div>
+            <div class="level"><i class="fas fa-signal"></i> Easy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="#" class="nav-item active">
+      <i class="fas fa-spa"></i>
+      <span class="nav-label">Meditate</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-book"></i>
+      <span class="nav-label">Journal</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span class="nav-label">Profile</span>
+    </a>
+  </div>
+
+  <script>
+    // Create floating elements
+    function createFloatingElements() {
+      const container = document.body;
+      const types = ['cloud', 'leaf', 'bubble'];
+      const colors = ['#5E60CE', '#64DFDF', '#FF6B6B', '#25274D', '#F8F9FF'];
+      
+      for (let i = 0; i < 15; i++) {
+        const element = document.createElement('div');
+        const type = types[Math.floor(Math.random() * types.length)];
+        element.classList.add('floating-element', type);
+        
+        // Random size
+        const size = Math.floor(Math.random() * 120) + 40;
+        
+        if (type === 'cloud') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size/2}px`;
+          element.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        } else if (type === 'leaf') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size}px`;
+        } else if (type === 'bubble') {
+          element.style.width = `${size}px`;
+          element.style.height = `${size}px`;
+          element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          element.style.opacity = Math.random() * 0.3 + 0.1;
+        }
+        
+        // Random position
+        element.style.top = `${Math.random() * 100}%`;
+        element.style.left = `${Math.random() * 100}%`;
+        
+        // Random animation delay and duration
+        element.style.animationDelay = `${Math.random() * 20}s`;
+        element.style.animationDuration = `${15 + Math.random() * 30}s`;
+        
+        container.appendChild(element);
+      }
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      createFloatingElements();
+      
+      // Add play button functionality
+      document.querySelectorAll('.play-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const card = this.closest('.meditation-card');
+          const title = card.querySelector('h3').textContent;
+          showToast(`Starting: ${title}`, 'info');
+          
+          // Pulse animation
+          this.classList.add('pulse');
+          setTimeout(() => {
+            this.classList.remove('pulse');
+          }, 500);
+        });
+      });
+      
+      // Add filter button functionality
+      document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          const filterText = this.textContent;
+          showToast(`Filtering by: ${filterText}`, 'info');
+        });
+      });
+      
+      // Player controls
+      const playButton = document.querySelector('.control-btn .fa-play').closest('.control-btn');
+      playButton.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('fa-play')) {
+          icon.classList.replace('fa-play', 'fa-pause');
+          showToast('Playing meditation', 'info');
+        } else {
+          icon.classList.replace('fa-pause', 'fa-play');
+          showToast('Paused', 'info');
+        }
+      });
+    });
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      // Create toast if not exists
+      if (!document.getElementById('toast')) {
+        const toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
