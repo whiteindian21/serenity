@@ -383,17 +383,6 @@
       color: var(--gray);
     }
 
-    /* PayPal Button Styles */
-    .paypal-button-container {
-      margin-top: 1.5rem;
-      min-height: 40px;
-    }
-
-    .paypal-button {
-      border-radius: 50px !important;
-      min-height: 40px !important;
-    }
-
     /* Features Grid */
     .features {
       background: linear-gradient(to bottom, var(--light) 50%, #ffffff 100%);
@@ -1140,7 +1129,7 @@
               <li>Advanced analytics</li>
               <li>Cancel anytime</li>
             </ul>
-            <div id="paypal-button-container-monthly" class="paypal-button-container"></div>
+            <a href="pricing.html" class="cta-button">Subscribe Now</a>
           </div>
           
           <div class="pricing-card premium animate delay-3">
@@ -1157,7 +1146,7 @@
               <li>First access to new features</li>
               <li>7-day free trial</li>
             </ul>
-            <div id="paypal-button-container-yearly" class="paypal-button-container"></div>
+            <a href="pricing.html" class="cta-button">Subscribe Now</a>
           </div>
         </div>
       </div>
@@ -1172,7 +1161,7 @@
         </div>
         <div class="companion-grid">
           <div class="companion-card animate delay-1">
-            <img src="Flux_Dev_depict_a_gentlelooking_Asian_woman_in_her_mid30s_to_e_0.jpg" alt="Elena AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Elena AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Elena</h3>
               <span class="companion-role">Empathy Specialist</span>
@@ -1185,7 +1174,7 @@
           </div>
           
           <div class="companion-card animate delay-2">
-            <img src="Flux_Dev_a_warm_and_approachable_middleaged_black_man_with_a_g_1.jpg" alt="David AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="David AI companion" class="companion-image">
             <div class="companion-info">
               <h3>David</h3>
               <span class="companion-role">Resilience Coach</span>
@@ -1198,7 +1187,7 @@
           </div>
           
           <div class="companion-card animate delay-3">
-            <img src="Flux_Dev_A_warm_and_inviting_Latina_woman_in_her_mid30s_with_a_1.jpg" alt="Sophia AI companion" class="companion-image">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Sophia AI companion" class="companion-image">
             <div class="companion-info">
               <h3>Sophia</h3>
               <span class="companion-role">Mindfulness Guide</span>
@@ -1345,9 +1334,6 @@
     </div>
   </footer>
 
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-  
   <script>
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -1409,41 +1395,6 @@
     }
     
     createParticles();
-
-    // PayPal Subscription Buttons
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'blue',
-        layout: 'vertical',
-        label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          'plan_id': 'YOUR_MONTHLY_PLAN_ID' // Replace with your monthly plan ID
-        });
-      },
-      onApprove: function(data, actions) {
-        alert('You have successfully subscribed to Therapathy Premium Monthly!');
-      }
-    }).render('#paypal-button-container-monthly');
-
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          'plan_id': 'YOUR_YEARLY_PLAN_ID' // Replace with your yearly plan ID
-        });
-      },
-      onApprove: function(data, actions) {
-        alert('You have successfully subscribed to Therapathy Premium Yearly!');
-      }
-    }).render('#paypal-button-container-yearly');
   </script>
 </body>
 </html>
