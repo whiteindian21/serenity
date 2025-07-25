@@ -6,6 +6,7 @@
   <title>Meditation Library | Calming Exercises</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -260,6 +261,56 @@
       animation: pulse 1.5s infinite;
     }
 
+    /* Login Prompt */
+    .login-prompt {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-medium);
+      margin: 2rem auto;
+      max-width: 500px;
+    }
+    
+    .login-prompt h2 {
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      font-size: 1.8rem;
+    }
+    
+    .login-prompt p {
+      margin-bottom: 1.8rem;
+      color: var(--gray);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: var(--shadow-medium);
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-dark);
+    }
+
     /* Category Filters */
     .category-filters {
       display: flex;
@@ -506,7 +557,8 @@
     .progress-bar {
       height: 100%;
       background: var(--primary);
-      width: 30%;
+      width: 0%;
+      transition: width 0.1s linear;
     }
     
     .time-display {
@@ -539,6 +591,52 @@
       background: white;
       color: var(--primary);
       border: 1px solid var(--primary);
+    }
+    
+    /* Audio Player */
+    #audio-player {
+      display: none;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-dark);
+      z-index: 3000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      max-width: 90%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(37, 39, 77, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: rgba(72, 187, 120, 0.95);
+    }
+    
+    .toast.error {
+      background: rgba(229, 62, 62, 0.95);
+    }
+    
+    .toast.info {
+      background: rgba(94, 96, 206, 0.95);
     }
 
     /* Bottom Navigation */
@@ -621,6 +719,16 @@
       .featured-section {
         padding: 1.5rem;
       }
+      
+      .user-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .streak-counter {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
     }
     
     @media (max-width: 576px) {
@@ -657,38 +765,38 @@
   <div class="mobile-header">
     <div class="app-logo">
       <i class="fas fa-heart"></i>
-      <span>therapathy</span>
+      <span>Therapathy</span>
     </div>
-    <div class="user-avatar">☺</div>
+    <div class="user-avatar" id="userAvatar">☺</div>
   </div>
   
-  <div class="container">
+  <div class="container" id="dashboard">
     <header class="page-header">
       <h1><i class="fas fa-spa"></i> Meditation Library</h1>
       <p>Discover guided meditations to deepen your practice and find inner peace</p>
     </header>
 
     <!-- User Profile Section -->
-    <div class="user-profile">
-      <div class="user-avatar">☺</div>
+    <div class="user-profile" id="userProfile">
+      <div class="user-avatar" id="userInitial">U</div>
       <div class="user-info">
-        <h3>Welcome Back, Friend!</h3>
-        <p>You've completed 12 meditation sessions this month</p>
+        <h3 id="userGreeting">Welcome Back, Friend!</h3>
+        <p id="meditationStats">You've completed <span id="sessionCount">0</span> meditation sessions</p>
       </div>
       <div class="streak-counter">
         <i class="fas fa-fire"></i>
-        <span id="streakCount">7 Day Streak</span>
+        <span id="streakCount">0 Day Streak</span>
       </div>
     </div>
 
     <!-- Category Filters -->
     <div class="category-filters">
-      <button class="filter-btn active"><i class="fas fa-star"></i> All Meditations</button>
-      <button class="filter-btn"><i class="fas fa-moon"></i> Sleep</button>
-      <button class="filter-btn"><i class="fas fa-wind"></i> Anxiety Relief</button>
-      <button class="filter-btn"><i class="fas fa-brain"></i> Focus</button>
-      <button class="filter-btn"><i class="fas fa-heart"></i> Self-Love</button>
-      <button class="filter-btn"><i class="fas fa-seedling"></i> Beginners</button>
+      <button class="filter-btn active" data-category="all"><i class="fas fa-star"></i> All Meditations</button>
+      <button class="filter-btn" data-category="sleep"><i class="fas fa-moon"></i> Sleep</button>
+      <button class="filter-btn" data-category="anxiety"><i class="fas fa-wind"></i> Anxiety Relief</button>
+      <button class="filter-btn" data-category="focus"><i class="fas fa-brain"></i> Focus</button>
+      <button class="filter-btn" data-category="self-love"><i class="fas fa-heart"></i> Self-Love</button>
+      <button class="filter-btn" data-category="beginners"><i class="fas fa-seedling"></i> Beginners</button>
     </div>
 
     <!-- Featured Meditation -->
@@ -721,21 +829,21 @@
           </div>
           
           <div class="player-controls">
-            <button class="control-btn secondary">
+            <button class="control-btn secondary" id="prevBtn">
               <i class="fas fa-step-backward"></i>
             </button>
-            <button class="control-btn">
-              <i class="fas fa-play"></i>
+            <button class="control-btn" id="playBtn">
+              <i class="fas fa-play" id="playIcon"></i>
             </button>
-            <button class="control-btn secondary">
+            <button class="control-btn secondary" id="nextBtn">
               <i class="fas fa-step-forward"></i>
             </button>
             
-            <div class="progress-container">
-              <div class="progress-bar"></div>
+            <div class="progress-container" id="progressContainer">
+              <div class="progress-bar" id="progressBar"></div>
               <div class="time-display">
-                <span>5:24</span>
-                <span>25:00</span>
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
               </div>
             </div>
           </div>
@@ -748,132 +856,8 @@
       <i class="fas fa-headphones"></i> Guided Meditations
     </h2>
     
-    <div class="meditation-grid">
-      <!-- Meditation Card 1 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #64DFDF;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Sleep</span>
-            <span class="tag">Beginners</span>
-          </div>
-          <h3>Deep Sleep Meditation</h3>
-          <p>Fall asleep faster with this calming guided meditation designed to quiet your mind.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 30 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Easy</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Meditation Card 2 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #5E60CE;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Anxiety</span>
-            <span class="tag">Stress Relief</span>
-          </div>
-          <h3>Anxiety Relief Session</h3>
-          <p>Release tension and calm your nervous system with this powerful anxiety-reducing practice.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 20 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Medium</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Meditation Card 3 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #FF6B6B;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Self-Love</span>
-            <span class="tag">Compassion</span>
-          </div>
-          <h3>Loving-Kindness Practice</h3>
-          <p>Cultivate compassion for yourself and others with this heart-opening meditation.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 15 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Easy</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Meditation Card 4 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #48BB78;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Focus</span>
-            <span class="tag">Productivity</span>
-          </div>
-          <h3>Mindful Focus Session</h3>
-          <p>Sharpen your concentration and improve mental clarity with this focused attention practice.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 10 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Medium</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Meditation Card 5 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #F6AD55;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Morning</span>
-            <span class="tag">Energy</span>
-          </div>
-          <h3>Morning Energy Boost</h3>
-          <p>Start your day with intention and vitality using this energizing morning meditation.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 12 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Easy</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Meditation Card 6 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #4A4DC7;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Advanced</span>
-            <span class="tag">Mindfulness</span>
-          </div>
-          <h3>Deep Mindfulness</h3>
-          <p>Dive deep into present-moment awareness with this advanced mindfulness practice.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 45 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Advanced</div>
-          </div>
-        </div>
-      </div>
+    <div class="meditation-grid" id="meditationGrid">
+      <!-- Meditation cards will be dynamically generated -->
     </div>
     
     <!-- Breathing Exercises Section -->
@@ -881,70 +865,594 @@
       <i class="fas fa-lungs"></i> Breathing Exercises
     </h2>
     
-    <div class="meditation-grid">
-      <!-- Breathing Card 1 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #E0E1FF;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Calming</span>
-          </div>
-          <h3>4-7-8 Breathing</h3>
-          <p>Reduce anxiety and promote relaxation with this simple but powerful breathing technique.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 5 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Easy</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Breathing Card 2 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #64DFDF;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Energy</span>
-          </div>
-          <h3>Box Breathing</h3>
-          <p>Improve focus and balance your nervous system with this tactical breathing method.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 7 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Medium</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Breathing Card 3 -->
-      <div class="meditation-card">
-        <div class="card-image" style="background-color: #FFD8D8;">
-          <div class="play-button">
-            <i class="fas fa-play"></i>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="card-tags">
-            <span class="tag">Sleep</span>
-          </div>
-          <h3>Deep Sleep Breath</h3>
-          <p>Prepare your body for restful sleep with this evening breathing practice.</p>
-          <div class="card-meta">
-            <div class="duration"><i class="fas fa-clock"></i> 10 min</div>
-            <div class="level"><i class="fas fa-signal"></i> Easy</div>
-          </div>
-        </div>
-      </div>
+    <div class="meditation-grid" id="breathingGrid">
+      <!-- Breathing cards will be dynamically generated -->
     </div>
   </div>
 
+  <!-- Login Prompt -->
+  <div class="container login-prompt" id="loginPrompt" style="display: none;">
+    <h2>Welcome to Mindful Moments</h2>
+    <p>Please sign in to access our full meditation library and track your progress</p>
+    <button class="btn-login" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i> Sign In
+    </button>
+  </div>
+
+  <!-- Audio Player -->
+  <audio id="audioPlayer" preload="metadata"></audio>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="#" class="nav-item active">
+      <i class="fas fa-spa"></i>
+      <span class="nav-label">Meditate</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-book"></i>
+      <span class="nav-label">Journal</span>
+    </a>
+    <a href="#" class="nav-item" id="profileNav">
+      <i class="fas fa-user"></i>
+      <span class="nav-label">Profile</span>
+    </a>
+  </div>
+
   <script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // State variables
+    let currentUser = null;
+    let meditationSessions = 0;
+    let streak = 0;
+    let currentAudio = null;
+    let currentTrack = null;
+    let isPlaying = false;
+    
+    // Meditation library data
+    const meditationLibrary = {
+      guided: [
+        {
+          id: 'sleep',
+          title: 'Deep Sleep Meditation',
+          category: 'sleep',
+          description: 'Fall asleep faster with this calming guided meditation designed to quiet your mind.',
+          duration: '30 min',
+          level: 'Easy',
+          color: '#64DFDF',
+          tags: ['Sleep', 'Beginners'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'anxiety',
+          title: 'Anxiety Relief Session',
+          category: 'anxiety',
+          description: 'Release tension and calm your nervous system with this powerful anxiety-reducing practice.',
+          duration: '20 min',
+          level: 'Medium',
+          color: '#5E60CE',
+          tags: ['Anxiety', 'Stress Relief'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'self-love',
+          title: 'Loving-Kindness Practice',
+          category: 'self-love',
+          description: 'Cultivate compassion for yourself and others with this heart-opening meditation.',
+          duration: '15 min',
+          level: 'Easy',
+          color: '#FF6B6B',
+          tags: ['Self-Love', 'Compassion'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'focus',
+          title: 'Mindful Focus Session',
+          category: 'focus',
+          description: 'Sharpen your concentration and improve mental clarity with this focused attention practice.',
+          duration: '10 min',
+          level: 'Medium',
+          color: '#48BB78',
+          tags: ['Focus', 'Productivity'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'morning',
+          title: 'Morning Energy Boost',
+          category: 'energy',
+          description: 'Start your day with intention and vitality using this energizing morning meditation.',
+          duration: '12 min',
+          level: 'Easy',
+          color: '#F6AD55',
+          tags: ['Morning', 'Energy'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'advanced',
+          title: 'Deep Mindfulness',
+          category: 'mindfulness',
+          description: 'Dive deep into present-moment awareness with this advanced mindfulness practice.',
+          duration: '45 min',
+          level: 'Advanced',
+          color: '#4A4DC7',
+          tags: ['Advanced', 'Mindfulness'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        }
+      ],
+      breathing: [
+        {
+          id: 'breath1',
+          title: '4-7-8 Breathing',
+          category: 'calming',
+          description: 'Reduce anxiety and promote relaxation with this simple but powerful breathing technique.',
+          duration: '5 min',
+          level: 'Easy',
+          color: '#E0E1FF',
+          tags: ['Calming'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'breath2',
+          title: 'Box Breathing',
+          category: 'energy',
+          description: 'Improve focus and balance your nervous system with this tactical breathing method.',
+          duration: '7 min',
+          level: 'Medium',
+          color: '#64DFDF',
+          tags: ['Energy'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        },
+        {
+          id: 'breath3',
+          title: 'Deep Sleep Breath',
+          category: 'sleep',
+          description: 'Prepare your body for restful sleep with this evening breathing practice.',
+          duration: '10 min',
+          level: 'Easy',
+          color: '#FFD8D8',
+          tags: ['Sleep'],
+          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+        }
+      ]
+    };
+
+    // Helper function to safely get DOM elements
+    function getElement(id) {
+      const el = document.getElementById(id);
+      if (!el) console.warn(`Element with ID ${id} not found`);
+      return el;
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = getElement('toast');
+      if (!toast) return;
+      
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Check user session
+    async function checkSession() {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        if (data.session) {
+          currentUser = data.session.user;
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Session check failed:', error.message);
+        return false;
+      }
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const isAuthenticated = await checkSession();
+        const dashboard = getElement('dashboard');
+        const loginPrompt = getElement('loginPrompt');
+        
+        if (isAuthenticated) {
+          // Show dashboard for logged-in users
+          if (loginPrompt) loginPrompt.style.display = 'none';
+          if (dashboard) dashboard.style.display = 'block';
+          
+          // Load user data
+          loadUserData();
+          
+          // Initialize UI
+          setupEventListeners();
+          renderMeditationGrid();
+          renderBreathingGrid();
+          
+          // Initialize audio player
+          initAudioPlayer();
+          
+        } else {
+          // Show login prompt for unauthenticated users
+          if (loginPrompt) loginPrompt.style.display = 'block';
+          if (dashboard) dashboard.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Initialization failed:', error);
+        showToast("Failed to initialize app", "error");
+      }
+    });
+
+    // Load user data from Supabase
+    async function loadUserData() {
+      if (!currentUser) return;
+      
+      try {
+        // Update UI with user info
+        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+        const userInitial = getElement('userInitial');
+        const userAvatar = getElement('userAvatar');
+        const userGreeting = getElement('userGreeting');
+        
+        if (userInitial) userInitial.textContent = initial;
+        if (userAvatar) userAvatar.textContent = initial;
+        
+        // Set greeting based on time of day
+        const hour = new Date().getHours();
+        let greeting = "Welcome back";
+        
+        if (hour < 12) {
+          greeting = "Good morning";
+        } else if (hour < 18) {
+          greeting = "Good afternoon";
+        } else {
+          greeting = "Good evening";
+        }
+        
+        if (userGreeting) userGreeting.textContent = `${greeting}, ${currentUser.email.split('@')[0]}`;
+        
+        // Load user meditation stats (simulated for demo)
+        meditationSessions = Math.floor(Math.random() * 20) + 5;
+        streak = Math.floor(Math.random() * 10) + 1;
+        
+        const sessionCount = getElement('sessionCount');
+        const streakCount = getElement('streakCount');
+        
+        if (sessionCount) sessionCount.textContent = meditationSessions;
+        if (streakCount) streakCount.textContent = `${streak} Day Streak`;
+        
+      } catch (error) {
+        showToast("Error loading user data", "error");
+      }
+    }
+
+    // Render meditation grid
+    function renderMeditationGrid() {
+      const grid = getElement('meditationGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      
+      meditationLibrary.guided.forEach(meditation => {
+        const card = document.createElement('div');
+        card.className = 'meditation-card';
+        card.dataset.id = meditation.id;
+        card.dataset.category = meditation.category;
+        
+        card.innerHTML = `
+          <div class="card-image" style="background-color: ${meditation.color};">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <h3>${meditation.title}</h3>
+            <p>${meditation.description}</p>
+            <div class="card-meta">
+              <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
+              <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
+            </div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Render breathing grid
+    function renderBreathingGrid() {
+      const grid = getElement('breathingGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      
+      meditationLibrary.breathing.forEach(meditation => {
+        const card = document.createElement('div');
+        card.className = 'meditation-card';
+        card.dataset.id = meditation.id;
+        card.dataset.category = meditation.category;
+        
+        card.innerHTML = `
+          <div class="card-image" style="background-color: ${meditation.color};">
+            <div class="play-button">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <h3>${meditation.title}</h3>
+            <p>${meditation.description}</p>
+            <div class="card-meta">
+              <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
+              <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
+            </div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Initialize audio player
+    function initAudioPlayer() {
+      const audioPlayer = getElement('audioPlayer');
+      const playBtn = getElement('playBtn');
+      const playIcon = getElement('playIcon');
+      const progressBar = getElement('progressBar');
+      const progressContainer = getElement('progressContainer');
+      const currentTimeEl = getElement('currentTime');
+      const durationEl = getElement('duration');
+      
+      if (!audioPlayer) return;
+      
+      // Time formatting
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+      
+      // Update progress bar
+      function updateProgress() {
+        const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        if (progressBar) progressBar.style.width = `${percent}%`;
+        if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+      }
+      
+      // Set progress on click
+      function setProgress(e) {
+        const width = this.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audioPlayer.duration;
+        
+        audioPlayer.currentTime = (clickX / width) * duration;
+      }
+      
+      // Event listeners
+      audioPlayer.addEventListener('timeupdate', updateProgress);
+      audioPlayer.addEventListener('loadedmetadata', () => {
+        if (durationEl) durationEl.textContent = formatTime(audioPlayer.duration);
+      });
+      
+      audioPlayer.addEventListener('ended', () => {
+        isPlaying = false;
+        if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
+        
+        // Track meditation completion
+        if (currentUser && currentTrack) {
+          trackMeditationCompletion(currentTrack.id);
+        }
+      });
+      
+      if (progressContainer) progressContainer.addEventListener('click', setProgress);
+      
+      // Play button functionality
+      if (playBtn) {
+        playBtn.addEventListener('click', () => {
+          if (isPlaying) {
+            audioPlayer.pause();
+            if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
+          } else {
+            audioPlayer.play();
+            if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+          }
+          isPlaying = !isPlaying;
+        });
+      }
+    }
+
+    // Play meditation audio
+    function playMeditation(meditation) {
+      const audioPlayer = getElement('audioPlayer');
+      const playIcon = getElement('playIcon');
+      
+      if (!audioPlayer) return;
+      
+      // Set the audio source
+      audioPlayer.src = meditation.audioSrc;
+      audioPlayer.load();
+      
+      // Play the audio
+      audioPlayer.play()
+        .then(() => {
+          isPlaying = true;
+          if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+          showToast(`Now playing: ${meditation.title}`, 'info');
+          
+          // Set current track
+          currentTrack = meditation;
+        })
+        .catch(error => {
+          console.error('Error playing audio:', error);
+          showToast('Error playing meditation audio', 'error');
+        });
+    }
+
+    // Track meditation completion in Supabase
+    async function trackMeditationCompletion(meditationId) {
+      if (!currentUser) return;
+      
+      try {
+        const { error } = await supabase
+          .from('meditation_sessions')
+          .insert([
+            {
+              user_id: currentUser.id,
+              meditation_id: meditationId,
+              duration: 0, // Actual duration would be calculated
+              completed_at: new Date().toISOString()
+            }
+          ]);
+        
+        if (error) throw error;
+        
+        // Update UI
+        meditationSessions++;
+        const sessionCount = getElement('sessionCount');
+        if (sessionCount) sessionCount.textContent = meditationSessions;
+        
+        showToast('Meditation completed! Great job!', 'success');
+      } catch (error) {
+        console.error('Error tracking meditation:', error);
+      }
+    }
+
+    // Setup all event listeners
+    function setupEventListeners() {
+      // Login button
+      const loginBtn = getElement('loginBtn');
+      if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          // In a real app, this would redirect to login page
+          // For demo, we'll simulate login
+          simulateLogin();
+        });
+      }
+      
+      // Profile nav
+      const profileNav = getElement('profileNav');
+      if (profileNav) {
+        profileNav.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast('Profile page would show here', 'info');
+        });
+      }
+      
+      // Play buttons
+      document.querySelectorAll('.play-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const card = this.closest('.meditation-card');
+          const meditationId = card.dataset.id;
+          
+          // Find meditation in library
+          const meditation = [...meditationLibrary.guided, ...meditationLibrary.breathing].find(
+            m => m.id === meditationId
+          );
+          
+          if (meditation) {
+            playMeditation(meditation);
+            
+            // Pulse animation
+            this.classList.add('pulse');
+            setTimeout(() => {
+              this.classList.remove('pulse');
+            }, 500);
+          }
+        });
+      });
+      
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const category = this.dataset.category;
+          
+          document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          // Filter meditation cards
+          document.querySelectorAll('.meditation-card').forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          showToast(`Filtering by: ${this.textContent}`, 'info');
+        });
+      });
+      
+      // Player controls
+      const prevBtn = getElement('prevBtn');
+      const nextBtn = getElement('nextBtn');
+      
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          showToast('Previous track would play', 'info');
+        });
+      }
+      
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          showToast('Next track would play', 'info');
+        });
+      }
+    }
+
+    // Simulate login for demo purposes
+    function simulateLogin() {
+      // In a real app, this would be handled by Supabase auth
+      currentUser = {
+        id: 'demo-user',
+        email: 'demo@mindfulmoments.com',
+        user_metadata: {
+          name: 'Demo User'
+        }
+      };
+      
+      // Hide login, show dashboard
+      const loginPrompt = getElement('loginPrompt');
+      const dashboard = getElement('dashboard');
+      
+      if (loginPrompt) loginPrompt.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'block';
+      
+      // Load user data
+      loadUserData();
+      
+      // Initialize UI
+      setupEventListeners();
+      renderMeditationGrid();
+      renderBreathingGrid();
+      
+      // Initialize audio player
+      initAudioPlayer();
+      
+      showToast('Welcome to Mindful Moments!', 'success');
+    }
+
     // Create floating elements
     function createFloatingElements() {
       const container = document.body;
@@ -985,70 +1493,8 @@
       }
     }
     
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      createFloatingElements();
-      
-      // Add play button functionality
-      document.querySelectorAll('.play-button').forEach(button => {
-        button.addEventListener('click', function() {
-          const card = this.closest('.meditation-card');
-          const title = card.querySelector('h3').textContent;
-          showToast(`Starting: ${title}`, 'info');
-          
-          // Pulse animation
-          this.classList.add('pulse');
-          setTimeout(() => {
-            this.classList.remove('pulse');
-          }, 500);
-        });
-      });
-      
-      // Add filter button functionality
-      document.querySelectorAll('.filter-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          const filterText = this.textContent;
-          showToast(`Filtering by: ${filterText}`, 'info');
-        });
-      });
-      
-      // Player controls
-      const playButton = document.querySelector('.control-btn .fa-play').closest('.control-btn');
-      playButton.addEventListener('click', function() {
-        const icon = this.querySelector('i');
-        if (icon.classList.contains('fa-play')) {
-          icon.classList.replace('fa-play', 'fa-pause');
-          showToast('Playing meditation', 'info');
-        } else {
-          icon.classList.replace('fa-pause', 'fa-play');
-          showToast('Paused', 'info');
-        }
-      });
-    });
-    
-    // Show toast notification
-    function showToast(message, type = 'success') {
-      // Create toast if not exists
-      if (!document.getElementById('toast')) {
-        const toast = document.createElement('div');
-        toast.id = 'toast';
-        toast.className = 'toast';
-        document.body.appendChild(toast);
-      }
-      
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
+    // Initialize floating elements
+    createFloatingElements();
   </script>
 </body>
 </html>
