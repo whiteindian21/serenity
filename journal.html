@@ -4,35 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Serenity Journal | Healing Companion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
   <style>
     :root {
-      --primary: #7C4DFF;
-      --primary-light: #EDE7F6;
-      --primary-dark: #651FFF;
-      --secondary: #FF7E8F;
-      --secondary-light: #FFE5E9;
-      --tertiary: #4DB6AC;
-      --tertiary-light: #E0F2F1;
-      --dark: #2E3A4D;
-      --light: #F9FAFB;
-      --gray: #94A3B8;
+      --primary: #5E60CE;
+      --primary-light: #E0E1FF;
+      --primary-dark: #4A4DC7;
+      --secondary: #64DFDF;
+      --accent: #FF6B6B;
+      --accent-light: #FFD8D8;
+      --dark: #25274D;
+      --light: #F8F9FF;
+      --light-alt: #F0F3FF;
+      --gray: #8A9BA8;
       --gray-light: #E2E8F0;
-      --success: #4CAF50;
-      --warning: #FFC107;
-      --error: #F44336;
-      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --success: #48BB78;
+      --warning: #F6AD55;
+      --error: #E53E3E;
+      --transition: all 0.3s ease;
       --radius-lg: 24px;
       --radius-md: 16px;
-      --radius-sm: 8px;
-      --shadow-light: 0 6px 30px rgba(0, 0, 0, 0.04);
-      --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.08);
-      --shadow-dark: 0 12px 50px rgba(0, 0, 0, 0.12);
-      --spacing-unit: 0.5rem;
+      --radius-sm: 10px;
+      --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.08);
+      --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
@@ -44,51 +44,26 @@
 
     html {
       scroll-behavior: smooth;
+      font-size: 16px;
     }
 
     body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      line-height: 1.7;
+      line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(124, 77, 255, 0.03) 0%, transparent 70%),
-        radial-gradient(circle at 90% 80%, rgba(77, 182, 172, 0.03) 0%, transparent 70%),
-        linear-gradient(to bottom right, #f9fafb, #eef2f6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 1000px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-medium);
       position: relative;
-      overflow: hidden;
-      animation: fadeIn 0.8s ease-out;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      overflow-x: hidden;
+      background: radial-gradient(circle at 20% 30%, rgba(94, 96, 206, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(100, 223, 223, 0.05) 0%, transparent 50%);
+      padding-bottom: calc(70px + var(--safe-area-inset-bottom));
     }
 
-    .container:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-    }
-
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
+    h1, h2, h3, h4 {
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
       line-height: 1.3;
       color: var(--dark);
     }
@@ -98,75 +73,97 @@
       font-size: 0.95rem;
     }
 
-    .journal-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      position: relative;
-      padding: 2.5rem 1rem 1rem;
-      background: linear-gradient(135deg, var(--primary-light) 0%, var(--tertiary-light) 100%);
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      overflow: hidden;
+    /* Mobile Header */
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-light);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(94, 96, 206, 0.1);
+    }
+    
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--primary);
+      text-shadow: 0 1px 2px rgba(94, 96, 206, 0.1);
+    }
+    
+    .app-logo i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.25);
+      cursor: pointer;
+      transition: var(--transition);
     }
 
-    .journal-header:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: 2px;
+    .user-avatar:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.35);
+    }
+
+    /* Journal Container */
+    .journal-container {
+      padding: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Journal Header */
+    .journal-header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--light-alt) 100%);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-light);
+      animation: fadeIn 0.8s ease-out;
     }
 
     .journal-header h2 {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       margin-bottom: 0.5rem;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: textGlow 3s infinite alternate;
-      position: relative;
-      z-index: 2;
+      color: var(--primary);
     }
 
     .journal-header p {
       color: var(--dark);
       max-width: 600px;
       margin: 0 auto;
-      font-size: 1.1rem;
-      position: relative;
-      z-index: 2;
     }
 
-    .header-decor {
-      position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
-      background: linear-gradient(45deg, rgba(124, 77, 255, 0.1), rgba(255, 126, 143, 0.1));
-      border-radius: 50%;
-      z-index: 1;
-    }
-
-    .header-decor:nth-child(2) {
-      top: 30px;
-      left: -80px;
-      width: 150px;
-      height: 150px;
-      background: linear-gradient(45deg, rgba(77, 182, 172, 0.1), rgba(124, 77, 255, 0.1));
-    }
-
+    /* Mood Selector */
     .mood-selector {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
       flex-wrap: wrap;
-      padding: 0 1rem;
     }
 
     .mood-option {
@@ -174,63 +171,64 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      opacity: 0.6;
-      transition: var(--transition);
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: var(--radius-md);
+      transition: var(--transition);
       background: white;
       box-shadow: var(--shadow-light);
       border: 1px solid var(--gray-light);
-      min-width: 100px;
-      position: relative;
-      overflow: hidden;
+      min-width: 90px;
     }
 
     .mood-option:hover {
-      opacity: 0.8;
-      transform: translateY(-5px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-medium);
     }
 
     .mood-option.selected {
-      opacity: 1;
       background: var(--primary-light);
       border-color: var(--primary);
-      transform: scale(1.05);
-      box-shadow: 0 4px 15px rgba(124, 77, 255, 0.2);
-    }
-
-    .mood-option.selected:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+      box-shadow: 0 6px 18px rgba(94, 96, 206, 0.15);
     }
 
     .mood-icon {
-      font-size: 2.5rem;
+      font-size: 2rem;
       margin-bottom: 0.5rem;
-      transition: transform 0.3s ease;
     }
 
-    .mood-option.selected .mood-icon {
-      transform: scale(1.2);
+    /* Tag Suggestions */
+    .tag-suggestions {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
+    .tag-btn {
+      padding: 0.5rem 1rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(94, 96, 206, 0.3);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tag-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Formatting Toolbar */
     .formatting-toolbar {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1rem;
       flex-wrap: wrap;
-      background: var(--light);
-      padding: 0.8rem;
-      border-radius: var(--radius-md);
-      margin: 0 1rem;
-      box-shadow: var(--shadow-light);
-      border: 1px solid rgba(124, 77, 255, 0.1);
+      justify-content: center;
     }
 
     .format-btn {
@@ -251,41 +249,31 @@
       background: var(--primary-light);
       border-color: var(--primary);
       color: var(--primary);
-      transform: translateY(-2px);
     }
 
+    /* Journal Input */
     .journal-input {
-      margin-bottom: 2rem;
-      padding: 0 1rem;
-      position: relative;
+      margin-bottom: 1.5rem;
     }
 
     #userInput {
       width: 100%;
-      min-height: 250px;
-      padding: 1.8rem 2rem;
+      min-height: 200px;
+      padding: 1.5rem;
       border: 1px solid var(--gray-light);
       border-radius: var(--radius-md);
-      font-size: 1.05rem;
-      line-height: 1.8;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
       resize: vertical;
       transition: var(--transition);
-      background-color: white;
       box-shadow: var(--shadow-light);
-      font-family: 'Poppins', sans-serif;
-      background-image: linear-gradient(white, white);
-      background-attachment: local;
-    }
-
-    #userInput.error {
-      border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
     }
 
     #userInput:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light), var(--shadow-medium);
+      box-shadow: 0 0 0 3px var(--primary-light);
     }
 
     #userInput::placeholder {
@@ -294,43 +282,40 @@
       font-style: italic;
     }
 
+    /* Journal Actions */
     .journal-actions {
       display: flex;
       gap: 1rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
-      padding: 0 1rem;
     }
 
     .btn {
-      padding: 1.1rem 2rem;
+      padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
       display: inline-flex;
       align-items: center;
       gap: 0.7rem;
       border: none;
-      box-shadow: var(--shadow-light);
-      flex: 1;
-      min-width: 200px;
+      min-width: 180px;
       justify-content: center;
-      position: relative;
-      overflow: hidden;
+      flex: 1;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .btn-primary:hover {
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(124, 77, 255, 0.4);
+      box-shadow: var(--shadow-dark);
     }
 
     .btn-secondary {
@@ -341,246 +326,35 @@
 
     .btn-secondary:hover {
       background: var(--primary-light);
-      transform: translateY(-3px);
     }
 
     .btn-tertiary {
-      background: linear-gradient(135deg, var(--tertiary), #3CA89F);
+      background: linear-gradient(135deg, var(--secondary), #4DB6AC);
       color: white;
-      box-shadow: 0 4px 15px rgba(77, 182, 172, 0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .btn-tertiary:hover {
-      background: linear-gradient(135deg, #3CA89F, var(--tertiary));
+      background: linear-gradient(135deg, #4DB6AC, var(--secondary));
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(77, 182, 172, 0.4);
+      box-shadow: var(--shadow-dark);
     }
 
-    .ai-response {
-      background: var(--primary-light);
-      border-radius: var(--radius-md);
-      padding: 2rem;
-      margin: 2rem 1rem 0;
-      position: relative;
-      min-height: auto;
-      transition: opacity 0.3s ease;
-      box-shadow: var(--shadow-light);
-      animation: fadeIn 0.8s ease-out;
-      border: 1px solid rgba(124, 77, 255, 0.1);
-    }
-
-    .ai-response:before {
-      content: '\201C';
-      font-family: 'Playfair Display', serif;
-      font-size: 5rem;
-      position: absolute;
-      top: -1rem;
-      left: 1rem;
-      color: rgba(124, 77, 255, 0.1);
-      line-height: 1;
-    }
-
-    .ai-response h3 {
-      color: var(--primary);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .ai-response h3 i {
-      font-size: 1.2rem;
-    }
-
-    #response {
-      position: relative;
-      z-index: 1;
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-
-    .prompt-suggestions {
-      margin: 3rem 1rem 0;
-      padding: 1.5rem;
-      background: var(--tertiary-light);
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(77, 182, 172, 0.1);
-    }
-
-    .prompt-suggestions h3 {
-      color: var(--dark);
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .prompt-suggestions h3 i {
-      color: var(--primary);
-    }
-
-    .prompt-buttons {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
-
-    .prompt-btn {
-      padding: 0.8rem 1.5rem;
-      background: white;
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow-light);
-    }
-
-    .prompt-btn:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: translateY(-2px);
-    }
-
+    /* Journal Entry History */
     .journal-entry-history {
-      margin: 3rem 1rem 1rem;
-      background: var(--primary-light);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-light);
-      border: 1px solid rgba(124, 77, 255, 0.1);
-    }
-
-    .entry-list {
-      list-style: none;
-      margin-top: 1rem;
-    }
-
-    .entry-item {
-      padding: 1.2rem;
       background: white;
       border-radius: var(--radius-md);
-      margin-bottom: 1rem;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
       box-shadow: var(--shadow-light);
-      position: relative;
-      overflow: hidden;
+      border: 1px solid var(--gray-light);
     }
 
-    .entry-item:hover {
-      transform: translateX(5px);
-      box-shadow: var(--shadow-medium);
-    }
-
-    .entry-date {
-      font-size: 0.85rem;
-      color: var(--gray);
-    }
-
-    .entry-tag {
-      background: rgba(124, 77, 255, 0.1);
-      color: var(--primary);
-      padding: 0.3rem 0.7rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
-      display: inline-block;
-    }
-
-    .entry-mood {
-      display: inline-block;
-      font-size: 1.4rem;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-
-    .entry-content-preview {
-      margin-top: 0.5rem;
-      color: var(--dark);
-      font-size: 0.9rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-
-    .typing-indicator {
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--gray);
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: var(--radius-md);
-      width: fit-content;
-      margin: 1rem auto;
-    }
-
-    .typing-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--primary);
-      border-radius: 50%;
-      animation: typingAnimation 1.4s infinite ease-in-out;
-    }
-
-    .typing-dot:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .typing-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes typingAnimation {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-5px); }
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--dark);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      box-shadow: var(--shadow-medium);
+    .journal-entry-history h3 {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      z-index: 1000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-
-    .toast.success {
-      background: var(--success);
-    }
-
-    .toast.error {
-      background: var(--error);
-    }
-
-    .toast.info {
-      background: var(--primary);
+      margin-bottom: 1rem;
     }
 
     .filters {
@@ -612,6 +386,152 @@
       border-color: var(--primary);
     }
 
+    .entry-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .entry-item {
+      padding: 1.2rem;
+      background: white;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--gray-light);
+    }
+
+    .entry-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+      border-color: var(--primary);
+    }
+
+    .entry-date {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .entry-tag {
+      background: rgba(94, 96, 206, 0.1);
+      color: var(--primary);
+      padding: 0.3rem 0.7rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+      display: inline-block;
+    }
+
+    .entry-mood {
+      display: inline-block;
+      font-size: 1.4rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .entry-content-preview {
+      margin-top: 0.5rem;
+      color: var(--dark);
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.8rem 0;
+      z-index: 100;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.9);
+      padding-bottom: calc(0.8rem + var(--safe-area-inset-bottom));
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray);
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: var(--transition);
+      flex: 1;
+      padding: 0.3rem;
+    }
+    
+    .nav-item i {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .nav-item.active {
+      color: var(--primary);
+    }
+    
+    .nav-item:hover {
+      transform: translateY(-4px);
+      color: var(--primary);
+    }
+    
+    .nav-item .nav-label {
+      font-weight: 600;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-dark);
+      z-index: 3000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      max-width: 90%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(37, 39, 77, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: rgba(72, 187, 120, 0.95);
+    }
+    
+    .toast.error {
+      background: rgba(229, 62, 62, 0.95);
+    }
+    
+    .toast.info {
+      background: rgba(94, 96, 206, 0.95);
+    }
+
+    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -625,187 +545,43 @@
       align-items: center;
       backdrop-filter: blur(5px);
     }
-
+    
     .modal-content {
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 2rem;
-      width: 90%;
-      max-width: 700px;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: var(--shadow-dark);
-      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--gray);
-      transition: var(--transition);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .close-modal:hover {
-      color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    .user-info {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: white;
-      padding: 0.7rem 1.2rem;
-      border-radius: 50px;
-      box-shadow: var(--shadow-light);
-      z-index: 1;
-      cursor: pointer;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .user-name {
-      font-weight: 500;
-    }
-
-    .login-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 3000;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .login-form {
       background: white;
       border-radius: var(--radius-md);
       padding: 2.5rem;
       width: 90%;
-      max-width: 450px;
-      text-align: center;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-dark);
+      animation: scaleIn 0.3s ease-out;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
     }
-
-    .login-form h2 {
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--dark);
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.9rem;
-      border: 1px solid var(--gray-light);
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light);
-    }
-
-    .form-actions {
+    
+    .modal-header {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 2rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
     }
-
-    .login-btn {
-      padding: 1rem;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
+    
+    .close-modal {
+      background: none;
       border: none;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 500;
+      font-size: 1.8rem;
+      color: var(--gray);
       cursor: pointer;
       transition: var(--transition);
     }
-
-    .login-btn:hover {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      transform: translateY(-2px);
-    }
-
-    .signup-link {
+    
+    .close-modal:hover {
       color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-      margin-top: 1rem;
-      display: inline-block;
     }
 
-    .tag-suggestions {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      margin: 1rem 0;
-      padding: 0 1rem;
-    }
-
-    .tag-btn {
-      padding: 0.5rem 1rem;
-      background: var(--primary-light);
-      color: var(--primary);
-      border: 1px solid rgba(124, 77, 255, 0.3);
-      border-radius: 50px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .tag-btn:hover {
-      background: var(--primary);
-      color: white;
-      transform: translateY(-2px);
-    }
-
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -816,15 +592,6 @@
       to { transform: scale(1); opacity: 1; }
     }
     
-    @keyframes textGlow {
-      0% { text-shadow: 0 0 5px rgba(124, 77, 255, 0.3); }
-      100% { text-shadow: 0 0 15px rgba(124, 77, 255, 0.5); }
-    }
-
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
-    }
-
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
@@ -835,34 +602,19 @@
       animation: pulse 0.5s ease;
     }
 
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
-      .container {
-        margin: 0;
-        padding: 0;
-      }
-
       .journal-header {
-        padding: 1.5rem 1rem 1rem;
+        padding: 1.5rem 1rem;
       }
-
-      .journal-header h2 {
-        font-size: 1.8rem;
-      }
-
+      
       .journal-actions {
         flex-direction: column;
       }
-
+      
       .btn {
         width: 100%;
         min-width: auto;
-      }
-      
-      .user-info {
-        position: static;
-        margin: 1rem auto;
-        width: fit-content;
-        justify-content: center;
       }
       
       .mood-selector {
@@ -885,7 +637,7 @@
       }
       
       .mood-icon {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
       
       .mood-option {
@@ -902,108 +654,95 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="user-info" id="userInfo">
-      <div class="user-avatar" id="userAvatar">U</div>
-      <span class="user-name" id="userName">User</span>
+  <!-- Mobile Header -->
+  <div class="mobile-header">
+    <div class="app-logo">
+      <i class="fas fa-book-open"></i>
+      <span>Serenity Journal</span>
+    </div>
+    <div class="user-avatar" id="userInitialMobile" title="Profile">
+      <span id="userInitialTextMobile">U</span>
+    </div>
+  </div>
+
+  <!-- Journal Container -->
+  <div class="journal-container">
+    <header class="journal-header">
+      <h2>Serenity Journal</h2>
+      <p>How are you feeling today? This is your safe space to write freely, without judgment 🌿</p>
+    </header>
+
+    <div class="mood-selector">
+      <div class="mood-option" data-mood="very-sad" onclick="selectMood(this)">
+        <i class="mood-icon fas fa-sad-tear"></i>
+        <span>Very Sad</span>
+      </div>
+      <div class="mood-option" data-mood="sad" onclick="selectMood(this)">
+        <i class="mood-icon fas fa-frown"></i>
+        <span>Sad</span>
+      </div>
+      <div class="mood-option" data-mood="neutral" onclick="selectMood(this)">
+        <i class="mood-icon fas fa-meh"></i>
+        <span>Neutral</span>
+      </div>
+      <div class="mood-option" data-mood="happy" onclick="selectMood(this)">
+        <i class="mood-icon fas fa-smile"></i>
+        <span>Happy</span>
+      </div>
+      <div class="mood-option" data-mood="very-happy" onclick="selectMood(this)">
+        <i class="mood-icon fas fa-laugh"></i>
+        <span>Very Happy</span>
+      </div>
     </div>
     
-    <div id="journalContent">
-      <header class="journal-header">
-        <div class="header-decor"></div>
-        <div class="header-decor"></div>
-        <h2>Serenity Journal</h2>
-        <p>How are you feeling today? This is your safe space to write freely, without judgment 🌿</p>
-      </header>
+    <div class="tag-suggestions">
+      <div class="tag-btn" onclick="insertTag('grateful')">#grateful</div>
+      <div class="tag-btn" onclick="insertTag('anxious')">#anxious</div>
+      <div class="tag-btn" onclick="insertTag('reflective')">#reflective</div>
+      <div class="tag-btn" onclick="insertTag('stress')">#stress</div>
+      <div class="tag-btn" onclick="insertTag('family')">#family</div>
+      <div class="tag-btn" onclick="insertTag('work')">#work</div>
+    </div>
 
-      <div class="mood-selector">
-        <div class="mood-option" data-mood="very-sad" onclick="selectMood(this)">
-          <i class="mood-icon fas fa-sad-tear"></i>
-          <span>Very Sad</span>
-        </div>
-        <div class="mood-option" data-mood="sad" onclick="selectMood(this)">
-          <i class="mood-icon fas fa-frown"></i>
-          <span>Sad</span>
-        </div>
-        <div class="mood-option" data-mood="neutral" onclick="selectMood(this)">
-          <i class="mood-icon fas fa-meh"></i>
-          <span>Neutral</span>
-        </div>
-        <div class="mood-option" data-mood="happy" onclick="selectMood(this)">
-          <i class="mood-icon fas fa-smile"></i>
-          <span>Happy</span>
-        </div>
-        <div class="mood-option" data-mood="very-happy" onclick="selectMood(this)">
-          <i class="mood-icon fas fa-laugh"></i>
-          <span>Very Happy</span>
-        </div>
-      </div>
-      
-      <div class="tag-suggestions">
-        <div class="tag-btn" onclick="insertTag('grateful')">#grateful</div>
-        <div class="tag-btn" onclick="insertTag('anxious')">#anxious</div>
-        <div class="tag-btn" onclick="insertTag('reflective')">#reflective</div>
-        <div class="tag-btn" onclick="insertTag('stress')">#stress</div>
-        <div class="tag-btn" onclick="insertTag('family')">#family</div>
-        <div class="tag-btn" onclick="insertTag('work')">#work</div>
-      </div>
+    <div class="formatting-toolbar">
+      <button class="format-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i> Bold</button>
+      <button class="format-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i> Italic</button>
+      <button class="format-btn" onclick="formatText('bullet')"><i class="fas fa-list-ul"></i> List</button>
+      <button class="format-btn" onclick="formatText('header')"><i class="fas fa-heading"></i> Heading</button>
+      <button class="format-btn" onclick="formatText('quote')"><i class="fas fa-quote-right"></i> Quote</button>
+    </div>
 
-      <div class="formatting-toolbar">
-        <button class="format-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i> Bold</button>
-        <button class="format-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i> Italic</button>
-        <button class="format-btn" onclick="formatText('bullet')"><i class="fas fa-list-ul"></i> List</button>
-        <button class="format-btn" onclick="formatText('header')"><i class="fas fa-heading"></i> Heading</button>
-        <button class="format-btn" onclick="formatText('quote')"><i class="fas fa-quote-right"></i> Quote</button>
-      </div>
+    <div class="journal-input">
+      <textarea id="userInput" rows="6" placeholder="Let it all out... your thoughts and feelings are welcome here. This space is just for you."></textarea>
+    </div>
 
-      <div class="journal-input">
-        <textarea id="userInput" rows="6" placeholder="Let it all out... your thoughts and feelings are welcome here. This space is just for you."></textarea>
-      </div>
+    <div class="journal-actions">
+      <button class="btn btn-tertiary" onclick="talkToCoach()">
+        <i class="fas fa-comment-dots"></i> Get Insight
+      </button>
+      <button class="btn btn-primary" onclick="saveJournal()">
+        <i class="fas fa-save"></i> Save Entry
+      </button>
+      <button class="btn btn-secondary" onclick="clearForm()">
+        <i class="fas fa-eraser"></i> Clear
+      </button>
+    </div>
 
-      <div class="journal-actions">
-       
-        </button>
-        <button class="btn btn-tertiary" onclick="saveJournal()">
-          <i class="fas fa-save"></i> Save Entry
-        </button>
-        <button class="btn btn-secondary" onclick="clearForm()">
-          <i class="fas fa-eraser"></i> Clear
-        </button>
-      </div>
-      <div class="journal-entry-history">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-          <h3><i class="fas fa-archive"></i> Journal Archive</h3>
-          <div class="filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="happy">Happy</button>
-            <button class="filter-btn" data-filter="sad">Sad</button>
-            <button class="filter-btn" data-filter="reflective">Reflective</button>
-            <button class="filter-btn" data-filter="grateful">Grateful</button>
-          </div>
+    <div class="journal-entry-history">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h3><i class="fas fa-archive"></i> Journal Archive</h3>
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="happy">Happy</button>
+          <button class="filter-btn" data-filter="sad">Sad</button>
+          <button class="filter-btn" data-filter="reflective">Reflective</button>
+          <button class="filter-btn" data-filter="grateful">Grateful</button>
         </div>
-        <ul class="entry-list" id="entryList"></ul>
       </div>
+      <ul class="entry-list" id="entryList"></ul>
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div class="login-modal" id="loginModal">
-    <div class="login-form">
-      <h2>Welcome to Serenity Journal</h2>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="••••••••">
-      </div>
-      <div class="form-actions">
-        <button class="login-btn" onclick="login()">Sign In</button>
-        <a href="#" class="signup-link" onclick="signUp()">Create an account</a>
-      </div>
-    </div>
-  </div>
 
   <!-- Entry Modal -->
   <div class="modal" id="entryModal">
@@ -1019,372 +758,347 @@
     </div>
   </div>
 
+  <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
-<script>
-  // Supabase Configuration
-  const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-  
-  // Declare supabase client at the top level
-  let supabaseClient = null;
-
-  // User and journal state
-  let currentUser = null;
-  let entries = [];
-  let currentEntryId = null;
-  let selectedMood = null;
-
-  // Mood mapping to emojis
-  const moodEmojis = {
-    'very-sad': '😭',
-    'sad': '😔',
-    'neutral': '😐',
-    'happy': '🙂',
-    'very-happy': '😄'
-  };
-
-  // Initialize the app when DOM is loaded
-  document.addEventListener('DOMContentLoaded', async () => {
+  <script>
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    
     // Initialize Supabase client
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // Check for existing session
-    const { data, error } = await supabaseClient.auth.getSession();
-    
-    if (data.session) {
-      currentUser = data.session.user;
-      updateUserUI();
-      loadEntries();
-    } else {
-      document.getElementById('loginModal').style.display = 'flex';
-    }
-    
-    // Set up filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        renderEntryList();
-      });
-    });
-    
-    // Setup global event listeners
-    document.getElementById('userInfo').addEventListener('click', logout);
-  });
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Update user UI elements
-  function updateUserUI() {
-    if (currentUser) {
-      const avatar = document.getElementById('userAvatar');
-      const name = document.getElementById('userName');
+    // User and journal state
+    let currentUser = null;
+    let entries = [];
+    let currentEntryId = null;
+    let selectedMood = null;
+
+    // Mood mapping to emojis
+    const moodEmojis = {
+      'very-sad': '😭',
+      'sad': '😔',
+      'neutral': '😐',
+      'happy': '🙂',
+      'very-happy': '😄'
+    };
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check for existing session
+      const { data, error } = await supabase.auth.getSession();
       
-      avatar.textContent = currentUser.email.charAt(0).toUpperCase();
-      name.textContent = currentUser.email.split('@')[0];
-      
-      // Show journal content
-      document.getElementById('journalContent').style.display = 'block';
-      document.getElementById('loginModal').style.display = 'none';
-    } else {
-      document.getElementById('journalContent').style.display = 'none';
-      document.getElementById('loginModal').style.display = 'flex';
-    }
-  }
-
-  // Login function
-  async function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    if (!email || !password) {
-      showToast('Please enter both email and password', 'error');
-      return;
-    }
-    
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    if (error) {
-      showToast(error.message, 'error');
-      return;
-    }
-    
-    currentUser = data.user;
-    updateUserUI();
-    showToast('Welcome back!', 'success');
-    loadEntries();
-  }
-
-  // Sign up function
-  async function signUp() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    if (!email || !password) {
-      showToast('Please enter both email and password', 'error');
-      return;
-    }
-    
-    if (password.length < 6) {
-      showToast('Password must be at least 6 characters', 'error');
-      return;
-    }
-    
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password
-    });
-    
-    if (error) {
-      showToast(error.message, 'error');
-      return;
-    }
-    
-    showToast('Account created! Please check your email to verify your account', 'success');
-  }
-
-  // Logout function
-  async function logout() {
-    await supabaseClient.auth.signOut();
-    currentUser = null;
-    entries = [];
-    updateUserUI();
-    showToast('You have been logged out', 'info');
-  }
-
-  // Journal Entry Functions
-  async function saveJournal() {
-    if (!currentUser) {
-      showToast('Please sign in to save your journal', 'error');
-      return;
-    }
-    
-    const entryContent = document.getElementById('userInput').value.trim();
-    if (!entryContent) {
-      document.getElementById('userInput').classList.add('error');
-      showToast('Please write something before saving', 'error');
-      return;
-    }
-
-    try {
-      // Create new entry
-      const entryData = {
-        user_id: currentUser.id,
-        content: entryContent,
-        mood: selectedMood,
-        tags: analyzeContent(entryContent),
-      };
-
-      if (currentEntryId) {
-        // Update existing entry
-        const { error } = await supabaseClient
-          .from('journal_entries')
-          .update({ ...entryData, updated_at: new Date().toISOString() })
-          .eq('id', currentEntryId)
-          .eq('user_id', currentUser.id);
-        
-        if (error) throw error;
-        showToast('Journal entry updated successfully', 'success');
+      if (data.session) {
+        currentUser = data.session.user;
+        updateUserUI();
+        loadEntries();
       } else {
-        // Create new entry
-        const { data, error } = await supabaseClient
-          .from('journal_entries')
-          .insert([{ ...entryData, created_at: new Date().toISOString() }])
-          .select();
-        
-        if (error) throw error;
-        // Add new entry to local state
-        if (data && data.length > 0) {
-          entries.unshift(data[0]);
-        }
-        showToast('Journal entry saved successfully', 'success');
+        showToast('Please sign in to use the journal', 'error');
+        window.location.href = 'login.html';
+      }
+      
+      // Set up filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          renderEntryList();
+        });
+      });
+      
+      // Update user avatar initial
+      if (currentUser) {
+        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+        document.getElementById('userInitialTextMobile').textContent = initial;
+      }
+    });
+
+    // Update user UI elements
+    function updateUserUI() {
+      if (currentUser) {
+        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+        document.getElementById('userInitialTextMobile').textContent = initial;
+      }
+    }
+
+    // Journal Entry Functions
+    async function saveJournal() {
+      if (!currentUser) {
+        showToast('Please sign in to save your journal', 'error');
+        return;
+      }
+      
+      const entryContent = document.getElementById('userInput').value.trim();
+      if (!entryContent) {
+        document.getElementById('userInput').classList.add('error');
+        showToast('Please write something before saving', 'error');
+        return;
       }
 
-      // Reset UI
-      document.getElementById('userInput').classList.remove('error');
+      try {
+        // Create new entry
+        const entryData = {
+          user_id: currentUser.id,
+          content: entryContent,
+          mood: selectedMood,
+          tags: analyzeContent(entryContent),
+        };
+
+        if (currentEntryId) {
+          // Update existing entry
+          const { error } = await supabase
+            .from('journal_entries')
+            .update({ ...entryData, updated_at: new Date().toISOString() })
+            .eq('id', currentEntryId)
+            .eq('user_id', currentUser.id);
+          
+          if (error) throw error;
+          showToast('Journal entry updated successfully', 'success');
+        } else {
+          // Create new entry
+          const { data, error } = await supabase
+            .from('journal_entries')
+            .insert([{ ...entryData, created_at: new Date().toISOString() }])
+            .select();
+          
+          if (error) throw error;
+          // Add new entry to local state
+          if (data && data.length > 0) {
+            entries.unshift(data[0]);
+          }
+          showToast('Journal entry saved successfully', 'success');
+        }
+
+        // Reset UI
+        document.getElementById('userInput').classList.remove('error');
+        document.getElementById('userInput').value = '';
+        selectedMood = null;
+        currentEntryId = null;
+        document.querySelectorAll('.mood-option.selected').forEach(el => {
+          el.classList.remove('selected');
+        });
+        
+        // Update entry list
+        renderEntryList();
+        
+      } catch (error) {
+        console.error('Error saving entry:', error);
+        showToast('Error saving entry: ' + error.message, 'error');
+      }
+    }
+
+    // Clear form function
+    function clearForm() {
       document.getElementById('userInput').value = '';
       selectedMood = null;
       currentEntryId = null;
       document.querySelectorAll('.mood-option.selected').forEach(el => {
         el.classList.remove('selected');
       });
-      
-      // Update entry list
-      renderEntryList();
-      
-    } catch (error) {
-      console.error('Error saving entry:', error);
-      showToast('Error saving entry: ' + error.message, 'error');
+      showToast('Form cleared', 'info');
     }
-  }
 
-  // Clear form function
-  function clearForm() {
-    document.getElementById('userInput').value = '';
-    selectedMood = null;
-    currentEntryId = null;
-    document.querySelectorAll('.mood-option.selected').forEach(el => {
-      el.classList.remove('selected');
-    });
-    showToast('Form cleared', 'info');
-  }
+    async function deleteEntry() {
+      if (!currentUser || !currentEntryId) return;
+      
+      if (confirm('Are you sure you want to delete this entry?')) {
+        try {
+          const { error } = await supabase
+            .from('journal_entries')
+            .delete()
+            .eq('id', currentEntryId)
+            .eq('user_id', currentUser.id);
+          
+          if (error) throw error;
+          
+          // Remove from local entries
+          entries = entries.filter(entry => entry.id !== currentEntryId);
+          
+          showToast('Entry deleted', 'success');
+          renderEntryList();
+          closeModal();
+        } catch (error) {
+          console.error('Error deleting entry:', error);
+          showToast('Error deleting entry: ' + error.message, 'error');
+        }
+      }
+    }
 
-  async function deleteEntry() {
-    if (!currentUser || !currentEntryId) return;
+    // UI Functions
+    function formatText(type) {
+      const textarea = document.getElementById('userInput');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      let newText = '';
+      let cursorOffset = 0;
+
+      switch(type) {
+        case 'bold':
+          newText = `**${selectedText}**`;
+          cursorOffset = 2;
+          break;
+        case 'italic':
+          newText = `_${selectedText}_`;
+          cursorOffset = 1;
+          break;
+        case 'header':
+          newText = `## ${selectedText}`;
+          cursorOffset = 3;
+          break;
+        case 'quote':
+          newText = `> ${selectedText}`;
+          cursorOffset = 2;
+          break;
+        case 'bullet':
+          if (selectedText) {
+            newText = `• ${selectedText.replace(/\n/g, '\n• ')}`;
+            cursorOffset = 2;
+          } else {
+            newText = '• ';
+            cursorOffset = 2;
+          }
+          break;
+      }
+
+      textarea.value = textarea.value.substring(0, start) + 
+                     newText + 
+                     textarea.value.substring(end);
+      textarea.focus();
+      
+      // Restore cursor position with offset
+      textarea.setSelectionRange(start + cursorOffset, start + cursorOffset + (selectedText ? selectedText.length : 0));
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function selectMood(element) {
+      document.querySelectorAll('.mood-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      element.classList.add('selected');
+      selectedMood = element.getAttribute('data-mood');
+      element.classList.add('pulse');
+      setTimeout(() => element.classList.remove('pulse'), 500);
+    }
     
-    if (confirm('Are you sure you want to delete this entry?')) {
+    function insertTag(tag) {
+      const textarea = document.getElementById('userInput');
+      const currentText = textarea.value;
+      textarea.value = currentText + (currentText.endsWith(' ') ? '' : ' ') + `#${tag} `;
+      textarea.focus();
+      
+      // Visual feedback
+      const tagBtn = Array.from(document.querySelectorAll('.tag-btn')).find(
+        btn => btn.textContent.includes(tag)
+      );
+      if (tagBtn) {
+        tagBtn.classList.add('pulse');
+        setTimeout(() => tagBtn.classList.remove('pulse'), 500);
+      }
+    }
+
+    // Sanitize markdown output
+    function safeMarkdown(text) {
+      return DOMPurify.sanitize(marked.parse(text));
+    }
+
+    async function loadEntries() {
+      if (!currentUser) {
+        showToast('Please sign in to view your journal history', 'error');
+        return;
+      }
+      
       try {
-        const { error } = await supabaseClient
+        const { data, error } = await supabase
           .from('journal_entries')
-          .delete()
-          .eq('id', currentEntryId)
-          .eq('user_id', currentUser.id);
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
         
         if (error) throw error;
         
-        // Remove from local entries
-        entries = entries.filter(entry => entry.id !== currentEntryId);
-        
-        showToast('Entry deleted', 'success');
+        entries = data || [];
         renderEntryList();
-        closeModal();
       } catch (error) {
-        console.error('Error deleting entry:', error);
-        showToast('Error deleting entry: ' + error.message, 'error');
+        console.error('Error loading entries:', error);
+        showToast('Error loading entries: ' + error.message, 'error');
       }
     }
-  }
 
-  // UI Functions
-  function formatText(type) {
-    const textarea = document.getElementById('userInput');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-    let newText = '';
-    let cursorOffset = 0;
-
-    switch(type) {
-      case 'bold':
-        newText = `**${selectedText}**`;
-        cursorOffset = 2;
-        break;
-      case 'italic':
-        newText = `_${selectedText}_`;
-        cursorOffset = 1;
-        break;
-      case 'header':
-        newText = `## ${selectedText}`;
-        cursorOffset = 3;
-        break;
-      case 'quote':
-        newText = `> ${selectedText}`;
-        cursorOffset = 2;
-        break;
-      case 'bullet':
-        if (selectedText) {
-          newText = `• ${selectedText.replace(/\n/g, '\n• ')}`;
-          cursorOffset = 2;
-        } else {
-          newText = '• ';
-          cursorOffset = 2;
-        }
-        break;
-    }
-
-    textarea.value = textarea.value.substring(0, start) + 
-                   newText + 
-                   textarea.value.substring(end);
-    textarea.focus();
-    
-    // Restore cursor position with offset
-    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset + (selectedText ? selectedText.length : 0));
-  }
-
-  function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast ${type} show`;
-
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
-  }
-
-  function selectMood(element) {
-    document.querySelectorAll('.mood-option').forEach(opt => {
-      opt.classList.remove('selected');
-    });
-    
-    element.classList.add('selected');
-    selectedMood = element.getAttribute('data-mood');
-    element.classList.add('pulse');
-    setTimeout(() => element.classList.remove('pulse'), 500);
-  }
-  
-  function insertTag(tag) {
-    const textarea = document.getElementById('userInput');
-    const currentText = textarea.value;
-    textarea.value = currentText + (currentText.endsWith(' ') ? '' : ' ') + `#${tag} `;
-    textarea.focus();
-    
-    // Visual feedback
-    const tagBtn = Array.from(document.querySelectorAll('.tag-btn')).find(
-      btn => btn.textContent.includes(tag)
-    );
-    if (tagBtn) {
-      tagBtn.classList.add('pulse');
-      setTimeout(() => tagBtn.classList.remove('pulse'), 500);
-    }
-  }
-
-  // Sanitize markdown output
-  function safeMarkdown(text) {
-    return DOMPurify.sanitize(marked.parse(text));
-  }
-
-  async function loadEntries() {
-    if (!currentUser) {
-      showToast('Please sign in to view your journal history', 'error');
-      return;
-    }
-    
-    try {
-      const { data, error } = await supabaseClient
-        .from('journal_entries')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
+    function renderEntryList() {
+      const entryList = document.getElementById('entryList');
+      const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
       
-      if (error) throw error;
+      // Filter entries
+      let filteredEntries = entries;
+      if (filter !== 'all') {
+        filteredEntries = entries.filter(entry => 
+          entry.tags?.includes(filter) || 
+          (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
+          (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
+        );
+      }
       
-      entries = data || [];
-      renderEntryList();
-    } catch (error) {
-      console.error('Error loading entries:', error);
-      showToast('Error loading entries: ' + error.message, 'error');
-    }
-  }
+      entryList.innerHTML = filteredEntries
+        .slice(0, 5) // Only show last 5 entries by default
+        .map(entry => {
+          // Format date for display
+          const date = new Date(entry.created_at);
+          const formattedDate = date.toLocaleDateString('en-US', {
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          return `
+          <li class="entry-item" data-id="${entry.id}">
+            <div>
+              <span class="entry-date">${formattedDate}</span>
+              ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
+              ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
+              <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </li>
+        `})
+        .join('');
 
-  function renderEntryList() {
-    const entryList = document.getElementById('entryList');
-    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-    
-    // Filter entries
-    let filteredEntries = entries;
-    if (filter !== 'all') {
-      filteredEntries = entries.filter(entry => 
-        entry.tags?.includes(filter) || 
-        (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
-        (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
-      );
+      // Add event listeners to new items
+      document.querySelectorAll('.entry-item').forEach(item => {
+        const id = item.getAttribute('data-id');
+        item.addEventListener('click', () => openEntryModal(id));
+      });
+
+      // Show more button if there are more entries
+      if (filteredEntries.length > 5) {
+        const showAllItem = document.createElement('li');
+        showAllItem.className = 'entry-item';
+        showAllItem.innerHTML = `
+          <div>Show all ${filteredEntries.length} entries</div>
+          <i class="fas fa-chevron-down"></i>
+        `;
+        showAllItem.addEventListener('click', showAllEntries);
+        entryList.appendChild(showAllItem);
+      }
     }
-    
-    entryList.innerHTML = filteredEntries
-      .slice(0, 5) // Only show last 5 entries by default
-      .map(entry => {
+
+    function openEntryModal(id) {
+      const entry = entries.find(e => e.id == id);
+      if (entry) {
         // Format date for display
         const date = new Date(entry.created_at);
         const formattedDate = date.toLocaleDateString('en-US', {
@@ -1396,253 +1110,127 @@
           minute: '2-digit'
         });
         
-        return `
-        <li class="entry-item" data-id="${entry.id}">
-          <div>
-            <span class="entry-date">${formattedDate}</span>
-            ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
-            ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
-            <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
-          </div>
-          <i class="fas fa-chevron-right"></i>
-        </li>
-      `})
-      .join('');
-
-    // Add event listeners to new items
-    document.querySelectorAll('.entry-item').forEach(item => {
-      const id = item.getAttribute('data-id');
-      item.addEventListener('click', () => openEntryModal(id));
-    });
-
-    // Show more button if there are more entries
-    if (filteredEntries.length > 5) {
-      const showAllItem = document.createElement('li');
-      showAllItem.className = 'entry-item';
-      showAllItem.innerHTML = `
-        <div>Show all ${filteredEntries.length} entries</div>
-        <i class="fas fa-chevron-down"></i>
-      `;
-      showAllItem.addEventListener('click', showAllEntries);
-      entryList.appendChild(showAllItem);
+        document.getElementById('modalTitle').textContent = "Journal Entry";
+        document.getElementById('modalDate').textContent = formattedDate;
+        document.getElementById('modalContent').innerHTML = safeMarkdown(entry.content);
+        
+        if (entry.mood) {
+          document.getElementById('modalTitle').innerHTML += ` <span style="font-size: 1.5rem;">${moodEmojis[entry.mood]}</span>`;
+        }
+        
+        document.getElementById('entryModal').style.display = 'flex';
+        currentEntryId = entry.id;
+      }
     }
-  }
 
-  function openEntryModal(id) {
-    const entry = entries.find(e => e.id == id);
-    if (entry) {
-      // Format date for display
-      const date = new Date(entry.created_at);
-      const formattedDate = date.toLocaleDateString('en-US', {
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    function closeModal() {
+      document.getElementById('entryModal').style.display = 'none';
+      currentEntryId = null;
+    }
+
+    function editEntry() {
+      const entry = entries.find(e => e.id == currentEntryId);
+      if (entry) {
+        document.getElementById('userInput').value = entry.content;
+        if (entry.mood) {
+          document.querySelector(`.mood-option[data-mood="${entry.mood}"]`).classList.add('selected');
+          selectedMood = entry.mood;
+        }
+        document.getElementById('userInput').focus();
+        closeModal();
+      }
+    }
+
+    function analyzeContent(text) {
+      const tags = [];
+      const words = text.toLowerCase().split(/\s+/);
+      
+      // Emotion detection
+      const emotions = ['happy', 'sad', 'angry', 'confused', 'hopeful', 'anxious'];
+      emotions.forEach(emotion => {
+        if (text.toLowerCase().includes(emotion)) tags.push(emotion);
       });
       
-      document.getElementById('modalTitle').textContent = "Journal Entry";
-      document.getElementById('modalDate').textContent = formattedDate;
-      document.getElementById('modalContent').innerHTML = safeMarkdown(entry.content);
+      // Content themes
+      const themes = {
+        'grateful': ['thank', 'grateful', 'appreciate', 'blessed'],
+        'reflective': ['learn', 'realize', 'understand', 'reflect'],
+        'relationship': ['friend', 'partner', 'family', 'relationship', 'love'],
+        'work': ['work', 'job', 'career', 'project', 'colleague'],
+        'health': ['health', 'body', 'exercise', 'sleep', 'diet', 'pain']
+      };
       
-      if (entry.mood) {
-        document.getElementById('modalTitle').innerHTML += ` <span style="font-size: 1.5rem;">${moodEmojis[entry.mood]}</span>`;
-      }
-      
-      document.getElementById('entryModal').style.display = 'flex';
-      currentEntryId = entry.id;
-    }
-  }
-
-  function closeModal() {
-    document.getElementById('entryModal').style.display = 'none';
-    currentEntryId = null;
-  }
-
-  function editEntry() {
-    const entry = entries.find(e => e.id == currentEntryId);
-    if (entry) {
-      document.getElementById('userInput').value = entry.content;
-      if (entry.mood) {
-        document.querySelector(`.mood-option[data-mood="${entry.mood}"]`).classList.add('selected');
-        selectedMood = entry.mood;
-      }
-      document.getElementById('userInput').focus();
-      closeModal();
-    }
-  }
-
-  function insertPrompt(prompt) {
-    const textarea = document.getElementById('userInput');
-    textarea.value = prompt;
-    textarea.focus();
-    showToast('Prompt inserted');
-  }
-
-  function showTypingIndicator() {
-    document.getElementById('typingIndicator').style.display = 'flex';
-    document.getElementById('response').innerHTML = '';
-  }
-
-  function hideTypingIndicator() {
-    document.getElementById('typingIndicator').style.display = 'none';
-  }
-
-  function analyzeContent(text) {
-    const tags = [];
-    const words = text.toLowerCase().split(/\s+/);
-    
-    // Emotion detection
-    const emotions = ['happy', 'sad', 'angry', 'confused', 'hopeful', 'anxious'];
-    emotions.forEach(emotion => {
-      if (text.toLowerCase().includes(emotion)) tags.push(emotion);
-    });
-    
-    // Content themes
-    const themes = {
-      'grateful': ['thank', 'grateful', 'appreciate', 'blessed'],
-      'reflective': ['learn', 'realize', 'understand', 'reflect'],
-      'relationship': ['friend', 'partner', 'family', 'relationship', 'love'],
-      'work': ['work', 'job', 'career', 'project', 'colleague'],
-      'health': ['health', 'body', 'exercise', 'sleep', 'diet', 'pain']
-    };
-    
-    for (const [theme, keywords] of Object.entries(themes)) {
-      if (keywords.some(keyword => text.toLowerCase().includes(keyword))) {
-        tags.push(theme);
-      }
-    }
-    
-    return [...new Set(tags)]; // Remove duplicates
-  }
-
-  // FIXED FUNCTION: Using fetch with proper headers to resolve CORS issue
-  async function talkToCoach() {
-    const userInput = document.getElementById('userInput').value.trim();
-    if (!userInput) {
-      document.getElementById('userInput').classList.add('error');
-      showToast('Please share your thoughts first', 'error');
-      return;
-    }
-
-    showTypingIndicator();
-    
-    try {
-      // Create a controller for timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
-      
-      // Use direct fetch with proper headers to avoid CORS issues
-      const response = await fetch(
-        `${SUPABASE_URL}/functions/v1/journal-coach`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'apikey': SUPABASE_KEY
-          },
-          body: JSON.stringify({ entry: userInput }),
-          signal: controller.signal
+      for (const [theme, keywords] of Object.entries(themes)) {
+        if (keywords.some(keyword => text.toLowerCase().includes(keyword))) {
+          tags.push(theme);
         }
-      );
+      }
+      
+      return [...new Set(tags)]; // Remove duplicates
+    }
 
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Service error: ${errorData.error || response.statusText}`);
+    async function talkToCoach() {
+      const userInput = document.getElementById('userInput').value.trim();
+      if (!userInput) {
+        document.getElementById('userInput').classList.add('error');
+        showToast('Please share your thoughts first', 'error');
+        return;
       }
 
-      const data = await response.json();
-
-      // Display AI response
-      document.getElementById('response').innerHTML = safeMarkdown(data?.response || "I'm here to listen. Would you like to share more?");
-      hideTypingIndicator();
+      showToast('AI insights feature coming soon!', 'info');
       
-      // Auto-save if new entry
-      if (!currentEntryId) {
-        await saveJournal();
+      // In a real implementation, this would call your AI API
+      // For now, we'll just simulate a response
+      setTimeout(() => {
+        showToast('Feature coming in next update!', 'info');
+      }, 1500);
+    }
+
+    // Helper function to show all entries
+    function showAllEntries() {
+      const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+      let filteredEntries = entries;
+      
+      if (filter !== 'all') {
+        filteredEntries = entries.filter(entry => 
+          entry.tags?.includes(filter) || 
+          (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
+          (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
+        );
       }
-    } catch (error) {
-      console.error('AI Companion Error:', error);
-      hideTypingIndicator();
       
-      document.getElementById('response').innerHTML = `
-        <p>I'm having trouble connecting right now.</p>
-        <p><small>${error.message.includes('timeout') ? 'Request timed out' : 'Service unavailable'}</small></p>
-        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="talkToCoach()">
-          <i class="fas fa-redo"></i> Try Again
-        </button>
-      `;
+      const entryList = document.getElementById('entryList');
+      entryList.innerHTML = filteredEntries
+        .map(entry => {
+          const date = new Date(entry.created_at);
+          const formattedDate = date.toLocaleDateString('en-US', {
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          return `
+          <li class="entry-item" data-id="${entry.id}">
+            <div>
+              <span class="entry-date">${formattedDate}</span>
+              ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
+              ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
+              <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </li>
+        `})
+        .join('');
       
-      showToast('Connection issue. Please try again.', 'error');
+      // Add event listeners to new items
+      document.querySelectorAll('.entry-item').forEach(item => {
+        const id = item.getAttribute('data-id');
+        item.addEventListener('click', () => openEntryModal(id));
+      });
     }
-  }
-
-  // Helper function to show all entries
-  function showAllEntries() {
-    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-    let filteredEntries = entries;
-    
-    if (filter !== 'all') {
-      filteredEntries = entries.filter(entry => 
-        entry.tags?.includes(filter) || 
-        (filter === 'happy' && (entry.mood === 'happy' || entry.mood === 'very-happy')) ||
-        (filter === 'sad' && (entry.mood === 'sad' || entry.mood === 'very-sad'))
-      );
-    }
-    
-    const entryList = document.getElementById('entryList');
-    entryList.innerHTML = filteredEntries
-      .map(entry => {
-        const date = new Date(entry.created_at);
-        const formattedDate = date.toLocaleDateString('en-US', {
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        
-        return `
-        <li class="entry-item" data-id="${entry.id}">
-          <div>
-            <span class="entry-date">${formattedDate}</span>
-            ${entry.tags?.map(t => `<span class="entry-tag">#${t}</span>`).join('') || ''}
-            ${entry.mood ? `<span class="entry-mood">${moodEmojis[entry.mood]}</span>` : ''}
-            <div class="entry-content-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
-          </div>
-          <i class="fas fa-chevron-right"></i>
-        </li>
-      `})
-      .join('');
-    
-    // Add event listeners to new items
-    document.querySelectorAll('.entry-item').forEach(item => {
-      const id = item.getAttribute('data-id');
-      item.addEventListener('click', () => openEntryModal(id));
-    });
-  }
-
-  // Make functions globally available
-  window.login = login;
-  window.signUp = signUp;
-  window.logout = logout;
-  window.saveJournal = saveJournal;
-  window.clearForm = clearForm;
-  window.talkToCoach = talkToCoach;
-  window.formatText = formatText;
-  window.selectMood = selectMood;
-  window.insertTag = insertTag;
-  window.insertPrompt = insertPrompt;
-  window.openEntryModal = openEntryModal;
-  window.closeModal = closeModal;
-  window.editEntry = editEntry;
-  window.deleteEntry = deleteEntry;
-  window.showAllEntries = showAllEntries;
-</script>
+  </script>
 </body>
 </html>
