@@ -583,7 +583,7 @@
     const supabaseUrl = 'https://mindtdfasfsrfrmwgdn.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmR0ZGZhc2ZzcmZybXdnZG4iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY5NjY5MjQ1OSwiZXhwIjoyMDEyMjY4NDU5fQ.abcdefghijklmnopqrstuvwxyz123456'; // REPLACE WITH YOUR ACTUAL KEY
     
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey, {
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
