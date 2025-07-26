@@ -889,659 +889,657 @@
 
 
   <script>
-    // Initialize Supabase
-   
-    // Updated Supabase Configuration
-    const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // State variables
-    let currentUser = null;
-    let meditationSessions = 0;
-    let streak = 0;
-    let currentAudio = null;
-    let currentTrack = null;
-    let isPlaying = false;
-    let isLooping = false;
-    let currentFeatured = null;
-    
-    // Meditation library data with real audio tracks
-    const meditationLibrary = {
-      guided: [
-        {
-          id: 'sleep',
-          title: 'Deep Sleep Meditation',
-          category: 'sleep',
-          description: 'Fall asleep faster with this calming guided meditation designed to quiet your mind.',
-          duration: '10 min',
-          level: 'Easy',
-          color: '#64DFDF',
-          tags: ['Sleep', 'Beginners'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
-        },
-        {
-          id: 'anxiety',
-          title: 'Anxiety Relief Session',
-          category: 'anxiety',
-          description: 'Release tension and calm your nervous system with this powerful anxiety-reducing practice.',
-          duration: '15 min',
-          level: 'Medium',
-          color: '#5E60CE',
-          tags: ['Anxiety', 'Stress Relief'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/11/23/audio_0c4a5a2e3b.mp3?filename=calm-meditation-117266.mp3'
-        },
-        {
-          id: 'self-love',
-          title: 'Loving-Kindness Practice',
-          category: 'self-love',
-          description: 'Cultivate compassion for yourself and others with this heart-opening meditation.',
-          duration: '12 min',
-          level: 'Easy',
-          color: '#FF6B6B',
-          tags: ['Self-Love', 'Compassion'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2021/11/04/audio_31e34b5b4d.mp3?filename=meditation-zen-ambient-119721.mp3'
-        },
-        {
-          id: 'focus',
-          title: 'Mindful Focus Session',
-          category: 'focus',
-          description: 'Sharpen your concentration and improve mental clarity with this focused attention practice.',
-          duration: '10 min',
-          level: 'Medium',
-          color: '#48BB78',
-          tags: ['Focus', 'Productivity'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/02/15/audio_5f1f1b2d1c.mp3?filename=focus-meditation-107392.mp3'
-        },
-        {
-          id: 'morning',
-          title: 'Morning Energy Boost',
-          category: 'energy',
-          description: 'Start your day with intention and vitality using this energizing morning meditation.',
-          duration: '12 min',
-          level: 'Easy',
-          color: '#F6AD55',
-          tags: ['Morning', 'Energy'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/12/07/audio_15b2d7e5e1.mp3?filename=morning-meditation-121727.mp3'
-        },
-        {
-          id: 'advanced',
-          title: 'Deep Mindfulness',
-          category: 'mindfulness',
-          description: 'Dive deep into present-moment awareness with this advanced mindfulness practice.',
-          duration: '30 min',
-          level: 'Advanced',
-          color: '#4A4DC7',
-          tags: ['Advanced', 'Mindfulness'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2021/10/30/audio_1a6b8a0f7e.mp3?filename=deep-meditation-119128.mp3'
-        }
-      ],
-      breathing: [
-        {
-          id: 'breath1',
-          title: '4-7-8 Breathing',
-          category: 'calming',
-          description: 'Reduce anxiety and promote relaxation with this simple but powerful breathing technique.',
-          duration: '5 min',
-          level: 'Easy',
-          color: '#E0E1FF',
-          tags: ['Calming'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/09/10/audio_1b0f0a0f0e.mp3?filename=calm-breathing-112194.mp3'
-        },
-        {
-          id: 'breath2',
-          title: 'Box Breathing',
-          category: 'energy',
-          description: 'Improve focus and balance your nervous system with this tactical breathing method.',
-          duration: '7 min',
-          level: 'Medium',
-          color: '#64DFDF',
-          tags: ['Energy'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/10/22/audio_1c1d1e1f20.mp3?filename=box-breathing-114657.mp3'
-        },
-        {
-          id: 'breath3',
-          title: 'Deep Sleep Breath',
-          category: 'sleep',
-          description: 'Prepare your body for restful sleep with this evening breathing practice.',
-          duration: '10 min',
-          level: 'Easy',
-          color: '#FFD8D8',
-          tags: ['Sleep'],
-          audioSrc: 'https://cdn.pixabay.com/download/audio/2022/08/15/audio_1a2b3c4d5e.mp3?filename=sleep-breathing-110543.mp3'
-        }
-      ]
-    };
+ // Initialize Supabase
+const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Helper function to safely get DOM elements
-    function getElement(id) {
-      const el = document.getElementById(id);
-      if (!el) console.warn(`Element with ID ${id} not found`);
-      return el;
+// State variables
+let currentUser = null;
+let meditationSessions = 0;
+let streak = 0;
+let currentAudio = null;
+let currentTrack = null;
+let isPlaying = false;
+let isLooping = false;
+let currentFeatured = null;
+
+// Meditation library data with real audio tracks
+const meditationLibrary = {
+  guided: [
+    {
+      id: 'sleep',
+      title: 'Deep Sleep Meditation',
+      category: 'sleep',
+      description: 'Fall asleep faster with this calming guided meditation designed to quiet your mind.',
+      duration: '10 min',
+      level: 'Easy',
+      color: '#64DFDF',
+      tags: ['Sleep', 'Beginners'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2023/06/19/audio_0a8b4b4d08.mp3?filename=meditation-ambient-11157.mp3'
+    },
+    {
+      id: 'anxiety',
+      title: 'Anxiety Relief Session',
+      category: 'anxiety',
+      description: 'Release tension and calm your nervous system with this powerful anxiety-reducing practice.',
+      duration: '15 min',
+      level: 'Medium',
+      color: '#5E60CE',
+      tags: ['Anxiety', 'Stress Relief'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/11/23/audio_0c4a5a2e3b.mp3?filename=calm-meditation-117266.mp3'
+    },
+    {
+      id: 'self-love',
+      title: 'Loving-Kindness Practice',
+      category: 'self-love',
+      description: 'Cultivate compassion for yourself and others with this heart-opening meditation.',
+      duration: '12 min',
+      level: 'Easy',
+      color: '#FF6B6B',
+      tags: ['Self-Love', 'Compassion'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2021/11/04/audio_31e34b5b4d.mp3?filename=meditation-zen-ambient-119721.mp3'
+    },
+    {
+      id: 'focus',
+      title: 'Mindful Focus Session',
+      category: 'focus',
+      description: 'Sharpen your concentration and improve mental clarity with this focused attention practice.',
+      duration: '10 min',
+      level: 'Medium',
+      color: '#48BB78',
+      tags: ['Focus', 'Productivity'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/02/15/audio_5f1f1b2d1c.mp3?filename=focus-meditation-107392.mp3'
+    },
+    {
+      id: 'morning',
+      title: 'Morning Energy Boost',
+      category: 'energy',
+      description: 'Start your day with intention and vitality using this energizing morning meditation.',
+      duration: '12 min',
+      level: 'Easy',
+      color: '#F6AD55',
+      tags: ['Morning', 'Energy'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/12/07/audio_15b2d7e5e1.mp3?filename=morning-meditation-121727.mp3'
+    },
+    {
+      id: 'advanced',
+      title: 'Deep Mindfulness',
+      category: 'mindfulness',
+      description: 'Dive deep into present-moment awareness with this advanced mindfulness practice.',
+      duration: '30 min',
+      level: 'Advanced',
+      color: '#4A4DC7',
+      tags: ['Advanced', 'Mindfulness'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2021/10/30/audio_1a6b8a0f7e.mp3?filename=deep-meditation-119128.mp3'
     }
-
-    // Show toast notification
-    function showToast(message, type = 'success') {
-      const toast = getElement('toast');
-      if (!toast) return;
-      
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
+  ],
+  breathing: [
+    {
+      id: 'breath1',
+      title: '4-7-8 Breathing',
+      category: 'calming',
+      description: 'Reduce anxiety and promote relaxation with this simple but powerful breathing technique.',
+      duration: '5 min',
+      level: 'Easy',
+      color: '#E0E1FF',
+      tags: ['Calming'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/09/10/audio_1b0f0a0f0e.mp3?filename=calm-breathing-112194.mp3'
+    },
+    {
+      id: 'breath2',
+      title: 'Box Breathing',
+      category: 'energy',
+      description: 'Improve focus and balance your nervous system with this tactical breathing method.',
+      duration: '7 min',
+      level: 'Medium',
+      color: '#64DFDF',
+      tags: ['Energy'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/10/22/audio_1c1d1e1f20.mp3?filename=box-breathing-114657.mp3'
+    },
+    {
+      id: 'breath3',
+      title: 'Deep Sleep Breath',
+      category: 'sleep',
+      description: 'Prepare your body for restful sleep with this evening breathing practice.',
+      duration: '10 min',
+      level: 'Easy',
+      color: '#FFD8D8',
+      tags: ['Sleep'],
+      audioSrc: 'https://cdn.pixabay.com/download/audio/2022/08/15/audio_1a2b3c4d5e.mp3?filename=sleep-breathing-110543.mp3'
     }
+  ]
+};
 
-    // Check user session
-    async function checkSession() {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        
-        if (data.session) {
-          currentUser = data.session.user;
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error('Session check failed:', error.message);
-        return false;
+// Helper function to safely get DOM elements
+function getElement(id) {
+  const el = document.getElementById(id);
+  if (!el) console.warn(`Element with ID ${id} not found`);
+  return el;
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+  const toast = getElement('toast');
+  if (!toast) return;
+  
+  toast.textContent = message;
+  toast.className = `toast ${type} show`;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Check user session
+async function checkSession() {
+  try {
+    const { data, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    
+    if (data.session) {
+      currentUser = data.session.user;
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Session check failed:', error.message);
+    return false;
+  }
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    const isAuthenticated = await checkSession();
+    const dashboard = getElement('dashboard');
+    const loginPrompt = getElement('loginPrompt');
+    
+    if (isAuthenticated) {
+      // Show dashboard for logged-in users
+      if (loginPrompt) loginPrompt.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'block';
+      
+      // Load user data
+      await loadUserData();
+      
+      // Initialize UI
+      setupEventListeners();
+      renderMeditationGrid();
+      renderBreathingGrid();
+      
+      // Initialize audio player
+      initAudioPlayer();
+      
+      // Set default featured meditation
+      setFeaturedMeditation(meditationLibrary.guided[0]);
+      
+      // Create floating elements
+      createFloatingElements();
+    } else {
+      // Show login prompt for unauthenticated users
+      if (loginPrompt) loginPrompt.style.display = 'block';
+      if (dashboard) dashboard.style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Initialization failed:', error);
+    showToast("Failed to initialize app", "error");
+  }
+});
+
+// Load user data from Supabase
+async function loadUserData() {
+  if (!currentUser) return;
+  
+  try {
+    // Update UI with user info
+    const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
+    const userInitial = getElement('userInitial');
+    const userAvatar = getElement('userAvatar');
+    const userGreeting = getElement('userGreeting');
+    
+    if (userInitial) userInitial.textContent = initial;
+    if (userAvatar) userAvatar.textContent = initial;
+    
+    // Set greeting based on time of day
+    const hour = new Date().getHours();
+    let greeting = "Welcome back";
+    
+    if (hour < 12) {
+      greeting = "Good morning";
+    } else if (hour < 18) {
+      greeting = "Good afternoon";
+    } else {
+      greeting = "Good evening";
+    }
+    
+    const username = currentUser.email.split('@')[0];
+    if (userGreeting) userGreeting.textContent = `${greeting}, ${username}`;
+    
+    // Load user meditation stats
+    const { data, error } = await supabase
+      .from('user_stats')
+      .select('sessions, streak')
+      .eq('user_id', currentUser.id)
+      .single();
+    
+    if (error) throw error;
+    
+    meditationSessions = data?.sessions || 0;
+    streak = data?.streak || 0;
+    
+    const sessionCount = getElement('sessionCount');
+    const streakCount = getElement('streakCount');
+    
+    if (sessionCount) sessionCount.textContent = meditationSessions;
+    if (streakCount) streakCount.textContent = `${streak} Day Streak`;
+    
+  } catch (error) {
+    console.error('Error loading user data:', error);
+    showToast("Error loading user data", "error");
+  }
+}
+
+// Set featured meditation
+function setFeaturedMeditation(meditation) {
+  currentTrack = meditation;
+  
+  const featuredTitle = getElement('featuredTitle');
+  const featuredDescription = getElement('featuredDescription');
+  const featuredDuration = getElement('featuredDuration');
+  const featuredDurationStat = getElement('featuredDurationStat');
+  
+  if (featuredTitle) featuredTitle.textContent = meditation.title;
+  if (featuredDescription) featuredDescription.textContent = meditation.description;
+  if (featuredDuration) featuredDuration.textContent = meditation.duration;
+  if (featuredDurationStat) featuredDurationStat.textContent = meditation.duration;
+}
+
+// Render meditation grid
+function renderMeditationGrid() {
+  const grid = getElement('meditationGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = '';
+  
+  meditationLibrary.guided.forEach(meditation => {
+    const card = document.createElement('div');
+    card.className = 'meditation-card';
+    card.dataset.id = meditation.id;
+    card.dataset.category = meditation.category;
+    
+    card.innerHTML = `
+      <div class="card-image" style="background-color: ${meditation.color};">
+        <div class="play-button">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tags">
+          ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+        <h3>${meditation.title}</h3>
+        <p>${meditation.description}</p>
+        <div class="card-meta">
+          <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
+          <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
+        </div>
+      </div>
+    `;
+    
+    grid.appendChild(card);
+  });
+}
+
+// Render breathing grid
+function renderBreathingGrid() {
+  const grid = getElement('breathingGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = '';
+  
+  meditationLibrary.breathing.forEach(meditation => {
+    const card = document.createElement('div');
+    card.className = 'meditation-card';
+    card.dataset.id = meditation.id;
+    card.dataset.category = meditation.category;
+    
+    card.innerHTML = `
+      <div class="card-image" style="background-color: ${meditation.color};">
+        <div class="play-button">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-tags">
+          ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+        <h3>${meditation.title}</h3>
+        <p>${meditation.description}</p>
+        <div class="card-meta">
+          <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
+          <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
+        </div>
+      </div>
+    `;
+    
+    grid.appendChild(card);
+  });
+}
+
+// Initialize audio player
+function initAudioPlayer() {
+  const audioPlayer = getElement('audioPlayer');
+  const playBtn = getElement('playBtn');
+  const playIcon = getElement('playIcon');
+  const progressBar = getElement('progressBar');
+  const progressContainer = document.querySelector('.progress-container');
+  const currentTimeEl = getElement('currentTime');
+  const durationEl = getElement('duration');
+  const loopBtn = getElement('loopBtn');
+  
+  if (!audioPlayer) return;
+  
+  // Time formatting
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+  
+  // Update progress bar
+  function updateProgress() {
+    const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+  }
+  
+  // Set progress on click
+  function setProgress(e) {
+    const width = this.clientWidth;
+    const clickX = e.offsetX;
+    const duration = audioPlayer.duration;
+    
+    audioPlayer.currentTime = (clickX / width) * duration;
+  }
+  
+  // Event listeners
+  audioPlayer.addEventListener('timeupdate', updateProgress);
+  audioPlayer.addEventListener('loadedmetadata', () => {
+    if (durationEl) durationEl.textContent = formatTime(audioPlayer.duration);
+  });
+  
+  audioPlayer.addEventListener('ended', () => {
+    if (isLooping) {
+      // Loop the track
+      audioPlayer.currentTime = 0;
+      audioPlayer.play();
+      showToast("Track looped", "info");
+    } else {
+      // Stop playing
+      isPlaying = false;
+      if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
+      
+      // Track meditation completion
+      if (currentUser && currentTrack) {
+        trackMeditationCompletion(currentTrack.id);
       }
     }
+  });
+  
+  if (progressContainer) progressContainer.addEventListener('click', setProgress);
+  
+  // Play button functionality
+  if (playBtn) {
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        audioPlayer.pause();
+        if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
+      } else {
+        audioPlayer.play();
+        if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+      }
+      isPlaying = !isPlaying;
+    });
+  }
+  
+  // Loop button functionality
+  if (loopBtn) {
+    loopBtn.addEventListener('click', () => {
+      isLooping = !isLooping;
+      loopBtn.classList.toggle('active', isLooping);
+      showToast(`Loop ${isLooping ? 'enabled' : 'disabled'}`, "info");
+    });
+  }
+}
 
-    // Initialize the app
-    document.addEventListener('DOMContentLoaded', async function() {
-      try {
-        const isAuthenticated = await checkSession();
-        const dashboard = getElement('dashboard');
-        const loginPrompt = getElement('loginPrompt');
-        
-        if (isAuthenticated) {
-          // Show dashboard for logged-in users
-          if (loginPrompt) loginPrompt.style.display = 'none';
-          if (dashboard) dashboard.style.display = 'block';
-          
-          // Load user data
-          loadUserData();
-          
-          // Initialize UI
-          setupEventListeners();
-          renderMeditationGrid();
-          renderBreathingGrid();
-          
-          // Initialize audio player
-          initAudioPlayer();
-          
-          // Set default featured meditation
-          setFeaturedMeditation(meditationLibrary.guided[0]);
-          
-          // Create floating elements
-          createFloatingElements();
-        } else {
-          // Show login prompt for unauthenticated users
-          if (loginPrompt) loginPrompt.style.display = 'block';
-          if (dashboard) dashboard.style.display = 'none';
+// Play meditation audio
+function playMeditation(meditation) {
+  const audioPlayer = getElement('audioPlayer');
+  const playIcon = getElement('playIcon');
+  const featuredHeader = getElement('featuredHeader');
+  
+  if (!audioPlayer) return;
+  
+  // Set the audio source
+  audioPlayer.src = meditation.audioSrc;
+  audioPlayer.load();
+  
+  // Play the audio
+  audioPlayer.play()
+    .then(() => {
+      isPlaying = true;
+      if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+      
+      // Update featured section to "Now Playing"
+      if (featuredHeader) {
+        featuredHeader.innerHTML = `<i class="fas fa-music"></i> Now Playing`;
+      }
+      
+      // Update featured meditation to show the current track
+      setFeaturedMeditation(meditation);
+      
+      showToast(`Now playing: ${meditation.title}`, 'info');
+    })
+    .catch(error => {
+      console.error('Error playing audio:', error);
+      showToast('Error playing meditation audio', 'error');
+    });
+}
+
+// Track meditation completion in Supabase
+async function trackMeditationCompletion(meditationId) {
+  if (!currentUser) return;
+  
+  try {
+    // Update session count
+    meditationSessions++;
+    const { error: updateError } = await supabase
+      .from('user_stats')
+      .update({ sessions: meditationSessions })
+      .eq('user_id', currentUser.id);
+    
+    if (updateError) throw updateError;
+    
+    // Add meditation session to history
+    const { error: historyError } = await supabase
+      .from('meditation_history')
+      .insert([
+        {
+          user_id: currentUser.id,
+          meditation_id: meditationId,
+          duration: 0, // Actual duration would be calculated
+          completed_at: new Date().toISOString()
         }
-      } catch (error) {
-        console.error('Initialization failed:', error);
-        showToast("Failed to initialize app", "error");
+      ]);
+    
+    if (historyError) throw historyError;
+    
+    // Update UI
+    const sessionCount = getElement('sessionCount');
+    if (sessionCount) sessionCount.textContent = meditationSessions;
+    
+    showToast('Meditation completed! Great job!', 'success');
+  } catch (error) {
+    console.error('Error tracking meditation:', error);
+    showToast('Failed to track meditation session', 'error');
+  }
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+  // Login button
+  const loginBtn = getElement('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+      // In a real app, this would redirect to login page
+      // For demo, we'll simulate login
+      simulateLogin();
+    });
+  }
+  
+  // Play buttons
+  document.querySelectorAll('.play-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const card = this.closest('.meditation-card');
+      const meditationId = card.dataset.id;
+      
+      // Find meditation in library
+      const meditation = [...meditationLibrary.guided, ...meditationLibrary.breathing].find(
+        m => m.id === meditationId
+      );
+      
+      if (meditation) {
+        playMeditation(meditation);
       }
     });
-
-    // Load user data from Supabase
-    async function loadUserData() {
-      if (!currentUser) return;
+  });
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const category = this.dataset.category;
       
-      try {
-        // Update UI with user info
-        const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
-        const userInitial = getElement('userInitial');
-        const userAvatar = getElement('userAvatar');
-        const userGreeting = getElement('userGreeting');
-        
-        if (userInitial) userInitial.textContent = initial;
-        if (userAvatar) userAvatar.textContent = initial;
-        
-        // Set greeting based on time of day
-        const hour = new Date().getHours();
-        let greeting = "Welcome back";
-        
-        if (hour < 12) {
-          greeting = "Good morning";
-        } else if (hour < 18) {
-          greeting = "Good afternoon";
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      this.classList.add('active');
+      
+      // Filter meditation cards
+      document.querySelectorAll('.meditation-card').forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'block';
         } else {
-          greeting = "Good evening";
+          card.style.display = 'none';
         }
-        
-        const username = currentUser.email.split('@')[0];
-        if (userGreeting) userGreeting.textContent = `${greeting}, ${username}`;
-        
-        // Load user meditation stats
-        const { data, error } = await supabase
-          .from('user_stats')
-          .select('sessions, streak')
-          .eq('user_id', currentUser.id)
-          .single();
-        
-        if (error) throw error;
-        
-        meditationSessions = data?.sessions || 0;
-        streak = data?.streak || 0;
-        
-        const sessionCount = getElement('sessionCount');
-        const streakCount = getElement('streakCount');
-        
-        if (sessionCount) sessionCount.textContent = meditationSessions;
-        if (streakCount) streakCount.textContent = `${streak} Day Streak`;
-        
-      } catch (error) {
-        console.error('Error loading user data:', error);
-        showToast("Error loading user data", "error");
+      });
+      
+      showToast(`Filtering by: ${this.textContent}`, 'info');
+    });
+  });
+  
+  // Player controls
+  const prevBtn = getElement('prevBtn');
+  const nextBtn = getElement('nextBtn');
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      showToast('Previous track would play', 'info');
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      showToast('Next track would play', 'info');
+    });
+  }
+}
+
+// Simulate login for demo purposes
+async function simulateLogin() {
+  try {
+    // In a real app, this would be handled by Supabase auth
+    // For demo, we'll simulate login with a test user
+    
+    // Create a test user session
+    currentUser = {
+      id: 'demo-user-id',
+      email: 'demo@mindfulmoments.com',
+      user_metadata: {
+        name: 'Demo User'
       }
-    }
-
-    // Set featured meditation
-    function setFeaturedMeditation(meditation) {
-      currentTrack = meditation;
-      
-      const featuredTitle = getElement('featuredTitle');
-      const featuredDescription = getElement('featuredDescription');
-      const featuredDuration = getElement('featuredDuration');
-      const featuredDurationStat = getElement('featuredDurationStat');
-      
-      if (featuredTitle) featuredTitle.textContent = meditation.title;
-      if (featuredDescription) featuredDescription.textContent = meditation.description;
-      if (featuredDuration) featuredDuration.textContent = meditation.duration;
-      if (featuredDurationStat) featuredDurationStat.textContent = meditation.duration;
-    }
-
-    // Render meditation grid
-    function renderMeditationGrid() {
-      const grid = getElement('meditationGrid');
-      if (!grid) return;
-      
-      grid.innerHTML = '';
-      
-      meditationLibrary.guided.forEach(meditation => {
-        const card = document.createElement('div');
-        card.className = 'meditation-card';
-        card.dataset.id = meditation.id;
-        card.dataset.category = meditation.category;
-        
-        card.innerHTML = `
-          <div class="card-image" style="background-color: ${meditation.color};">
-            <div class="play-button">
-              <i class="fas fa-play"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="card-tags">
-              ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <h3>${meditation.title}</h3>
-            <p>${meditation.description}</p>
-            <div class="card-meta">
-              <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
-              <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
-            </div>
-          </div>
-        `;
-        
-        grid.appendChild(card);
-      });
-    }
-
-    // Render breathing grid
-    function renderBreathingGrid() {
-      const grid = getElement('breathingGrid');
-      if (!grid) return;
-      
-      grid.innerHTML = '';
-      
-      meditationLibrary.breathing.forEach(meditation => {
-        const card = document.createElement('div');
-        card.className = 'meditation-card';
-        card.dataset.id = meditation.id;
-        card.dataset.category = meditation.category;
-        
-        card.innerHTML = `
-          <div class="card-image" style="background-color: ${meditation.color};">
-            <div class="play-button">
-              <i class="fas fa-play"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="card-tags">
-              ${meditation.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <h3>${meditation.title}</h3>
-            <p>${meditation.description}</p>
-            <div class="card-meta">
-              <div class="duration"><i class="fas fa-clock"></i> ${meditation.duration}</div>
-              <div class="level"><i class="fas fa-signal"></i> ${meditation.level}</div>
-            </div>
-          </div>
-        `;
-        
-        grid.appendChild(card);
-      });
-    }
-
+    };
+    
+    // Hide login, show dashboard
+    const loginPrompt = getElement('loginPrompt');
+    const dashboard = getElement('dashboard');
+    
+    if (loginPrompt) loginPrompt.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'block';
+    
+    // Load user data
+    await loadUserData();
+    
+    // Initialize UI
+    setupEventListeners();
+    renderMeditationGrid();
+    renderBreathingGrid();
+    
     // Initialize audio player
-    function initAudioPlayer() {
-      const audioPlayer = getElement('audioPlayer');
-      const playBtn = getElement('playBtn');
-      const playIcon = getElement('playIcon');
-      const progressBar = getElement('progressBar');
-      const progressContainer = getElement('progressContainer');
-      const currentTimeEl = getElement('currentTime');
-      const durationEl = getElement('duration');
-      const loopBtn = getElement('loopBtn');
-      
-      if (!audioPlayer) return;
-      
-      // Time formatting
-      function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-      }
-      
-      // Update progress bar
-      function updateProgress() {
-        const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-        if (progressBar) progressBar.style.width = `${percent}%`;
-        if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-      }
-      
-      // Set progress on click
-      function setProgress(e) {
-        const width = this.clientWidth;
-        const clickX = e.offsetX;
-        const duration = audioPlayer.duration;
-        
-        audioPlayer.currentTime = (clickX / width) * duration;
-      }
-      
-      // Event listeners
-      audioPlayer.addEventListener('timeupdate', updateProgress);
-      audioPlayer.addEventListener('loadedmetadata', () => {
-        if (durationEl) durationEl.textContent = formatTime(audioPlayer.duration);
-      });
-      
-      audioPlayer.addEventListener('ended', () => {
-        if (isLooping) {
-          // Loop the track
-          audioPlayer.currentTime = 0;
-          audioPlayer.play();
-          showToast("Track looped", "info");
-        } else {
-          // Stop playing
-          isPlaying = false;
-          if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
-          
-          // Track meditation completion
-          if (currentUser && currentTrack) {
-            trackMeditationCompletion(currentTrack.id);
-          }
-        }
-      });
-      
-      if (progressContainer) progressContainer.addEventListener('click', setProgress);
-      
-      // Play button functionality
-      if (playBtn) {
-        playBtn.addEventListener('click', () => {
-          if (isPlaying) {
-            audioPlayer.pause();
-            if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
-          } else {
-            audioPlayer.play();
-            if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
-          }
-          isPlaying = !isPlaying;
-        });
-      }
-      
-      // Loop button functionality
-      if (loopBtn) {
-        loopBtn.addEventListener('click', () => {
-          isLooping = !isLooping;
-          loopBtn.classList.toggle('active', isLooping);
-          showToast(`Loop ${isLooping ? 'enabled' : 'disabled'}`, "info");
-        });
-      }
-    }
-
-    // Play meditation audio
-    function playMeditation(meditation) {
-      const audioPlayer = getElement('audioPlayer');
-      const playIcon = getElement('playIcon');
-      const featuredHeader = getElement('featuredHeader');
-      
-      if (!audioPlayer) return;
-      
-      // Set the audio source
-      audioPlayer.src = meditation.audioSrc;
-      audioPlayer.load();
-      
-      // Play the audio
-      audioPlayer.play()
-        .then(() => {
-          isPlaying = true;
-          if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
-          
-          // Update featured section to "Now Playing"
-          if (featuredHeader) {
-            featuredHeader.innerHTML = `<i class="fas fa-music"></i> Now Playing`;
-          }
-          
-          // Update featured meditation to show the current track
-          setFeaturedMeditation(meditation);
-          
-          showToast(`Now playing: ${meditation.title}`, 'info');
-        })
-        .catch(error => {
-          console.error('Error playing audio:', error);
-          showToast('Error playing meditation audio', 'error');
-        });
-    }
-
-    // Track meditation completion in Supabase
-    async function trackMeditationCompletion(meditationId) {
-      if (!currentUser) return;
-      
-      try {
-        // Update session count
-        meditationSessions++;
-        const { error: updateError } = await supabase
-          .from('user_stats')
-          .update({ sessions: meditationSessions })
-          .eq('user_id', currentUser.id);
-        
-        if (updateError) throw updateError;
-        
-        // Add meditation session to history
-        const { error: historyError } = await supabase
-          .from('meditation_history')
-          .insert([
-            {
-              user_id: currentUser.id,
-              meditation_id: meditationId,
-              duration: 0, // Actual duration would be calculated
-              completed_at: new Date().toISOString()
-            }
-          ]);
-        
-        if (historyError) throw historyError;
-        
-        // Update UI
-        const sessionCount = getElement('sessionCount');
-        if (sessionCount) sessionCount.textContent = meditationSessions;
-        
-        showToast('Meditation completed! Great job!', 'success');
-      } catch (error) {
-        console.error('Error tracking meditation:', error);
-        showToast('Failed to track meditation session', 'error');
-      }
-    }
-
-    // Setup all event listeners
-    function setupEventListeners() {
-      // Login button
-      const loginBtn = getElement('loginBtn');
-      if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-          // In a real app, this would redirect to login page
-          // For demo, we'll simulate login
-          simulateLogin();
-        });
-      }
-      
-      // Play buttons
-      document.querySelectorAll('.play-button').forEach(button => {
-        button.addEventListener('click', function() {
-          const card = this.closest('.meditation-card');
-          const meditationId = card.dataset.id;
-          
-          // Find meditation in library
-          const meditation = [...meditationLibrary.guided, ...meditationLibrary.breathing].find(
-            m => m.id === meditationId
-          );
-          
-          if (meditation) {
-            playMeditation(meditation);
-          }
-        });
-      });
-      
-      // Filter buttons
-      document.querySelectorAll('.filter-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const category = this.dataset.category;
-          
-          document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          // Filter meditation cards
-          document.querySelectorAll('.meditation-card').forEach(card => {
-            if (category === 'all' || card.dataset.category === category) {
-              card.style.display = 'block';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-          
-          showToast(`Filtering by: ${this.textContent}`, 'info');
-        });
-      });
-      
-      // Player controls
-      const prevBtn = getElement('prevBtn');
-      const nextBtn = getElement('nextBtn');
-      
-      if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-          showToast('Previous track would play', 'info');
-        });
-      }
-      
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-          showToast('Next track would play', 'info');
-        });
-      }
-    }
-
-    // Simulate login for demo purposes
-    async function simulateLogin() {
-      try {
-        // In a real app, this would be handled by Supabase auth
-        // For demo, we'll simulate login with a test user
-        
-        // Create a test user session
-        currentUser = {
-          id: 'demo-user-id',
-          email: 'demo@mindfulmoments.com',
-          user_metadata: {
-            name: 'Demo User'
-          }
-        };
-        
-        // Hide login, show dashboard
-        const loginPrompt = getElement('loginPrompt');
-        const dashboard = getElement('dashboard');
-        
-        if (loginPrompt) loginPrompt.style.display = 'none';
-        if (dashboard) dashboard.style.display = 'block';
-        
-        // Load user data
-        await loadUserData();
-        
-        // Initialize UI
-        setupEventListeners();
-        renderMeditationGrid();
-        renderBreathingGrid();
-        
-        // Initialize audio player
-        initAudioPlayer();
-        
-        // Set default featured meditation
-        setFeaturedMeditation(meditationLibrary.guided[0]);
-        
-        // Create floating elements
-        createFloatingElements();
-        
-        showToast('Welcome to Mindful Moments!', 'success');
-      } catch (error) {
-        console.error('Login simulation failed:', error);
-        showToast('Failed to log in', 'error');
-      }
-    }
-
+    initAudioPlayer();
+    
+    // Set default featured meditation
+    setFeaturedMeditation(meditationLibrary.guided[0]);
+    
     // Create floating elements
-    function createFloatingElements() {
-      const container = document.body;
-      const types = ['cloud', 'leaf', 'bubble'];
-      const colors = ['#5E60CE', '#64DFDF', '#FF6B6B', '#25274D', '#F8F9FF'];
-      
-      for (let i = 0; i < 15; i++) {
-        const element = document.createElement('div');
-        const type = types[Math.floor(Math.random() * types.length)];
-        element.classList.add('floating-element', type);
-        
-        // Random size
-        const size = Math.floor(Math.random() * 80) + 30;
-        
-        if (type === 'cloud') {
-          element.style.width = `${size}px`;
-          element.style.height = `${size/2}px`;
-          element.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        } else if (type === 'leaf') {
-          element.style.width = `${size}px`;
-          element.style.height = `${size}px`;
-        } else if (type === 'bubble') {
-          element.style.width = `${size}px`;
-          element.style.height = `${size}px`;
-          element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          element.style.opacity = Math.random() * 0.3 + 0.1;
-        }
-        
-        // Random position
-        element.style.top = `${Math.random() * 100}%`;
-        element.style.left = `${Math.random() * 100}%`;
-        
-        // Random animation delay and duration
-        element.style.animationDelay = `${Math.random() * 20}s`;
-        element.style.animationDuration = `${15 + Math.random() * 30}s`;
-        
-        container.appendChild(element);
-      }
+    createFloatingElements();
+    
+    showToast('Welcome to Mindful Moments!', 'success');
+  } catch (error) {
+    console.error('Login simulation failed:', error);
+    showToast('Failed to log in', 'error');
+  }
+}
+
+// Create floating elements
+function createFloatingElements() {
+  const container = document.body;
+  const types = ['cloud', 'leaf', 'bubble'];
+  const colors = ['#5E60CE', '#64DFDF', '#FF6B6B', '#25274D', '#F8F9FF'];
+  
+  for (let i = 0; i < 15; i++) {
+    const element = document.createElement('div');
+    const type = types[Math.floor(Math.random() * types.length)];
+    element.classList.add('floating-element', type);
+    
+    // Random size
+    const size = Math.floor(Math.random() * 80) + 30;
+    
+    if (type === 'cloud') {
+      element.style.width = `${size}px`;
+      element.style.height = `${size/2}px`;
+      element.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+    } else if (type === 'leaf') {
+      element.style.width = `${size}px`;
+      element.style.height = `${size}px`;
+    } else if (type === 'bubble') {
+      element.style.width = `${size}px`;
+      element.style.height = `${size}px`;
+      element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      element.style.opacity = Math.random() * 0.3 + 0.1;
     }
+    
+    // Random position
+    element.style.top = `${Math.random() * 100}%`;
+    element.style.left = `${Math.random() * 100}%`;
+    
+    // Random animation delay and duration
+    element.style.animationDelay = `${Math.random() * 20}s`;
+    element.style.animationDuration = `${15 + Math.random() * 30}s`;
+    
+    container.appendChild(element);
+  }
+}
   </script>
 </body>
 </html>
