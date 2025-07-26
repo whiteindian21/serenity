@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -629,59 +628,6 @@
       display: flex;
       gap: 0.8rem;
       margin-top: 1.2rem;
-    }
-
-    /* Activity Section */
-    .activity-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .activity-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: var(--radius-md);
-      transition: background 0.3s ease;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(94, 96, 206, 0.15);
-      box-shadow: var(--shadow-light);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-
-    .activity-item:hover {
-      background: rgba(94, 96, 206, 0.08);
-      transform: translateX(5px);
-    }
-
-    .activity-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(94, 96, 206, 0.25);
-    }
-
-    .activity-title {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.3rem;
-      color: var(--dark);
-    }
-
-    .activity-time {
-      font-size: 0.9rem;
-      color: var(--gray);
-      font-weight: 500;
     }
 
     /* Progress Section */
@@ -2184,6 +2130,28 @@
       font-size: 0.9rem;
       color: var(--gray);
     }
+    
+    /* File upload */
+    .file-upload-container {
+      border: 2px dashed var(--gray-light);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .file-upload-container:hover {
+      border-color: var(--primary);
+      background: rgba(94, 96, 206, 0.05);
+    }
+    
+    .file-upload-container i {
+      font-size: 3rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -2368,7 +2336,7 @@
             <i class="fas fa-book-open"></i>
             <h3>Journal</h3>
             <p>Express your thoughts with guided prompts</p>
-            <a href="journal.html" class="btn btn-primary">
+            <a href="#" class="btn btn-primary" id="open-journal">
               Begin <i class="fas fa-chevron-right"></i>
             </a>
           </div>
@@ -2378,7 +2346,7 @@
             <i class="fas fa-hand-holding-heart"></i>
             <h3>Self-Care</h3>
             <p>Exercises to cultivate self-kindness</p>
-            <a href="self-care.html" class="btn btn-primary">
+            <a href="#" class="btn btn-primary">
               Explore <i class="fas fa-chevron-right"></i>
             </a>
           </div>
@@ -2388,7 +2356,7 @@
             <i class="fas fa-headphones"></i>
             <h3>Meditation Library</h3>
             <p>Calming meditations for grief and healing</p>
-            <a href="meditation.html" class="btn btn-primary">
+            <a href="#" class="btn btn-primary">
               Explore <i class="fas fa-chevron-right"></i>
             </a>
           </div>
@@ -2398,7 +2366,7 @@
             <i class="fas fa-brain"></i>
             <h3>Cognitive Exercises</h3>
             <p>Tools to reframe negative thoughts</p>
-            <a href="cognitive-exercises.html" class="btn btn-primary">
+            <a href="#" class="btn btn-primary">
               Begin <i class="fas fa-chevron-right"></i>
             </a>
           </div>
@@ -2424,12 +2392,17 @@
           </div>
         </div>
         
+        <div class="file-upload-container" id="memory-upload">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h4>Upload a Memory</h4>
+          <p>Click or drag files to upload</p>
+          <p class="credit-info">(Cost: 10 credits per file)</p>
+          <input type="file" id="memory-file" style="display: none;">
+        </div>
+        
         <div class="memory-actions">
           <button class="btn btn-primary" id="memory-book-btn">
             <i class="fas fa-book"></i> Memory Book
-          </button>
-          <button class="btn btn-secondary" id="add-memory-btn">
-            <i class="fas fa-plus"></i> Add New
           </button>
         </div>
       </div>
@@ -2573,6 +2546,36 @@
     </button>
   </div>
 
+  <!-- Journal Modal -->
+  <div class="modal" id="journal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Journal Entry</h3>
+        <button class="close-modal" id="close-journal-modal">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="journal-title">Title</label>
+        <input type="text" id="journal-title" class="form-control" placeholder="Title your journal entry">
+      </div>
+      <div class="form-group">
+        <label for="journal-content">Your Thoughts</label>
+        <textarea id="journal-content" class="form-control" rows="8" placeholder="Express your feelings..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Add Attachment (5 credits)</label>
+        <div class="file-upload-container" id="journal-upload">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h4>Upload Attachment</h4>
+          <p>Click or drag files to upload</p>
+          <input type="file" id="journal-file" style="display: none;">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="save-journal">
+        <i class="fas fa-save"></i> Save Journal Entry
+      </button>
+    </div>
+  </div>
+
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="#" class="nav-item active" data-target="home-section">
@@ -2596,9 +2599,35 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
   
-   <script>
-    // Initialize Supabase
-   // Initialize Supabase with your new credentials
+  <!-- Companion Selection Modal -->
+  <div class="modal" id="companion-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Choose Your Companion</h3>
+        <button class="close-modal" id="close-companion-modal">&times;</button>
+      </div>
+      <div class="companion-grid">
+        <div class="companion-select" data-companion="elena">
+          <div class="avatar"><i class="fas fa-smile"></i></div>
+          <h4>Elena</h4>
+          <p>Healing Guide</p>
+        </div>
+        <div class="companion-select" data-companion="david">
+          <div class="avatar"><i class="fas fa-leaf"></i></div>
+          <h4>David</h4>
+          <p>Mindfulness Coach</p>
+        </div>
+        <div class="companion-select" data-companion="sophia">
+          <div class="avatar"><i class="fas fa-lightbulb"></i></div>
+          <h4>Sophia</h4>
+          <p>Therapeutic Guide</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Initialize Supabase with demo credentials
     const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -2628,7 +2657,7 @@
     let credits = 50;
     let creditsUsed = 0;
     
-    // Define companions (same as before)
+    // Define companions
     const companions = {
       "elena": {
         name: "Elena",
@@ -2734,69 +2763,6 @@
       }
     }
 
-    // Check user session - UPDATED TO USE getSession() PROPERLY
-    async function checkSession() {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Session check error:', error);
-          return false;
-        }
-        
-        if (session) {
-          currentUser = session.user;
-          console.log('User session found:', currentUser);
-          
-          // Get user initials from email or use 'U' as default
-          const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
-          
-          // Update user initials in UI
-          ['userInitialTextMobile', 'profile-initial'].forEach(id => {
-            const el = getElement(id);
-            if (el) el.textContent = initial;
-          });
-          
-          // Update profile name if available
-          const profileName = getElement('profile-name');
-          if (profileName) {
-            profileName.textContent = currentUser.user_metadata?.name || currentUser.email || 'User';
-          }
-          
-          // Load companion from user metadata
-          if (currentUser.user_metadata?.companion) {
-            currentCompanion = currentUser.user_metadata.companion;
-          } else {
-            // Set default companion if none exists
-            currentCompanion = "elena";
-            // Update user metadata with default companion
-            await supabase.auth.updateUser({
-              data: { companion: currentCompanion }
-            });
-          }
-          
-          // Load subscription status
-          if (currentUser.user_metadata?.subscription_status) {
-            subscriptionStatus = currentUser.user_metadata.subscription_status;
-          }
-          
-          // Load credits
-          if (currentUser.user_metadata?.credits) {
-            credits = currentUser.user_metadata.credits;
-          }
-          
-          // Update UI
-          updateCreditDisplay();
-          
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error('Session check failed:', error);
-        return false;
-      }
-    }
-
     // Set greeting based on time of day
     function setGreeting() {
       const hour = new Date().getHours();
@@ -2825,76 +2791,57 @@
       }
     }
 
-    // Initialize the dashboard - UPDATED WITH BETTER SESSION HANDLING
-    document.addEventListener('DOMContentLoaded', async function() {
-      try {
-        // First check if we have an existing session
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session) {
-          // If we have a session, initialize the app
-          initializeApp(session.user);
-        } else {
-          // No session found, show login prompt
-          showLoginPrompt();
-        }
-        
-        // Setup login redirection button
-        const goToLoginBtn = getElement('go-to-login');
-        if (goToLoginBtn) {
-          goToLoginBtn.addEventListener('click', () => {
-            window.location.href = 'login.html';
-          });
-        }
-        
-        // Listen for auth state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-          console.log('Auth state changed:', event, session);
-          if (event === 'SIGNED_IN' && session) {
-            initializeApp(session.user);
-          } else if (event === 'SIGNED_OUT') {
-            showLoginPrompt();
-          }
-        });
-        
-      } catch (error) {
-        console.error('Initialization failed:', error);
-        showToast("Failed to initialize app", "error");
-      }
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up UI elements
+      setGreeting();
+      setCurrentDate();
+      initBreathingExercise();
+      setupEventListeners();
+      simulateUserSession();
+      loadCompanion();
+      startCompanionChat();
+      loadMemories();
+      updateProgressBar();
+      updateCreditDisplay();
     });
 
-    // Initialize the app for authenticated users
-    async function initializeApp(user) {
-      console.log('Initializing app for user:', user);
-      currentUser = user;
+    // Simulate user session for demo
+    function simulateUserSession() {
+      currentUser = {
+        id: 'demo-user',
+        email: 'user@therapathy.com',
+        user_metadata: {
+          name: 'Demo User',
+          companion: 'elena',
+          subscription_status: 'free',
+          credits: 50
+        }
+      };
       
+      // Update UI elements
+      const userInitials = currentUser.user_metadata.name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      ['userInitialTextMobile', 'profile-initial'].forEach(id => {
+        const el = getElement(id);
+        if (el) el.textContent = userInitials;
+      });
+      
+      const profileName = getElement('profile-name');
+      if (profileName) {
+        profileName.textContent = currentUser.user_metadata.name || 'User';
+      }
+      
+      // Set companion
+      currentCompanion = currentUser.user_metadata.companion || "elena";
+      subscriptionStatus = currentUser.user_metadata.subscription_status || "free";
+      credits = currentUser.user_metadata.credits || 50;
+      
+      // Show dashboard
       const loginPrompt = getElement('login-prompt');
       const dashboardContainer = getElement('dashboard-container');
       
       if (loginPrompt) loginPrompt.style.display = 'none';
       if (dashboardContainer) dashboardContainer.style.display = 'block';
-      
-      setGreeting();
-      setCurrentDate();
-      initBreathingExercise();
-      setupEventListeners();
-      
-      // Load user-specific data
-      await loadCompanion();
-      await loadProgress();
-      await loadMemories();
-      
-      // Start companion chat
-      startCompanionChat();
-    }
-
-    // Show login prompt for unauthenticated users
-    function showLoginPrompt() {
-      const loginPrompt = getElement('login-prompt');
-      const dashboardContainer = getElement('dashboard-container');
-      
-      if (loginPrompt) loginPrompt.style.display = 'block';
-      if (dashboardContainer) dashboardContainer.style.display = 'none';
     }
 
     // Initialize breathing exercise
@@ -3078,20 +3025,58 @@
       const chatSettingsBtn = getElement('chat-settings');
       if (chatSettingsBtn) {
         chatSettingsBtn.addEventListener('click', () => {
-          showToast("Companion settings feature is coming soon!", "info");
+          getElement('companion-modal').style.display = 'flex';
         });
       }
       
       // Memory controls
-      const addMemoryBtn = getElement('add-memory-btn');
-      if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
-        showToast("Add memory feature is coming soon!", "info");
-      });
+      const memoryUpload = getElement('memory-upload');
+      const memoryFile = getElement('memory-file');
+      if (memoryUpload && memoryFile) {
+        memoryUpload.addEventListener('click', () => {
+          memoryFile.click();
+        });
+        
+        memoryFile.addEventListener('change', function(e) {
+          if (this.files && this.files[0]) {
+            uploadMemory(this.files[0]);
+          }
+        });
+      }
       
       const memoryBookBtn = getElement('memory-book-btn');
       if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
         showToast("Memory book feature is coming soon!", "info");
       });
+      
+      // Journal controls
+      const openJournalBtn = getElement('open-journal');
+      if (openJournalBtn) {
+        openJournalBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          getElement('journal-modal').style.display = 'flex';
+        });
+      }
+      
+      const closeJournalModal = getElement('close-journal-modal');
+      if (closeJournalModal) {
+        closeJournalModal.addEventListener('click', () => {
+          getElement('journal-modal').style.display = 'none';
+        });
+      }
+      
+      const journalUpload = getElement('journal-upload');
+      const journalFile = getElement('journal-file');
+      if (journalUpload && journalFile) {
+        journalUpload.addEventListener('click', () => {
+          journalFile.click();
+        });
+      }
+      
+      const saveJournalBtn = getElement('save-journal');
+      if (saveJournalBtn) {
+        saveJournalBtn.addEventListener('click', saveJournal);
+      }
       
       // Settings controls
       const accountSettingsBtn = getElement('account-settings-btn');
@@ -3106,23 +3091,40 @@
       // Companion selection buttons
       const changeCompanionBtn = getElement('change-companion-btn');
       if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
-        showToast("Change companion feature is coming soon!", "info");
+        getElement('companion-modal').style.display = 'flex';
       });
       
       const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
       if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
-        showToast("Change companion feature is coming soon!", "info");
+        getElement('companion-modal').style.display = 'flex';
       });
       
       // Upgrade button
       const upgradeBtn = getElement('upgrade-btn');
       if (upgradeBtn) upgradeBtn.addEventListener('click', () => {
-        showToast("Upgrade to premium feature is coming soon!", "info");
+        upgradeToPremium();
       });
       
       const subscribeBtn = getElement('subscribe-btn');
       if (subscribeBtn) subscribeBtn.addEventListener('click', () => {
         upgradeToPremium();
+      });
+      
+      // Modal close button
+      const closeCompanionModal = getElement('close-companion-modal');
+      if (closeCompanionModal) {
+        closeCompanionModal.addEventListener('click', () => {
+          getElement('companion-modal').style.display = 'none';
+        });
+      }
+      
+      // Companion selection in modal
+      document.querySelectorAll('.companion-select').forEach(select => {
+        select.addEventListener('click', function() {
+          const companion = this.dataset.companion;
+          selectCompanion(companion);
+          getElement('companion-modal').style.display = 'none';
+        });
       });
     }
 
@@ -3165,63 +3167,6 @@
       });
     }
 
-    // Load user progress
-    async function loadProgress() {
-      if (!currentUser) return;
-      
-      try {
-        const { data, error } = await supabase
-          .from('user_progress')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .single();
-        
-        if (error && error.code !== 'PGRST116') throw error; // Ignore "no rows" error
-        
-        if (data) {
-          progressSources = {
-            mood: data.mood_entries || 0,
-            chat: data.chat_count || 0,
-            journal: data.journal_entries || 0,
-            memories: data.memories || 0
-          };
-          
-          creditsUsed = data.credits_used || 0;
-          updateProgressBar();
-          updateCreditDisplay();
-        } else {
-          // Create initial progress record if none exists
-          await saveProgress();
-        }
-      } catch (error) {
-        console.error("Error loading progress:", error);
-        showToast("Error loading progress", "error");
-      }
-    }
-
-    // Save user progress
-    async function saveProgress() {
-      if (!currentUser) return;
-      
-      try {
-        const { error } = await supabase
-          .from('user_progress')
-          .upsert({
-            user_id: currentUser.id,
-            mood_entries: progressSources.mood,
-            chat_count: progressSources.chat,
-            journal_entries: progressSources.journal,
-            memories: progressSources.memories,
-            credits_used: creditsUsed,
-            updated_at: new Date().toISOString()
-          }, { onConflict: 'user_id' });
-        
-        if (error) throw error;
-      } catch (error) {
-        console.error("Error saving progress:", error);
-      }
-    }
-
     // Load companion information
     function loadCompanion() {
       const companion = companions[currentCompanion];
@@ -3251,6 +3196,17 @@
       }
     }
 
+    // Select a new companion
+    function selectCompanion(companionId) {
+      if (!companions[companionId]) return;
+      
+      currentCompanion = companionId;
+      loadCompanion();
+      startCompanionChat();
+      
+      showToast(`Companion changed to ${companions[companionId].name}`, "success");
+    }
+
     // Start chat with companion
     function startCompanionChat() {
       const chatMessages = getElement('chat-messages');
@@ -3262,6 +3218,7 @@
       
       // Reset conversation history
       conversationHistory = [];
+      chatMessages.innerHTML = '';
       
       // Add intro message
       const introMessage = document.createElement('div');
@@ -3285,17 +3242,15 @@
     }
 
     // Send message to companion
-    async function sendMessage() {
+    function sendMessage() {
       // Check if user has credits or is premium
       if (subscriptionStatus === "free") {
-        if (credits <= 0) {
-          showToast("You have no credits remaining. Please upgrade your plan.", "error");
+        if (credits < 5) {
+          showToast("You don't have enough credits (5 per message)", "error");
           return;
         }
-        
-        // Deduct credit for free users
-        credits--;
-        creditsUsed++;
+        credits -= 5;
+        creditsUsed += 5;
         updateCreditDisplay();
       }
       
@@ -3334,169 +3289,186 @@
       chatMessages.appendChild(thinkingMessage);
       chatMessages.scrollTop = chatMessages.scrollHeight;
       
-      try {
-        // Simulate AI response with a delay
-        setTimeout(() => {
-          // Remove thinking indicator
-          thinkingMessage.remove();
-          
-          // Add AI response to UI
-          const responseTime = new Date();
-          const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          
-          // Select a random response from the companion's responses
-          const companionResponses = companions[currentCompanion].responses;
-          const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
-          
-          const companionMessage = document.createElement('div');
-          companionMessage.className = 'message companion';
-          companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
-          chatMessages.appendChild(companionMessage);
-          
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-          
-          // Add to conversation history
-          conversationHistory.push({
-            role: "assistant",
-            content: response
-          });
-          
-          // Update progress
-          progressSources.chat++;
-          updateProgressBar();
-          saveProgress();
-        }, 1500);
+      // Simulate AI response with a delay
+      setTimeout(() => {
+        // Remove thinking indicator
+        thinkingMessage.remove();
         
-      } catch (error) {
-        console.error("Companion chat error:", error);
-        if (chatMessages) {
-          thinkingMessage.innerHTML = `I'm having trouble connecting right now. Could you try again later?`;
+        // Add AI response to UI
+        const responseTime = new Date();
+        const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        // Select a random response from the companion's responses
+        const companionResponses = companions[currentCompanion].responses;
+        const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
+        
+        const companionMessage = document.createElement('div');
+        companionMessage.className = 'message companion';
+        companionMessage.innerHTML = `${response}<div class="message-time">${responseTimeString}</div>`;
+        chatMessages.appendChild(companionMessage);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Add to conversation history
+        conversationHistory.push({
+          role: "assistant",
+          content: response
+        });
+        
+        // Update progress
+        progressSources.chat++;
+        updateProgressBar();
+        
+      }, 1500);
+    }
+
+    // Upload memory file
+    function uploadMemory(file) {
+      if (subscriptionStatus === "free") {
+        if (credits < 10) {
+          showToast("You need 10 credits to upload a memory", "error");
+          return;
+        }
+        credits -= 10;
+        creditsUsed += 10;
+        updateCreditDisplay();
+      }
+      
+      showToast(`Uploading "${file.name}"...`, "info");
+      
+      // Simulate upload process
+      setTimeout(() => {
+        showToast("Memory uploaded successfully!", "success");
+        
+        // Add to memories
+        const memoryId = memories.length + 1;
+        memories.push({
+          id: memoryId,
+          title: file.name,
+          icon: "fas fa-file"
+        });
+        
+        // Update UI
+        loadMemories();
+        
+        // Update progress
+        progressSources.memories++;
+        updateProgressBar();
+      }, 2000);
+    }
+
+    // Save journal entry
+    function saveJournal() {
+      const title = getElement('journal-title').value.trim();
+      const content = getElement('journal-content').value.trim();
+      const fileInput = getElement('journal-file');
+      
+      if (!title || !content) {
+        showToast("Please fill in both title and content", "error");
+        return;
+      }
+      
+      // Check for attachment
+      let hasAttachment = false;
+      if (fileInput.files && fileInput.files[0]) {
+        hasAttachment = true;
+        
+        if (subscriptionStatus === "free") {
+          if (credits < 5) {
+            showToast("You need 5 credits to add an attachment", "error");
+            return;
+          }
+          credits -= 5;
+          creditsUsed += 5;
+          updateCreditDisplay();
         }
       }
+      
+      // Simulate save process
+      showToast("Saving journal entry...", "info");
+      
+      setTimeout(() => {
+        showToast("Journal entry saved successfully!", "success");
+        getElement('journal-modal').style.display = 'none';
+        
+        // Reset form
+        getElement('journal-title').value = '';
+        getElement('journal-content').value = '';
+        fileInput.value = '';
+        
+        // Update progress
+        progressSources.journal++;
+        updateProgressBar();
+      }, 1500);
     }
 
     // Upgrade to premium
-    async function upgradeToPremium() {
-      try {
-        // Update user metadata
-        const { error } = await supabase.auth.updateUser({
-          data: { 
-            subscription_status: "premium",
-            credits: credits + 50 // Add bonus credits
-          }
-        });
-        
-        if (error) throw error;
-        
-        // Update local state
-        subscriptionStatus = "premium";
-        credits += 50;
-        
-        // Update UI
-        updateCreditDisplay();
-        getElement('current-plan').textContent = "Premium Plan";
-        getElement('credit-counter').innerHTML = '<i class="fas fa-crown"></i> Premium';
-        
-        showToast("Congratulations! You've upgraded to Premium", "success");
-        
-        // Update profile section
-        getElement('upgrade-prompt').style.display = 'none';
-        getElement('credit-alert').style.display = 'none';
-        
-      } catch (error) {
-        showToast("Error upgrading account: " + error.message, "error");
-      }
+    function upgradeToPremium() {
+      subscriptionStatus = "premium";
+      credits = 10000; // Set to unlimited or high value
+      
+      // Update UI
+      updateCreditDisplay();
+      getElement('current-plan').textContent = "Premium Plan";
+      getElement('credit-counter').innerHTML = '<i class="fas fa-crown"></i> Premium';
+      
+      showToast("Congratulations! You've upgraded to Premium", "success");
+      
+      // Update profile section
+      getElement('upgrade-prompt').style.display = 'none';
+      getElement('credit-alert').style.display = 'none';
     }
 
     // Load memories
-    async function loadMemories() {
-      if (!currentUser) return;
+    function loadMemories() {
+      // Demo memories
+      memories = [
+        { id: 1, title: "Beach Day", icon: "fas fa-umbrella-beach" },
+        { id: 2, title: "Family Gathering", icon: "fas fa-users" },
+        { id: 3, title: "Mountain Hike", icon: "fas fa-mountain" },
+        { id: 4, title: "Birthday", icon: "fas fa-birthday-cake" }
+      ];
       
-      try {
-        const { data, error } = await supabase
-          .from('memories')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        memories = data || [];
-        progressSources.memories = memories.length;
-        updateProgressBar();
-        
-        const container = getElement('memory-container');
-        if (!container) return;
-        
-        // Remove loading indicator
-        const loadingIndicator = getElement('memories-loading');
-        if (loadingIndicator) loadingIndicator.remove();
-        
-        container.innerHTML = '';
-        
-        // Add existing memories
-        memories.forEach(memory => {
-          const memoryItem = document.createElement('div');
-          memoryItem.className = 'memory-item has-image';
-          
-          if (memory.image_url) {
-            memoryItem.style.backgroundImage = `url(${memory.image_url})`;
-            const img = document.createElement('img');
-            img.className = 'memory-image';
-            img.src = memory.image_url;
-            img.alt = 'Memory';
-            memoryItem.appendChild(img);
-          } else {
-            const icon = document.createElement('i');
-            icon.className = memory.icon || 'fas fa-heart';
-            memoryItem.appendChild(icon);
-          }
-          
-          const label = document.createElement('div');
-          label.className = 'memory-label';
-          label.textContent = memory.title || 'Memory';
-          memoryItem.appendChild(label);
-          
-          memoryItem.addEventListener('click', () => {
-            showToast("Memory viewing feature is coming soon!", "info");
-          });
-          container.appendChild(memoryItem);
-        });
-        
-        // Add "Add Memory" button
-        const addMemory = document.createElement('div');
-        addMemory.className = 'memory-item add-memory';
-        addMemory.innerHTML = `
-          <i class="fas fa-plus"></i>
-          <div class="memory-label">Add Memory</div>
+      progressSources.memories = memories.length;
+      updateProgressBar();
+      
+      const container = getElement('memory-container');
+      if (!container) return;
+      
+      // Remove loading indicator
+      const loadingIndicator = getElement('memories-loading');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      container.innerHTML = '';
+      
+      // Add existing memories
+      memories.forEach(memory => {
+        const memoryItem = document.createElement('div');
+        memoryItem.className = 'memory-item';
+        memoryItem.innerHTML = `
+          <i class="${memory.icon}"></i>
+          <div class="memory-label">${memory.title}</div>
         `;
-        addMemory.addEventListener('click', () => {
-          showToast("Add memory feature is coming soon!", "info");
-        });
-        container.appendChild(addMemory);
         
-      } catch (error) {
-        showToast("Error loading memories: " + error.message, "error");
-      }
+        memoryItem.addEventListener('click', () => {
+          showToast(`Viewing memory: ${memory.title}`, "info");
+        });
+        container.appendChild(memoryItem);
+      });
     }
 
     // Sign out user
-    async function signOut() {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-        
+    function signOut() {
+      showToast("Signed out successfully", "success");
+      setTimeout(() => {
         window.location.reload();
-      } catch (error) {
-        showToast("Error signing out: " + error.message, "error");
-      }
+      }, 1500);
     }
     
     // Track mood function
     function trackMood() {
       progressSources.mood++;
       updateProgressBar();
-      saveProgress();
       showToast(`Your mood has been recorded: ${currentMood}`, "success");
     }
   </script>
