@@ -539,7 +539,7 @@
       // Initialize Supabase client with your new credentials
       const supabaseUrl = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
-      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
       
       // DOM Elements
       const authForm = document.getElementById('authForm');
