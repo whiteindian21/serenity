@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>therapathy Journal | Healing Companion</title>
+  <title>Therapathy Journal | Healing Companion</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -400,6 +400,9 @@
       transition: var(--transition);
       box-shadow: var(--shadow-light);
       border: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .entry-item:hover {
@@ -658,7 +661,7 @@
   <div class="mobile-header">
     <div class="app-logo">
       <i class="fas fa-book-open"></i>
-      <span>Serenity Journal</span>
+      <span>Therapathy Journal</span>
     </div>
     <div class="user-avatar" id="userInitialMobile" title="Profile">
       <span id="userInitialTextMobile">U</span>
@@ -717,7 +720,6 @@
     </div>
 
     <div class="journal-actions">
-      
       <button class="btn btn-primary" onclick="saveJournal()">
         <i class="fas fa-save"></i> Save Entry
       </button>
@@ -737,18 +739,41 @@
           <button class="filter-btn" data-filter="grateful">Grateful</button>
         </div>
       </div>
-      <ul class="entry-list" id="entryList"></ul>
+      <ul class="entry-list" id="entryList">
+        <li class="entry-item">
+          <div>
+            <span class="entry-date">July 26, 2025</span>
+            <span class="entry-tag">#grateful</span>
+            <span class="entry-tag">#family</span>
+            <span class="entry-mood">🙂</span>
+            <div class="entry-content-preview">Today I'm feeling grateful for my family. We had a wonderful dinner together and shared stories from our week.</div>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </li>
+        <li class="entry-item">
+          <div>
+            <span class="entry-date">July 24, 2025</span>
+            <span class="entry-tag">#stress</span>
+            <span class="entry-tag">#work</span>
+            <span class="entry-mood">😔</span>
+            <div class="entry-content-preview">Work has been overwhelming this week with multiple deadlines approaching. Need to practice better time management...</div>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </li>
+      </ul>
     </div>
   </div>
-
 
   <!-- Entry Modal -->
   <div class="modal" id="entryModal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal()">&times;</button>
       <h2 id="modalTitle">Journal Entry</h2>
-      <p id="modalDate" class="entry-date"></p>
-      <div id="modalContent" style="margin-top: 1rem; line-height: 1.8;"></div>
+      <p id="modalDate" class="entry-date">July 26, 2025</p>
+      <div id="modalContent" style="margin-top: 1rem; line-height: 1.8;">
+        <p>Today I'm feeling grateful for my family. We had a wonderful dinner together and shared stories from our week.</p>
+        <p>My daughter told us about her new project at school, and it reminded me how important it is to create these moments of connection.</p>
+      </div>
       <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
         <button class="btn btn-primary" onclick="editEntry()"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn btn-secondary" onclick="deleteEntry()"><i class="fas fa-trash"></i> Delete</button>
@@ -761,10 +786,9 @@
 
   <script>
     // Supabase Configuration
-     <script>
-    // Updated Supabase Configuration
     const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
+    
     // Initialize Supabase client
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -788,13 +812,14 @@
       // Check for existing session
       const { data, error } = await supabase.auth.getSession();
       
-      if (data.session) {
+      if (data && data.session) {
         currentUser = data.session.user;
         updateUserUI();
         loadEntries();
       } else {
         showToast('Please sign in to use the journal', 'error');
-        window.location.href = 'login.html';
+        // In a real app, redirect to login page
+        // window.location.href = 'login.html';
       }
       
       // Set up filter buttons
@@ -810,6 +835,13 @@
       if (currentUser) {
         const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
         document.getElementById('userInitialTextMobile').textContent = initial;
+      } else {
+        // For demo purposes, simulate a user
+        currentUser = {
+          id: 'demo-user-id',
+          email: 'demo@therapathy.com'
+        };
+        updateUserUI();
       }
     });
 
@@ -1177,12 +1209,6 @@
       }
 
       showToast('AI insights feature coming soon!', 'info');
-      
-      // In a real implementation, this would call your AI API
-      // For now, we'll just simulate a response
-      setTimeout(() => {
-        showToast('Feature coming in next update!', 'info');
-      }, 1500);
     }
 
     // Helper function to show all entries
