@@ -1986,6 +1986,204 @@
     .message.user {
       border-right: 3px solid var(--primary);
     }
+  /* Add new styles for subscription elements */
+    .credit-counter {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(94, 96, 206, 0.1);
+      padding: 0.5rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .credit-counter i {
+      color: var(--primary);
+    }
+    
+    .credit-counter.low {
+      background: rgba(255, 107, 107, 0.1);
+      color: var(--accent);
+    }
+    
+    .credit-counter.low i {
+      color: var(--accent);
+    }
+    
+    .premium-badge {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #8B4513;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    
+    .subscription-section {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(94, 96, 206, 0.15);
+      box-shadow: var(--shadow-light);
+    }
+    
+    .subscription-plans {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .subscription-plans {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .subscription-plan {
+      border: 2px solid var(--gray-light);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .subscription-plan.featured {
+      border: 2px solid var(--primary);
+      transform: scale(1.02);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .subscription-plan.featured::before {
+      content: 'BEST VALUE';
+      position: absolute;
+      top: 10px;
+      right: -25px;
+      background: var(--primary);
+      color: white;
+      padding: 0.3rem 2rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transform: rotate(45deg);
+    }
+    
+    .subscription-plan h4 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+    
+    .subscription-price {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .subscription-price .period {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray);
+    }
+    
+    .subscription-features {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+    
+    .subscription-features li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+    }
+    
+    .subscription-features li i {
+      color: var(--success);
+      font-size: 1.1rem;
+      margin-top: 0.2rem;
+    }
+    
+    .plan-savings {
+      background: var(--primary-light);
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-weight: 600;
+      margin-top: 1rem;
+      color: var(--primary);
+    }
+    
+    .current-plan {
+      background: var(--success-light);
+      color: var(--success);
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    
+    .credit-alert {
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .credit-alert i {
+      margin-right: 0.5rem;
+    }
+    
+    .upgrade-prompt {
+      background: linear-gradient(135deg, rgba(94, 96, 206, 0.08), rgba(100, 223, 223, 0.08));
+      border: 1px solid rgba(94, 96, 206, 0.18);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+      text-align: center;
+    }
+    
+    .upgrade-prompt h4 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .credit-usage {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      background: var(--light-alt);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+    }
+    
+    .credit-usage-item {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .credit-usage-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .credit-usage-label {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
   </style>
 </head>
 <body>
@@ -1994,6 +2192,10 @@
     <div class="app-logo">
       <i class="fas fa-brain"></i>
       <span>Therapathy</span>
+    </div>
+    <div class="credit-counter" id="credit-counter" title="Remaining credits">
+      <i class="fas fa-coins"></i>
+      <span id="credit-count">50</span>
     </div>
     <div class="user-avatar" id="userInitialMobile" title="Profile">
       <span id="userInitialTextMobile">U</span>
@@ -2023,7 +2225,6 @@
           </button>
         </div>
       </div>
-
 
       <!-- Companion Card -->
       <div class="companion-card">
@@ -2068,6 +2269,21 @@
             <i class="fas fa-paper-plane"></i>
           </button>
         </div>
+      </div>
+      
+      <!-- Credit Alert for Free Users -->
+      <div class="credit-alert" id="credit-alert" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        You have <span id="remaining-credits">0</span> credits remaining. Upgrade for unlimited access.
+      </div>
+      
+      <!-- Upgrade Prompt -->
+      <div class="upgrade-prompt" id="upgrade-prompt" style="display: none;">
+        <h4>Upgrade to Premium</h4>
+        <p>Get unlimited chats and full access to all features</p>
+        <button class="btn btn-primary" id="upgrade-btn">
+          <i class="fas fa-crown"></i> Upgrade Now
+        </button>
       </div>
 
       <!-- Breathing Exercise -->
@@ -2269,12 +2485,73 @@
           </div>
         </div>
         
+        <!-- Credit Usage -->
+        <div class="credit-usage" id="credit-usage-section">
+          <div class="credit-usage-item">
+            <div class="credit-usage-value" id="credits-used">0</div>
+            <div class="credit-usage-label">Credits Used</div>
+          </div>
+          <div class="credit-usage-item">
+            <div class="credit-usage-value" id="credits-remaining">50</div>
+            <div class="credit-usage-label">Credits Remaining</div>
+          </div>
+        </div>
+        
         <button class="btn btn-primary" style="margin-top: 1.5rem;" id="account-settings-btn">
           <i class="fas fa-cog"></i> Account Settings
         </button>
         
         <button class="btn btn-secondary" style="margin-top: 1rem;" id="change-companion-btn-profile">
           <i class="fas fa-user-friends"></i> Change Companion
+        </button>
+      </div>
+      
+      <!-- Subscription Section -->
+      <div class="subscription-section">
+        <h3><i class="fas fa-crown"></i> Subscription Plan</h3>
+        <div class="current-plan" id="current-plan">Free Tier (50 Credits)</div>
+        
+        <div class="subscription-plans">
+          <div class="subscription-plan">
+            <h4>Free Tier</h4>
+            <div class="subscription-price">$0<span class="period">/month</span></div>
+            <ul class="subscription-features">
+              <li><i class="fas fa-check"></i> 50 sign-up credits</li>
+              <li><i class="fas fa-check"></i> 10 monthly credits</li>
+              <li><i class="fas fa-check"></i> Basic tools</li>
+              <li><i class="fas fa-check"></i> Limited AI chats</li>
+              <li><i class="fas fa-check"></i> Mood tracking</li>
+            </ul>
+          </div>
+          
+          <div class="subscription-plan featured">
+            <h4>Premium Yearly</h4>
+            <div class="subscription-price">$110<span class="period">/year</span></div>
+            <div class="plan-savings">Save $70 vs monthly</div>
+            <ul class="subscription-features">
+              <li><i class="fas fa-check"></i> Unlimited AI chats</li>
+              <li><i class="fas fa-check"></i> Full tool access</li>
+              <li><i class="fas fa-check"></i> Premium features</li>
+              <li><i class="fas fa-check"></i> +50 bonus credits</li>
+              <li><i class="fas fa-check"></i> Priority support</li>
+            </ul>
+          </div>
+          
+          <div class="subscription-plan">
+            <h4>Premium Monthly</h4>
+            <div class="subscription-price">$15<span class="period">/month</span></div>
+            <ul class="subscription-features">
+              <li><i class="fas fa-check"></i> Unlimited AI chats</li>
+              <li><i class="fas fa-check"></i> Full tool access</li>
+              <li><i class="fas fa-check"></i> Premium features</li>
+              <li><i class="fas fa-check"></i> Ad-free experience</li>
+              <li><i class="fas fa-check"></i> Early access</li>
+            </ul>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" id="subscribe-btn">
+          <i class="fas fa-crown"></i> Upgrade to Premium
         </button>
       </div>
       
@@ -2319,178 +2596,6 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
   
-  <!-- Settings Modal -->
-  <div class="modal" id="settings-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>User Settings</h3>
-        <button class="close-modal" id="close-settings">&times;</button>
-      </div>
-      
-      <div class="form-group">
-        <label for="user-name">Name</label>
-        <input type="text" id="user-name" class="form-control" placeholder="Enter your name">
-      </div>
-      
-      <div class="form-group">
-        <label for="user-email">Email</label>
-        <input type="email" id="user-email" class="form-control" placeholder="Enter your email">
-      </div>
-      
-      <div class="form-group">
-        <label for="loss-type">Primary Loss Type</label>
-        <select id="loss-type" class="form-control">
-          <option value="relationship">Relationship</option>
-          <option value="loved-one">Loved One</option>
-          <option value="pet">Pet</option>
-          <option value="job">Job</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label>Healing Preferences</label>
-        <div>
-          <input type="checkbox" id="journal-reminders" checked>
-          <label for="journal-reminders">Daily journal reminders</label>
-        </div>
-        <div>
-          <input type="checkbox" id="affirmation-reminders" checked>
-          <label for="affirmation-reminders">Daily affirmations</label>
-        </div>
-      </div>
-      
-      <button class="btn-save" id="save-settings">Save Settings</button>
-    </div>
-  </div>
-  
-  <!-- Mood History Modal -->
-  <div class="modal" id="mood-history-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Your Mood History</h3>
-        <button class="close-modal" id="close-mood-history">&times;</button>
-      </div>
-      
-      <div class="mood-chart">
-        <canvas id="moodChart"></canvas>
-      </div>
-      
-      <div class="mood-history-container" id="mood-history-list">
-        <!-- Mood history will be loaded here -->
-      </div>
-    </div>
-  </div>
-  
-  <!-- Add Memory Modal -->
-  <div class="modal" id="add-memory-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add New Memory</h3>
-        <button class="close-modal" id="close-add-memory">&times;</button>
-      </div>
-      
-      <form id="memory-form">
-        <div class="form-group">
-          <label for="memory-title">Memory Title</label>
-          <input type="text" id="memory-title" class="form-control" placeholder="Enter a title for this memory" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="memory-date">Date</label>
-          <input type="date" id="memory-date" class="form-control" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="memory-description">Description</label>
-          <textarea id="memory-description" class="form-control" rows="3" placeholder="Describe this memory"></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label>Add Photo</label>
-          <label for="memory-image" class="memory-label-upload">
-            <i class="fas fa-camera"></i> Choose Image
-          </label>
-          <input type="file" id="memory-image" accept="image/*">
-          
-          <div class="memory-preview" id="memory-preview">
-            <i class="fas fa-image"></i>
-          </div>
-        </div>
-        
-        <button type="submit" class="btn-save">
-          <i class="fas fa-save"></i> Save Memory
-        </button>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Memory Book Modal -->
-  <div class="modal" id="memory-book-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Your Memory Book</h3>
-        <button class="close-modal" id="close-memory-book">&times;</button>
-      </div>
-      
-      <div class="memory-book">
-        <div class="memory-book-progress">
-          <h4>Your Healing Journey</h4>
-          <p>You've collected <span id="memory-count">0</span> memories so far. Each one represents a step in your healing journey.</p>
-        </div>
-        
-        <div id="memory-book-entries">
-          <!-- Memory entries will be loaded here -->
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Companion Selection Modal -->
-  <div class="modal" id="companion-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Choose Your Companion</h3>
-        <button class="close-modal" id="close-companion">&times;</button>
-      </div>
-      
-      <p style="margin-bottom: 1.5rem;">Select an AI companion who best matches your healing needs</p>
-      
-      <div class="companion-grid">
-        <div class="companion-select" data-companion="elena">
-          <div class="avatar">
-            <i class="fas fa-smile"></i>
-          </div>
-          <h4>Elena</h4>
-          <p>Healing Guide</p>
-          <p class="specialty-tag">Grief & Compassion</p>
-        </div>
-        
-        <div class="companion-select" data-companion="david">
-          <div class="avatar">
-            <i class="fas fa-leaf"></i>
-          </div>
-          <h4>David</h4>
-          <p>Mindfulness Coach</p>
-          <p class="specialty-tag">Meditation & Resilience</p>
-        </div>
-        
-        <div class="companion-select" data-companion="sophia">
-          <div class="avatar">
-            <i class="fas fa-lightbulb"></i>
-          </div>
-          <h4>Sophia</h4>
-          <p>Therapeutic Guide</p>
-          <p class="specialty-tag">Cognitive Therapy</p>
-        </div>
-      </div>
-      
-      <button class="btn-save" id="save-companion" style="margin-top: 1.5rem;">
-        Select Companion
-      </button>
-    </div>
-  </div>
-  
   <script>
     // Initialize Supabase
     const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
@@ -2517,6 +2622,11 @@
       journal: 0,
       memories: 0
     };
+    
+    // Subscription state
+    let subscriptionStatus = "free"; // "free" or "premium"
+    let credits = 50;
+    let creditsUsed = 0;
     
     // Define companions
     const companions = {
@@ -2580,6 +2690,50 @@
       return el;
     }
 
+    // Update credit display
+    function updateCreditDisplay() {
+      const creditCount = getElement('credit-count');
+      const creditCounter = getElement('credit-counter');
+      const creditsRemaining = getElement('credits-remaining');
+      const creditsUsedEl = getElement('credits-used');
+      const creditAlert = getElement('credit-alert');
+      const upgradePrompt = getElement('upgrade-prompt');
+      
+      if (creditCount) creditCount.textContent = credits;
+      if (creditsRemaining) creditsRemaining.textContent = credits;
+      if (creditsUsedEl) creditsUsedEl.textContent = creditsUsed;
+      
+      // Update credit counter style
+      if (creditCounter) {
+        if (credits < 5) {
+          creditCounter.classList.add('low');
+        } else {
+          creditCounter.classList.remove('low');
+        }
+      }
+      
+      // Show/hide alerts based on credits
+      if (creditAlert) {
+        if (subscriptionStatus === "free" && credits < 5) {
+          creditAlert.style.display = 'block';
+          if (getElement('remaining-credits')) {
+            getElement('remaining-credits').textContent = credits;
+          }
+        } else {
+          creditAlert.style.display = 'none';
+        }
+      }
+      
+      // Show upgrade prompt for free users
+      if (upgradePrompt) {
+        if (subscriptionStatus === "free" && credits < 10) {
+          upgradePrompt.style.display = 'block';
+        } else {
+          upgradePrompt.style.display = 'none';
+        }
+      }
+    }
+
     // Check user session
     async function checkSession() {
       try {
@@ -2606,6 +2760,19 @@
           if (currentUser.user_metadata?.companion) {
             currentCompanion = currentUser.user_metadata.companion;
           }
+          
+          // Load subscription status
+          if (currentUser.user_metadata?.subscription_status) {
+            subscriptionStatus = currentUser.user_metadata.subscription_status;
+          }
+          
+          // Load credits
+          if (currentUser.user_metadata?.credits) {
+            credits = currentUser.user_metadata.credits;
+          }
+          
+          // Update UI
+          updateCreditDisplay();
           
           return true;
         }
@@ -2857,25 +3024,6 @@
         getElement('mood-history-modal').style.display = 'flex';
       });
       
-      // Close modals
-      const closeButtons = [
-        { id: 'close-settings', modal: 'settings-modal' },
-        { id: 'close-mood-history', modal: 'mood-history-modal' },
-        { id: 'close-add-memory', modal: 'add-memory-modal' },
-        { id: 'close-memory-book', modal: 'memory-book-modal' },
-        { id: 'close-companion', modal: 'companion-modal' }
-      ];
-      
-      closeButtons.forEach(btn => {
-        const element = getElement(btn.id);
-        if (element) {
-          element.addEventListener('click', () => {
-            const modal = getElement(btn.modal);
-            if (modal) modal.style.display = 'none';
-          });
-        }
-      });
-      
       // Chat controls
       const sendBtn = getElement('send-btn');
       if (sendBtn) sendBtn.addEventListener('click', sendMessage);
@@ -2907,34 +3055,12 @@
         loadMemoryBook();
       });
       
-      const memoryForm = getElement('memory-form');
-      if (memoryForm) memoryForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        saveMemory();
-      });
-      
-      const memoryImage = getElement('memory-image');
-      if (memoryImage) memoryImage.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const preview = getElement('memory-preview');
-            preview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width:100%;max-height:100%;">`;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-      
       // Settings controls
       const accountSettingsBtn = getElement('account-settings-btn');
       if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
         getElement('settings-modal').style.display = 'flex';
         loadUserSettings();
       });
-      
-      const saveSettingsBtn = getElement('save-settings');
-      if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
       
       // Sign out button
       const signoutBtn = getElement('signout-btn');
@@ -2953,8 +3079,18 @@
         initCompanionSelection();
       });
       
-      const saveCompanionBtn = getElement('save-companion');
-      if (saveCompanionBtn) saveCompanionBtn.addEventListener('click', saveCompanion);
+      // Upgrade button
+      const upgradeBtn = getElement('upgrade-btn');
+      if (upgradeBtn) upgradeBtn.addEventListener('click', () => {
+        const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
+        if (profileNav) profileNav.click();
+      });
+      
+      const subscribeBtn = getElement('subscribe-btn');
+      if (subscribeBtn) subscribeBtn.addEventListener('click', () => {
+        // Simulate subscription upgrade
+        upgradeToPremium();
+      });
     }
 
     // Show toast notification
@@ -3025,7 +3161,9 @@
             memories: data.memories || 0
           };
           
+          creditsUsed = data.credits_used || 0;
           updateProgressBar();
+          updateCreditDisplay();
         } else {
           // Create initial progress record if none exists
           await saveProgress();
@@ -3048,6 +3186,7 @@
             chat_messages: progressSources.chat,
             journal_entries: progressSources.journal,
             memories: progressSources.memories,
+            credits_used: creditsUsed,
             updated_at: new Date().toISOString()
           }, { onConflict: 'user_id' });
         
@@ -3121,6 +3260,19 @@
 
     // Send message to companion
     async function sendMessage() {
+      // Check if user has credits or is premium
+      if (subscriptionStatus === "free") {
+        if (credits <= 0) {
+          showToast("You have no credits remaining. Please upgrade your plan.", "error");
+          return;
+        }
+        
+        // Deduct credit for free users
+        credits--;
+        creditsUsed++;
+        updateCreditDisplay();
+      }
+      
       const input = getElement('chat-input');
       if (!input) return;
       
@@ -3197,119 +3349,37 @@
       }
     }
 
-    // Track user mood
-    async function trackMood() {
-      if (!currentUser) return;
-      
+    // Upgrade to premium
+    async function upgradeToPremium() {
       try {
-        const { error } = await supabase
-          .from('mood_entries')
-          .insert([{
-            user_id: currentUser.id,
-            mood: currentMood,
-            created_at: new Date().toISOString()
-          }]);
-        
-        if (error) throw error;
-        
-        showToast("Mood recorded successfully", "success");
-        progressSources.mood++;
-        updateProgressBar();
-        saveProgress();
-        loadMoodHistory();
-      } catch (error) {
-        showToast("Error recording mood: " + error.message, "error");
-      }
-    }
-
-    // Load mood history
-    async function loadMoodHistory() {
-      if (!currentUser) return;
-      
-      try {
-        const { data: moods, error } = await supabase
-          .from('mood_entries')
-          .select('mood, created_at')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false })
-          .limit(7);
-        
-        if (error) throw error;
-        
-        const historyContainer = getElement('mood-history-list');
-        if (!historyContainer) return;
-        
-        historyContainer.innerHTML = '';
-        
-        moods.forEach(mood => {
-          const moodLabels = {
-            "awful": { emoji: "😢", label: "Awful" },
-            "sad": { emoji: "😞", label: "Sad" },
-            "neutral": { emoji: "😐", label: "Neutral" },
-            "great": { emoji: "😊", label: "Great" }
-          };
-          
-          const moodData = moodLabels[mood.mood] || { emoji: "❓", label: "Unknown" };
-          const date = new Date(mood.created_at);
-          const formattedDate = `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-          
-          const entry = document.createElement('div');
-          entry.className = 'mood-entry';
-          entry.innerHTML = `
-            <div>
-              <span class="mood-emoji-history">${moodData.emoji}</span>
-              <span>${moodData.label}</span>
-            </div>
-            <div>${formattedDate}</div>
-          `;
-          
-          historyContainer.appendChild(entry);
-        });
-      } catch (error) {
-        showToast("Error loading mood history: " + error.message, "error");
-      }
-    }
-
-    // Initialize mood chart
-    function initMoodChart() {
-      const ctx = document.getElementById('moodChart');
-      if (!ctx) return;
-      
-      moodChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Mood',
-            data: [3, 2, 4, 3, 4, 2, 3],
-            borderColor: 'rgba(94, 96, 206, 1)',
-            backgroundColor: 'rgba(94, 96, 206, 0.1)',
-            tension: 0.3,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: false,
-              min: 1,
-              max: 4,
-              ticks: {
-                callback: function(value) {
-                  const moods = {
-                    1: 'Awful',
-                    2: 'Sad',
-                    3: 'Neutral',
-                    4: 'Great'
-                  };
-                  return moods[value] || '';
-                }
-              }
-            }
+        // Update user metadata
+        const { error } = await supabase.auth.updateUser({
+          data: { 
+            subscription_status: "premium",
+            credits: credits + 50 // Add bonus credits
           }
-        }
-      });
+        });
+        
+        if (error) throw error;
+        
+        // Update local state
+        subscriptionStatus = "premium";
+        credits += 50;
+        
+        // Update UI
+        updateCreditDisplay();
+        getElement('current-plan').textContent = "Premium Plan";
+        getElement('credit-counter').innerHTML = '<i class="fas fa-crown"></i> Premium';
+        
+        showToast("Congratulations! You've upgraded to Premium", "success");
+        
+        // Update profile section
+        getElement('upgrade-prompt').style.display = 'none';
+        getElement('credit-alert').style.display = 'none';
+        
+      } catch (error) {
+        showToast("Error upgrading account: " + error.message, "error");
+      }
     }
 
     // Load memories
@@ -3382,158 +3452,6 @@
       }
     }
 
-    // Save memory
-    async function saveMemory() {
-      const title = getElement('memory-title')?.value;
-      const date = getElement('memory-date')?.value;
-      const description = getElement('memory-description')?.value;
-      const imageFile = getElement('memory-image')?.files[0];
-      
-      if (!title) {
-        showToast("Please enter a title for your memory", "error");
-        return;
-      }
-      
-      try {
-        let imageUrl = null;
-        
-        // Upload image if provided
-        if (imageFile) {
-          const fileExt = imageFile.name.split('.').pop();
-          const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
-          const filePath = `memories/${fileName}`;
-          
-          const { data, error: uploadError } = await supabase.storage
-            .from('memory-images')
-            .upload(filePath, imageFile);
-          
-          if (uploadError) throw uploadError;
-          
-          // Get public URL
-          const { data: { publicUrl } } = supabase.storage
-            .from('memory-images')
-            .getPublicUrl(filePath);
-          
-          imageUrl = publicUrl;
-        }
-        
-        // Save memory to database
-        const { error } = await supabase
-          .from('memories')
-          .insert([{
-            user_id: currentUser.id,
-            title: title,
-            date: date,
-            description: description,
-            image_url: imageUrl,
-            created_at: new Date().toISOString()
-          }]);
-        
-        if (error) throw error;
-        
-        showToast("Memory saved successfully", "success");
-        getElement('add-memory-modal').style.display = 'none';
-        getElement('memory-form').reset();
-        getElement('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
-        
-        // Reload memories
-        loadMemories();
-        
-      } catch (error) {
-        showToast("Error saving memory: " + error.message, "error");
-      }
-    }
-
-    // View memory details
-    function viewMemory(memory) {
-      // Create a modal to view memory details
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'flex';
-      
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>${memory.title || 'Memory'}</h3>
-            <button class="close-modal" id="close-view-memory">&times;</button>
-          </div>
-          
-          ${memory.image_url ? `
-            <div class="memory-preview">
-              <img src="${memory.image_url}" alt="${memory.title}">
-            </div>
-          ` : `
-            <div class="memory-preview">
-              <i class="fas fa-heart"></i>
-            </div>
-          `}
-          
-          <div class="form-group">
-            <label>Date</label>
-            <p>${memory.date || 'No date specified'}</p>
-          </div>
-          
-          ${memory.description ? `
-            <div class="form-group">
-              <label>Description</label>
-              <p>${memory.description}</p>
-            </div>
-          ` : ''}
-          
-          <button class="btn btn-secondary" id="close-view-memory-btn" style="margin-top: 1rem;">
-            Close
-          </button>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      // Close modal handlers
-      const closeBtn = modal.querySelector('#close-view-memory');
-      if (closeBtn) closeBtn.addEventListener('click', () => {
-        document.body.removeChild(modal);
-      });
-      
-      const closeBtn2 = modal.querySelector('#close-view-memory-btn');
-      if (closeBtn2) closeBtn2.addEventListener('click', () => {
-        document.body.removeChild(modal);
-      });
-    }
-
-    // Load memory book
-    function loadMemoryBook() {
-      const container = getElement('memory-book-entries');
-      if (!container) return;
-      
-      container.innerHTML = '';
-      
-      const memoryCount = getElement('memory-count');
-      if (memoryCount) memoryCount.textContent = memories.length;
-      
-      if (memories.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No memories yet. Add some to track your healing journey.</p>';
-        return;
-      }
-      
-      memories.forEach(memory => {
-        const entry = document.createElement('div');
-        entry.className = 'memory-book-entry';
-        
-        entry.innerHTML = `
-          <div class="memory-book-thumbnail" style="${memory.image_url ? `background-image: url(${memory.image_url})` : ''}">
-            ${!memory.image_url ? `<i class="fas fa-heart"></i>` : ''}
-          </div>
-          <div class="memory-book-details">
-            <div class="memory-book-title">${memory.title || 'Memory'}</div>
-            <div class="memory-book-date">${memory.date || 'No date'}</div>
-          </div>
-        `;
-        
-        entry.addEventListener('click', () => viewMemory(memory));
-        container.appendChild(entry);
-      });
-    }
-
     // Load user settings
     async function loadUserSettings() {
       if (!currentUser) return;
@@ -3587,53 +3505,6 @@
         }
       } catch (error) {
         showToast("Error saving settings: " + error.message, "error");
-      }
-    }
-
-    // Initialize companion selection
-    function initCompanionSelection() {
-      const companionSelects = document.querySelectorAll('.companion-select');
-      companionSelects.forEach(select => {
-        select.classList.remove('selected');
-        if (select.dataset.companion === currentCompanion) {
-          select.classList.add('selected');
-        }
-        
-        select.addEventListener('click', function() {
-          companionSelects.forEach(s => s.classList.remove('selected'));
-          this.classList.add('selected');
-        });
-      });
-    }
-
-    // Save companion selection
-    async function saveCompanion() {
-      const selected = document.querySelector('.companion-select.selected');
-      if (!selected) {
-        showToast("Please select a companion", "error");
-        return;
-      }
-      
-      const companion = selected.dataset.companion;
-      
-      try {
-        const { error } = await supabase.auth.updateUser({
-          data: { 
-            companion: companion
-          }
-        });
-        
-        if (error) throw error;
-        
-        currentCompanion = companion;
-        loadCompanion();
-        showToast("Companion updated successfully", "success");
-        getElement('companion-modal').style.display = 'none';
-        
-        // Restart chat with new companion
-        startCompanionChat();
-      } catch (error) {
-        showToast("Error saving companion: " + error.message, "error");
       }
     }
 
