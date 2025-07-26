@@ -2596,7 +2596,7 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
   
-  <script>
+   <script>
     // Initialize Supabase
     const SUPABASE_URL = 'https://minchdfasfsrfrnwgqdn.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
@@ -2628,7 +2628,7 @@
     let credits = 50;
     let creditsUsed = 0;
     
-    // Define companions
+    // Define companions (same as before)
     const companions = {
       "elena": {
         name: "Elena",
@@ -2734,17 +2734,24 @@
       }
     }
 
-    // Check user session
+    // Check user session - UPDATED TO USE getSession() PROPERLY
     async function checkSession() {
       try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) throw error;
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (data.session) {
-          currentUser = data.session.user;
+        if (error) {
+          console.error('Session check error:', error);
+          return false;
+        }
+        
+        if (session) {
+          currentUser = session.user;
+          console.log('User session found:', currentUser);
+          
+          // Get user initials from email or use 'U' as default
           const initial = currentUser.email?.[0]?.toUpperCase() || 'U';
           
-          // Safely update user initials
+          // Update user initials in UI
           ['userInitialTextMobile', 'profile-initial'].forEach(id => {
             const el = getElement(id);
             if (el) el.textContent = initial;
@@ -2752,13 +2759,20 @@
           
           // Update profile name if available
           const profileName = getElement('profile-name');
-          if (profileName && currentUser.user_metadata?.name) {
-            profileName.textContent = currentUser.user_metadata.name;
+          if (profileName) {
+            profileName.textContent = currentUser.user_metadata?.name || currentUser.email || 'User';
           }
           
           // Load companion from user metadata
           if (currentUser.user_metadata?.companion) {
             currentCompanion = currentUser.user_metadata.companion;
+          } else {
+            // Set default companion if none exists
+            currentCompanion = "elena";
+            // Update user metadata with default companion
+            await supabase.auth.updateUser({
+              data: { companion: currentCompanion }
+            });
           }
           
           // Load subscription status
@@ -2778,7 +2792,7 @@
         }
         return false;
       } catch (error) {
-        console.error('Session check failed:', error.message);
+        console.error('Session check failed:', error);
         return false;
       }
     }
@@ -2811,34 +2825,18 @@
       }
     }
 
-    // Initialize the dashboard
+    // Initialize the dashboard - UPDATED WITH BETTER SESSION HANDLING
     document.addEventListener('DOMContentLoaded', async function() {
       try {
-        const isAuthenticated = await checkSession();
-        const loginPrompt = getElement('login-prompt');
-        const dashboardContainer = getElement('dashboard-container');
+        // First check if we have an existing session
+        const { data: { session } } = await supabase.auth.getSession();
         
-        if (isAuthenticated) {
-          // Show dashboard for logged-in users
-          if (loginPrompt) loginPrompt.style.display = 'none';
-          if (dashboardContainer) dashboardContainer.style.display = 'block';
-          
-          setGreeting();
-          setCurrentDate();
-          initBreathingExercise();
-          setupEventListeners();
-          
-          // Load user-specific data
-          loadCompanion();
-          loadProgress();
-          loadMemories();
-          
-          // Start companion chat
-          startCompanionChat();
+        if (session) {
+          // If we have a session, initialize the app
+          initializeApp(session.user);
         } else {
-          // Show login prompt for unauthenticated users
-          if (loginPrompt) loginPrompt.style.display = 'block';
-          if (dashboardContainer) dashboardContainer.style.display = 'none';
+          // No session found, show login prompt
+          showLoginPrompt();
         }
         
         // Setup login redirection button
@@ -2848,11 +2846,56 @@
             window.location.href = 'login.html';
           });
         }
+        
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+          console.log('Auth state changed:', event, session);
+          if (event === 'SIGNED_IN' && session) {
+            initializeApp(session.user);
+          } else if (event === 'SIGNED_OUT') {
+            showLoginPrompt();
+          }
+        });
+        
       } catch (error) {
         console.error('Initialization failed:', error);
         showToast("Failed to initialize app", "error");
       }
     });
+
+    // Initialize the app for authenticated users
+    async function initializeApp(user) {
+      console.log('Initializing app for user:', user);
+      currentUser = user;
+      
+      const loginPrompt = getElement('login-prompt');
+      const dashboardContainer = getElement('dashboard-container');
+      
+      if (loginPrompt) loginPrompt.style.display = 'none';
+      if (dashboardContainer) dashboardContainer.style.display = 'block';
+      
+      setGreeting();
+      setCurrentDate();
+      initBreathingExercise();
+      setupEventListeners();
+      
+      // Load user-specific data
+      await loadCompanion();
+      await loadProgress();
+      await loadMemories();
+      
+      // Start companion chat
+      startCompanionChat();
+    }
+
+    // Show login prompt for unauthenticated users
+    function showLoginPrompt() {
+      const loginPrompt = getElement('login-prompt');
+      const dashboardContainer = getElement('dashboard-container');
+      
+      if (loginPrompt) loginPrompt.style.display = 'block';
+      if (dashboardContainer) dashboardContainer.style.display = 'none';
+    }
 
     // Initialize breathing exercise
     function initBreathingExercise() {
@@ -3017,7 +3060,6 @@
       // Mood history button
       const moodHistoryBtn = getElement('mood-history');
       if (moodHistoryBtn) moodHistoryBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Mood history feature is coming soon!", "info");
       });
       
@@ -3036,7 +3078,6 @@
       const chatSettingsBtn = getElement('chat-settings');
       if (chatSettingsBtn) {
         chatSettingsBtn.addEventListener('click', () => {
-          // Not implemented in this demo
           showToast("Companion settings feature is coming soon!", "info");
         });
       }
@@ -3044,20 +3085,17 @@
       // Memory controls
       const addMemoryBtn = getElement('add-memory-btn');
       if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Add memory feature is coming soon!", "info");
       });
       
       const memoryBookBtn = getElement('memory-book-btn');
       if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Memory book feature is coming soon!", "info");
       });
       
       // Settings controls
       const accountSettingsBtn = getElement('account-settings-btn');
       if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Account settings feature is coming soon!", "info");
       });
       
@@ -3068,26 +3106,22 @@
       // Companion selection buttons
       const changeCompanionBtn = getElement('change-companion-btn');
       if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Change companion feature is coming soon!", "info");
       });
       
       const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
       if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Change companion feature is coming soon!", "info");
       });
       
       // Upgrade button
       const upgradeBtn = getElement('upgrade-btn');
       if (upgradeBtn) upgradeBtn.addEventListener('click', () => {
-        // Not implemented in this demo
         showToast("Upgrade to premium feature is coming soon!", "info");
       });
       
       const subscribeBtn = getElement('subscribe-btn');
       if (subscribeBtn) subscribeBtn.addEventListener('click', () => {
-        // Simulate subscription upgrade
         upgradeToPremium();
       });
     }
@@ -3147,7 +3181,7 @@
         if (data) {
           progressSources = {
             mood: data.mood_entries || 0,
-            chat: data.chat_count || 0, // Fixed column name
+            chat: data.chat_count || 0,
             journal: data.journal_entries || 0,
             memories: data.memories || 0
           };
@@ -3160,7 +3194,8 @@
           await saveProgress();
         }
       } catch (error) {
-        showToast("Error loading progress: " + error.message, "error");
+        console.error("Error loading progress:", error);
+        showToast("Error loading progress", "error");
       }
     }
 
@@ -3174,7 +3209,7 @@
           .upsert({
             user_id: currentUser.id,
             mood_entries: progressSources.mood,
-            chat_count: progressSources.chat, // Fixed column name
+            chat_count: progressSources.chat,
             journal_entries: progressSources.journal,
             memories: progressSources.memories,
             credits_used: creditsUsed,
@@ -3183,7 +3218,7 @@
         
         if (error) throw error;
       } catch (error) {
-        console.error("Error saving progress:", error.message);
+        console.error("Error saving progress:", error);
       }
     }
 
@@ -3423,7 +3458,6 @@
           memoryItem.appendChild(label);
           
           memoryItem.addEventListener('click', () => {
-            // Not implemented in this demo
             showToast("Memory viewing feature is coming soon!", "info");
           });
           container.appendChild(memoryItem);
@@ -3437,7 +3471,6 @@
           <div class="memory-label">Add Memory</div>
         `;
         addMemory.addEventListener('click', () => {
-          // Not implemented in this demo
           showToast("Add memory feature is coming soon!", "info");
         });
         container.appendChild(addMemory);
