@@ -6,7 +6,7 @@
   <title>Therapathy - AI Healing Companion</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary: #5E60CE;
@@ -1782,8 +1782,7 @@
       font-size: 0.9rem;
       color: var(--gray);
     }
-    
-    /* Added loading spinner */
+  /* Added loading spinner */
     .loading-spinner {
       display: inline-block;
       width: 20px;
@@ -1933,8 +1932,7 @@
     .message.user {
       border-right: 3px solid var(--primary);
     }
-    
-    /* Add new styles for subscription elements */
+  /* Add new styles for subscription elements */
     .credit-counter {
       display: flex;
       align-items: center;
@@ -2173,7 +2171,7 @@
   </div>
 
   <!-- Dashboard Container -->
-  <div class="container dashboard-container" id="dashboard-container">
+  <div class="container dashboard-container" id="dashboard-container" style="display: none;">
     <!-- Dashboard Header -->
     <div class="dashboard-header">
       <div class="greeting" id="greeting">Good afternoon</div>
@@ -2229,17 +2227,8 @@
           </button>
         </div>
         <div class="chat-messages" id="chat-messages">
-          <div class="message companion">
-            Hi there! I'm Elena, your healing companion. How are you feeling today?
-            <div class="message-time">2:45 PM</div>
-          </div>
-          <div class="message user">
-            I'm feeling a bit overwhelmed today.
-            <div class="message-time">2:46 PM</div>
-          </div>
-          <div class="message companion">
-            I understand how you feel. Would you like to talk more about this?
-            <div class="message-time">2:46 PM</div>
+          <div class="loading-text" id="chat-loading">
+            <div class="loading-spinner"></div> Connecting with your companion...
           </div>
         </div>
         <div class="chat-input">
@@ -2398,23 +2387,12 @@
         <p>Preserve and revisit special moments</p>
         
         <div class="memory-container" id="memory-container">
-          <!-- Memories will be added here dynamically -->
-          <div class="memory-item" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'50\' y=\'50\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>🏖️</text></svg>')">
-            <div class="memory-label">Beach Day</div>
-          </div>
-          <div class="memory-item" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'50\' y=\'50\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>👪</text></svg>')">
-            <div class="memory-label">Family</div>
-          </div>
-          <div class="memory-item" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'50\' y=\'50\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>🏔️</text></svg>')">
-            <div class="memory-label">Mountain</div>
-          </div>
-          <div class="memory-item add-memory" id="add-memory-btn">
-            <i class="fas fa-plus"></i>
-            <div class="memory-label">Add Memory</div>
+          <div class="loading-text" id="memories-loading">
+            <div class="loading-spinner"></div> Loading your memories...
           </div>
         </div>
         
-        <div class="file-upload-container" id="memory-upload" style="display: none;">
+        <div class="file-upload-container" id="memory-upload">
           <i class="fas fa-cloud-upload-alt"></i>
           <h4>Upload a Memory</h4>
           <p>Click or drag files to upload</p>
@@ -2443,10 +2421,10 @@
       <div class="card">
         <div class="progress-title">
           <h4>Healing Progress</h4>
-          <span id="profile-progress-percent">65%</span>
+          <span id="profile-progress-percent">0%</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="profile-progress-fill" style="width: 65%"></div>
+          <div class="progress-fill" id="profile-progress-fill" style="width: 0%"></div>
         </div>
         
         <div class="progress-details">
@@ -2454,28 +2432,28 @@
             <div class="progress-source-icon">
               <i class="fas fa-smile"></i>
             </div>
-            <div class="progress-source-value" id="profile-mood-source">12</div>
+            <div class="progress-source-value" id="profile-mood-source">0</div>
             <div class="progress-source-label">Moods</div>
           </div>
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-comment"></i>
             </div>
-            <div class="progress-source-value" id="profile-chat-source">24</div>
+            <div class="progress-source-value" id="profile-chat-source">0</div>
             <div class="progress-source-label">Messages</div>
           </div>
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-book"></i>
             </div>
-            <div class="progress-source-value" id="profile-journal-source">8</div>
+            <div class="progress-source-value" id="profile-journal-source">0</div>
             <div class="progress-source-label">Journals</div>
           </div>
           <div class="progress-source">
             <div class="progress-source-icon">
               <i class="fas fa-heart"></i>
             </div>
-            <div class="progress-source-value" id="profile-memory-source">3</div>
+            <div class="progress-source-value" id="profile-memory-source">0</div>
             <div class="progress-source-label">Memories</div>
           </div>
         </div>
@@ -2483,11 +2461,11 @@
         <!-- Credit Usage -->
         <div class="credit-usage" id="credit-usage-section">
           <div class="credit-usage-item">
-            <div class="credit-usage-value" id="credits-used">12</div>
+            <div class="credit-usage-value" id="credits-used">0</div>
             <div class="credit-usage-label">Credits Used</div>
           </div>
           <div class="credit-usage-item">
-            <div class="credit-usage-value" id="credits-remaining">38</div>
+            <div class="credit-usage-value" id="credits-remaining">50</div>
             <div class="credit-usage-label">Credits Remaining</div>
           </div>
         </div>
@@ -2559,6 +2537,15 @@
     </div>
   </div>
 
+  <!-- Login Prompt -->
+  <div class="container login-prompt" id="login-prompt">
+    <h2>Welcome to Therapathy</h2>
+    <p>Your AI-powered healing companion for grief counseling and emotional support</p>
+    <button class="btn-login" id="go-to-login">
+      <i class="fas fa-sign-in-alt"></i> Go to Login Page
+    </button>
+  </div>
+
   <!-- Journal Modal -->
   <div class="modal" id="journal-modal">
     <div class="modal-content">
@@ -2598,11 +2585,11 @@
       </div>
       <div class="form-group">
         <label for="settings-name">Full Name</label>
-        <input type="text" id="settings-name" class="form-control" placeholder="Your full name" value="Demo User">
+        <input type="text" id="settings-name" class="form-control" placeholder="Your full name">
       </div>
       <div class="form-group">
         <label for="settings-email">Email Address</label>
-        <input type="email" id="settings-email" class="form-control" placeholder="Your email" value="user@example.com">
+        <input type="email" id="settings-email" class="form-control" placeholder="Your email">
       </div>
       <div class="form-group">
         <label for="settings-password">New Password</label>
@@ -2626,29 +2613,8 @@
         <button class="close-modal" id="close-memory-book-modal">&times;</button>
       </div>
       <div class="memory-book" id="memory-book-content">
-        <div class="memory-book-entry">
-          <div class="memory-book-thumbnail" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 70 70\'><rect width=\'70\' height=\'70\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'35\' y=\'35\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>🏖️</text></svg>')">
-          </div>
-          <div class="memory-book-details">
-            <div class="memory-book-title">Beach Day</div>
-            <div class="memory-book-date">Added: Jun 15, 2023</div>
-          </div>
-        </div>
-        <div class="memory-book-entry">
-          <div class="memory-book-thumbnail" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 70 70\'><rect width=\'70\' height=\'70\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'35\' y=\'35\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>👪</text></svg>')">
-          </div>
-          <div class="memory-book-details">
-            <div class="memory-book-title">Family Gathering</div>
-            <div class="memory-book-date">Added: Apr 22, 2023</div>
-          </div>
-        </div>
-        <div class="memory-book-entry">
-          <div class="memory-book-thumbnail" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 70 70\'><rect width=\'70\' height=\'70\' fill=\'%235E60CE\' fill-opacity=\'0.1\'/><text x=\'35\' y=\'35\' font-size=\'20\' text-anchor=\'middle\' fill=\'%235E60CE\' font-family=\'Arial\'>🏔️</text></svg>')">
-          </div>
-          <div class="memory-book-details">
-            <div class="memory-book-title">Mountain Hike</div>
-            <div class="memory-book-date">Added: Mar 5, 2023</div>
-          </div>
+        <div class="loading-text">
+          <div class="loading-spinner"></div> Loading your memories...
         </div>
       </div>
     </div>
@@ -2704,40 +2670,12 @@
     </div>
   </div>
   
-  <!-- Add Memory Modal -->
-  <div class="modal" id="add-memory-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add New Memory</h3>
-        <button class="close-modal" id="close-memory-modal">&times;</button>
-      </div>
-      <div class="form-group">
-        <label for="memory-title">Memory Title</label>
-        <input type="text" id="memory-title" class="form-control" placeholder="Give your memory a title">
-      </div>
-      <div class="form-group">
-        <label for="memory-description">Description</label>
-        <textarea id="memory-description" class="form-control" rows="3" placeholder="Describe this memory"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="memory-file">Upload Image</label>
-        <div class="file-upload-container" id="memory-file-upload">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <h4>Upload Memory Image</h4>
-          <p>Click or drag files to upload</p>
-          <input type="file" id="memory-image" style="display: none;">
-        </div>
-        <div class="memory-preview" id="memory-preview">
-          <i class="fas fa-image"></i>
-        </div>
-      </div>
-      <button class="btn btn-primary" id="save-memory">
-        <i class="fas fa-save"></i> Save Memory
-      </button>
-    </div>
-  </div>
-  
   <script>
+    // Initialize Supabase with demo credentials
+    const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     // State variables
     let currentMood = "great";
     let breathInterval;
@@ -2745,10 +2683,23 @@
     let cycleCount = 0;
     let secondsElapsed = 0;
     let currentPhase = 0;
-    let progress = 65;
-    let credits = 38;
-    let creditsUsed = 12;
+    let progress = 0;
+    let currentUser = null;
+    let moodChart = null;
     let currentCompanion = "elena";
+    let conversationHistory = [];
+    let memories = [];
+    let progressSources = {
+      mood: 0,
+      chat: 0,
+      journal: 0,
+      memories: 0
+    };
+    
+    // Subscription state
+    let subscriptionStatus = "free"; // "free" or "premium"
+    let credits = 50;
+    let creditsUsed = 0;
     
     // Define companions
     const companions = {
@@ -2757,21 +2708,51 @@
         role: "Healing Guide",
         specialties: ["Grief", "Compassion", "Support"],
         avatar: "fas fa-smile",
-        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?"
+        intro: "Hi there! I'm Elena, your healing companion. How are you feeling today?",
+        responses: [
+          "I understand how you feel. Would you like to talk more about this?",
+          "That sounds challenging. Remember to be gentle with yourself during this process.",
+          "Thank you for sharing that with me. How has this been affecting your daily life?",
+          "I appreciate you opening up about this. What's one thing that brought you comfort today?",
+          "Your feelings are valid. Would it help to explore some coping strategies together?",
+          "It takes courage to share what you're going through. I'm here to support you.",
+          "Let's take a moment to breathe together. Would that help right now?",
+          "I'm listening. Would you like to share more about what you're experiencing?"
+        ]
       },
       "david": {
         name: "David",
         role: "Mindfulness Coach",
         specialties: ["Mindfulness", "Resilience", "Meditation"],
         avatar: "fas fa-leaf",
-        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey."
+        intro: "Hello, I'm David. I'm here to help you find peace and mindfulness on your healing journey.",
+        responses: [
+          "Let's take a deep breath together. Inhale slowly... and exhale.",
+          "Mindfulness can help us navigate difficult emotions. Would you like to try a grounding exercise?",
+          "I hear you. Remember that emotions are temporary visitors. How can we find calm right now?",
+          "Notice your breathing. Where do you feel this emotion in your body?",
+          "Let's practice being present. Name three things you can see around you.",
+          "Difficult moments are opportunities for growth. What is this experience teaching you?",
+          "I'm here to guide you back to the present moment whenever you feel overwhelmed.",
+          "Would a short guided meditation help you right now?"
+        ]
       },
       "sophia": {
         name: "Sophia",
         role: "Therapeutic Guide",
         specialties: ["Cognitive Therapy", "Self-Discovery", "Empowerment"],
         avatar: "fas fa-lightbulb",
-        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth."
+        intro: "Hi, I'm Sophia. Let's explore your thoughts and feelings together to foster healing and growth.",
+        responses: [
+          "That's an interesting perspective. What evidence supports this thought?",
+          "How might you reframe that situation in a more balanced way?",
+          "What strengths have helped you through difficult times in the past?",
+          "Let's explore alternative perspectives. What might be another way to view this?",
+          "I notice a pattern here. How might we challenge that thought together?",
+          "What would you tell a friend who was experiencing what you're going through?",
+          "Let's examine the evidence for and against that thought.",
+          "What small step could you take today to move toward healing?"
+        ]
       }
     };
 
@@ -2806,7 +2787,7 @@
       
       // Show/hide alerts based on credits
       if (creditAlert) {
-        if (credits < 5) {
+        if (subscriptionStatus === "free" && credits < 5) {
           creditAlert.style.display = 'block';
           if (getElement('remaining-credits')) {
             getElement('remaining-credits').textContent = credits;
@@ -2818,7 +2799,7 @@
       
       // Show upgrade prompt for free users
       if (upgradePrompt) {
-        if (credits < 10) {
+        if (subscriptionStatus === "free" && credits < 10) {
           upgradePrompt.style.display = 'block';
         } else {
           upgradePrompt.style.display = 'none';
@@ -2855,14 +2836,106 @@
     }
 
     // Initialize the dashboard
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       // Set up UI elements
       setGreeting();
       setCurrentDate();
       initBreathingExercise();
       setupEventListeners();
-      updateCreditDisplay();
+      
+      // Check user session
+      await checkUserSession();
+      
+      // If user is logged in, initialize the rest
+      if (currentUser) {
+        loadCompanion();
+        startCompanionChat();
+        loadMemories();
+        updateProgressBar();
+        updateCreditDisplay();
+      }
     });
+
+    // Check user session and load data
+    async function checkUserSession() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (user) {
+        currentUser = user;
+        await fetchUserProfile();
+        getElement('login-prompt').style.display = 'none';
+        getElement('dashboard-container').style.display = 'block';
+        initializeDashboard();
+      } else {
+        getElement('login-prompt').style.display = 'block';
+        getElement('dashboard-container').style.display = 'none';
+      }
+    }
+
+    // Fetch user profile from database
+    async function fetchUserProfile() {
+      if (!currentUser) return;
+      
+      // In a real app, you would fetch from your profiles table
+      // For demo purposes, we'll simulate profile data
+      const profile = {
+        id: currentUser.id,
+        full_name: currentUser.user_metadata.full_name || "Demo User",
+        companion: "elena",
+        subscription_status: "free",
+        credits: 50,
+        join_date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      };
+      
+      // Update user data
+      currentUser.profile = profile;
+      
+      // Set subscription status and credits
+      subscriptionStatus = profile.subscription_status || 'free';
+      credits = profile.credits || 50;
+      currentCompanion = profile.companion || 'elena';
+      
+      // Update UI
+      const userInitials = currentUser.profile.full_name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      ['userInitialTextMobile', 'profile-initial'].forEach(id => {
+        const el = getElement(id);
+        if (el) el.textContent = userInitials;
+      });
+      
+      const profileName = getElement('profile-name');
+      if (profileName) {
+        profileName.textContent = currentUser.profile.full_name || 'User';
+      }
+      
+      const joinDate = getElement('join-date');
+      if (joinDate) {
+        joinDate.textContent = profile.join_date || 'Jan 2023';
+      }
+    }
+
+    // Initialize the dashboard with user data
+    function initializeDashboard() {
+      // Update UI with user data
+      const userInitials = currentUser.profile.full_name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      ['userInitialTextMobile', 'profile-initial'].forEach(id => {
+        const el = getElement(id);
+        if (el) el.textContent = userInitials;
+      });
+      
+      const profileName = getElement('profile-name');
+      if (profileName) {
+        profileName.textContent = currentUser.profile.full_name || 'User';
+      }
+      
+      const joinDate = getElement('join-date');
+      if (joinDate) {
+        joinDate.textContent = currentUser.profile.join_date || 'Jan 2023';
+      }
+      
+      // Show dashboard
+      getElement('login-prompt').style.display = 'none';
+      getElement('dashboard-container').style.display = 'block';
+    }
 
     // Initialize breathing exercise
     function initBreathingExercise() {
@@ -2991,6 +3064,30 @@
         });
       });
       
+      // Go to login button
+      const goToLoginBtn = getElement('go-to-login');
+      if (goToLoginBtn) {
+        goToLoginBtn.addEventListener('click', function() {
+          window.location.href = 'login.html';
+        });
+      }
+      
+      // Profile avatar click
+      const userInitialMobile = getElement('userInitialMobile');
+      if (userInitialMobile) {
+        userInitialMobile.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Navigate to profile section
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
+          if (profileNav) profileNav.classList.add('active');
+          
+          document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+          const profileSection = getElement('profile-section');
+          if (profileSection) profileSection.classList.add('active');
+        });
+      }
+      
       // Breathing exercise controls
       const startBtn = getElement('start-breath');
       if (startBtn) startBtn.addEventListener('click', toggleBreathing);
@@ -3034,16 +3131,23 @@
       }
       
       // Memory controls
-      const addMemoryBtn = getElement('add-memory-btn');
-      if (addMemoryBtn) {
-        addMemoryBtn.addEventListener('click', () => {
-          getElement('add-memory-modal').style.display = 'flex';
+      const memoryUpload = getElement('memory-upload');
+      const memoryFile = getElement('memory-file');
+      if (memoryUpload && memoryFile) {
+        memoryUpload.addEventListener('click', () => {
+          memoryFile.click();
+        });
+        
+        memoryFile.addEventListener('change', function(e) {
+          if (this.files && this.files[0]) {
+            uploadMemory(this.files[0]);
+          }
         });
       }
       
       const memoryBookBtn = getElement('memory-book-btn');
       if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
-        getElement('memory-book-modal').style.display = 'flex';
+        showMemoryBook();
       });
       
       // Journal controls
@@ -3078,7 +3182,7 @@
       // Account settings controls
       const accountSettingsBtn = getElement('account-settings-btn');
       if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
-        getElement('account-settings-modal').style.display = 'flex';
+        openAccountSettings();
       });
       
       const closeSettingsModal = getElement('close-settings-modal');
@@ -3143,47 +3247,6 @@
           getElement('memory-book-modal').style.display = 'none';
         });
       }
-      
-      // Close add memory modal
-      const closeMemoryModal = getElement('close-memory-modal');
-      if (closeMemoryModal) {
-        closeMemoryModal.addEventListener('click', () => {
-          getElement('add-memory-modal').style.display = 'none';
-        });
-      }
-      
-      // Memory file upload
-      const memoryFileUpload = getElement('memory-file-upload');
-      const memoryImage = getElement('memory-image');
-      if (memoryFileUpload && memoryImage) {
-        memoryFileUpload.addEventListener('click', () => {
-          memoryImage.click();
-        });
-        
-        memoryImage.addEventListener('change', function(e) {
-          if (this.files && this.files[0]) {
-            const file = this.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              const preview = getElement('memory-preview');
-              preview.innerHTML = `<img src="${e.target.result}" alt="Memory preview">`;
-            }
-            reader.readAsDataURL(file);
-          }
-        });
-      }
-      
-      // Save memory button
-      const saveMemoryBtn = getElement('save-memory');
-      if (saveMemoryBtn) {
-        saveMemoryBtn.addEventListener('click', saveMemory);
-      }
-      
-      // Refresh affirmation button
-      const refreshAffirmation = getElement('refreshAffirmation');
-      if (refreshAffirmation) {
-        refreshAffirmation.addEventListener('click', generateAffirmation);
-      }
     }
 
     // Show toast notification
@@ -3199,29 +3262,35 @@
       }, 3000);
     }
 
-    // Generate a new affirmation
-    function generateAffirmation() {
-      const affirmations = [
-        "You are stronger than you think.",
-        "It's okay to not be okay. Healing takes time.",
-        "Your feelings are valid and important.",
-        "Each day brings new opportunities for healing.",
-        "You are not alone in this journey.",
-        "Self-compassion is the first step toward healing.",
-        "Your strength is greater than your struggles.",
-        "Healing is not linear; be patient with yourself."
-      ];
+    // Update progress bar
+    function updateProgressBar() {
+      const totalPoints = progressSources.mood * 1 + progressSources.chat * 2 + 
+                         progressSources.journal * 3 + progressSources.memories * 2;
+      progress = Math.min(100, Math.round(totalPoints * 100 / 50));
       
-      const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
-      getElement('affirmation').textContent = `"${randomAffirmation}"`;
+      const profileProgressFill = getElement('profile-progress-fill');
+      const profileProgressPercent = getElement('profile-progress-percent');
+      
+      if (profileProgressFill) profileProgressFill.style.width = `${progress}%`;
+      if (profileProgressPercent) profileProgressPercent.textContent = `${progress}%`;
+      
+      // Update progress sources
+      const sources = {
+        'profile-mood-source': progressSources.mood,
+        'profile-chat-source': progressSources.chat,
+        'profile-journal-source': progressSources.journal,
+        'profile-memory-source': progressSources.memories
+      };
+      
+      Object.entries(sources).forEach(([id, value]) => {
+        const el = getElement(id);
+        if (el) el.textContent = value;
+      });
     }
 
-    // Select a new companion
-    function selectCompanion(companionId) {
-      if (!companions[companionId]) return;
-      
-      currentCompanion = companionId;
-      const companion = companions[companionId];
+    // Load companion information
+    function loadCompanion() {
+      const companion = companions[currentCompanion];
       
       // Update UI
       const nameEl = getElement('companion-name');
@@ -3246,21 +3315,69 @@
           specialtiesContainer.appendChild(tag);
         });
       }
+    }
+
+    // Select a new companion
+    function selectCompanion(companionId) {
+      if (!companions[companionId]) return;
       
-      // Update chat intro
+      currentCompanion = companionId;
+      loadCompanion();
+      startCompanionChat();
+      
+      showToast(`Companion changed to ${companions[companionId].name}`, "success");
+      
+      // In a real app, you would save this preference to the database
+      // For demo purposes, we'll just update local state
+    }
+
+    // Start chat with companion
+    function startCompanionChat() {
       const chatMessages = getElement('chat-messages');
-      if (chatMessages) {
-        const firstMessage = chatMessages.querySelector('.message.companion');
-        if (firstMessage) {
-          firstMessage.textContent = companion.intro;
-        }
-      }
+      if (!chatMessages) return;
       
-      showToast(`Companion changed to ${companion.name}`, "success");
+      // Remove loading indicator if present
+      const loadingIndicator = getElement('chat-loading');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      // Reset conversation history
+      conversationHistory = [];
+      chatMessages.innerHTML = '';
+      
+      // Add intro message
+      const introMessage = document.createElement('div');
+      introMessage.className = 'message companion';
+      introMessage.innerHTML = `
+        ${companions[currentCompanion].intro}
+        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatMessages.appendChild(introMessage);
+      
+      // Add to conversation history
+      conversationHistory.push({
+        role: "assistant",
+        content: companions[currentCompanion].intro
+      });
+      
+      // Add companion change animation
+      const chatContainer = getElement('chat-container');
+      chatContainer.classList.add('companion-change');
+      setTimeout(() => chatContainer.classList.remove('companion-change'), 500);
     }
 
     // Send message to companion
     function sendMessage() {
+      // Check if user has credits or is premium
+      if (subscriptionStatus === "free") {
+        if (credits < 5) {
+          showToast("You don't have enough credits (5 per message)", "error");
+          return;
+        }
+        credits -= 5;
+        creditsUsed += 5;
+        updateCreditDisplay();
+      }
+      
       const input = getElement('chat-input');
       if (!input) return;
       
@@ -3278,6 +3395,12 @@
       userMessage.className = 'message user';
       userMessage.innerHTML = `${message}<div class="message-time">${timeString}</div>`;
       chatMessages.appendChild(userMessage);
+      
+      // Add to conversation history
+      conversationHistory.push({
+        role: "user",
+        content: message
+      });
       
       // Clear input
       input.value = '';
@@ -3299,41 +3422,8 @@
         const responseTime = new Date();
         const responseTimeString = responseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        // Responses based on companion
-        const responses = {
-          "elena": [
-            "I understand how you feel. Would you like to talk more about this?",
-            "That sounds challenging. Remember to be gentle with yourself during this process.",
-            "Thank you for sharing that with me. How has this been affecting your daily life?",
-            "I appreciate you opening up about this. What's one thing that brought you comfort today?",
-            "Your feelings are valid. Would it help to explore some coping strategies together?",
-            "It takes courage to share what you're going through. I'm here to support you.",
-            "Let's take a moment to breathe together. Would that help right now?",
-            "I'm listening. Would you like to share more about what you're experiencing?"
-          ],
-          "david": [
-            "Let's take a deep breath together. Inhale slowly... and exhale.",
-            "Mindfulness can help us navigate difficult emotions. Would you like to try a grounding exercise?",
-            "I hear you. Remember that emotions are temporary visitors. How can we find calm right now?",
-            "Notice your breathing. Where do you feel this emotion in your body?",
-            "Let's practice being present. Name three things you can see around you.",
-            "Difficult moments are opportunities for growth. What is this experience teaching you?",
-            "I'm here to guide you back to the present moment whenever you feel overwhelmed.",
-            "Would a short guided meditation help you right now?"
-          ],
-          "sophia": [
-            "That's an interesting perspective. What evidence supports this thought?",
-            "How might you reframe that situation in a more balanced way?",
-            "What strengths have helped you through difficult times in the past?",
-            "Let's explore alternative perspectives. What might be another way to view this?",
-            "I notice a pattern here. How might we challenge that thought together?",
-            "What would you tell a friend who was experiencing what you're going through?",
-            "Let's examine the evidence for and against that thought.",
-            "What small step could you take today to move toward healing?"
-          ]
-        };
-        
-        const companionResponses = responses[currentCompanion] || responses["elena"];
+        // Select a random response from the companion's responses
+        const companionResponses = companions[currentCompanion].responses;
         const response = companionResponses[Math.floor(Math.random() * companionResponses.length)];
         
         const companionMessage = document.createElement('div');
@@ -3342,85 +3432,308 @@
         chatMessages.appendChild(companionMessage);
         
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Add to conversation history
+        conversationHistory.push({
+          role: "assistant",
+          content: response
+        });
+        
+        // Update progress
+        progressSources.chat++;
+        updateProgressBar();
+        
       }, 1500);
+    }
+
+    // Upload memory file
+    async function uploadMemory(file) {
+      if (subscriptionStatus === "free") {
+        if (credits < 10) {
+          showToast("You need 10 credits to upload a memory", "error");
+          return;
+        }
+        credits -= 10;
+        creditsUsed += 10;
+        updateCreditDisplay();
+      }
+      
+      showToast(`Uploading "${file.name}"...`, "info");
+      
+      // Upload to Supabase Storage
+      const filePath = `${currentUser.id}/${Date.now()}_${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('memories')
+        .upload(filePath, file);
+      
+      if (error) {
+        showToast("Upload failed: " + error.message, "error");
+        return;
+      }
+      
+      // Get public URL
+      const { data: urlData } = await supabase.storage
+        .from('memories')
+        .getPublicUrl(filePath);
+      
+      const publicUrl = urlData.publicUrl;
+      
+      // Save memory to database
+      const { data: memory, error: dbError } = await supabase
+        .from('memories')
+        .insert([
+          { 
+            user_id: currentUser.id, 
+            title: file.name, 
+            description: "Uploaded memory",
+            file_url: publicUrl,
+            file_type: file.type
+          }
+        ]);
+      
+      if (dbError) {
+        showToast("Failed to save memory: " + dbError.message, "error");
+        return;
+      }
+      
+      showToast("Memory uploaded successfully!", "success");
+      
+      // Update UI
+      loadMemories();
+      
+      // Update progress
+      progressSources.memories++;
+      updateProgressBar();
     }
 
     // Save journal entry
     function saveJournal() {
       const title = getElement('journal-title').value.trim();
       const content = getElement('journal-content').value.trim();
+      const fileInput = getElement('journal-file');
       
       if (!title || !content) {
         showToast("Please fill in both title and content", "error");
         return;
       }
       
-      showToast("Journal entry saved successfully!", "success");
-      getElement('journal-modal').style.display = 'none';
+      // Check for attachment
+      let hasAttachment = false;
+      if (fileInput.files && fileInput.files[0]) {
+        hasAttachment = true;
+        
+        if (subscriptionStatus === "free") {
+          if (credits < 5) {
+            showToast("You need 5 credits to add an attachment", "error");
+            return;
+          }
+          credits -= 5;
+          creditsUsed += 5;
+          updateCreditDisplay();
+        }
+      }
       
-      // Reset form
-      getElement('journal-title').value = '';
-      getElement('journal-content').value = '';
+      // Simulate save process
+      showToast("Saving journal entry...", "info");
+      
+      setTimeout(() => {
+        showToast("Journal entry saved successfully!", "success");
+        getElement('journal-modal').style.display = 'none';
+        
+        // Reset form
+        getElement('journal-title').value = '';
+        getElement('journal-content').value = '';
+        fileInput.value = '';
+        
+        // Update progress
+        progressSources.journal++;
+        updateProgressBar();
+      }, 1500);
     }
 
     // Upgrade to premium
     function upgradeToPremium() {
-      showToast("Redirecting to premium subscription page...", "info");
-      setTimeout(() => {
-        // In a real app, this would redirect to the subscription page
-        showToast("Premium features unlocked!", "success");
-        getElement('current-plan').textContent = "Premium Member";
-        getElement('credit-alert').style.display = 'none';
-        getElement('upgrade-prompt').style.display = 'none';
-      }, 2000);
+      // Redirect to pricing page
+      window.location.href = 'pricing.html';
     }
 
-    // Save memory
-    function saveMemory() {
-      const title = getElement('memory-title').value.trim();
+    // Load memories from Supabase
+    async function loadMemories() {
+      const container = getElement('memory-container');
+      if (!container) return;
       
-      if (!title) {
-        showToast("Please give your memory a title", "error");
-        return;
+      // Remove loading indicator
+      const loadingIndicator = getElement('memories-loading');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      // Show loading state
+      container.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div> Loading your memories...</div>';
+      
+      try {
+        // Fetch memories from Supabase
+        const { data: memories, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('user_id', currentUser.id);
+        
+        if (error) throw error;
+        
+        // Update progress sources
+        progressSources.memories = memories.length;
+        updateProgressBar();
+        
+        // Update UI
+        container.innerHTML = '';
+        
+        // Add existing memories
+        memories.forEach(memory => {
+          const memoryItem = document.createElement('div');
+          memoryItem.className = 'memory-item has-image';
+          memoryItem.style.backgroundImage = `url(${memory.file_url})`;
+          memoryItem.innerHTML = `
+            <div class="memory-label">${memory.title}</div>
+          `;
+          
+          memoryItem.addEventListener('click', () => {
+            showToast(`Viewing memory: ${memory.title}`, "info");
+          });
+          container.appendChild(memoryItem);
+        });
+        
+        // Add "Add Memory" button
+        const addMemory = document.createElement('div');
+        addMemory.className = 'memory-item add-memory';
+        addMemory.innerHTML = `
+          <i class="fas fa-plus"></i>
+          <div class="memory-label">Add Memory</div>
+        `;
+        addMemory.addEventListener('click', () => {
+          getElement('memory-file').click();
+        });
+        container.appendChild(addMemory);
+        
+      } catch (error) {
+        container.innerHTML = '<div class="empty-state">Failed to load memories</div>';
+        console.error("Error loading memories:", error);
       }
+    }
+
+    // Show memory book
+    async function showMemoryBook() {
+      const modal = getElement('memory-book-modal');
+      const content = getElement('memory-book-content');
       
-      showToast("Memory saved successfully!", "success");
-      getElement('add-memory-modal').style.display = 'none';
+      if (!modal || !content) return;
       
-      // Reset form
-      getElement('memory-title').value = '';
-      getElement('memory-description').value = '';
-      getElement('memory-preview').innerHTML = '<i class="fas fa-image"></i>';
+      // Show loading state
+      content.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div> Loading your memories...</div>';
+      modal.style.display = 'flex';
+      
+      try {
+        // Fetch memories from Supabase
+        const { data: memories, error } = await supabase
+          .from('memories')
+          .select('*')
+          .eq('user_id', currentUser.id);
+        
+        if (error) throw error;
+        
+        content.innerHTML = '';
+        
+        memories.forEach(memory => {
+          const entry = document.createElement('div');
+          entry.className = 'memory-book-entry';
+          entry.innerHTML = `
+            <div class="memory-book-thumbnail" style="background-image: url(${memory.file_url})">
+            </div>
+            <div class="memory-book-details">
+              <div class="memory-book-title">${memory.title}</div>
+              <div class="memory-book-date">Added: ${new Date(memory.created_at).toLocaleDateString()}</div>
+            </div>
+          `;
+          content.appendChild(entry);
+        });
+        
+        if (memories.length === 0) {
+          content.innerHTML = '<div class="empty-state">No memories found. Start adding some!</div>';
+        }
+      } catch (error) {
+        content.innerHTML = '<div class="empty-state">Failed to load memory book</div>';
+        console.error("Error loading memory book:", error);
+      }
+    }
+
+    // Open account settings
+    function openAccountSettings() {
+      const modal = getElement('account-settings-modal');
+      if (!modal) return;
+      
+      // Populate with current user data
+      getElement('settings-name').value = currentUser.profile.full_name || '';
+      getElement('settings-email').value = currentUser.email || '';
+      
+      modal.style.display = 'flex';
     }
 
     // Save account settings
     function saveAccountSettings() {
       const name = getElement('settings-name').value;
+      const email = getElement('settings-email').value;
+      const password = getElement('settings-password').value;
+      const confirm = getElement('settings-confirm').value;
       
-      if (!name) {
-        showToast("Please enter your name", "error");
-        return;
+      // Validate password if changed
+      if (password || confirm) {
+        if (password !== confirm) {
+          showToast("Passwords don't match", "error");
+          return;
+        }
+        if (password.length < 6) {
+          showToast("Password must be at least 6 characters", "error");
+          return;
+        }
       }
       
-      showToast("Account settings updated successfully", "success");
-      getElement('account-settings-modal').style.display = 'none';
+      showToast("Saving account settings...", "info");
       
-      // Update profile name
-      getElement('profile-name').textContent = name;
-      getElement('profile-initial').textContent = name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      setTimeout(() => {
+        // Update profile name
+        currentUser.profile.full_name = name;
+        
+        // Update UI
+        const userInitials = name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+        ['userInitialTextMobile', 'profile-initial'].forEach(id => {
+          const el = getElement(id);
+          if (el) el.textContent = userInitials;
+        });
+        
+        const profileName = getElement('profile-name');
+        if (profileName) {
+          profileName.textContent = name;
+        }
+        
+        showToast("Account settings updated successfully", "success");
+        getElement('account-settings-modal').style.display = 'none';
+      }, 1000);
     }
 
     // Sign out user
-    function signOut() {
-      showToast("Signed out successfully", "success");
-      setTimeout(() => {
-        // In a real app, this would redirect to the login page
-        window.location.reload();
-      }, 1500);
+    async function signOut() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        showToast("Error signing out: " + error.message, "error");
+      } else {
+        showToast("Signed out successfully", "success");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
     }
     
     // Track mood function
     function trackMood() {
+      progressSources.mood++;
+      updateProgressBar();
       showToast(`Your mood has been recorded: ${currentMood}`, "success");
     }
   </script>
