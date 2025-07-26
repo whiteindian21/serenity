@@ -889,7 +889,7 @@
 
 
   <script>
- // Initialize Supabase
+// Initialize Supabase
 const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -1087,7 +1087,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 });
 
-// Load user data from Supabase
+// Load user data from Supabase with fallback
 async function loadUserData() {
   if (!currentUser) return;
   
@@ -1116,17 +1116,29 @@ async function loadUserData() {
     const username = currentUser.email.split('@')[0];
     if (userGreeting) userGreeting.textContent = `${greeting}, ${username}`;
     
-    // Load user meditation stats
+    // Load user meditation stats with fallback for new users
     const { data, error } = await supabase
       .from('user_stats')
       .select('sessions, streak')
       .eq('user_id', currentUser.id)
-      .single();
+      .maybeSingle();  // Use maybeSingle instead of single to handle empty results
     
     if (error) throw error;
     
-    meditationSessions = data?.sessions || 0;
-    streak = data?.streak || 0;
+    // If no stats exist, create default stats for the user
+    if (!data) {
+      const { error: insertError } = await supabase
+        .from('user_stats')
+        .insert([{ user_id: currentUser.id, sessions: 0, streak: 0 }]);
+      
+      if (insertError) throw insertError;
+      
+      meditationSessions = 0;
+      streak = 0;
+    } else {
+      meditationSessions = data.sessions || 0;
+      streak = data.streak || 0;
+    }
     
     const sessionCount = getElement('sessionCount');
     const streakCount = getElement('streakCount');
@@ -1137,6 +1149,13 @@ async function loadUserData() {
   } catch (error) {
     console.error('Error loading user data:', error);
     showToast("Error loading user data", "error");
+    
+    // Fallback to default values
+    const sessionCount = getElement('sessionCount');
+    const streakCount = getElement('streakCount');
+    
+    if (sessionCount) sessionCount.textContent = '0';
+    if (streakCount) streakCount.textContent = '0 Day Streak';
   }
 }
 
@@ -1249,9 +1268,11 @@ function initAudioPlayer() {
   
   // Update progress bar
   function updateProgress() {
-    const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    if (progressBar) progressBar.style.width = `${percent}%`;
-    if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    if (audioPlayer.duration) {
+      const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      if (progressBar) progressBar.style.width = `${percent}%`;
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    }
   }
   
   // Set progress on click
@@ -1266,7 +1287,9 @@ function initAudioPlayer() {
   // Event listeners
   audioPlayer.addEventListener('timeupdate', updateProgress);
   audioPlayer.addEventListener('loadedmetadata', () => {
-    if (durationEl) durationEl.textContent = formatTime(audioPlayer.duration);
+    if (durationEl && audioPlayer.duration) {
+      durationEl.textContent = formatTime(audioPlayer.duration);
+    }
   });
   
   audioPlayer.addEventListener('ended', () => {
@@ -1296,8 +1319,14 @@ function initAudioPlayer() {
         audioPlayer.pause();
         if (playIcon) playIcon.classList.replace('fa-pause', 'fa-play');
       } else {
-        audioPlayer.play();
-        if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+        audioPlayer.play()
+          .then(() => {
+            if (playIcon) playIcon.classList.replace('fa-play', 'fa-pause');
+          })
+          .catch(error => {
+            console.error('Error playing audio:', error);
+            showToast('Error playing audio', 'error');
+          });
       }
       isPlaying = !isPlaying;
     });
