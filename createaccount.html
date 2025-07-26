@@ -579,16 +579,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 
 <script>
-  // Wait for DOM to be fully loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    // ✅ Initialize Supabase client with CORRECT credentials
+  document.addEventListener('DOMContentLoaded', function () {
     const supabaseUrl = 'https://minchdfasfsrfrmwgqdn.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXdncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-    
-    // Verify supabase is loaded before creating client
+
     if (typeof supabase !== 'undefined') {
-      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-      initializeApp(supabase);
+      const client = supabase.createClient(supabaseUrl, supabaseKey);
+      initializeApp(client);
     } else {
       console.error('Supabase library not loaded');
       showToast('Authentication service not available', 'error');
@@ -596,7 +593,6 @@
   });
 
   function initializeApp(supabase) {
-    // DOM references
     const signupForm = document.getElementById('signupForm');
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
@@ -613,7 +609,6 @@
     const strengthMeter = document.getElementById('strengthMeter');
     const strengthText = document.getElementById('strengthText');
 
-    // Password toggle visibility
     togglePassword.addEventListener('click', function () {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
@@ -621,7 +616,6 @@
       this.classList.toggle('fa-eye-slash');
     });
 
-    // Password strength logic
     passwordInput.addEventListener('input', function () {
       if (this.value.length === 0) {
         strengthMeter.className = 'strength-meter';
@@ -636,7 +630,6 @@
       strengthText.style.color = ['#e53935', '#ef6c00', '#ffb300', '#7cb342', '#388e3c'][result.score];
     });
 
-    // Toast notification
     function showToast(message, type = 'success') {
       toast.textContent = message;
       toast.className = `toast ${type} show`;
@@ -666,7 +659,6 @@
       input.addEventListener('input', () => clearErrorState(input));
     });
 
-    // ✅ Fixed Signup form submission
     signupForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -675,7 +667,6 @@
       const password = passwordInput.value;
       const termsChecked = document.getElementById('terms').checked;
 
-      // Basic validation
       let isValid = true;
 
       if (!name) {
@@ -710,13 +701,13 @@
         isValid = false;
       }
 
-      // CAPTCHA check
       let recaptchaResponse = '';
       try {
         recaptchaResponse = grecaptcha.getResponse();
       } catch (e) {
         console.log('reCAPTCHA not loaded');
       }
+
       if (!recaptchaResponse) {
         showToast('Please complete the reCAPTCHA verification', 'error');
         isValid = false;
@@ -728,12 +719,10 @@
       submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
 
       try {
-        // First verify supabase.auth exists
         if (!supabase?.auth?.signUp) {
           throw new Error('Authentication service not available');
         }
 
-        // Attempt signup
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -748,7 +737,6 @@
 
         if (error) throw error;
 
-        // If we get here, signup was successful
         localStorage.setItem('tempUser', JSON.stringify({
           email,
           name,
@@ -766,10 +754,9 @@
 
       } catch (error) {
         console.error('Signup Error:', error);
-        
+
         let errorMessage = 'Signup failed. Please try again.';
-        if (error.message.includes('User already registered') || 
-            error.message.includes('email already in use')) {
+        if (error.message.includes('User already registered') || error.message.includes('email already in use')) {
           errorMessage = 'This email is already registered. Try logging in.';
           setErrorState(emailInput, errorMessage);
         } else {
@@ -809,7 +796,6 @@
       }
     });
 
-    // Auto-hide password
     passwordInput.addEventListener('blur', () => {
       setTimeout(() => {
         passwordInput.type = 'password';
