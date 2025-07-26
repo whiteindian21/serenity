@@ -582,7 +582,7 @@
   // ✅ Initialize Supabase client with CORRECT credentials
   const supabaseUrl = 'https://minchdfasfsrfrmwgqdn.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXdncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey);
 
   // DOM references
   const signupForm = document.getElementById('signupForm');
