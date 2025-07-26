@@ -36,10 +36,11 @@
       justify-content: center;
       align-items: center;
       -webkit-font-smoothing: antialiased;
-      background: linear-gradient(135deg, rgba(94, 96, 206, 0.08), rgba(100, 223, 223, 0.08)), 
-                  url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-image: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
       background-size: cover;
       background-position: center;
+      background-blend-mode: overlay;
+      background-color: rgba(248, 249, 255, 0.92);
       padding: 1rem;
     }
 
@@ -50,7 +51,7 @@
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.96);
+      background: white;
       border-radius: 16px;
       box-shadow: 0 15px 40px rgba(37, 39, 77, 0.15);
       width: 100%;
@@ -58,8 +59,7 @@
       padding: 2rem;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(94, 96, 206, 0.15);
-      backdrop-filter: blur(5px);
+      border: 1px solid var(--primary-light);
     }
 
     .container:before {
@@ -104,121 +104,394 @@
       font-size: 0.95rem;
     }
 
-    /* Social login buttons */
-    .social-login {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+    .form-group {
+      margin-bottom: 1.2rem;
+      position: relative;
     }
 
-    .social-btn {
-      flex: 1;
-      padding: 0.7rem;
-      border-radius: 8px;
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.9rem;
+    }
+
+    .input-container {
+      position: relative;
+    }
+
+    .input-container i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .left-icon {
+      left: 1rem;
+    }
+
+    .right-icon {
+      right: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .right-icon:hover {
+      color: var(--secondary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.9rem 3rem;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background-color: var(--light);
+    }
+
+    .has-left-icon {
+      padding-left: 3rem;
+    }
+
+    .has-right-icon {
+      padding-right: 3rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .terms input {
+      margin-top: 0.3rem;
+      accent-color: var(--secondary);
+    }
+
+    .terms label {
+      font-size: 0.85rem;
+      color: var(--dark);
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .terms a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .terms a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .btn {
+      padding: 0.9rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      border: none;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      font-weight: 500;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      border: 1px solid var(--gray-light);
-      background: white;
+      gap: 0.8rem;
     }
 
-    .social-btn:hover {
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(94, 96, 206, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(94, 96, 206, 0.3);
     }
 
-    .social-btn.google { color: #DB4437; }
-    .social-btn.apple { color: #000000; }
-    .social-btn.facebook { color: #1877F2; }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 1.5rem 0;
-      color: var(--gray);
-      font-size: 0.85rem;
+    .login-link {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--dark);
+      opacity: 0.8;
     }
 
-    .divider:before, .divider:after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--gray-light);
+    .login-link a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
     }
 
-    .divider:before {
-      margin-right: 1rem;
+    .login-link a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
     }
 
-    .divider:after {
-      margin-left: 1rem;
-    }
-
-    /* Rest of your existing styles... */
-    /* [Previous CSS styles remain the same] */
-
-    /* Enhanced password requirements */
-    .password-requirements {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--gray);
-    }
-
-    .requirement {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .requirement i {
-      font-size: 0.7rem;
-    }
-
-    .requirement.valid {
-      color: var(--success);
-    }
-
-    /* Loading overlay */
-    .loading-overlay {
+    .floating-brain {
       position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .error-message {
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+      display: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-overlay {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255,255,255,0.8);
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 10;
       opacity: 0;
       pointer-events: none;
-      transition: var(--transition);
+      transition: opacity 0.4s ease;
     }
-
-    .loading-overlay.active {
+    
+    .success-overlay.active {
       opacity: 1;
       pointer-events: all;
     }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--primary-light);
-      border-top-color: var(--primary);
+    
+    .success-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    
+    .success-overlay.active .success-box {
+      transform: translateY(0);
+    }
+    
+    .success-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--primary-light);
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+    
+    .success-icon i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+    
+    .success-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      margin-top: 1rem;
+    }
+    
+    .success-btn:hover {
+      background: var(--primary-dark);
     }
 
-    /* Mobile adjustments */
-    @media (max-width: 480px) {
-      .social-login {
-        flex-direction: column;
+    /* Password strength meter */
+    .password-strength {
+      height: 4px;
+      border-radius: 3px;
+      margin-top: 5px;
+      background: #e0e0e0;
+      overflow: hidden;
+    }
+    
+    .strength-meter {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    
+    .strength-0 { background: #e53935; width: 25%; }
+    .strength-1 { background: #ef6c00; width: 50%; }
+    .strength-2 { background: #ffb300; width: 75%; }
+    .strength-3 { background: #7cb342; width: 100%; }
+    .strength-4 { background: #388e3c; width: 100%; }
+    
+    .strength-text {
+      font-size: 0.75rem;
+      margin-top: 3px;
+      text-align: right;
+    }
+    
+    .resend-link {
+      margin-top: 1.2rem;
+      font-size: 0.85rem;
+    }
+    
+    .resend-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .resend-link a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark);
+      color: white;
+      padding: 0.7rem 1.3rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      max-width: 90%;
+    }
+    
+    .toast.show {
+      opacity: 1;
+    }
+    
+    .toast.success {
+      background: var(--primary);
+    }
+    
+    .toast.error {
+      background: var(--accent);
+    }
+    
+    /* Recaptcha container */
+    .recaptcha-container {
+      margin: 1.2rem 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    /* Form validation feedback */
+    .form-group.error input {
+      border-color: var(--accent);
+    }
+    
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    /* Mobile-first adjustments */
+    @media (min-width: 480px) {
+      .container {
+        padding: 2.5rem;
+      }
+      
+      .header h2 {
+        font-size: 2rem;
+      }
+      
+      .success-box {
+        padding: 2rem;
+      }
+      
+      .floating-brain {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 2rem;
+      }
+      
+      .container {
+        padding: 3rem;
+      }
+      
+      .floating-brain {
+        top: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+      }
+      
+      .header h2 {
+        font-size: 2.2rem;
+      }
+      
+      .success-box {
+        padding: 2.5rem;
       }
     }
   </style>
@@ -233,27 +506,8 @@
       <h2>Begin Your Healing Journey</h2>
       <p>Create your Therapathy account for personalized mental wellness</p>
     </div>
-
-    <!-- Social login options -->
-    <div class="social-login">
-      <button class="social-btn google">
-        <i class="fab fa-google"></i> Google
-      </button>
-      <button class="social-btn apple">
-        <i class="fab fa-apple"></i> Apple
-      </button>
-      <button class="social-btn facebook">
-        <i class="fab fa-facebook-f"></i> Facebook
-      </button>
-    </div>
-
-    <div class="divider">or continue with email</div>
     
     <form id="signupForm">
-      <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-      </div>
-      
       <div class="form-group">
         <label for="name">Full Name</label>
         <div class="input-container">
@@ -283,23 +537,6 @@
           <div class="strength-meter" id="strengthMeter"></div>
         </div>
         <div class="strength-text" id="strengthText"></div>
-        
-        <!-- Password requirements -->
-        <div class="password-requirements">
-          <div class="requirement" id="reqLength">
-            <i class="fas fa-circle"></i> At least 8 characters
-          </div>
-          <div class="requirement" id="reqUpper">
-            <i class="fas fa-circle"></i> Contains uppercase
-          </div>
-          <div class="requirement" id="reqNumber">
-            <i class="fas fa-circle"></i> Contains number
-          </div>
-          <div class="requirement" id="reqSpecial">
-            <i class="fas fa-circle"></i> Contains special character
-          </div>
-        </div>
-        
         <div class="error-message" id="passwordError"></div>
       </div>
       
@@ -309,7 +546,7 @@
       
       <div class="terms">
         <input type="checkbox" id="terms" required>
-        <label for="terms">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>, and I'm at least 18 years old</label>
+        <label for="terms">I agree to the <a href="#" target="_blank">Privacy Policy</a>, and I'm at least 18 years old</label>
       </div>
       <div class="error-message" id="termsError"></div>
       
@@ -368,14 +605,7 @@
     const toast = document.getElementById('toast');
     const strengthMeter = document.getElementById('strengthMeter');
     const strengthText = document.getElementById('strengthText');
-    const loadingOverlay = document.getElementById('loadingOverlay');
     
-    // Password requirements elements
-    const reqLength = document.getElementById('reqLength');
-    const reqUpper = document.getElementById('reqUpper');
-    const reqNumber = document.getElementById('reqNumber');
-    const reqSpecial = document.getElementById('reqSpecial');
-
     // Password toggle visibility
     togglePassword.addEventListener('click', function() {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -384,57 +614,15 @@
       this.classList.toggle('fa-eye-slash');
     });
     
-    // Check password requirements
-    function checkPasswordRequirements(password) {
-      // Check length
-      if (password.length >= 8) {
-        reqLength.classList.add('valid');
-        reqLength.innerHTML = '<i class="fas fa-check-circle"></i> At least 8 characters';
-      } else {
-        reqLength.classList.remove('valid');
-        reqLength.innerHTML = '<i class="fas fa-circle"></i> At least 8 characters';
-      }
-      
-      // Check uppercase
-      if (/[A-Z]/.test(password)) {
-        reqUpper.classList.add('valid');
-        reqUpper.innerHTML = '<i class="fas fa-check-circle"></i> Contains uppercase';
-      } else {
-        reqUpper.classList.remove('valid');
-        reqUpper.innerHTML = '<i class="fas fa-circle"></i> Contains uppercase';
-      }
-      
-      // Check number
-      if (/\d/.test(password)) {
-        reqNumber.classList.add('valid');
-        reqNumber.innerHTML = '<i class="fas fa-check-circle"></i> Contains number';
-      } else {
-        reqNumber.classList.remove('valid');
-        reqNumber.innerHTML = '<i class="fas fa-circle"></i> Contains number';
-      }
-      
-      // Check special character
-      if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        reqSpecial.classList.add('valid');
-        reqSpecial.innerHTML = '<i class="fas fa-check-circle"></i> Contains special character';
-      } else {
-        reqSpecial.classList.remove('valid');
-        reqSpecial.innerHTML = '<i class="fas fa-circle"></i> Contains special character';
-      }
-    }
-    
     // Password strength indicator
     passwordInput.addEventListener('input', function() {
-      const password = this.value;
-      checkPasswordRequirements(password);
-      
-      if (password.length === 0) {
+      if (this.value.length === 0) {
         strengthMeter.className = 'strength-meter';
         strengthText.textContent = '';
         return;
       }
       
-      const result = zxcvbn(password);
+      const result = zxcvbn(this.value);
       strengthMeter.className = `strength-meter strength-${result.score}`;
       
       const strengthLabels = [
@@ -516,9 +704,6 @@
       if (!name) {
         setErrorState(nameInput, 'Please enter your name');
         isValid = false;
-      } else if (name.length < 2) {
-        setErrorState(nameInput, 'Name must be at least 2 characters');
-        isValid = false;
       }
       
       if (!email) {
@@ -566,8 +751,8 @@
       if (!isValid) return;
       
       // Show loading state
-      loadingOverlay.classList.add('active');
       submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
       
       try {
         // Sign up with email/password
@@ -576,8 +761,7 @@
           password,
           options: {
             data: {
-              full_name: name,
-              signup_date: new Date().toISOString()
+              full_name: name
             },
             emailRedirectTo: window.location.origin + '/dashboard.html'
           }
@@ -618,8 +802,8 @@
         }
       } finally {
         // Reset button state
-        loadingOverlay.classList.remove('active');
         submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
       }
     });
     
@@ -658,14 +842,7 @@
         togglePassword.classList.add('fa-eye');
       }, 5000);
     });
-
-    // Social login handlers
-    document.querySelectorAll('.social-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showToast('Social login coming soon!', 'info');
-      });
-    });
   </script>
 </body>
 </html>
+
