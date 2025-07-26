@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serenity Journal | Healing Companion</title>
+  <title>therapathy Journal | Healing Companion</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -668,7 +668,7 @@
   <!-- Journal Container -->
   <div class="journal-container">
     <header class="journal-header">
-      <h2>Serenity Journal</h2>
+      <h2>Therapathy Journal</h2>
       <p>How are you feeling today? This is your safe space to write freely, without judgment 🌿</p>
     </header>
 
@@ -717,9 +717,7 @@
     </div>
 
     <div class="journal-actions">
-      <button class="btn btn-tertiary" onclick="talkToCoach()">
-        <i class="fas fa-comment-dots"></i> Get Insight
-      </button>
+      
       <button class="btn btn-primary" onclick="saveJournal()">
         <i class="fas fa-save"></i> Save Entry
       </button>
@@ -763,9 +761,10 @@
 
   <script>
     // Supabase Configuration
-    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-    
+     <script>
+    // Updated Supabase Configuration
+    const SUPABASE_URL = 'https://retpsdyfgdzwntxhnjgz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldHBzZHlmZ2R6d250eGhuamd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0OTQ5MzcsImV4cCI6MjA2OTA3MDkzN30.jbDmAbnBifiM8Kg54TZw8zArb2XzeXjNSwXMujNuDQ4';
     // Initialize Supabase client
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
