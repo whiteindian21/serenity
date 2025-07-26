@@ -573,235 +573,251 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
-<!-- Include Supabase JS library -->
+<!-- Load Supabase JS library FIRST -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Include zxcvbn for password strength -->
+<!-- Then load zxcvbn -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 
 <script>
-  // ✅ Initialize Supabase client with CORRECT credentials
-  const supabaseUrl = 'https://minchdfasfsrfrmwgqdn.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXdncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-  const supabaseclient = supabase.createClient(supabaseUrl, supabaseKey);
-
-  // DOM references
-  const signupForm = document.getElementById('signupForm');
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const togglePassword = document.getElementById('togglePassword');
-  const submitBtn = document.getElementById('submitBtn');
-  const successOverlay = document.getElementById('successOverlay');
-  const successTitle = document.getElementById('successTitle');
-  const successMessage = document.getElementById('successMessage');
-  const continueBtn = document.getElementById('continueBtn');
-  const resendContainer = document.getElementById('resendContainer');
-  const resendLink = document.getElementById('resendLink');
-  const toast = document.getElementById('toast');
-  const strengthMeter = document.getElementById('strengthMeter');
-  const strengthText = document.getElementById('strengthText');
-
-  // Password toggle visibility
-  togglePassword.addEventListener('click', function () {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.classList.toggle('fa-eye');
-    this.classList.toggle('fa-eye-slash');
-  });
-
-  // Password strength logic
-  passwordInput.addEventListener('input', function () {
-    if (this.value.length === 0) {
-      strengthMeter.className = 'strength-meter';
-      strengthText.textContent = '';
-      return;
-    }
-
-    const result = zxcvbn(this.value);
-    strengthMeter.className = `strength-meter strength-${result.score}`;
-    const strengthLabels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
-    strengthText.textContent = `${strengthLabels[result.score]} • ${result.feedback.suggestions[0] || 'Good password'}`;
-    strengthText.style.color = ['#e53935', '#ef6c00', '#ffb300', '#7cb342', '#388e3c'][result.score];
-  });
-
-  // Toast notification
-  function showToast(message, type = 'success') {
-    toast.textContent = message;
-    toast.className = `toast ${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 3000);
-  }
-
-  function setErrorState(element, message) {
-    const formGroup = element.closest('.form-group');
-    formGroup.classList.add('error');
-    const errorElement = formGroup.querySelector('.error-message');
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
-    }
-  }
-
-  function clearErrorState(element) {
-    const formGroup = element.closest('.form-group');
-    if (formGroup) {
-      formGroup.classList.remove('error');
-      const errorElement = formGroup.querySelector('.error-message');
-      if (errorElement) errorElement.style.display = 'none';
-    }
-  }
-
-  document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', () => clearErrorState(input));
-  });
-
-  // ✅ Fixed Signup form submission
-  signupForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const termsChecked = document.getElementById('terms').checked;
-
-    // Basic validation
-    let isValid = true;
-
-    if (!name) {
-      setErrorState(nameInput, 'Please enter your name');
-      isValid = false;
-    }
-
-    if (!email) {
-      setErrorState(emailInput, 'Please enter your email');
-      isValid = false;
-    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setErrorState(emailInput, 'Please enter a valid email');
-      isValid = false;
-    }
-
-    if (!password) {
-      setErrorState(passwordInput, 'Please enter a password');
-      isValid = false;
-    } else if (password.length < 8) {
-      setErrorState(passwordInput, 'Password must be at least 8 characters');
-      isValid = false;
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // ✅ Initialize Supabase client with CORRECT credentials
+    const supabaseUrl = 'https://minchdfasfsrfrmwgqdn.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXdncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
+    
+    // Verify supabase is loaded before creating client
+    if (typeof supabase !== 'undefined') {
+      const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      initializeApp(supabase);
     } else {
-      const result = zxcvbn(password);
-      if (result.score < 2) {
-        setErrorState(passwordInput, 'Password is too weak. ' + (result.feedback.suggestions[0] || 'Choose a stronger one.'));
+      console.error('Supabase library not loaded');
+      showToast('Authentication service not available', 'error');
+    }
+  });
+
+  function initializeApp(supabase) {
+    // DOM references
+    const signupForm = document.getElementById('signupForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const submitBtn = document.getElementById('submitBtn');
+    const successOverlay = document.getElementById('successOverlay');
+    const successTitle = document.getElementById('successTitle');
+    const successMessage = document.getElementById('successMessage');
+    const continueBtn = document.getElementById('continueBtn');
+    const resendContainer = document.getElementById('resendContainer');
+    const resendLink = document.getElementById('resendLink');
+    const toast = document.getElementById('toast');
+    const strengthMeter = document.getElementById('strengthMeter');
+    const strengthText = document.getElementById('strengthText');
+
+    // Password toggle visibility
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    // Password strength logic
+    passwordInput.addEventListener('input', function () {
+      if (this.value.length === 0) {
+        strengthMeter.className = 'strength-meter';
+        strengthText.textContent = '';
+        return;
+      }
+
+      const result = zxcvbn(this.value);
+      strengthMeter.className = `strength-meter strength-${result.score}`;
+      const strengthLabels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
+      strengthText.textContent = `${strengthLabels[result.score]} • ${result.feedback.suggestions[0] || 'Good password'}`;
+      strengthText.style.color = ['#e53935', '#ef6c00', '#ffb300', '#7cb342', '#388e3c'][result.score];
+    });
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function setErrorState(element, message) {
+      const formGroup = element.closest('.form-group');
+      formGroup.classList.add('error');
+      const errorElement = formGroup.querySelector('.error-message');
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+      }
+    }
+
+    function clearErrorState(element) {
+      const formGroup = element.closest('.form-group');
+      if (formGroup) {
+        formGroup.classList.remove('error');
+        const errorElement = formGroup.querySelector('.error-message');
+        if (errorElement) errorElement.style.display = 'none';
+      }
+    }
+
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', () => clearErrorState(input));
+    });
+
+    // ✅ Fixed Signup form submission
+    signupForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const termsChecked = document.getElementById('terms').checked;
+
+      // Basic validation
+      let isValid = true;
+
+      if (!name) {
+        setErrorState(nameInput, 'Please enter your name');
         isValid = false;
       }
-    }
 
-    if (!termsChecked) {
-      setErrorState(document.getElementById('terms'), 'You must agree to the terms and conditions');
-      isValid = false;
-    }
-
-    // CAPTCHA check
-    let recaptchaResponse = '';
-    try {
-      recaptchaResponse = grecaptcha.getResponse();
-    } catch (e) {
-      console.log('reCAPTCHA not loaded');
-    }
-    if (!recaptchaResponse) {
-      showToast('Please complete the reCAPTCHA verification', 'error');
-      isValid = false;
-    }
-
-    if (!isValid) return;
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
-
-    try {
-      // First check if user exists in auth.users
-      const { data: { user }, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name,
-            email: email
-          },
-          emailRedirectTo: window.location.origin + '/dashboard.html'
-        }
-      });
-
-      if (authError) throw authError;
-
-      // If we get here, signup was successful
-      localStorage.setItem('tempUser', JSON.stringify({
-        email,
-        name,
-        signupTime: new Date().toISOString()
-      }));
-
-      successTitle.textContent = 'Verify Your Email';
-      successMessage.innerHTML = `
-        <p>Welcome to Therapathy, <strong>${name}</strong>!</p>
-        <p>We've sent a verification link to:</p>
-        <p><strong>${email}</strong></p>
-        <p>Please check your inbox and click the link to activate your account.</p>`;
-      resendContainer.style.display = 'block';
-      successOverlay.classList.add('active');
-
-    } catch (error) {
-      console.error('Signup Error:', error);
-      
-      let errorMessage = 'Signup failed. Please try again.';
-      if (error.message.includes('User already registered')) {
-        errorMessage = 'This email is already registered. Try logging in.';
-        setErrorState(emailInput, errorMessage);
-      } else if (error.message.includes('email already in use')) {
-        errorMessage = 'This email is already registered. Try logging in.';
-        setErrorState(emailInput, errorMessage);
-      } else {
-        showToast(errorMessage, 'error');
+      if (!email) {
+        setErrorState(emailInput, 'Please enter your email');
+        isValid = false;
+      } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+        setErrorState(emailInput, 'Please enter a valid email');
+        isValid = false;
       }
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-    }
-  });
 
-  continueBtn.addEventListener('click', function () {
-    window.location.href = 'login.html';
-  });
-
-  resendLink.addEventListener('click', async function (e) {
-    e.preventDefault();
-
-    const tempUser = JSON.parse(localStorage.getItem('tempUser'));
-    if (!tempUser) return;
-
-    try {
-      const { error } = await supabase.auth.resend({
-        type: 'signup',
-        email: tempUser.email,
-        options: {
-          emailRedirectTo: window.location.origin + '/dashboard.html'
+      if (!password) {
+        setErrorState(passwordInput, 'Please enter a password');
+        isValid = false;
+      } else if (password.length < 8) {
+        setErrorState(passwordInput, 'Password must be at least 8 characters');
+        isValid = false;
+      } else {
+        const result = zxcvbn(password);
+        if (result.score < 2) {
+          setErrorState(passwordInput, 'Password is too weak. ' + (result.feedback.suggestions[0] || 'Choose a stronger one.'));
+          isValid = false;
         }
-      });
+      }
 
-      if (error) throw error;
+      if (!termsChecked) {
+        setErrorState(document.getElementById('terms'), 'You must agree to the terms and conditions');
+        isValid = false;
+      }
 
-      showToast('Verification email resent!', 'success');
-    } catch (error) {
-      console.error('Resend error:', error);
-      showToast('Failed to resend email: ' + error.message, 'error');
-    }
-  });
+      // CAPTCHA check
+      let recaptchaResponse = '';
+      try {
+        recaptchaResponse = grecaptcha.getResponse();
+      } catch (e) {
+        console.log('reCAPTCHA not loaded');
+      }
+      if (!recaptchaResponse) {
+        showToast('Please complete the reCAPTCHA verification', 'error');
+        isValid = false;
+      }
 
-  // Auto-hide password
-  passwordInput.addEventListener('blur', () => {
-    setTimeout(() => {
-      passwordInput.type = 'password';
-      togglePassword.classList.remove('fa-eye-slash');
-      togglePassword.classList.add('fa-eye');
-    }, 5000);
-  });
+      if (!isValid) return;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+
+      try {
+        // First verify supabase.auth exists
+        if (!supabase?.auth?.signUp) {
+          throw new Error('Authentication service not available');
+        }
+
+        // Attempt signup
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name,
+              email: email
+            },
+            emailRedirectTo: window.location.origin + '/dashboard.html'
+          }
+        });
+
+        if (error) throw error;
+
+        // If we get here, signup was successful
+        localStorage.setItem('tempUser', JSON.stringify({
+          email,
+          name,
+          signupTime: new Date().toISOString()
+        }));
+
+        successTitle.textContent = 'Verify Your Email';
+        successMessage.innerHTML = `
+          <p>Welcome to Therapathy, <strong>${name}</strong>!</p>
+          <p>We've sent a verification link to:</p>
+          <p><strong>${email}</strong></p>
+          <p>Please check your inbox and click the link to activate your account.</p>`;
+        resendContainer.style.display = 'block';
+        successOverlay.classList.add('active');
+
+      } catch (error) {
+        console.error('Signup Error:', error);
+        
+        let errorMessage = 'Signup failed. Please try again.';
+        if (error.message.includes('User already registered') || 
+            error.message.includes('email already in use')) {
+          errorMessage = 'This email is already registered. Try logging in.';
+          setErrorState(emailInput, errorMessage);
+        } else {
+          showToast(errorMessage, 'error');
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+      }
+    });
+
+    continueBtn.addEventListener('click', function () {
+      window.location.href = 'login.html';
+    });
+
+    resendLink.addEventListener('click', async function (e) {
+      e.preventDefault();
+
+      const tempUser = JSON.parse(localStorage.getItem('tempUser'));
+      if (!tempUser) return;
+
+      try {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email: tempUser.email,
+          options: {
+            emailRedirectTo: window.location.origin + '/dashboard.html'
+          }
+        });
+
+        if (error) throw error;
+
+        showToast('Verification email resent!', 'success');
+      } catch (error) {
+        console.error('Resend error:', error);
+        showToast('Failed to resend email: ' + error.message, 'error');
+      }
+    });
+
+    // Auto-hide password
+    passwordInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        passwordInput.type = 'password';
+        togglePassword.classList.remove('fa-eye-slash');
+        togglePassword.classList.add('fa-eye');
+      }, 5000);
+    });
+  }
 </script>
 
 </body>
