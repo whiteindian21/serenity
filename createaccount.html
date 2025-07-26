@@ -579,10 +579,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
   
   <script>
-    // Initialize Supabase client with correct URL
+    // Initialize Supabase client with correct URL and configuration
     const supabaseUrl = 'https://mindtdfasfsrfrmwgdn.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmR0ZGZhc2ZzcmZybXdnZG4iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY5NjY5MjQ1OSwiZXhwIjoyMDEyMjY4NDU5fQ.abcdefghijklmnopqrstuvwxyz123456'; // REPLACE WITH YOUR ACTUAL KEY
+    
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+      }
+    });
     
     // DOM Elements
     const signupForm = document.getElementById('signupForm');
@@ -750,23 +757,45 @@
       submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
       
       try {
+        // First check if email already exists
+        const { data: existingUser, error: emailError } = await supabaseClient
+          .from('users')
+          .select('email')
+          .eq('email', email)
+          .maybeSingle();
+
+        if (emailError) throw emailError;
+        if (existingUser) {
+          throw new Error('User already registered');
+        }
+
         // Sign up with email/password
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { data, error: signUpError } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
             data: {
-              full_name: name
+              full_name: name,
+              email: email
             },
             emailRedirectTo: window.location.origin + '/dashboard.html'
           }
         });
-        
-        if (error) {
-          console.error('Detailed signup error:', error);
-          throw error;
+
+        if (signUpError) {
+          console.error('Signup Error Details:', {
+            message: signUpError.message,
+            status: signUpError.status,
+            details: signUpError.__isAuthError ? signUpError.toString() : signUpError
+          });
+          throw signUpError;
         }
-        
+
+        // Additional check for email confirmation required
+        if (!data.user && !data.session) {
+          console.log('Email confirmation required - no immediate user session');
+        }
+
         // Store user in local storage
         localStorage.setItem('tempUser', JSON.stringify({
           email,
@@ -786,20 +815,33 @@
         successOverlay.classList.add('active');
         
       } catch (error) {
-        console.error('Full signup error:', error);
+        console.error('Full Error Object:', error);
         
-        // Show appropriate error message
+        // Enhanced error handling
+        let errorMessage = 'Signup failed. Please try again.';
+        
         if (error.message.includes('User already registered')) {
-          setErrorState(emailInput, 'This email is already registered. Try logging in.');
-        } else if (error.message.includes('password')) {
-          setErrorState(passwordInput, 'Invalid password format. ' + error.message);
-        } else if (error.message.includes('Database error')) {
-          showToast('Database configuration issue. Please contact support.', 'error');
-        } else {
-          showToast('Signup failed: ' + error.message, 'error');
+          errorMessage = 'This email is already registered. Try logging in.';
+          setErrorState(emailInput, errorMessage);
+        } 
+        else if (error.message.includes('password')) {
+          errorMessage = 'Invalid password: ' + error.message;
+          setErrorState(passwordInput, errorMessage);
         }
+        else if (error.message.includes('Database error') || error.status === 500) {
+          errorMessage = 'Server error. Please contact support.';
+          showToast(errorMessage, 'error');
+        }
+        else if (error.status === 401 || error.status === 403) {
+          errorMessage = 'Permission denied. Please refresh and try again.';
+          showToast(errorMessage, 'error');
+        }
+        else {
+          showToast(errorMessage, 'error');
+        }
+        
+        console.error('Signup Error:', errorMessage);
       } finally {
-        // Reset button state
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
       }
@@ -820,7 +862,10 @@
       try {
         const { error } = await supabaseClient.auth.resend({
           type: 'signup',
-          email: tempUser.email
+          email: tempUser.email,
+          options: {
+            emailRedirectTo: window.location.origin + '/dashboard.html'
+          }
         });
         
         if (error) throw error;
@@ -840,6 +885,7 @@
         togglePassword.classList.add('fa-eye');
       }, 5000);
     });
+  
   </script>
 </body>
 </html>
