@@ -2598,7 +2598,7 @@
   
   <script>
     // Initialize Supabase
-    const SUPABASE_URL = 'https://minchdfasfsrfrmvgqdn.supabase.co';
+    const SUPABASE_URL = 'https://minchdfasfsrfrnwgqdn.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pbmNoZGZhc2ZzcmZybXZncWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMDQyOTIsImV4cCI6MjA2NTU4MDI5Mn0.58MfL3Yud-XqhBTwr9-_n-7igX81SABq1eEoe1LzVnQ';
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -2832,10 +2832,6 @@
           loadCompanion();
           loadProgress();
           loadMemories();
-          loadMoodHistory();
-          
-          // Initialize mood chart
-          initMoodChart();
           
           // Start companion chat
           startCompanionChat();
@@ -3021,7 +3017,8 @@
       // Mood history button
       const moodHistoryBtn = getElement('mood-history');
       if (moodHistoryBtn) moodHistoryBtn.addEventListener('click', () => {
-        getElement('mood-history-modal').style.display = 'flex';
+        // Not implemented in this demo
+        showToast("Mood history feature is coming soon!", "info");
       });
       
       // Chat controls
@@ -3039,27 +3036,29 @@
       const chatSettingsBtn = getElement('chat-settings');
       if (chatSettingsBtn) {
         chatSettingsBtn.addEventListener('click', () => {
-          getElement('companion-modal').style.display = 'flex';
+          // Not implemented in this demo
+          showToast("Companion settings feature is coming soon!", "info");
         });
       }
       
       // Memory controls
       const addMemoryBtn = getElement('add-memory-btn');
       if (addMemoryBtn) addMemoryBtn.addEventListener('click', () => {
-        getElement('add-memory-modal').style.display = 'flex';
+        // Not implemented in this demo
+        showToast("Add memory feature is coming soon!", "info");
       });
       
       const memoryBookBtn = getElement('memory-book-btn');
       if (memoryBookBtn) memoryBookBtn.addEventListener('click', () => {
-        getElement('memory-book-modal').style.display = 'flex';
-        loadMemoryBook();
+        // Not implemented in this demo
+        showToast("Memory book feature is coming soon!", "info");
       });
       
       // Settings controls
       const accountSettingsBtn = getElement('account-settings-btn');
       if (accountSettingsBtn) accountSettingsBtn.addEventListener('click', () => {
-        getElement('settings-modal').style.display = 'flex';
-        loadUserSettings();
+        // Not implemented in this demo
+        showToast("Account settings feature is coming soon!", "info");
       });
       
       // Sign out button
@@ -3069,21 +3068,21 @@
       // Companion selection buttons
       const changeCompanionBtn = getElement('change-companion-btn');
       if (changeCompanionBtn) changeCompanionBtn.addEventListener('click', () => {
-        getElement('companion-modal').style.display = 'flex';
-        initCompanionSelection();
+        // Not implemented in this demo
+        showToast("Change companion feature is coming soon!", "info");
       });
       
       const changeCompanionBtnProfile = getElement('change-companion-btn-profile');
       if (changeCompanionBtnProfile) changeCompanionBtnProfile.addEventListener('click', () => {
-        getElement('companion-modal').style.display = 'flex';
-        initCompanionSelection();
+        // Not implemented in this demo
+        showToast("Change companion feature is coming soon!", "info");
       });
       
       // Upgrade button
       const upgradeBtn = getElement('upgrade-btn');
       if (upgradeBtn) upgradeBtn.addEventListener('click', () => {
-        const profileNav = document.querySelector('.nav-item[data-target="profile-section"]');
-        if (profileNav) profileNav.click();
+        // Not implemented in this demo
+        showToast("Upgrade to premium feature is coming soon!", "info");
       });
       
       const subscribeBtn = getElement('subscribe-btn');
@@ -3112,22 +3111,14 @@
                          progressSources.journal * 3 + progressSources.memories * 2;
       progress = Math.min(100, Math.round(totalPoints * 100 / 50));
       
-      const progressFill = getElement('progressFill');
-      const progressPercent = getElement('progress-percent');
       const profileProgressFill = getElement('profile-progress-fill');
       const profileProgressPercent = getElement('profile-progress-percent');
       
-      if (progressFill) progressFill.style.width = `${progress}%`;
-      if (progressPercent) progressPercent.textContent = `${progress}%`;
       if (profileProgressFill) profileProgressFill.style.width = `${progress}%`;
       if (profileProgressPercent) profileProgressPercent.textContent = `${progress}%`;
       
       // Update progress sources
       const sources = {
-        'mood-source': progressSources.mood,
-        'chat-source': progressSources.chat,
-        'journal-source': progressSources.journal,
-        'memory-source': progressSources.memories,
         'profile-mood-source': progressSources.mood,
         'profile-chat-source': progressSources.chat,
         'profile-journal-source': progressSources.journal,
@@ -3156,7 +3147,7 @@
         if (data) {
           progressSources = {
             mood: data.mood_entries || 0,
-            chat: data.chat_messages || 0,
+            chat: data.chat_count || 0, // Fixed column name
             journal: data.journal_entries || 0,
             memories: data.memories || 0
           };
@@ -3183,7 +3174,7 @@
           .upsert({
             user_id: currentUser.id,
             mood_entries: progressSources.mood,
-            chat_messages: progressSources.chat,
+            chat_count: progressSources.chat, // Fixed column name
             journal_entries: progressSources.journal,
             memories: progressSources.memories,
             credits_used: creditsUsed,
@@ -3197,7 +3188,7 @@
     }
 
     // Load companion information
-    async function loadCompanion() {
+    function loadCompanion() {
       const companion = companions[currentCompanion];
       
       // Update UI
@@ -3431,7 +3422,10 @@
           label.textContent = memory.title || 'Memory';
           memoryItem.appendChild(label);
           
-          memoryItem.addEventListener('click', () => viewMemory(memory));
+          memoryItem.addEventListener('click', () => {
+            // Not implemented in this demo
+            showToast("Memory viewing feature is coming soon!", "info");
+          });
           container.appendChild(memoryItem);
         });
         
@@ -3443,68 +3437,13 @@
           <div class="memory-label">Add Memory</div>
         `;
         addMemory.addEventListener('click', () => {
-          getElement('add-memory-modal').style.display = 'flex';
+          // Not implemented in this demo
+          showToast("Add memory feature is coming soon!", "info");
         });
         container.appendChild(addMemory);
         
       } catch (error) {
         showToast("Error loading memories: " + error.message, "error");
-      }
-    }
-
-    // Load user settings
-    async function loadUserSettings() {
-      if (!currentUser) return;
-      
-      try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) throw error;
-        
-        const nameInput = getElement('user-name');
-        const emailInput = getElement('user-email');
-        const lossTypeSelect = getElement('loss-type');
-        const journalReminders = getElement('journal-reminders');
-        const affirmationReminders = getElement('affirmation-reminders');
-        
-        if (nameInput) nameInput.value = user.user_metadata?.name || '';
-        if (emailInput) emailInput.value = user.email || '';
-        if (lossTypeSelect) lossTypeSelect.value = user.user_metadata?.loss_type || 'relationship';
-        if (journalReminders) journalReminders.checked = user.user_metadata?.journal_reminders !== false;
-        if (affirmationReminders) affirmationReminders.checked = user.user_metadata?.affirmation_reminders !== false;
-      } catch (error) {
-        showToast("Error loading settings: " + error.message, "error");
-      }
-    }
-
-    // Save user settings
-    async function saveSettings() {
-      const name = getElement('user-name')?.value;
-      const email = getElement('user-email')?.value;
-      const lossType = getElement('loss-type')?.value;
-      
-      try {
-        const { error } = await supabase.auth.updateUser({
-          email: email,
-          data: { 
-            name: name,
-            loss_type: lossType,
-            journal_reminders: getElement('journal-reminders')?.checked,
-            affirmation_reminders: getElement('affirmation-reminders')?.checked
-          }
-        });
-        
-        if (error) throw error;
-        
-        showToast("Settings saved successfully", "success");
-        getElement('settings-modal').style.display = 'none';
-        
-        // Update UI with new name if available
-        if (name) {
-          getElement('profile-initial').textContent = name[0].toUpperCase();
-          getElement('profile-name').textContent = name;
-        }
-      } catch (error) {
-        showToast("Error saving settings: " + error.message, "error");
       }
     }
 
@@ -3518,6 +3457,14 @@
       } catch (error) {
         showToast("Error signing out: " + error.message, "error");
       }
+    }
+    
+    // Track mood function
+    function trackMood() {
+      progressSources.mood++;
+      updateProgressBar();
+      saveProgress();
+      showToast(`Your mood has been recorded: ${currentMood}`, "success");
     }
   </script>
 </body>
