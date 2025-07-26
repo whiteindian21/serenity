@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Therapathy Pricing | Choose Your Plan</title>
-  <meta name="description" content="Select the Therapathy plan that fits your mental wellness journey - from free credit-based options to premium unlimited support">
+  <meta name="description" content="Select the Therapathy plan that fits your mental wellness journey - from free options to premium unlimited support">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -173,45 +173,6 @@
       opacity: 0.9;
     }
 
-    /* Pricing Tabs */
-    .pricing-tabs {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0 3rem;
-      border-bottom: 1px solid rgba(140, 185, 189, 0.3);
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .pricing-tab {
-      padding: 1rem 2rem;
-      cursor: pointer;
-      position: relative;
-      font-weight: 500;
-      color: var(--gray);
-      transition: var(--transition);
-    }
-
-    .pricing-tab.active {
-      color: var(--secondary);
-    }
-
-    .pricing-tab.active:after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--secondary);
-      border-radius: 3px 3px 0 0;
-    }
-
-    .pricing-tab:hover:not(.active) {
-      color: var(--dark);
-    }
-
     /* Pricing Cards */
     .pricing-cards {
       display: grid;
@@ -344,49 +305,10 @@
       box-shadow: 0 6px 20px rgba(140, 185, 189, 0.25);
     }
 
-    .cta-button.secondary {
-      background: white;
-      color: var(--secondary);
-      border: 1px solid var(--secondary);
-    }
-
-    .cta-button.secondary:hover {
-      background: rgba(93, 142, 169, 0.05);
-    }
-
-    /* Credit System */
-    .credit-system {
-      background: rgba(140, 185, 189, 0.1);
-      padding: 3rem 0;
-      margin: 3rem 0;
-      border-radius: 20px;
-    }
-
-    .credit-cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .credit-card {
-      background: white;
-      border-radius: 15px;
-      padding: 1.5rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(140, 185, 189, 0.2);
-    }
-
-    .credit-card h4 {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .credit-card h4 i {
-      color: var(--accent);
+    /* PayPal Button Container */
+    .paypal-button-container {
+      margin-top: 1.5rem;
+      min-height: 40px;
     }
 
     /* FAQ Section */
@@ -566,11 +488,7 @@
       }
       
       .pricing-cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .credit-cards {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
       
       .cta-buttons {
@@ -583,10 +501,6 @@
     }
 
     @media (min-width: 1024px) {
-      .pricing-cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
       .footer-content {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -623,16 +537,8 @@
       </div>
     </section>
 
-    <!-- Pricing Tabs -->
+    <!-- Pricing Cards -->
     <div class="container">
-      <div class="pricing-tabs">
-        <div class="pricing-tab active" data-tab="subscription">Subscription Plans</div>
-        <div class="pricing-tab" data-tab="credits">Credit System</div>
-      </div>
-    </div>
-
-    <!-- Subscription Plans -->
-    <div class="container" id="subscription-plans">
       <div class="pricing-cards">
         <div class="pricing-card">
           <div class="pricing-header">
@@ -666,7 +572,7 @@
             <li>Advanced analytics</li>
             <li>Cancel anytime</li>
           </ul>
-          <a href="checkout.html?plan=monthly" class="cta-button">Choose Monthly</a>
+          <div id="paypal-button-container-monthly" class="paypal-button-container"></div>
         </div>
         
         <div class="pricing-card">
@@ -683,43 +589,7 @@
             <li>First access to new features</li>
             <li>7-day free trial</li>
           </ul>
-          <a href="checkout.html?plan=yearly" class="cta-button">Choose Yearly</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Credit System (Hidden by default) -->
-    <div class="container" id="credit-system" style="display: none;">
-      <div class="credit-system">
-        <h2 style="text-align: center; margin-bottom: 2rem;">Credit-Based System</h2>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem; opacity: 0.9;">
-          Our credit system lets you pay as you go. Each interaction uses credits based on length and complexity.
-          Perfect for those who want occasional support without a subscription.
-        </p>
-        
-        <div class="credit-cards">
-          <div class="credit-card">
-            <h4><i class="fas fa-coins"></i> Basic Package</h4>
-            <div class="price" style="font-size: 1.8rem; color: var(--secondary); margin-bottom: 1rem;">$5 <span style="font-size: 1rem; color: var(--gray);">for 50 credits</span></div>
-            <ul class="pricing-features">
-              <li>~10-15 conversations</li>
-              <li>Basic journaling sessions</li>
-              <li>Access to free companions</li>
-            </ul>
-            <a href="signup.html" class="cta-button secondary" style="margin-top: 1.5rem;">Purchase Credits</a>
-          </div>
-          
-          <div class="credit-card">
-            <h4><i class="fas fa-piggy-bank"></i> Value Package</h4>
-            <div class="price" style="font-size: 1.8rem; color: var(--secondary); margin-bottom: 1rem;">$20 <span style="font-size: 1rem; color: var(--gray);">for 250 credits</span></div>
-            <ul class="pricing-features">
-              <li>~50-60 conversations</li>
-              <li>Includes premium features</li>
-              <li>Access to all companions</li>
-              <li>Best value</li>
-            </ul>
-            <a href="signup.html" class="cta-button" style="margin-top: 1.5rem;">Purchase Credits</a>
-          </div>
+          <div id="paypal-button-container-yearly" class="paypal-button-container"></div>
         </div>
       </div>
     </div>
@@ -751,11 +621,11 @@
         
         <div class="faq-item">
           <div class="faq-question">
-            <span>How does the credit system work?</span>
+            <span>How does billing work?</span>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Each interaction uses credits based on length and complexity. A typical conversation uses 3-5 credits. Journaling exercises use 1-2 credits. You can purchase additional credits anytime.</p>
+            <p>Monthly plans are billed every 30 days from your signup date. Yearly plans are billed annually and include a 7-day free trial. You can cancel anytime through your account settings.</p>
           </div>
         </div>
         
@@ -775,7 +645,7 @@
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through our payment partners.</p>
+            <p>We accept all major credit cards through PayPal, and PayPal balance payments. All payments are processed securely through PayPal's payment system.</p>
           </div>
         </div>
       </div>
@@ -791,7 +661,7 @@
             Try for Free
             <i class="fas fa-heart"></i>
           </a>
-          <a href="#subscription-plans" class="cta-button primary">
+          <a href="#pricing-cards" class="cta-button primary">
             View Plans
             <i class="fas fa-comment"></i>
           </a>
@@ -851,6 +721,9 @@
     </div>
   </footer>
 
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+  
   <script>
     // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -876,23 +749,6 @@
       });
     });
 
-    // Pricing Tabs
-    const tabs = document.querySelectorAll('.pricing-tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        if (tab.dataset.tab === 'credits') {
-          document.getElementById('subscription-plans').style.display = 'none';
-          document.getElementById('credit-system').style.display = 'block';
-        } else {
-          document.getElementById('subscription-plans').style.display = 'block';
-          document.getElementById('credit-system').style.display = 'none';
-        }
-      });
-    });
-
     // FAQ Accordion
     const faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(question => {
@@ -910,6 +766,45 @@
         });
       });
     });
+
+    // PayPal Integration
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'blue',
+        layout: 'vertical',
+        label: 'subscribe'
+      },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': 'P-123456789' // Replace with your monthly plan ID
+        });
+      },
+      onApprove: function(data, actions) {
+        alert('You have successfully subscribed to Therapathy Premium Monthly!');
+        // You can redirect to a thank you page or account page here
+        // window.location.href = 'thank-you.html';
+      }
+    }).render('#paypal-button-container-monthly');
+
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'subscribe'
+      },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          'plan_id': 'P-987654321' // Replace with your yearly plan ID
+        });
+      },
+      onApprove: function(data, actions) {
+        alert('You have successfully subscribed to Therapathy Premium Yearly!');
+        // You can redirect to a thank you page or account page here
+        // window.location.href = 'thank-you.html';
+      }
+    }).render('#paypal-button-container-yearly');
   </script>
 </body>
 </html>
